@@ -1,3 +1,3 @@
-# dotnet-cli-lab
+# cli-lab
 
-A place to prototype possible verbs for the CLI.
+Work in progress.
