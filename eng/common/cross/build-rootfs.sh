@@ -2,7 +2,7 @@
 
 usage()
 {
-    echo "Usage: $0 [BuildArch] [LinuxCodeName] [lldbx.y] [--skipunmount] --rootfsdir <directory>]"
+    echo "Usage: $0 [BuildArch] [LinuxCodeName] [lldbx.y] [--skipunmount] --rootfs <directory>]"
     echo "BuildArch can be: arm(default), armel, arm64, x86"
     echo "LinuxCodeName - optional, Code name for Linux, can be: trusty, xenial(default), zesty, bionic, alpine. If BuildArch is armel, LinuxCodeName is jessie(default) or tizen."
     echo "lldbx.y - optional, LLDB version, can be: lldb3.9(default), lldb4.0, lldb5.0, lldb6.0 no-lldb. Ignored for alpine"
@@ -113,12 +113,12 @@ while :; do
                 __LinuxCodeName=trusty
             fi
             ;;
-        xenial) # Ubuntu 16.04
+        xenial) # Ubunry 16.04
             if [ "$__LinuxCodeName" != "jessie" ]; then
                 __LinuxCodeName=xenial
             fi
             ;;
-        zesty) # Ubuntu 17.04
+        zesty) # Ununtu 17.04
             if [ "$__LinuxCodeName" != "jessie" ]; then
                 __LinuxCodeName=zesty
             fi
@@ -132,16 +132,7 @@ while :; do
             __LinuxCodeName=jessie
             __UbuntuRepo="http://ftp.debian.org/debian/"
             ;;
-        stretch) # Debian 9
-            __LinuxCodeName=stretch
-            __UbuntuRepo="http://ftp.debian.org/debian/"
-            __LLDB_Package="liblldb-6.0-dev"
-            ;;
-        buster) # Debian 10
-            __LinuxCodeName=buster
-            __UbuntuRepo="http://ftp.debian.org/debian/"
-            __LLDB_Package="liblldb-6.0-dev"
-            ;;
+        # TBD Stretch -> Debian 9, Buster -> Debian 10
         tizen)
             if [ "$__BuildArch" != "armel" ]; then
                 echo "Tizen is available only for armel."

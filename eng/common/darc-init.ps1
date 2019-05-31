@@ -1,6 +1,5 @@
 param (
-    $darcVersion = $null,
-    $versionEndpoint = "https://maestro-prod.westus2.cloudapp.azure.com/api/assets/darc-version?api-version=2019-01-16"
+    $darcVersion = $null
 )
 
 $verbosity = "m"
@@ -17,13 +16,13 @@ function InstallDarcCli ($darcVersion) {
     Invoke-Expression "& `"$dotnet`" tool uninstall $darcCliPackageName -g"
   }
 
-  # If the user didn't explicitly specify the darc version,
-  # query the Maestro API for the correct version of darc to install.
+  # Until we can anonymously query the BAR API for the latest arcade-services
+  # build applied to the PROD channel, this is hardcoded.
   if (-not $darcVersion) {
-    $darcVersion = $(Invoke-WebRequest -Uri $versionEndpoint -UseBasicParsing).Content
+    $darcVersion = '1.1.0-beta.19205.4'
   }
   
-  $arcadeServicesSource = 'https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json'
+  $arcadeServicesSource = 'https://dotnetfeed.blob.core.windows.net/dotnet-arcade/index.json'
 
   Write-Host "Installing Darc CLI version $darcVersion..."
   Write-Host "You may need to restart your command window if this is the first dotnet tool you have installed."
