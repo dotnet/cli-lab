@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
 {
-    public class RegistryManagerTests
+    public class DotNetCoreSdkRegistryQueryTests
     {
         private static readonly string MicrosoftCorporationPublisher = "Microsoft Corporation";
         private static readonly string X64DisplayNameFormat = "Microsoft .NET Core SDK {0}.{1}.{2} (x64)";
@@ -13,28 +13,28 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [Fact]
         public void TestIsDotNetCoreSdkDisplayNameCorrect()
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, "2", "2", "300"))
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, "2", "2", "300"))
                 .Should().BeTrue();
         }
 
         [Fact]
         public void TestIsDotNetCoreSdkPublisherCorrect()
         {
-            RegistryManager.IsDotNetCoreSdkPublisher(MicrosoftCorporationPublisher)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkPublisher(MicrosoftCorporationPublisher)
                 .Should().BeTrue();
         }
 
         [Fact]
         public void TestIsDotNetCoreSdkDisplayNameNull()
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(null)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(null)
                 .Should().BeFalse();
         }
         
         [Fact]
         public void IsDotNetCoreSdkPublisherNull()
         {
-            RegistryManager.IsDotNetCoreSdkPublisher(null)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkPublisher(null)
                 .Should().BeFalse();
         }
 
@@ -46,7 +46,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("0", "00", "000")]
         public void TestIsDotNetCoreSdkDisplayNameVersionCorrect(string majorVersion, string minorVersion, string patchVersion)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, majorVersion, minorVersion, patchVersion))
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, majorVersion, minorVersion, patchVersion))
                 .Should().BeTrue();
         }
 
@@ -56,7 +56,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("1", "23", "def")]
         public void TestIsDotNetCoreSdkDisplayNameVersionWrong(string majorVersion, string minorVersion, string patchVersion)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, majorVersion, minorVersion, patchVersion))
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, majorVersion, minorVersion, patchVersion))
                 .Should().BeFalse();
         }
 
@@ -73,7 +73,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET Core SDK 2.2.300 ( x64)")]
         public void TestIsDotNetCoreSdkDisplayNameWhiteSpace(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeFalse();
         }
 
@@ -82,7 +82,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("microsoft .net core sdk 2.2.300 (x64)")]
         public void TestIsDotNetCoreSdkDisplayNameCaseSensitivity(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeFalse();
         }
 
@@ -91,7 +91,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET Core SDK 2.2.300 (x86)")]
         public void TestIsDotNetCoreSdkDisplayNamePlatformCorrect(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeTrue();
         }
 
@@ -100,7 +100,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET Core SDK 2.2.300")]
         public void TestIsDotNetCoreSdkDisplayNamePlatformWrong(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeFalse();
         }
 
@@ -109,7 +109,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft")]
         public void TestIsDotNetCoreSdkPublisherWrong(string publisher)
         {
-            RegistryManager.IsDotNetCoreSdkPublisher(publisher)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkPublisher(publisher)
                 .Should().BeFalse();
         }
 
@@ -119,7 +119,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft Corporation   ")]
         public void TestIsDotNetCoreSdkPublisherWhiteSpace(string publisher)
         {
-            RegistryManager.IsDotNetCoreSdkPublisher(publisher)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkPublisher(publisher)
                 .Should().BeFalse();
         }
 
@@ -128,7 +128,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("microsoft corporation")]
         public void TestIsDotNetCoreSdkPublisherCaseSensitivity(string publisher)
         {
-            RegistryManager.IsDotNetCoreSdkPublisher(publisher)
+            DotNetCoreSdkRegistryQuery.IsDotNetCoreSdkPublisher(publisher)
                 .Should().BeFalse();
         }
     }

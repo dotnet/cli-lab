@@ -4,9 +4,9 @@ using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal static class RegistryManager
+    internal static class DotNetCoreSdkRegistryQuery
     {
-        public static RegistryKey [] GetInstalledDotnetCoreSdks()
+        public static RegistryKey [] GetInstalledDotNetCoreSdks()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE")
@@ -33,11 +33,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         private static bool IsDotNetCoreSdk(RegistryKey rkey)
         {
-            return IsDotNetCoreSdkDisplayName(rkey.GetValue("DisplayName"))
-                && IsDotNetCoreSdkPublisher(rkey.GetValue("Publisher"));
+            return IsDotNetCoreSdkDisplayName(rkey.GetValue("DisplayName") as string)
+                && IsDotNetCoreSdkPublisher(rkey.GetValue("Publisher") as string);
         }
 
-        internal static bool IsDotNetCoreSdkDisplayName(object displayName)
+        internal static bool IsDotNetCoreSdkDisplayName(string displayName)
         {
             return displayName == null ?
                 false :
@@ -45,7 +45,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .IsMatch(displayName.ToString());
         }
 
-        internal static bool IsDotNetCoreSdkPublisher(object publisher)
+        internal static bool IsDotNetCoreSdkPublisher(string publisher)
         {
             return publisher == null ?
                 false :

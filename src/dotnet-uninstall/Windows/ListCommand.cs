@@ -6,7 +6,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
     {
         public static void Execute()
         {
-            var installedDotnetCoreSdks = RegistryManager.GetInstalledDotnetCoreSdks();
+            var installedDotnetCoreSdks = DotNetCoreSdkRegistryQuery.GetInstalledDotNetCoreSdks();
 
             foreach (var sdk in installedDotnetCoreSdks)
             {
