@@ -22,7 +22,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             foreach (var name in names)
             {
                 var uninstall = uninstalls.OpenSubKey(name);
-                if (IsDotnetCoreSdk(uninstall))
+                if (IsDotNetCoreSdk(uninstall))
                 {
                     sdks.Add(uninstall);
                 }
@@ -31,20 +31,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return sdks.ToArray();
         }
 
-        private static bool IsDotnetCoreSdk(RegistryKey rkey)
+        private static bool IsDotNetCoreSdk(RegistryKey rkey)
         {
-            var displayName = rkey.GetValue("DisplayName");
-            var publisher = rkey.GetValue("Publisher");
+            return IsDotNetCoreSdkDisplayName(rkey.GetValue("DisplayName"))
+                && IsDotNetCoreSdkPublisher(rkey.GetValue("Publisher"));
+        }
 
-            if (displayName == null || publisher == null)
-            {
-                return false;
-            }
+        internal static bool IsDotNetCoreSdkDisplayName(object displayName)
+        {
+            return displayName == null ?
+                false :
+                new Regex(@"^Microsoft\s.NET\sCore\sSDK\s(\d+)\.(\d+)\.(\d+)\s(\(x86\)|\(x64\))$")
+                .IsMatch(displayName.ToString());
+        }
 
-            var regex = new Regex(@"^Microsoft\s.NET\sCore\sSDK\s(\d+)\.(\d+)\.(\d+)\s(\(x86\)|\(x64\))$");
-
-            return regex.IsMatch(displayName.ToString())
-                && publisher.ToString().Equals("Microsoft Corporation");
+        internal static bool IsDotNetCoreSdkPublisher(object publisher)
+        {
+            return publisher == null ?
+                false :
+                publisher.ToString().Equals("Microsoft Corporation");
         }
     }
 }
