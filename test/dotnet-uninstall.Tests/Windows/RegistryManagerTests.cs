@@ -11,14 +11,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         private static readonly string X86DisplayNameFormat = "Microsoft .NET Core SDK {0}.{1}.{2} (x86)";
 
         [Fact]
-        public void TestIsDotNetCoreSdkDisplayName()
+        public void TestIsDotNetCoreSdkDisplayNameCorrect()
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, 2, 2, 300))
+            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, "2", "2", "300"))
                 .Should().BeTrue();
         }
 
         [Fact]
-        public void TestIsDotNetCoreSdkPublisher()
+        public void TestIsDotNetCoreSdkPublisherCorrect()
         {
             RegistryManager.IsDotNetCoreSdkPublisher(MicrosoftCorporationPublisher)
                 .Should().BeTrue();
@@ -38,215 +38,98 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion1()
+        [Theory]
+        [InlineData("0", "23", "456")]
+        [InlineData("01", "23", "456")]
+        [InlineData("1", "023", "456")]
+        [InlineData("1", "23", "0456")]
+        [InlineData("0", "00", "000")]
+        public void TestIsDotNetCoreSdkDisplayNameVersionCorrect(string majorVersion, string minorVersion, string patchVersion)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, 1, 23, 456))
+            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, majorVersion, minorVersion, patchVersion))
                 .Should().BeTrue();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion2()
+        [Theory]
+        [InlineData("a", "23", "456")]
+        [InlineData("1", "bc", "456")]
+        [InlineData("1", "23", "def")]
+        public void TestIsDotNetCoreSdkDisplayNameVersionWrong(string majorVersion, string minorVersion, string patchVersion)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, "a", 23, 456))
+            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, majorVersion, minorVersion, patchVersion))
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion3()
+        [Theory]
+        [InlineData("Microsoft  .NET Core SDK 2.2.300 (x64)")]
+        [InlineData("Microsoft .NET   Core SDK 2.2.300 (x64)")]
+        [InlineData("Microsoft .NET Core    SDK 2.2.300 (x64)")]
+        [InlineData("Microsoft .NET Core SDK  2.2.300 (x64)")]
+        [InlineData("Microsoft .NET Core SDK 2.2.300   (x64)")]
+        [InlineData(" Microsoft .NET Core SDK 2.2.300 (x64)")]
+        [InlineData("Microsoft .NET Core SDK 2.2.300 (x64) ")]
+        [InlineData("Micro soft .NET Core SDK 2.2.300 (x64)")]
+        [InlineData("Microsoft .NET Core SDK 2. 2.300 (x64)")]
+        [InlineData("Microsoft .NET Core SDK 2.2.300 ( x64)")]
+        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, 1, "bc", 456))
+            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion4()
+        [Theory]
+        [InlineData("MICROSOFT .NET CORE SDK 2.2.300 (X64)")]
+        [InlineData("microsoft .net core sdk 2.2.300 (x64)")]
+        public void TestIsDotNetCoreSdkDisplayNameCaseSensitivity(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, 1, 23, "def"))
+            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion5()
+        [Theory]
+        [InlineData("Microsoft .NET Core SDK 2.2.300 (x64)")]
+        [InlineData("Microsoft .NET Core SDK 2.2.300 (x86)")]
+        public void TestIsDotNetCoreSdkDisplayNamePlatformCorrect(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, "0", 23, 456))
+            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeTrue();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion6()
+        [Theory]
+        [InlineData("Microsoft .NET Core SDK 2.2.300 (x66)")]
+        [InlineData("Microsoft .NET Core SDK 2.2.300")]
+        public void TestIsDotNetCoreSdkDisplayNamePlatformWrong(string displayName)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, "01", 23, 456))
-                .Should().BeTrue();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion7()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, 1, "023", 456))
-                .Should().BeTrue();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameVersion8()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, 1, 23, "0456"))
-                .Should().BeTrue();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace1()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft  .NET Core SDK 2.2.300 (x64)")
+            RegistryManager.IsDotNetCoreSdkDisplayName(displayName)
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace2()
+        [Theory]
+        [InlineData("Yuchong Pan")]
+        [InlineData("Microsoft")]
+        public void TestIsDotNetCoreSdkPublisherWrong(string publisher)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET   Core SDK 2.2.300 (x64)")
+            RegistryManager.IsDotNetCoreSdkPublisher(publisher)
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace3()
+        [Theory]
+        [InlineData("Microsoft  Corporation")]
+        [InlineData("  Microsoft Corporation")]
+        [InlineData("Microsoft Corporation   ")]
+        public void TestIsDotNetCoreSdkPublisherWhiteSpace(string publisher)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core    SDK 2.2.300 (x64)")
+            RegistryManager.IsDotNetCoreSdkPublisher(publisher)
                 .Should().BeFalse();
         }
 
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace4()
+        [Theory]
+        [InlineData("MICROSOFT CORPORATION")]
+        [InlineData("microsoft corporation")]
+        public void TestIsDotNetCoreSdkPublisherCaseSensitivity(string publisher)
         {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK  2.2.300 (x64)")
+            RegistryManager.IsDotNetCoreSdkPublisher(publisher)
                 .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace5()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK 2.2.300   (x64)")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace6()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(" Microsoft .NET Core SDK 2.2.300 (x64)")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace7()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK 2.2.300 (x64) ")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace8()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Micro soft .NET Core SDK 2.2.300 (x64)")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace9()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK 2. 2.300 (x64)")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameWhiteSpace10()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK 2.2.300 ( x64)")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameCaseSensitivity1()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, 1, 23, 456).ToUpper())
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNameCaseSensitivity2()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, 1, 23, 456).ToLower())
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNamePlatform1()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X64DisplayNameFormat, 1, 23, 456))
-                .Should().BeTrue();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNamePlatform2()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName(string.Format(X86DisplayNameFormat, 1, 23, 456))
-                .Should().BeTrue();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNamePlatform3()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK 1.23.456 (x88)")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkDisplayNamePlatform4()
-        {
-            RegistryManager.IsDotNetCoreSdkDisplayName("Microsoft .NET Core SDK 1.23.456")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkPublisherIncorrect()
-        {
-            RegistryManager.IsDotNetCoreSdkPublisher("JetBrains")
-                .Should().BeFalse();
-        }
-            
-
-        [Fact]
-        public void TestIsDotNetCoreSdkPublisherWhiteSpace1()
-        {
-            RegistryManager.IsDotNetCoreSdkPublisher("Microsoft  Corporation")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkPublisherWhiteSpace2()
-        {
-            RegistryManager.IsDotNetCoreSdkPublisher("  Microsoft Corporation")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkPublisherWhiteSpace3()
-        {
-            RegistryManager.IsDotNetCoreSdkPublisher("Microsoft Corporation   ")
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkPublisherCaseSensitivity1()
-        {
-            RegistryManager.IsDotNetCoreSdkPublisher(MicrosoftCorporationPublisher.ToUpper())
-                .Should().BeFalse();
-        }
-
-        [Fact]
-        public void TestIsDotNetCoreSdkPublisherCaseSensitivity2()
-        {
-            RegistryManager.IsDotNetCoreSdkPublisher(MicrosoftCorporationPublisher.ToLower())
-            .Should().BeFalse();
         }
     }
 }
