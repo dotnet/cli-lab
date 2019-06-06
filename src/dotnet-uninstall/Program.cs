@@ -2,13 +2,19 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.DotNet.Tools.Uninstall
 {
     internal class Program
     {
+        internal static readonly bool RunningOnWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        internal static readonly bool RunningOnOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        internal static readonly bool RunningOnLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
+
         static int Main(string[] args)
         {
             var rootCommand = new RootCommand("dotnet-uninstall");
@@ -20,7 +26,7 @@ namespace Microsoft.DotNet.Tools.Uninstall
 
             listCommand.Handler = CommandHandler.Create(() =>
             {
-                Console.WriteLine("invoked list subcommand"); // TODO: implement list
+                ExecuteListCommand();
             });
 
             uninstallCommand.Handler = CommandHandler.Create(() =>
@@ -29,6 +35,16 @@ namespace Microsoft.DotNet.Tools.Uninstall
             });
 
             return rootCommand.InvokeAsync(args).Result;
+        }
+
+        private static void ExecuteListCommand()
+        {
+            if (RunningOnWindows)
+            {
+                Windows.ListCommand.Execute();
+            }
+
+            // TODO: implement list for macOS and linux
         }
     }
 }
