@@ -29,10 +29,10 @@ namespace Microsoft.DotNet.Tools.Uninstall
                 ExecuteListCommand();
             });
 
-            uninstallCommand.Handler = CommandHandler.Create(() =>
+            uninstallCommand.Handler = CommandHandler.Create((Func<int>)(() =>
             {
-                Console.WriteLine("invoked uninstall subcommand"); // TODO: implement uninstall
-            });
+                throw new NotImplementedException();
+            }));
 
             return rootCommand.InvokeAsync(args).Result;
         }
@@ -43,8 +43,10 @@ namespace Microsoft.DotNet.Tools.Uninstall
             {
                 Windows.ListCommand.Execute();
             }
-
-            // TODO: implement list for macOS and linux
+            else
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }
