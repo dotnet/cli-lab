@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Runtime.InteropServices;
+using Microsoft.DotNet.Tools.Uninstall.Windows;
 
 namespace Microsoft.DotNet.Tools.Uninstall
 {
@@ -20,19 +21,29 @@ namespace Microsoft.DotNet.Tools.Uninstall
             var rootCommand = new RootCommand("dotnet-uninstall");
 
             var listCommand = new Command("list");
-            var uninstallCommand = new Command("uninstall");
+
             rootCommand.Add(listCommand);
-            rootCommand.Add(uninstallCommand);
+
+            var uninstallAll = new Option(
+                "--all",
+                Messages.UninstallAllOptionDescription,
+                new Argument<bool>());
+
+            rootCommand.AddOption(uninstallAll);
 
             listCommand.Handler = CommandHandler.Create(() =>
             {
                 ExecuteListCommand();
             });
 
-            uninstallCommand.Handler = CommandHandler.Create((Func<int>)(() =>
+            rootCommand.Handler = CommandHandler.Create<bool>((all) =>
             {
-                throw new NotImplementedException();
-            }));
+                var options = new Dictionary<string, object>();
+
+                options.Add("all", all);
+
+                ExecuteUninstallCommand(rootCommand.Parse(args));
+            });
 
             return rootCommand.InvokeAsync(args).Result;
         }
@@ -41,7 +52,19 @@ namespace Microsoft.DotNet.Tools.Uninstall
         {
             if (RunningOnWindows)
             {
-                Windows.ListCommand.Execute();
+                ListCommand.Execute();
+            }
+            else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private static void ExecuteUninstallCommand(ParseResult parseResult)
+        {
+            if (RunningOnWindows)
+            {
+                UninstallCommand.Execute(parseResult);
             }
             else
             {

@@ -6,7 +6,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
     internal static class DotNetCoreSdkRegistryQuery
     {
-        public static RegistryKey [] GetInstalledDotNetCoreSdks()
+        internal static IEnumerable<RegistryKey> GetInstalledDotNetCoreSdks()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE")

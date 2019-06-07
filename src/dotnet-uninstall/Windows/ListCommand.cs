@@ -4,7 +4,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
     internal static class ListCommand
     {
-        public static void Execute()
+        internal static void Execute()
         {
             var installedDotnetCoreSdks = DotNetCoreSdkRegistryQuery.GetInstalledDotNetCoreSdks();
 
