@@ -18,7 +18,13 @@ namespace Microsoft.DotNet.Tools.Uninstall
 
         static int Main(string[] args)
         {
-            var rootCommand = new RootCommand("dotnet-uninstall");
+            var rootCommand = new RootCommand(
+                Messages.UninstallNoOptionDescription,
+                argument: new Argument<IEnumerable<string>>
+                {
+                    Name = Messages.UninstallNoOptionArgumentName,
+                    Description = Messages.UninstallNoOptionArgumentDescription
+                });
 
             var listCommand = new Command("list");
 

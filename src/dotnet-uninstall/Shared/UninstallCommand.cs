@@ -12,10 +12,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared
         private static readonly Dictionary<string, Filterer<TSdkInfo>> OptionFilterers
             = new Dictionary<string, Filterer<TSdkInfo>>()
             {
-                { "--all", new Filterer<bool, TSdkInfo>((value, sdks) => sdks) }
+                { "--all", new Filterer<bool, TSdkInfo>((value, sdks) => sdks) },
+                { "--all-lower-patches", new Filterer<bool, TSdkInfo>((value, sdks) => sdks) },       // TODO: stub
+                { "--all-but-latest", new Filterer<bool, TSdkInfo>((value, sdks) => sdks) },          // TODO: stub
+                { "--all-but", new Filterer<IEnumerable<string>, TSdkInfo>((value, sdks) => sdks) },  // TODO: stub
+                { "--all-below", new Filterer<string, TSdkInfo>((value, sdks) => sdks) },             // TODO: stub
+                { "--all-previews", new Filterer<bool, TSdkInfo>((value, sdks) => sdks) },            // TODO: stub
+                { "--all-previews-but-latest", new Filterer<bool, TSdkInfo>((value, sdks) => sdks) }, // TODO: stub
+                { "--major-minor", new Filterer<string, TSdkInfo>((value, sdks) => sdks) }            // TODO: stub
             };
 
-        private static readonly Filterer<IEnumerable<string>, TSdkInfo> NoOptionFilterer = new Filterer<IEnumerable<string>, TSdkInfo>((value, sdks) => sdks); // TODO: replace this
+        private static readonly Filterer<IEnumerable<string>, TSdkInfo> NoOptionFilterer
+            = new Filterer<IEnumerable<string>, TSdkInfo>((value, sdks) => sdks); // TODO: stub
 
         internal static void AssertCorrectOptions(ParseResult parseResult)
         {
@@ -29,7 +37,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared
                 }
             }
 
-            if (count > 1)
+            if (count > 1 || count == 1 && parseResult.RootCommandResult.Arguments.Count > 0)
             {
                 throw new OptionsConflictException();
             }

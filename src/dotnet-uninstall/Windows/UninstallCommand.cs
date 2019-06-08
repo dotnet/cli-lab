@@ -19,7 +19,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             catch (OptionsConflictException)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(Messages.UninstallOptionsConflict);
+                Console.WriteLine(Messages.UninstallOptionsConflictMessage);
                 Console.ResetColor();
             }
         }
