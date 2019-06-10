@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal static class DotNetCoreSdkRegistryQuery
+    static class SdkRegistryQuery
     {
-        internal static IEnumerable<RegistryKey> GetInstalledDotNetCoreSdks()
+        public static IEnumerable<ISdkInfo> GetInstalledSdks()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE")
@@ -28,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 }
             }
 
-            return sdks.ToArray();
+            return sdks.Select(sdk => new SdkRegistryKeyWrapper(sdk));
         }
 
         private static bool IsDotNetCoreSdk(RegistryKey rkey)
@@ -41,7 +43,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             return displayName == null ?
                 false :
-                new Regex(@"^Microsoft\s.NET\sCore\sSDK\s(\d+)\.(\d+)\.(\d+)\s(\(x86\)|\(x64\))$")
+                new Regex(@"^Microsoft\s\.NET\sCore\s(SDK|Runtime\s\-)\s\d+\.\d+\.\d+(\s\-\spreview\d+)?\s(\(x86\)|\(x64\))$")
                 .IsMatch(displayName.ToString());
         }
 
