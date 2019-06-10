@@ -6,7 +6,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
-    static class CommandLineConfigs
+    internal static class CommandLineConfigs
     {
         public static readonly Option UninstallAllOption = new Option(
             "--all",

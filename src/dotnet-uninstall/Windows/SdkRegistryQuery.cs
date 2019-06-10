@@ -6,7 +6,7 @@ using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    static class SdkRegistryQuery
+    internal static class SdkRegistryQuery
     {
         public static IEnumerable<ISdkInfo> GetInstalledSdks()
         {

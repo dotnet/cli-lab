@@ -4,7 +4,7 @@ using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
 {
-    static class VersionRegex
+    internal static class VersionRegex
     {
         public static SdkVersion ParseVersionString(string versionString)
         {

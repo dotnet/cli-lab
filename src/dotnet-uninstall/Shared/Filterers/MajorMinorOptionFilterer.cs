@@ -6,7 +6,7 @@ using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class MajorMinorOptionFilterer : ArgFilterer<string>
+    internal class MajorMinorOptionFilterer : ArgFilterer<string>
     {
         public override IEnumerable<ISdkInfo> Filter(string argValue, IEnumerable<ISdkInfo> sdks)
         {

@@ -5,7 +5,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class AllLowerPatchesOptionFilterer : NoArgFilterer
+    internal class AllLowerPatchesOptionFilterer : NoArgFilterer
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<ISdkInfo> sdks)
         {

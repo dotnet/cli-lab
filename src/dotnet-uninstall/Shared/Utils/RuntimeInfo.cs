@@ -2,7 +2,7 @@
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
 {
-    static class RuntimeInfo
+    internal static class RuntimeInfo
     {
         public static readonly bool RunningOnWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
         public static readonly bool RunningOnOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);

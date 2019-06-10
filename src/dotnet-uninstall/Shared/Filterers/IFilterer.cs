@@ -4,12 +4,12 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    interface IFilterer
+    internal interface IFilterer
     {
         IEnumerable<ISdkInfo> Filter(ParseResult parseResult, Option option, IEnumerable<ISdkInfo> sdks);
     }
 
-    abstract class ArgFilterer<TArg> : IFilterer
+    internal abstract class ArgFilterer<TArg> : IFilterer
     {
         public IEnumerable<ISdkInfo> Filter(ParseResult parseResult, Option option, IEnumerable<ISdkInfo> sdks)
         {
@@ -19,7 +19,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public abstract IEnumerable<ISdkInfo> Filter(TArg argValue, IEnumerable<ISdkInfo> sdks);
     }
 
-    abstract class NoArgFilterer : IFilterer
+    internal abstract class NoArgFilterer : IFilterer
     {
         public IEnumerable<ISdkInfo> Filter(ParseResult parseResult, Option option, IEnumerable<ISdkInfo> sdks)
         {

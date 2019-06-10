@@ -5,7 +5,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class AllBelowOptionFilterer : ArgFilterer<string>
+    internal class AllBelowOptionFilterer : ArgFilterer<string>
     {
         public override IEnumerable<ISdkInfo> Filter(string argValue, IEnumerable<ISdkInfo> sdks)
         {

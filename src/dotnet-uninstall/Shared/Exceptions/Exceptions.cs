@@ -3,7 +3,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
-    static class Exceptions
+    internal static class Exceptions
     {
         public class LinuxNotSupportedException : Exception { }
 

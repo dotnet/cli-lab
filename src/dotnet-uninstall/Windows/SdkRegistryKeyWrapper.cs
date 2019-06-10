@@ -1,12 +1,11 @@
-﻿using System;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    class SdkRegistryKeyWrapper : ISdkInfo
+    internal class SdkRegistryKeyWrapper : ISdkInfo
     {
         public SdkVersion Version { get; }
 

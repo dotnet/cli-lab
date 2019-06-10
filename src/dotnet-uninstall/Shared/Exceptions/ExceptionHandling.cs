@@ -3,7 +3,7 @@ using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
-    static class ExceptionHandling
+    internal static class ExceptionHandling
     {
         public static Action HandleException(Action action)
         {

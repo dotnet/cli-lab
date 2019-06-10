@@ -6,7 +6,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class AllButOptionFilterer : ArgFilterer<IEnumerable<string>>
+    internal class AllButOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<string> argValue, IEnumerable<ISdkInfo> sdks)
         {

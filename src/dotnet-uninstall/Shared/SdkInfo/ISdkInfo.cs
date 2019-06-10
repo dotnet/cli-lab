@@ -1,6 +1,6 @@
 ﻿namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 {
-    interface ISdkInfo
+    internal interface ISdkInfo
     {
         SdkVersion Version { get; }
         string DisplayName { get; }

@@ -7,7 +7,7 @@ using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
-    static class ListCommandExec
+    internal static class ListCommandExec
     {
         public static void Execute()
         {

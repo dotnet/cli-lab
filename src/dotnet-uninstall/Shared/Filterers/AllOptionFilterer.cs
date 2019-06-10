@@ -3,7 +3,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class AllOptionFilterer : NoArgFilterer
+    internal class AllOptionFilterer : NoArgFilterer
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<ISdkInfo> sdks)
         {

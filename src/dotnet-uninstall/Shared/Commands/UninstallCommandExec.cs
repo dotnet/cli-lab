@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Filterers;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
@@ -11,7 +9,7 @@ using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
-    static class UninstallCommandExec
+    internal static class UninstallCommandExec
     {
         private static readonly ParseResult CommandLineParseResult
             = CommandLineConfigs.UninstallRootCommand.Parse(Environment.GetCommandLineArgs());

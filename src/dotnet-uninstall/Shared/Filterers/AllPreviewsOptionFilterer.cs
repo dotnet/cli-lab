@@ -4,7 +4,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class AllPreviewsOptionFilterer : NoArgFilterer
+    internal class AllPreviewsOptionFilterer : NoArgFilterer
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<ISdkInfo> sdks)
         {

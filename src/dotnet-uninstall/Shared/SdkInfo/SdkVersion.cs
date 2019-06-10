@@ -2,7 +2,7 @@
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 {
-    class SdkVersion : IEquatable<SdkVersion>, IComparable<SdkVersion>, IComparable
+    internal class SdkVersion : IEquatable<SdkVersion>, IComparable<SdkVersion>, IComparable
     {
         public int Major { get; set; }
         public int Minor { get; set; }

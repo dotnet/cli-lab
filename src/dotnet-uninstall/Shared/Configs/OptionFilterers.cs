@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Filterers;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
-    static class OptionFilterers
+    internal static class OptionFilterers
     {
         public static readonly IDictionary<Option, IFilterer> OptionFiltererDictionary
             = new Dictionary<Option, IFilterer>

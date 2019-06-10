@@ -7,7 +7,7 @@ using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
-    class NoOptionFilterer : ArgFilterer<IEnumerable<string>>
+    internal class NoOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<string> argValue, IEnumerable<ISdkInfo> sdks)
         {
