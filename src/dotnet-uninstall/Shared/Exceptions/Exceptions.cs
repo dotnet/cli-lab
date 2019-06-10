@@ -16,8 +16,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 
         public class SpecifiedVersionNotFoundException : Exception
         {
-            public SpecifiedVersionNotFoundException(SdkVersion version)
-                : base(string.Format("{0}.{1}.{2}", version.Minor, version.Minor, version.Patch)) { }
+            public SpecifiedVersionNotFoundException(SdkVersion version) : base(version.ToString()) { }
         }
     }
 }
