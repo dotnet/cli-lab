@@ -27,6 +27,8 @@
         public static readonly string UninstallAllPreviewsButLatestOptionDescription = "Remove all .NET Core Preview SDKs that are marked as previews, except the latest preview";
 
         public static readonly string UninstallMajorMinorOptionDescription = "Remove .NET Core SDKs that match the specified major.minor version";
+        public static readonly string UninstallMajorMinorOptionArgumentName = "MAJOR-MINOR";
+        public static readonly string UninstallMajorMinorOptionArgumentDescription = "The specified major.minor version";
 
         public static readonly string UninstallVerbosityOptionDescription = "Set the MSBuild verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]";
         public static readonly string UninstallVerbosityOptionArgumentName = "VERBOSITY-LEVEL";

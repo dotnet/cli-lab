@@ -48,7 +48,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly Option UninstallMajorMinorOption = new Option(
             "--major-minor",
-            Messages.UninstallMajorMinorOptionDescription);
+            Messages.UninstallMajorMinorOptionDescription,
+            new Argument<string>
+            {
+                Name = Messages.UninstallMajorMinorOptionArgumentName,
+                Description = Messages.UninstallMajorMinorOptionArgumentDescription
+            });
 
         public static readonly Option UninstallVerbosityOption = new Option(
             new[] { "--verbosity", "-v" },
