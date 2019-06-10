@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<string> argValue, IEnumerable<ISdkInfo> sdks)
         {
-            var uninstallVersions = argValue.Select(versionString => VersionRegex.ParseVersionString(versionString));
+            var uninstallVersions = argValue.Select(versionString => SdkVersion.From(versionString));
             var sdkVersions = sdks.Select(sdk => sdk.Version);
 
             foreach (var version in uninstallVersions)

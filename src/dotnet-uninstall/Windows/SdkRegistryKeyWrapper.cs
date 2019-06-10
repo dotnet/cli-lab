@@ -21,7 +21,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             var regex = new Regex(@"\d+\.\d+\.\d+(\s\-\spreview\d+)?");
             var versionString = regex.Match(DisplayName).Value;
-            Version = VersionRegex.ParseVersionString(versionString);
+            Version = SdkVersion.From(versionString);
         }
     }
 }
