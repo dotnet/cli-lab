@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
     {
         public static SdkVersion ParseVersionString(string versionString)
         {
-            var regex = new Regex(@"^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)(\s?\-\s?preview(?<preview>\d+))?$");
+            var regex = new Regex(@"^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)((\s\-\s|\-)preview(?<preview>\d+))?$");
             var match = regex.Match(versionString);
 
             if (!match.Success)

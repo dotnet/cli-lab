@@ -19,27 +19,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .OpenSubKey("Uninstall");
 
             var names = uninstalls.GetSubKeyNames();
-            var sdks = new List<RegistryKey>();
 
-            foreach (var name in names)
-            {
-                var uninstall = uninstalls.OpenSubKey(name);
-                if (IsDotNetCoreSdk(uninstall))
-                {
-                    sdks.Add(uninstall);
-                }
-            }
+            var sdks = names
+                .Select(name => uninstalls.OpenSubKey(name))
+                .Where(sdk => IsDotNetCore(sdk));
 
             return sdks.Select(sdk => new SdkRegistryKeyWrapper(sdk));
         }
 
-        private static bool IsDotNetCoreSdk(RegistryKey rkey)
+        private static bool IsDotNetCore(RegistryKey rkey)
         {
-            return IsDotNetCoreSdkDisplayName(rkey.GetValue("DisplayName") as string)
-                && IsDotNetCoreSdkPublisher(rkey.GetValue("Publisher") as string);
+            return IsDotNetCoreDisplayName(rkey.GetValue("DisplayName") as string)
+                && IsDotNetCorePublisher(rkey.GetValue("Publisher") as string);
         }
 
-        internal static bool IsDotNetCoreSdkDisplayName(string displayName)
+        internal static bool IsDotNetCoreDisplayName(string displayName)
         {
             return displayName == null ?
                 false :
@@ -47,7 +41,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .IsMatch(displayName.ToString());
         }
 
-        internal static bool IsDotNetCoreSdkPublisher(string publisher)
+        internal static bool IsDotNetCorePublisher(string publisher)
         {
             return publisher == null ?
                 false :
