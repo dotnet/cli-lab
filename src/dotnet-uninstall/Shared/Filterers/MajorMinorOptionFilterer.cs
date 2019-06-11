@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -10,16 +10,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<ISdkInfo> Filter(string argValue, IEnumerable<ISdkInfo> sdks)
         {
-            var regex = new Regex(@"^(?<major>\d+)\.(?<minor>\d+)$");
-            var match = regex.Match(argValue);
+            var match = Regexes.DotNetCoreMajorMinorExtractionRegex.Match(argValue);
 
             if (!match.Success)
             {
                 throw new InvalidVersionStringException(argValue);
             }
 
-            var versionMajorString = match.Groups["major"].Value;
-            var versionMinorString = match.Groups["minor"].Value;
+            var versionMajorString = match.Groups[Regexes.DotNetCoreMajorMinorExtractionRegexMajorGroupName].Value;
+            var versionMinorString = match.Groups[Regexes.DotNetCoreMajorMinorExtractionRegexMinorGroupName].Value;
 
             var versionMajor = int.Parse(versionMajorString);
             var versionMinor = int.Parse(versionMinorString);

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
@@ -30,22 +30,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         private static bool IsDotNetCore(RegistryKey rkey)
         {
             return IsDotNetCoreDisplayName(rkey.GetValue("DisplayName") as string)
-                && IsDotNetCorePublisher(rkey.GetValue("Publisher") as string);
+                && IsDotNetCorePublisher(rkey.GetValue("Publisher") as string)
+                && IsDotNetCoreExeUninstaller(rkey.GetValue("WindowsInstaller") as int?);
         }
 
-        internal static bool IsDotNetCoreDisplayName(string displayName)
+        private static bool IsDotNetCoreDisplayName(string displayName)
         {
             return displayName == null ?
                 false :
-                new Regex(@"^Microsoft\s\.NET\sCore\s(SDK|Runtime\s\-)\s\d+\.\d+\.\d+(\s\-\spreview\d+)?\s(\(x86\)|\(x64\))$")
-                .IsMatch(displayName.ToString());
+                Regexes.DotNetCoreDisplayNameRegex.IsMatch(displayName);
         }
 
-        internal static bool IsDotNetCorePublisher(string publisher)
+        private static bool IsDotNetCorePublisher(string publisher)
         {
             return publisher == null ?
                 false :
-                publisher.ToString().Equals("Microsoft Corporation");
+                Regexes.DotNetCorePublisherRegex.IsMatch(publisher);
+        }
+
+        private static bool IsDotNetCoreExeUninstaller(int? windowsInstaller)
+        {
+            return windowsInstaller == null;
         }
     }
 }

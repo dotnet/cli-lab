@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<ISdkInfo> Filter(IEnumerable<string> argValue, IEnumerable<ISdkInfo> sdks)
         {
-            var excludedVersions = argValue.Select(versionString => SdkVersion.From(versionString));
+            var excludedVersions = argValue.Select(versionString => new SdkVersion(versionString));
             return sdks.Where(sdk => !excludedVersions.Contains(sdk.Version));
         }
     }

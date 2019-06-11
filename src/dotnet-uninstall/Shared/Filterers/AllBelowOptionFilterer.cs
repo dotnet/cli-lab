@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<ISdkInfo> Filter(string argValue, IEnumerable<ISdkInfo> sdks)
         {
-            var version = SdkVersion.From(argValue);
+            var version = new SdkVersion(argValue);
             return sdks.Where(sdk => sdk.Version.CompareTo(version) < 0);
         }
     }

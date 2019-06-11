@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+﻿using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.Win32;
@@ -16,12 +16,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public SdkRegistryKeyWrapper(RegistryKey registryKey)
         {
             DisplayName = registryKey.GetValue("DisplayName") as string;
-
             UninstallCommand = registryKey.GetValue("UninstallString") as string;
+            Version = new SdkVersion(ExtractVersionString(DisplayName));
+        }
 
-            var regex = new Regex(@"\d+\.\d+\.\d+(\s\-\spreview\d+)?");
-            var versionString = regex.Match(DisplayName).Value;
-            Version = SdkVersion.From(versionString);
+        private static string ExtractVersionString(string displayName)
+        {
+            var match = Regexes.DotNetCoreVersionRegex.Match(displayName);
+
+            if (match.Success)
+            {
+                return match.Value;
+            }
+            else
+            {
+                throw new InvalidVersionStringException(displayName);
+            }
         }
     }
 }

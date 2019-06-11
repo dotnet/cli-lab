@@ -1,27 +1,21 @@
 ﻿using System;
-using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 {
     internal class SdkVersion : IEquatable<SdkVersion>, IComparable<SdkVersion>, IComparable
     {
-        public int Major { get; set; }
-        public int Minor { get; set; }
-        public int Patch { get; set; }
-        public int? Preview { get; set; }
+        public int Major { get; }
+        public int Minor { get; }
+        public int Patch { get; }
+        public int? Preview { get; }
 
-        public SdkVersion(int major, int minor, int patch, int? preview = null)
-        {
-            Major = major;
-            Minor = minor;
-            Patch = patch;
-            Preview = preview;
-        }
+        private string _versionString;
 
-        public static SdkVersion From(string versionString)
+        public SdkVersion(string versionString)
         {
-            var regex = new Regex(@"^(?<major>\d+)\.(?<minor>\d+)\.(?<patch>\d+)((\s\-\s|\-)preview(?<preview>\d+))?$");
+            var regex = Regexes.DotNetCoreVersionExtractionRegex;
             var match = regex.Match(versionString);
 
             if (!match.Success)
@@ -29,23 +23,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
                 throw new InvalidVersionStringException(versionString);
             }
 
-            var versionMajorString = match.Groups["major"].Value;
-            var versionMinorString = match.Groups["minor"].Value;
-            var versionPatchString = match.Groups["patch"].Value;
+            var versionMajorString = match.Groups[Regexes.DotNetCoreVersionExtractionRegexMajorGroupName].Value;
+            var versionMinorString = match.Groups[Regexes.DotNetCoreVersionExtractionRegexMinorGroupName].Value;
+            var versionPatchString = match.Groups[Regexes.DotNetCoreVersionExtractionRegexPatchGroupName].Value;
 
             var versionPreviewString = match.Groups["preview"].Success ? match.Groups["preview"].Value : null;
 
-            var versionMajor = int.Parse(versionMajorString);
-            var versionMinor = int.Parse(versionMinorString);
-            var versionPatch = int.Parse(versionPatchString);
-            var versionPreview = versionPreviewString != null ? int.Parse(versionPreviewString) as int? : null;
+            Major = int.Parse(versionMajorString);
+            Minor = int.Parse(versionMinorString);
+            Patch = int.Parse(versionPatchString);
+            Preview = versionPreviewString != null ? int.Parse(versionPreviewString) as int? : null;
 
-            return new SdkVersion(versionMajor, versionMinor, versionPatch, versionPreview);
+            _versionString = versionString;
         }
 
         public override string ToString()
         {
-            return string.Format("{0}.{1}.{2}{3}", Major, Minor, Patch, Preview == null ? "" : "-preview" + Preview.Value);
+            return _versionString;
         }
 
         public override bool Equals(object obj)
