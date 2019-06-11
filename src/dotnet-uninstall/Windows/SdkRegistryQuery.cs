@@ -38,7 +38,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             return displayName == null ?
                 false :
-                Regexes.DotNetCoreDisplayNameRegex.IsMatch(displayName);
+                Regexes.DotNetCoreDisplayNameExtractionRegex.IsMatch(displayName);
         }
 
         private static bool IsDotNetCorePublisher(string publisher)

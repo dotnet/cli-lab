@@ -23,9 +23,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
                 throw new InvalidVersionStringException(versionString);
             }
 
-            var versionMajorString = match.Groups[Regexes.DotNetCoreVersionExtractionRegexMajorGroupName].Value;
-            var versionMinorString = match.Groups[Regexes.DotNetCoreVersionExtractionRegexMinorGroupName].Value;
-            var versionPatchString = match.Groups[Regexes.DotNetCoreVersionExtractionRegexPatchGroupName].Value;
+            var versionMajorString = match.Groups[Regexes.DotNetCoreExtractionRegexMajorGroupName].Value;
+            var versionMinorString = match.Groups[Regexes.DotNetCoreExtractionRegexMinorGroupName].Value;
+            var versionPatchString = match.Groups[Regexes.DotNetCoreExtractionRegexPatchGroupName].Value;
 
             var versionPreviewString = match.Groups["preview"].Success ? match.Groups["preview"].Value : null;
 

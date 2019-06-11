@@ -22,7 +22,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         private static string ExtractVersionString(string displayName)
         {
-            var match = Regexes.DotNetCoreVersionRegex.Match(displayName);
+            var match = Regexes.DotNetCoreDisplayNameExtractionRegex.Match(displayName);
 
             if (match.Success)
             {
