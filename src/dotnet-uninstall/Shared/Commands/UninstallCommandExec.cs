@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
-using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {

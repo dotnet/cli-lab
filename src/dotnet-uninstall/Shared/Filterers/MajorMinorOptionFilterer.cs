@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
-using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {

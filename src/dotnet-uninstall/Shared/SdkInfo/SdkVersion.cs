@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 {

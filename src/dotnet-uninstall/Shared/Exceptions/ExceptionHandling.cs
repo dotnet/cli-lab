@@ -1,5 +1,4 @@
 ﻿using System;
-using static Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
@@ -13,21 +12,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
                 {
                     action.Invoke();
                 }
-                catch (LinuxNotSupportedException)
+                catch (DotNetUninstallException e)
                 {
-                    PrintExceptionMessage(Messages.LinuxNotSupportedExceptionMessage);
-                }
-                catch (OptionsConflictException)
-                {
-                    PrintExceptionMessage(Messages.OptionsConflictExceptionMessage);
-                }
-                catch (InvalidVersionStringException e)
-                {
-                    PrintExceptionMessage(string.Format(Messages.InvalidVersionStringExceptionMessage, e.Message));
-                }
-                catch (SpecifiedVersionNotFoundException e)
-                {
-                    PrintExceptionMessage(string.Format(Messages.SpecifiedVersionNotFoundExceptionMessage, e.Message));
+                    PrintExceptionMessage(e.Message);
                 }
             };
         }

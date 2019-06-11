@@ -3,20 +3,32 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
-    internal static class Exceptions
+    internal abstract class DotNetUninstallException : Exception
     {
-        public class LinuxNotSupportedException : Exception { }
+        public DotNetUninstallException(string message) : base(message) { }
+    }
 
-        public class OptionsConflictException : Exception { }
+    internal class LinuxNotSupportedException : DotNetUninstallException
+    {
+        public LinuxNotSupportedException() :
+            base(Messages.LinuxNotSupportedExceptionMessage) { }
+    }
 
-        public class InvalidVersionStringException : Exception
-        {
-            public InvalidVersionStringException(string versionString) : base(versionString) { }
-        }
+    internal class OptionsConflictException : DotNetUninstallException
+    {
+        public OptionsConflictException() :
+            base(Messages.OptionsConflictExceptionMessage) { }
+    }
 
-        public class SpecifiedVersionNotFoundException : Exception
-        {
-            public SpecifiedVersionNotFoundException(SdkVersion version) : base(version.ToString()) { }
-        }
+    internal class InvalidVersionStringException : DotNetUninstallException
+    {
+        public InvalidVersionStringException(string versionString) :
+            base(string.Format(Messages.InvalidVersionStringExceptionMessageFormat, versionString)) { }
+    }
+
+    internal class SpecifiedVersionNotFoundException : DotNetUninstallException
+    {
+        public SpecifiedVersionNotFoundException(SdkVersion version) :
+            base(string.Format(Messages.SpecifiedVersionNotFoundExceptionMessageFormat, version.ToString())) { }
     }
 }

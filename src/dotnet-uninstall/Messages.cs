@@ -36,7 +36,7 @@
 
         public static readonly string LinuxNotSupportedExceptionMessage = "The Linux operating systems are not supported";
         public static readonly string OptionsConflictExceptionMessage = "Please specify only one of the options";
-        public static readonly string InvalidVersionStringExceptionMessage = "The specified version {0} is not valid";
-        public static readonly string SpecifiedVersionNotFoundExceptionMessage = "The specified version {0} is not found";
+        public static readonly string InvalidVersionStringExceptionMessageFormat = "The specified version is not valid: {0}";
+        public static readonly string SpecifiedVersionNotFoundExceptionMessageFormat = "The specified version is not found: {0}";
     }
 }
