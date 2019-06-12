@@ -40,7 +40,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
 
             var filteredBundles = option == null ?
-                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.CommandResult.Arguments, bundles) :
+                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles) :
                 OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles);
 
             ExecuteUninstall(filteredBundles);
@@ -52,7 +52,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             foreach (var option in CommandLineConfigs.Options)
             {
-                if (CommandLineParseResult.HasOption(option))
+                if (CommandLineParseResult.RootCommandResult.OptionResult(option.Name) != null)
                 {
                     if (specifiedOption == null)
                     {
