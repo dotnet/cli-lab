@@ -1,6 +1,8 @@
-﻿using System.CommandLine;
+﻿using System;
+using System.CommandLine;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
@@ -78,6 +80,79 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         {
             CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
                 .Should().NotBeEmpty();
+        }
+
+        [Theory]
+        [InlineData("--all")]
+        [InlineData("--all-lower-patches")]
+        [InlineData("--all-but-latest")]
+        [InlineData("--all-but", "2.2.300")]
+        [InlineData("--all-but", "2.2.300 3.0.100")]
+        [InlineData("--all-below", "2.2.300")]
+        [InlineData("--all-previews")]
+        [InlineData("--all-previews-but-latest")]
+        [InlineData("--major-minor", "2.2")]
+        [InlineData("", "2.2.300")]
+        [InlineData("", "2.2.300 3.0.100")]
+        [InlineData("", "--unknown-option")]
+        [InlineData("", "--unknown-option argument")]
+        public void TestGetUniqueOptionAccept(string option, string argValue = "")
+        {
+            var rootCommandResult = CommandLineConfigs.UninstallRootCommand.Parse($"{option} {argValue}").RootCommandResult;
+
+            rootCommandResult.GetUniqueOption()
+                .Should().Be(option.Equals(string.Empty) ? null : rootCommandResult.OptionResult(option).Option);
+        }
+
+        [Theory]
+        [InlineData("--all", "--all-lower-patches")]
+        [InlineData("--all", "--all-below", "", "2.2.300")]
+        [InlineData("--all", "--all-but", "", "2.2.300 2.1.700")]
+        [InlineData("--all-below", "--major-minor", "2.2.300", "2.1")]
+        [InlineData("--all-below", "--all-but", "2.2.300", "2.1.700 3.0.100")]
+        [InlineData("--all-below", "--all-but", "2.2.300", "2.1.700 3.0.100 --unknown-option")]
+        [InlineData("--all-below", "--all-but", "--unknown-option", "2.1.700 3.0.100")]
+        [InlineData("--all-below", "--major-minor", "2.2.300", "--unknown-option")]
+        public void TestGetUniqueOptionRejectOptionsConflictException(string option1, string option2, string argValue1 = "", string argValue2 = "")
+        {
+            Action action1 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option1} {argValue1} {option2} {argValue2}")
+            .RootCommandResult.GetUniqueOption();
+
+            Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option2} {argValue2} {option1} {argValue1}")
+            .RootCommandResult.GetUniqueOption();
+
+            action1.Should().Throw<OptionsConflictException>(string.Format(Messages.OptionsConflictExceptionMessageFormat, option1, option2));
+            action2.Should().Throw<OptionsConflictException>(string.Format(Messages.OptionsConflictExceptionMessageFormat, option1, option2));
+        }
+
+        [Theory]
+        [InlineData("--all", "2.2.300")]
+        [InlineData("--all-below", "2.1.700", "2.2.300")]
+        [InlineData("--all", "--unknown-option")]
+        [InlineData("--all-below", "--unknown-option-1", "--unknown-option-2")]
+        public void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgAfter(string option, string commandArgValue, string optionArgValue = "")
+        {
+            Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {optionArgValue} {commandArgValue}")
+            .RootCommandResult.GetUniqueOption();
+
+            action.Should().Throw<CommandArgOptionConflictException>(string.Format(Messages.CommandArgOptionConflictExceptionMessageFormat, option));
+        }
+
+        [Theory]
+        [InlineData("--all", "2.2.300")]
+        [InlineData("--all-below", "2.1.700", "2.2.300")]
+        [InlineData("--all-but", "2.2.300 2.1.700")]
+        [InlineData("--all", "--unknown-option")]
+        [InlineData("--all-below", "--unknown-option-1", "--unknown-option-2")]
+        [InlineData("--all-but", "--unknown-option 2.1.700")]
+        [InlineData("--all-but", "2.1.700 --unknown-option")]
+        [InlineData("--all-but", "--unknown-option-1 --unknown-option-2")]
+        public void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgBefore(string option, string commandArgValue, string optionArgValue = "")
+        {
+            Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
+            .RootCommandResult.GetUniqueOption();
+
+            action.Should().Throw<CommandArgOptionConflictException>(string.Format(Messages.CommandArgOptionConflictExceptionMessageFormat, option));
         }
     }
 }
