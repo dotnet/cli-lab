@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public int Patch { get; }
         public int? Preview { get; }
 
-        private string _versionString;
+        private readonly string _versionString;
 
         public BundleVersion(string versionString)
         {
