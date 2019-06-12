@@ -22,16 +22,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         private static string ExtractVersionString(string displayName)
         {
-            var match = Regexes.DotNetCoreBundleDisplayNameRegex.Match(displayName);
-
-            if (match.Success)
-            {
-                return match.Value;
-            }
-            else
-            {
-                throw new InvalidVersionStringException(displayName);
-            }
+            return Regexes.DotNetCoreBundleDisplayNameRegex.Match(displayName)
+                .Groups[Regexes.VersionRegexVersionGroupName].Value;
         }
     }
 }
