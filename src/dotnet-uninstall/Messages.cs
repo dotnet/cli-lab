@@ -35,7 +35,8 @@
         public static readonly string UninstallVerbosityOptionArgumentDescription = "The specified MSBuild verbosity level";
 
         public static readonly string LinuxNotSupportedExceptionMessage = "The Linux operating systems are not supported";
-        public static readonly string OptionsConflictExceptionMessage = "Please specify only one of the options";
+        public static readonly string OptionsConflictExceptionMessageFormat = "Please specify only one of the options: {0}, {1}";
+        public static readonly string CommandArgOptionConflictExceptionMessageFormat = "Please use either command arguments or the specified option: {0}";
         public static readonly string InvalidVersionStringExceptionMessageFormat = "The specified version is not valid: {0}";
         public static readonly string SpecifiedVersionNotFoundExceptionMessageFormat = "The specified version is not found: {0}";
     }

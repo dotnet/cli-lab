@@ -116,14 +116,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                     }
                     else
                     {
-                        throw new OptionsConflictException();
+                        throw new OptionsConflictException(specifiedOption, option);
                     }
                 }
             }
 
             if (specifiedOption != null && commandResult.Arguments.Count > 0)
             {
-                throw new OptionsConflictException();
+                throw new CommandArgOptionConflictException(specifiedOption);
             }
 
             return specifiedOption;
