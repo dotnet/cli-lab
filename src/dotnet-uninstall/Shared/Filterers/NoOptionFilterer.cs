@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -10,7 +11,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<IBundleInfo> Filter(IEnumerable<string> argValue, IEnumerable<IBundleInfo> bundles)
         {
-            var uninstallVersions = argValue.Select(versionString => new BundleVersion(versionString));
+            // TODO: add option handling for bundle type
+            var uninstallVersions = argValue.Select(versionString => Regexes.ParseSdkVersionFromInput(versionString));
             var bundleVersions = bundles.Select(bundle => bundle.Version);
 
             foreach (var version in uninstallVersions)

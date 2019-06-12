@@ -38,14 +38,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             return displayName == null ?
                 false :
-                Regexes.DotNetCoreBundleDisplayNameRegex.IsMatch(displayName);
+                Regexes.BundleDisplayNameRegex.IsMatch(displayName);
         }
 
         private static bool IsDotNetCoreBundlePublisher(string publisher)
         {
             return publisher == null ?
                 false :
-                Regexes.DotNetCoreBundlePublisherRegex.IsMatch(publisher);
+                Regexes.BundlePublisherRegex.IsMatch(publisher);
         }
 
         private static bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)

@@ -1,59 +1,18 @@
 ﻿using System;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal class BundleVersion : IEquatable<BundleVersion>, IComparable<BundleVersion>, IComparable
+    internal abstract class BundleVersion : IEquatable<BundleVersion>, IComparable<BundleVersion>, IComparable
     {
-        public int Major { get; }
-        public int Minor { get; }
-        public int Patch { get; }
-        public int? Preview { get; }
-
-        private readonly string _versionString;
-
-        public BundleVersion(string versionString)
-        {
-            var regex = Regexes.DotNetCoreBundleVersionRegex;
-            var match = regex.Match(versionString);
-
-            if (!match.Success)
-            {
-                throw new InvalidVersionStringException(versionString);
-            }
-
-            var versionMajorString = match.Groups[Regexes.VersionMajorGroupName].Value;
-            var versionMinorString = match.Groups[Regexes.VersionMinorGroupName].Value;
-            var versionPatchString = match.Groups[Regexes.VersionRegexPatchGroupName].Value;
-
-            var versionPreviewString = match.Groups["preview"].Success ? match.Groups["preview"].Value : null;
-
-            Major = int.Parse(versionMajorString);
-            Minor = int.Parse(versionMinorString);
-            Patch = int.Parse(versionPatchString);
-            Preview = versionPreviewString != null ? int.Parse(versionPreviewString) as int? : null;
-
-            _versionString = versionString;
-        }
-
-        public override string ToString()
-        {
-            return _versionString;
-        }
+        public int Major { get; protected set; }
+        public int Minor { get; protected set; }
+        public int Patch { get; protected set; }
+        public PreviewVersion Preview { get; protected set; }
+        public abstract BundleType Type { get; }
 
         public override bool Equals(object obj)
         {
             return Equals(obj as BundleVersion);
-        }
-
-        public bool Equals(BundleVersion other)
-        {
-            return other != null &&
-                   Major == other.Major &&
-                   Minor == other.Minor &&
-                   Patch == other.Patch &&
-                   Preview == other.Preview;
         }
 
         public override int GetHashCode()
@@ -61,49 +20,61 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             return HashCode.Combine(Major, Minor, Patch, Preview);
         }
 
-        public int CompareTo(BundleVersion other)
+        public int CompareTo(object obj)
         {
-            if (other == null)
-            {
-                return 1;
-            }
+            return CompareTo(obj as BundleVersion);
+        }
 
-            if (Major != other.Major)
-            {
-                return Major - other.Major;
-            }
-            
-            if (Minor != other.Minor)
-            {
-                return Minor - other.Minor;
-            }
+        public abstract bool Equals(BundleVersion other);
 
-            if (Patch != other.Patch)
-            {
-                return Patch - other.Patch;
-            }
+        public abstract int CompareTo(BundleVersion other);
 
-            if (Preview == other.Preview)
-            {
-                return 0;
-            }
+        public abstract override string ToString();
+    }
 
-            if (Preview == null)
-            {
-                return 1;
-            }
+    internal class PreviewVersion : IEquatable<PreviewVersion>, IComparable<PreviewVersion>, IComparable
+    {
+        public int PreviewNumber { get; }
+        public int BuildNumber { get; }
 
-            if (other.Preview == null)
-            {
-                return -1;
-            }
+        public PreviewVersion(int previewNumber, int buildNumber)
+        {
+            PreviewNumber = previewNumber;
+            BuildNumber = buildNumber;
+        }
 
-            return Preview.Value - other.Preview.Value;
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as PreviewVersion);
+        }
+
+        public bool Equals(PreviewVersion other)
+        {
+            return other != null &&
+                   PreviewNumber == other.PreviewNumber &&
+                   BuildNumber == other.BuildNumber;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(PreviewNumber, BuildNumber);
         }
 
         public int CompareTo(object obj)
         {
-            return CompareTo(obj as BundleVersion);
+            return CompareTo(obj as PreviewVersion);
+        }
+
+        public int CompareTo(PreviewVersion other)
+        {
+            return PreviewNumber != other.PreviewNumber ?
+                PreviewNumber - other.PreviewNumber :
+                BuildNumber - other.BuildNumber;
+        }
+
+        public override string ToString()
+        {
+            return $"-preview{PreviewNumber}-{BuildNumber}";
         }
     }
 }

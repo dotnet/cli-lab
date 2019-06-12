@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -9,7 +10,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<IBundleInfo> Filter(IEnumerable<string> argValue, IEnumerable<IBundleInfo> bundles)
         {
-            var excludedVersions = argValue.Select(versionString => new BundleVersion(versionString));
+            // TODO: add option handling for bundle type
+            var excludedVersions = argValue.Select(versionString => Regexes.ParseSdkVersionFromInput(versionString));
             return bundles.Where(bundle => !excludedVersions.Contains(bundle.Version));
         }
     }

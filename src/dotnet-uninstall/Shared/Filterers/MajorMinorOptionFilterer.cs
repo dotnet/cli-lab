@@ -10,15 +10,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<IBundleInfo> Filter(string argValue, IEnumerable<IBundleInfo> bundles)
         {
-            var match = Regexes.DotNetCoreBundleMajorMinorRegex.Match(argValue);
+            var match = Regexes.BundleMajorMinorRegex.Match(argValue);
 
             if (!match.Success)
             {
                 throw new InvalidVersionStringException(argValue);
             }
 
-            var versionMajorString = match.Groups[Regexes.VersionMajorGroupName].Value;
-            var versionMinorString = match.Groups[Regexes.VersionMinorGroupName].Value;
+            var versionMajorString = match.Groups[Regexes.MajorGroupName].Value;
+            var versionMinorString = match.Groups[Regexes.MinorGroupName].Value;
 
             var versionMajor = int.Parse(versionMajorString);
             var versionMinor = int.Parse(versionMinorString);
