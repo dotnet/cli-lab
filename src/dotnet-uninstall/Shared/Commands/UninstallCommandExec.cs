@@ -32,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(IEnumerable<IBundleInfo> bundles)
         {
-            var option = GetOption();
+            var option = CommandLineParseResult.RootCommandResult.GetUniqueOption();
 
             if (option == CommandLineConfigs.UninstallVerbosityOption)
             {
@@ -44,33 +44,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles);
 
             ExecuteUninstall(filteredBundles);
-        }
-
-        private static Option GetOption()
-        {
-            Option specifiedOption = null;
-
-            foreach (var option in CommandLineConfigs.Options)
-            {
-                if (CommandLineParseResult.RootCommandResult.OptionResult(option.Name) != null)
-                {
-                    if (specifiedOption == null)
-                    {
-                        specifiedOption = option;
-                    }
-                    else
-                    {
-                        throw new OptionsConflictException();
-                    }
-                }
-            }
-
-            if (specifiedOption != null && CommandLineParseResult.RootCommandResult.Arguments.Count > 0)
-            {
-                throw new OptionsConflictException();
-            }
-
-            return specifiedOption;
         }
 
         private static void ExecuteUninstall(IEnumerable<IBundleInfo> bundles)

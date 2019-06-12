@@ -101,5 +101,32 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             ListCommand.Handler = CommandHandler.Create(ExceptionHandling.HandleException(() => ListCommandExec.Execute()));
             UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandling.HandleException(() => UninstallCommandExec.Execute()));
         }
+
+        public static Option GetUniqueOption(this CommandResult commandResult)
+        {
+            Option specifiedOption = null;
+
+            foreach (var option in Options)
+            {
+                if (commandResult.OptionResult(option.Name) != null)
+                {
+                    if (specifiedOption == null)
+                    {
+                        specifiedOption = option;
+                    }
+                    else
+                    {
+                        throw new OptionsConflictException();
+                    }
+                }
+            }
+
+            if (specifiedOption != null && commandResult.Arguments.Count > 0)
+            {
+                throw new OptionsConflictException();
+            }
+
+            return specifiedOption;
+        }
     }
 }
