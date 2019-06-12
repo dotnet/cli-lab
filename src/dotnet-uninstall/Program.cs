@@ -45,6 +45,7 @@ namespace Microsoft.DotNet.Tools.Uninstall
             }
             else
             {
+                Console.WriteLine(LocalizableStrings.DoesNotSupportLinux);
                 throw new NotImplementedException();
             }
         }

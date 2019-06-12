@@ -8,6 +8,7 @@
     <ToolCommandName>dotnet-uninstall</ToolCommandName>
     <PackAsToolShimRuntimeIdentifiers>win-x64;win-x86;osx-x64</PackAsToolShimRuntimeIdentifiers>
     <PackagedShimOutputRootDirectory>$(OutputPath)</PackagedShimOutputRootDirectory>
+    <RootNamespace>Microsoft.DotNet.Tools.Uninstall</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -17,6 +18,10 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
     <PackageReference Include="System.CommandLine.Experimental" Version="0.2.0-alpha.19174.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="LocalizableStrings.resx" GenerateSource="true" />
   </ItemGroup>
 
 </Project>
