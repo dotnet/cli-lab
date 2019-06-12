@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllButLatestOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<ISdkInfo> Filter(IEnumerable<ISdkInfo> sdks)
+        public override IEnumerable<IBundleInfo> Filter(IEnumerable<IBundleInfo> bundles)
         {
-            SdkVersion latest = null;
+            BundleVersion latest = null;
 
-            foreach (var sdk in sdks)
+            foreach (var bundle in bundles)
             {
-                if (latest == null || latest.CompareTo(sdk.Version) < 0)
+                if (latest == null || latest.CompareTo(bundle.Version) < 0)
                 {
-                    latest = sdk.Version;
+                    latest = bundle.Version;
                 }
             }
 
-            return sdks.Where(sdk => !sdk.Version.Equals(latest));
+            return bundles.Where(bundle => !bundle.Version.Equals(latest));
         }
     }
 }

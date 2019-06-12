@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllBelowOptionFilterer : ArgFilterer<string>
     {
-        public override IEnumerable<ISdkInfo> Filter(string argValue, IEnumerable<ISdkInfo> sdks)
+        public override IEnumerable<IBundleInfo> Filter(string argValue, IEnumerable<IBundleInfo> bundles)
         {
-            var version = new SdkVersion(argValue);
-            return sdks.Where(sdk => sdk.Version.CompareTo(version) < 0);
+            var version = new BundleVersion(argValue);
+            return bundles.Where(bundle => bundle.Version.CompareTo(version) < 0);
         }
     }
 }

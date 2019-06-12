@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
 
@@ -18,7 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             if (RuntimeInfo.RunningOnWindows)
             {
-                Execute(SdkRegistryQuery.GetInstalledSdks());
+                Execute(RegistryQuery.GetInstalledBundles());
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static void Execute(IEnumerable<ISdkInfo> sdks)
+        private static void Execute(IEnumerable<IBundleInfo> bundles)
         {
             var option = GetOption();
 
@@ -39,11 +39,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 throw new NotImplementedException();
             }
 
-            var filteredSdks = option == null ?
-                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.CommandResult.Arguments, sdks) :
-                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, sdks);
+            var filteredBundles = option == null ?
+                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.CommandResult.Arguments, bundles) :
+                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles);
 
-            ExecuteUninstall(filteredSdks);
+            ExecuteUninstall(filteredBundles);
         }
 
         private static Option GetOption()
@@ -73,13 +73,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return specifiedOption;
         }
 
-        private static void ExecuteUninstall(IEnumerable<ISdkInfo> sdks)
+        private static void ExecuteUninstall(IEnumerable<IBundleInfo> bundles)
         {
-            foreach (var sdk in sdks)
+            foreach (var bundle in bundles)
             {
                 // TODO: replace this
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(string.Format("Uninstalling: {0}", sdk.UninstallCommand));
+                Console.WriteLine(string.Format("Uninstalling: {0}", bundle.UninstallCommand));
                 Console.ResetColor();
             }
         }

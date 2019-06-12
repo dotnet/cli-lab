@@ -1,5 +1,5 @@
 ﻿using System;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
@@ -28,7 +28,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 
     internal class SpecifiedVersionNotFoundException : DotNetUninstallException
     {
-        public SpecifiedVersionNotFoundException(SdkVersion version) :
+        public SpecifiedVersionNotFoundException(BundleVersion version) :
             base(string.Format(Messages.SpecifiedVersionNotFoundExceptionMessageFormat, version.ToString())) { }
     }
 }

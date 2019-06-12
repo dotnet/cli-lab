@@ -7,9 +7,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
     public class RegexesTests
     {
         [Fact]
-        public void TestDotNetCorePublisherRegexAccept()
+        public void TestDotNetCoreBundlePublisherRegexAccept()
         {
-            Regexes.DotNetCorePublisherRegex.IsMatch("Microsoft Corporation")
+            Regexes.DotNetCoreBundlePublisherRegex.IsMatch("Microsoft Corporation")
                 .Should().BeTrue();
         }
 
@@ -22,9 +22,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("Microsoft")]
         [InlineData("HelloMicrosoft CorporationWorld")]
         [InlineData("Hello Microsoft Corporation World")]
-        public void TestDotNetCorePublisherRegexReject(string s)
+        public void TestDotNetCoreBundlePublisherRegexReject(string s)
         {
-            Regexes.DotNetCorePublisherRegex.IsMatch(s)
+            Regexes.DotNetCoreBundlePublisherRegex.IsMatch(s)
                 .Should().BeFalse();
         }
 
@@ -43,20 +43,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("3.0.00 Preview 5", "3", "0", "00", "5")]
         [InlineData("3.0.0 Preview 05", "3", "0", "0", "05")]
         [InlineData("3.0.100 Preview 5", "3", "0", "100", "5")]
-        public void TestDotNetCoreVersionExtractionRegexAccept(string s, string major, string minor, string patch, string preview)
+        public void TestDotNetCoreBundleVersionRegexAccept(string s, string major, string minor, string patch, string preview)
         {
-            var match = Regexes.DotNetCoreVersionExtractionRegex.Match(s);
+            var match = Regexes.DotNetCoreBundleVersionRegex.Match(s);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexMajorGroupName].Value
+            match.Groups[Regexes.VersionMajorGroupName].Value
                 .Should().Be(major);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexMinorGroupName].Value
+            match.Groups[Regexes.VersionMinorGroupName].Value
                 .Should().Be(minor);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexPatchGroupName].Value
+            match.Groups[Regexes.VersionRegexPatchGroupName].Value
                 .Should().Be(patch);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexPreviewGroupName].Value
+            match.Groups[Regexes.VersionRegexPreviewGroupName].Value
                 .Should().Be(preview);
         }
 
@@ -75,9 +75,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("2.2.300 - Preview5")]
         [InlineData("3.0.0 Preview5")]
         [InlineData("3.0.0 preview 5")]
-        public void TestDotNetCoreVersionExtractionRegexReject(string s)
+        public void TestDotNetCoreBundleVersionRegexReject(string s)
         {
-            Regexes.DotNetCoreVersionExtractionRegex.IsMatch(s)
+            Regexes.DotNetCoreBundleVersionRegex.IsMatch(s)
                 .Should().BeFalse();
         }
 
@@ -86,14 +86,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("3.0", "3", "0")]
         [InlineData("03.0", "03", "0")]
         [InlineData("3.00", "3", "00")]
-        public void TestDotNetCoreMajorMinorExtractionRegexAccept(string s, string major, string minor)
+        public void TestDotNetCoreBundleMajorMinorRegexAccept(string s, string major, string minor)
         {
-            var match = Regexes.DotNetCoreMajorMinorExtractionRegex.Match(s);
+            var match = Regexes.DotNetCoreBundleMajorMinorRegex.Match(s);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexMajorGroupName].Value
+            match.Groups[Regexes.VersionMajorGroupName].Value
                 .Should().Be(major);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexMinorGroupName].Value
+            match.Groups[Regexes.VersionMinorGroupName].Value
                 .Should().Be(minor);
         }
 
@@ -101,9 +101,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("a.0")]
         [InlineData("0.a")]
         [InlineData("2,2")]
-        public void TestDotNetCoreMajorMinorExtractionRegexReject(string s)
+        public void TestDotNetCoreBundleMajorMinorRegexReject(string s)
         {
-            Regexes.DotNetCoreMajorMinorExtractionRegex.IsMatch(s)
+            Regexes.DotNetCoreBundleMajorMinorRegex.IsMatch(s)
                 .Should().BeFalse();
         }
 
@@ -114,11 +114,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("Microsoft .NET Core Runtime - 2.2.5 (x86)", "2.2.5")]
         [InlineData("Microsoft .NET Core Runtime - 3.0.0 Preview 5 (x86)", "3.0.0 Preview 5")]
         [InlineData("Microsoft .NET Core Runtime - 3.0.100 Preview 5 (x86)", "3.0.100 Preview 5")]
-        public void TestDotNetCoreDisplayNameExtractionRegexAccept(string s, string version)
+        public void TestDotNetCoreBundleDisplayNameRegexAccept(string s, string version)
         {
-            var match = Regexes.DotNetCoreDisplayNameExtractionRegex.Match(s);
+            var match = Regexes.DotNetCoreBundleDisplayNameRegex.Match(s);
 
-            match.Groups[Regexes.DotNetCoreExtractionRegexVersionGroupName].Value
+            match.Groups[Regexes.VersionRegexVersionGroupName].Value
                 .Should().Be(version);
         }
 
@@ -140,9 +140,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("Microsoft .NET Core Runtime 3.0.0 - preview5 (x64)")]
         [InlineData("Microsoft .NET Core Runtime 3.0.10 - preview5 (x64)")]
         [InlineData("Microsoft .NET Core Runtime 3.0.0 - preview 5 (x64)")]
-        public void TestDotNetCoreDisplayNameExtractionRegexReject(string s)
+        public void TestDotNetCoreBundleDisplayNameRegexReject(string s)
         {
-            Regexes.DotNetCoreDisplayNameExtractionRegex.IsMatch(s)
+            Regexes.DotNetCoreBundleDisplayNameRegex.IsMatch(s)
                 .Should().BeFalse();
         }
     }

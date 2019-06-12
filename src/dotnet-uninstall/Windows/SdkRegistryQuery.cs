@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal static class SdkRegistryQuery
+    internal static class RegistryQuery
     {
-        public static IEnumerable<ISdkInfo> GetInstalledSdks()
+        public static IEnumerable<IBundleInfo> GetInstalledBundles()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE")
@@ -20,35 +20,35 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             var names = uninstalls.GetSubKeyNames();
 
-            var sdks = names
+            var bundles = names
                 .Select(name => uninstalls.OpenSubKey(name))
-                .Where(sdk => IsDotNetCore(sdk));
+                .Where(bundle => IsDotNetCoreBundle(bundle));
 
-            return sdks.Select(sdk => new SdkRegistryKeyWrapper(sdk));
+            return bundles.Select(bundle => new RegistryKeyWrapper(bundle));
         }
 
-        private static bool IsDotNetCore(RegistryKey rkey)
+        private static bool IsDotNetCoreBundle(RegistryKey registryKey)
         {
-            return IsDotNetCoreDisplayName(rkey.GetValue("DisplayName") as string)
-                && IsDotNetCorePublisher(rkey.GetValue("Publisher") as string)
-                && IsDotNetCoreExeUninstaller(rkey.GetValue("WindowsInstaller") as int?);
+            return IsDotNetCoreBundleDisplayName(registryKey.GetValue("DisplayName") as string)
+                && IsDotNetCoreBundlePublisher(registryKey.GetValue("Publisher") as string)
+                && IsDotNetCoreBundleUninstaller(registryKey.GetValue("WindowsInstaller") as int?);
         }
 
-        private static bool IsDotNetCoreDisplayName(string displayName)
+        private static bool IsDotNetCoreBundleDisplayName(string displayName)
         {
             return displayName == null ?
                 false :
-                Regexes.DotNetCoreDisplayNameExtractionRegex.IsMatch(displayName);
+                Regexes.DotNetCoreBundleDisplayNameRegex.IsMatch(displayName);
         }
 
-        private static bool IsDotNetCorePublisher(string publisher)
+        private static bool IsDotNetCoreBundlePublisher(string publisher)
         {
             return publisher == null ?
                 false :
-                Regexes.DotNetCorePublisherRegex.IsMatch(publisher);
+                Regexes.DotNetCoreBundlePublisherRegex.IsMatch(publisher);
         }
 
-        private static bool IsDotNetCoreExeUninstaller(int? windowsInstaller)
+        private static bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)
         {
             return windowsInstaller == null;
         }

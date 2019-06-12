@@ -2,9 +2,9 @@
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
+namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal class SdkVersion : IEquatable<SdkVersion>, IComparable<SdkVersion>, IComparable
+    internal class BundleVersion : IEquatable<BundleVersion>, IComparable<BundleVersion>, IComparable
     {
         public int Major { get; }
         public int Minor { get; }
@@ -13,9 +13,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 
         private string _versionString;
 
-        public SdkVersion(string versionString)
+        public BundleVersion(string versionString)
         {
-            var regex = Regexes.DotNetCoreVersionExtractionRegex;
+            var regex = Regexes.DotNetCoreBundleVersionRegex;
             var match = regex.Match(versionString);
 
             if (!match.Success)
@@ -23,9 +23,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
                 throw new InvalidVersionStringException(versionString);
             }
 
-            var versionMajorString = match.Groups[Regexes.DotNetCoreExtractionRegexMajorGroupName].Value;
-            var versionMinorString = match.Groups[Regexes.DotNetCoreExtractionRegexMinorGroupName].Value;
-            var versionPatchString = match.Groups[Regexes.DotNetCoreExtractionRegexPatchGroupName].Value;
+            var versionMajorString = match.Groups[Regexes.VersionMajorGroupName].Value;
+            var versionMinorString = match.Groups[Regexes.VersionMinorGroupName].Value;
+            var versionPatchString = match.Groups[Regexes.VersionRegexPatchGroupName].Value;
 
             var versionPreviewString = match.Groups["preview"].Success ? match.Groups["preview"].Value : null;
 
@@ -44,10 +44,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as SdkVersion);
+            return Equals(obj as BundleVersion);
         }
 
-        public bool Equals(SdkVersion other)
+        public bool Equals(BundleVersion other)
         {
             return other != null &&
                    Major == other.Major &&
@@ -61,7 +61,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
             return HashCode.Combine(Major, Minor, Patch, Preview);
         }
 
-        public int CompareTo(SdkVersion other)
+        public int CompareTo(BundleVersion other)
         {
             if (other == null)
             {
@@ -103,7 +103,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo
 
         public int CompareTo(object obj)
         {
-            return CompareTo(obj as SdkVersion);
+            return CompareTo(obj as BundleVersion);
         }
     }
 }

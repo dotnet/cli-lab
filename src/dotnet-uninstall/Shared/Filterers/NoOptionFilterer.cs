@@ -2,26 +2,26 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class NoOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
-        public override IEnumerable<ISdkInfo> Filter(IEnumerable<string> argValue, IEnumerable<ISdkInfo> sdks)
+        public override IEnumerable<IBundleInfo> Filter(IEnumerable<string> argValue, IEnumerable<IBundleInfo> bundles)
         {
-            var uninstallVersions = argValue.Select(versionString => new SdkVersion(versionString));
-            var sdkVersions = sdks.Select(sdk => sdk.Version);
+            var uninstallVersions = argValue.Select(versionString => new BundleVersion(versionString));
+            var bundleVersions = bundles.Select(bundle => bundle.Version);
 
             foreach (var version in uninstallVersions)
             {
-                if (!sdkVersions.Contains(version))
+                if (!bundleVersions.Contains(version))
                 {
                     throw new SpecifiedVersionNotFoundException(version);
                 }
             }
 
-            return sdks.Where(sdk => uninstallVersions.Contains(sdk.Version));
+            return bundles.Where(bundle => uninstallVersions.Contains(bundle.Version));
         }
     }
 }

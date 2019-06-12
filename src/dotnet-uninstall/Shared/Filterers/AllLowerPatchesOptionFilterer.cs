@@ -1,34 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.DotNet.Tools.Uninstall.Shared.SdkInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllLowerPatchesOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<ISdkInfo> Filter(IEnumerable<ISdkInfo> sdks)
+        public override IEnumerable<IBundleInfo> Filter(IEnumerable<IBundleInfo> bundles)
         {
             var highestPatches = new Dictionary<Tuple<int, int>, int>();
 
-            foreach (var sdk in sdks)
+            foreach (var bundle in bundles)
             {
-                var majorMinor = new Tuple<int, int>(sdk.Version.Major, sdk.Version.Minor);
+                var majorMinor = new Tuple<int, int>(bundle.Version.Major, bundle.Version.Minor);
 
                 if (highestPatches.TryGetValue(majorMinor, out var highestPatch))
                 {
-                    highestPatches[majorMinor] = sdk.Version.Patch;
+                    highestPatches[majorMinor] = bundle.Version.Patch;
                 }
                 else
                 {
-                    highestPatches.Add(majorMinor, sdk.Version.Patch);
+                    highestPatches.Add(majorMinor, bundle.Version.Patch);
                 }
             }
 
-            return sdks.Where(sdk =>
+            return bundles.Where(bundle =>
             {
-                highestPatches.TryGetValue(new Tuple<int, int>(sdk.Version.Major, sdk.Version.Minor), out var highestPatch);
-                return sdk.Version.Patch < highestPatch;
+                highestPatches.TryGetValue(new Tuple<int, int>(bundle.Version.Major, bundle.Version.Minor), out var highestPatch);
+                return bundle.Version.Patch < highestPatch;
             });
         }
     }
