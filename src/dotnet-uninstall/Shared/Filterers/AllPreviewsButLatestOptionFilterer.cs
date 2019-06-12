@@ -18,7 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 }
             }
 
-            return bundles.Where(bundle => !bundle.Version.Equals(latest));
+            return bundles.Where(bundle => bundle.Version.Preview != null && !bundle.Version.Equals(latest));
         }
     }
 }
