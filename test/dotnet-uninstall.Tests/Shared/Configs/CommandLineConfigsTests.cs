@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
     public class CommandLineConfigsTests
     {
         [Fact]
-        public void TestListCommandAccept()
+        internal void TestListCommandAccept()
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse("list");
 
@@ -33,7 +33,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list --major-minor 2.2")]
         [InlineData("list 2.2")]
         [InlineData("list 2.2.300")]
-        public void TestListCommandReject(string command)
+        internal void TestListCommandReject(string command)
         {
             CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
                 .Should().NotBeEmpty();
@@ -53,7 +53,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
         [InlineData("", "--unknown-option", new[] { "--unknown-option" })]
         [InlineData("", "--unknown-option argument", new[] { "--unknown-option", "argument" })]
-        public void TestOptionsAccept(string option, string argValue = "", object expected = null)
+        internal void TestOptionsAccept(string option, string argValue = "", object expected = null)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{option} {argValue}");
 
@@ -76,7 +76,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-but")]
         [InlineData("--all-below")]
         [InlineData("--major-minor")]
-        public void TestOptionsReject(string command)
+        internal void TestOptionsReject(string command)
         {
             CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
                 .Should().NotBeEmpty();
@@ -96,7 +96,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("", "2.2.300 3.0.100")]
         [InlineData("", "--unknown-option")]
         [InlineData("", "--unknown-option argument")]
-        public void TestGetUniqueOptionAccept(string option, string argValue = "")
+        internal void TestGetUniqueOptionAccept(string option, string argValue = "")
         {
             var rootCommandResult = CommandLineConfigs.UninstallRootCommand.Parse($"{option} {argValue}").RootCommandResult;
 
@@ -113,7 +113,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below", "--all-but", "2.2.300", "2.1.700 3.0.100 --unknown-option")]
         [InlineData("--all-below", "--all-but", "--unknown-option", "2.1.700 3.0.100")]
         [InlineData("--all-below", "--major-minor", "2.2.300", "--unknown-option")]
-        public void TestGetUniqueOptionRejectOptionsConflictException(string option1, string option2, string argValue1 = "", string argValue2 = "")
+        internal void TestGetUniqueOptionRejectOptionsConflictException(string option1, string option2, string argValue1 = "", string argValue2 = "")
         {
             Action action1 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option1} {argValue1} {option2} {argValue2}")
             .RootCommandResult.GetUniqueOption();
@@ -130,7 +130,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below", "2.1.700", "2.2.300")]
         [InlineData("--all", "--unknown-option")]
         [InlineData("--all-below", "--unknown-option-1", "--unknown-option-2")]
-        public void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgAfter(string option, string commandArgValue, string optionArgValue = "")
+        internal void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgAfter(string option, string commandArgValue, string optionArgValue = "")
         {
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {optionArgValue} {commandArgValue}")
             .RootCommandResult.GetUniqueOption();
@@ -147,7 +147,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-but", "--unknown-option 2.1.700")]
         [InlineData("--all-but", "2.1.700 --unknown-option")]
         [InlineData("--all-but", "--unknown-option-1 --unknown-option-2")]
-        public void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgBefore(string option, string commandArgValue, string optionArgValue = "")
+        internal void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgBefore(string option, string commandArgValue, string optionArgValue = "")
         {
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
             .RootCommandResult.GetUniqueOption();

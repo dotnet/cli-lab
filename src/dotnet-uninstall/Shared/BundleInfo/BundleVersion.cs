@@ -109,10 +109,5 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
                 PreviewNumber - other.PreviewNumber :
                 BuildNumber - other.BuildNumber;
         }
-
-        public override string ToString()
-        {
-            return $"-preview{PreviewNumber}-{BuildNumber}";
-        }
     }
 }

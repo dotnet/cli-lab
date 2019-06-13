@@ -47,15 +47,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public override string ToString()
         {
-            string archString = "";
-            switch (Arch)
-            {
-                case BundleArch.X64: archString = "x64"; break;
-                case BundleArch.X86: archString = "x86"; break;
-                case BundleArch.Arm32: archString = "arm32"; break;
-            }
-
-            return $"{Version.ToString()} ({archString})";
+            return $"{Version.ToString()} ({Arch.ToString()})";
         }
     }
 }
