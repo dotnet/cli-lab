@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Xunit;
@@ -10,12 +12,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [Theory]
         [InlineData(5, 23758)]
         [InlineData(null, 23758)]
+        [InlineData(0, 23758)]
+        [InlineData(5, 0)]
+        [InlineData(0, 0)]
         internal void TestConstructor(int? previewNumber, int buildNumber)
         {
             var preview = new BundleVersion.PreviewVersion(previewNumber, buildNumber);
 
             preview.PreviewNumber.Should().Be(previewNumber);
             preview.BuildNumber.Should().Be(buildNumber);
+        }
+
+        [Theory]
+        [InlineData(-1, 23758)]
+        [InlineData(5, -23758)]
+        [InlineData(null, -1)]
+        [InlineData(-5, -23758)]
+        internal void TestConstructorInvalid(int? previewNumber, int buildNumber)
+        {
+            Action action = () => new BundleVersion.PreviewVersion(previewNumber, buildNumber);
+            action.Should().Throw<InvalidDataException>();
         }
 
         [Theory]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
@@ -15,6 +16,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public BundleVersion(int major, int minor, int patch, PreviewVersion preview = null)
         {
+            if (major < 0 || minor < 0 || patch < 0)
+            {
+                throw new InvalidDataException();
+            }
+
             Major = major;
             Minor = minor;
             Patch = patch;
@@ -26,17 +32,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             return Equals(obj as BundleVersion);
         }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Major, Minor, Patch, Preview);
-        }
-
         public int CompareTo(object obj)
         {
             return CompareTo(obj as BundleVersion);
         }
 
         public abstract bool Equals(BundleVersion other);
+
+        public abstract override int GetHashCode();
 
         public abstract int CompareTo(BundleVersion other);
 
@@ -83,6 +86,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
             public PreviewVersion(int? previewNumber, int buildNumber)
             {
+                if (previewNumber != null && previewNumber.Value < 0 || buildNumber < 0)
+                {
+                    throw new InvalidDataException();
+                }
+
                 PreviewNumber = previewNumber;
                 BuildNumber = buildNumber;
             }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
@@ -14,6 +15,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             yield return new object[]
             {
                 2, 2, 5, null
+            };
+
+            yield return new object[]
+            {
+                0, 2, 5, null
             };
 
             yield return new object[]
@@ -42,7 +48,40 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             version.Type.Should().Be(BundleType.Runtime);
         }
 
-        public static IEnumerable<object[]> GetDataForTestFromInput()
+        public static IEnumerable<object[]> GetDataForTestConstructorInvalid()
+        {
+            yield return new object[]
+            {
+                -2, 2, 5, null
+            };
+
+            yield return new object[]
+            {
+                -1, 2, 5, null
+            };
+
+            yield return new object[]
+            {
+                3, -1, 0,
+                new BundleVersion.PreviewVersion(5, 27363)
+            };
+
+            yield return new object[]
+            {
+                3, 0, -1,
+                new BundleVersion.PreviewVersion(null, 27363)
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetDataForTestConstructorInvalid))]
+        internal void TestConstructorInvalid(int major, int minor, int patch, BundleVersion.PreviewVersion preview)
+        {
+            Action action = () => new RuntimeVersion(major, minor, patch, preview);
+            action.Should().Throw<InvalidDataException>();
+        }
+
+        public static IEnumerable<object[]> GetDataForTestFromInputAccept()
         {
             yield return new object[]
             {
@@ -54,6 +93,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             {
                 "3.0.0-preview5-27626",
                 new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 27626))
+            };
+
+            yield return new object[]
+            {
+                "3.0.0-preview5-0",
+                new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 0))
             };
 
             yield return new object[]
@@ -70,13 +115,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
+                "3.0.0-preview05-27626",
+                new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 27626))
+            };
+
+            yield return new object[]
+            {
                 "12.345.678-preview9101-11213",
                 new RuntimeVersion(12, 345, 678, new BundleVersion.PreviewVersion(9101, 11213))
             };
         }
 
         [Theory]
-        [MemberData(nameof(GetDataForTestFromInput))]
+        [MemberData(nameof(GetDataForTestFromInputAccept))]
         internal void TestFromInputAccept(string input, RuntimeVersion expected)
         {
             RuntimeVersion.FromInput(input)

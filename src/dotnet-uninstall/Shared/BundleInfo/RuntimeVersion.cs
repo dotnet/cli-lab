@@ -20,6 +20,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             return Equals(other as RuntimeVersion);
         }
 
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Major, Minor, Patch, Preview);
+        }
+
         public override int CompareTo(BundleVersion other)
         {
             if (other is RuntimeVersion)

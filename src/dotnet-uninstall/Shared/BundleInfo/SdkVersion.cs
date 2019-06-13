@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
@@ -10,6 +11,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public SdkVersion(int major, int minor, int sdkMinor, int patch, PreviewVersion preview = null) : base(major, minor, patch, preview)
         {
+            if (sdkMinor < 0 || patch >= 100)
+            {
+                throw new InvalidDataException();
+            }
+
             SdkMinor = sdkMinor;
         }
 
@@ -26,6 +32,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public override bool Equals(BundleVersion other)
         {
             return Equals(other as SdkVersion);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Major, Minor, SdkMinor, Patch, Preview);
         }
 
         public override int CompareTo(BundleVersion other)
