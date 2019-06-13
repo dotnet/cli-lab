@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Xunit;
@@ -18,6 +19,38 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             bundle.Version.Should().Be(version);
             bundle.Arch.Should().Be(BundleArch.X64);
             bundle.UninstallCommand.Should().Be(uninstallCommand);
+        }
+
+        public static IEnumerable<object[]> GetDataForTestConstructorNull()
+        {
+            yield return new object[]
+            {
+                null,
+                BundleArch.X64,
+                "some random uninstall command"
+            };
+
+            yield return new object[]
+            {
+                new RuntimeVersion(2, 2, 5, null),
+                BundleArch.X86,
+                null
+            };
+
+            yield return new object[]
+            {
+                null,
+                BundleArch.Arm32,
+                null
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetDataForTestConstructorNull))]
+        internal void TestConstructorNull(BundleVersion version, BundleArch arch, string uninstallCommand)
+        {
+            Action action = () => new Bundle(version, arch, uninstallCommand);
+            action.Should().Throw<ArgumentNullException>();
         }
 
         public static IEnumerable<object[]> GetDataForTestEquality()

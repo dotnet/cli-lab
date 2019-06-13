@@ -11,6 +11,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public Bundle(BundleVersion version, BundleArch arch, string uninstallCommand)
         {
+            if (version == null || uninstallCommand == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             Version = version;
             Arch = arch;
             UninstallCommand = uninstallCommand;
