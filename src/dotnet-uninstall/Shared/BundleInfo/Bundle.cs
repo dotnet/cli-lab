@@ -28,6 +28,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public int CompareTo(Bundle other)
         {
+            if (other == null)
+            {
+                return 1;
+            }
+
             return Version.Equals(other.Version) ?
                 Arch.CompareTo(other.Arch) :
                 Version.CompareTo(other.Version);

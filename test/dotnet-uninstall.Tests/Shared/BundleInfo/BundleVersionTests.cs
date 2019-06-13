@@ -68,6 +68,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             preview2.CompareTo((object)preview1).Should().BeGreaterThan(0);
         }
 
+        public static IEnumerable<object[]> GetDataForTestInequalityNull()
+        {
+            yield return new object[]
+            {
+                new BundleVersion.PreviewVersion(5, 32768)
+            };
+
+            yield return new object[]
+            {
+                new BundleVersion.PreviewVersion(null, 32768)
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetDataForTestInequalityNull))]
+        internal void TestInequalityNull(BundleVersion.PreviewVersion preview)
+        {
+            preview.Equals(null).Should().BeFalse();
+            preview.CompareTo(null).Should().BeLessThan(0);
+        }
+
         [Theory]
         [InlineData(5, 23758, "D5", "-preview5-23758")]
         [InlineData(null, 23758, "D5", "-preview-23758")]

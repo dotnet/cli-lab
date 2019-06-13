@@ -30,10 +30,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
         { }
     }
 
-    internal class InvalidVersionStringException : DotNetUninstallException
+    internal class InvalidInputVersionStringException : DotNetUninstallException
     {
-        public InvalidVersionStringException(string versionString) :
-            base(string.Format(Messages.InvalidVersionStringExceptionMessageFormat, versionString))
+        public InvalidInputVersionStringException(string versionString) :
+            base(string.Format(Messages.InvalidInputVersionStringExceptionMessageFormat, versionString))
         { }
     }
 

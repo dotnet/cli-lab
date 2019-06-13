@@ -32,9 +32,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var patch = int.Parse(patchString);
 
             BundleVersion.PreviewVersion preview;
-            if (match.Groups[Regexes.PreviewNumberGroupName].Success)
+            if (match.Groups[Regexes.PreviewGroupName].Success)
             {
-                var previewNumber = match.Groups[Regexes.PreviewGroupName].Success ?
+                var previewNumber = match.Groups[Regexes.PreviewNumberGroupName].Success ?
                     int.Parse(match.Groups[Regexes.PreviewNumberGroupName].Value) as int? :
                     null;
 

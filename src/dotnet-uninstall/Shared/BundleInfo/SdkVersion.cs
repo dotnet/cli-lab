@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public int SdkMinor { get; }
         public override BundleType Type { get; } = BundleType.Sdk;
 
-        public SdkVersion(int major, int minor, int sdkMinor, int patch, PreviewVersion preview) : base(major, minor, patch, preview)
+        public SdkVersion(int major, int minor, int sdkMinor, int patch, PreviewVersion preview = null) : base(major, minor, patch, preview)
         {
             SdkMinor = sdkMinor;
         }
@@ -30,7 +30,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public override int CompareTo(BundleVersion other)
         {
-            return CompareTo(other as SdkVersion);
+            if (other is SdkVersion)
+            {
+                return CompareTo(other as SdkVersion);
+            }
+            else
+            {
+                return -1;
+            }
         }
 
         public bool Equals(SdkVersion other)
@@ -68,6 +75,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             if (Patch != other.Patch)
             {
                 return Patch - other.Patch;
+            }
+
+            if (Preview == other.Preview)
+            {
+                return 0;
             }
 
             return Preview == null ? 1 : Preview.CompareTo(other.Preview);

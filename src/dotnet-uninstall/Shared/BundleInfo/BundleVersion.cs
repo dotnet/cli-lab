@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
@@ -12,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public PreviewVersion Preview { get; protected set; }
         public abstract BundleType Type { get; }
 
-        public BundleVersion(int major, int minor, int patch, PreviewVersion preview)
+        public BundleVersion(int major, int minor, int patch, PreviewVersion preview = null)
         {
             Major = major;
             Minor = minor;
@@ -45,6 +46,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         {
             match = regex.Match(input);
 
+            if (!match.Success)
+            {
+                throw new InvalidInputVersionStringException(input);
+            }
+
             var majorString = match.Groups[Regexes.MajorGroupName].Value;
             var minorString = match.Groups[Regexes.MinorGroupName].Value;
             var patchString = match.Groups[Regexes.PatchGroupName].Value;
@@ -53,9 +59,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             minor = int.Parse(minorString);
             patch = int.Parse(patchString);
 
-            if (match.Groups[Regexes.PreviewNumberGroupName].Success)
+            if (match.Groups[Regexes.PreviewGroupName].Success)
             {
-                var previewNumber = match.Groups[Regexes.PreviewGroupName].Success ?
+                var previewNumber = match.Groups[Regexes.PreviewNumberGroupName].Success ?
                     int.Parse(match.Groups[Regexes.PreviewNumberGroupName].Value) as int? :
                     null;
 
@@ -105,6 +111,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
             public int CompareTo(PreviewVersion other)
             {
+                if (other == null)
+                {
+                    return -1;
+                }
+
                 if (PreviewNumber == other.PreviewNumber)
                 {
                     return BuildNumber - other.BuildNumber;
