@@ -75,10 +75,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public override string ToString()
         {
-            var previewString = Preview == null ?
-                string.Empty :
-                $"-preview{Preview.PreviewNumber}-{Preview.BuildNumber.ToString("D6")}";
-
+            var previewString = Preview == null ? string.Empty : Preview.ToString("D6");
             return $"{Major}.{Minor}.{SdkMinor}{Patch.ToString("D2")}{previewString}";
         }
     }

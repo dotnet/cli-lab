@@ -31,18 +31,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var minor = int.Parse(minorString);
             var patch = int.Parse(patchString);
 
-            PreviewVersion preview;
-            if (match.Groups[Regexes.PreviewGroupName].Success)
+            BundleVersion.PreviewVersion preview;
+            if (match.Groups[Regexes.PreviewNumberGroupName].Success)
             {
-                var previewNumberString = match.Groups[Regexes.PreviewGroupName].Value;
+                var previewNumber = match.Groups[Regexes.PreviewGroupName].Success ?
+                    int.Parse(match.Groups[Regexes.PreviewNumberGroupName].Value) as int? :
+                    null;
 
                 var buildNumberMatch = Regexes.BundleDisplayVersionStringRegex.Match(displayVersion);
-                var buildNumberString = buildNumberMatch.Groups[Regexes.BuildGroupName].Value;
-
-                var previewNumber = int.Parse(previewNumberString);
+                var buildNumberString = buildNumberMatch.Groups[Regexes.BuildNumberGroupName].Value;
                 var buildNumber = int.Parse(buildNumberString);
 
-                preview = new PreviewVersion(previewNumber, buildNumber);
+                preview = new BundleVersion.PreviewVersion(previewNumber, buildNumber);
             }
             else
             {

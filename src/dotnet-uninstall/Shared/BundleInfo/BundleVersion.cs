@@ -53,12 +53,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             minor = int.Parse(minorString);
             patch = int.Parse(patchString);
 
-            if (match.Groups[Regexes.PreviewGroupName].Success)
+            if (match.Groups[Regexes.PreviewNumberGroupName].Success)
             {
-                var previewNumberString = match.Groups[Regexes.PreviewGroupName].Value;
-                var buildNumberString = match.Groups[Regexes.BuildGroupName].Value;
+                var previewNumber = match.Groups[Regexes.PreviewGroupName].Success ?
+                    int.Parse(match.Groups[Regexes.PreviewNumberGroupName].Value) as int? :
+                    null;
 
-                var previewNumber = int.Parse(previewNumberString);
+                var buildNumberString = match.Groups[Regexes.BuildNumberGroupName].Value;
                 var buildNumber = int.Parse(buildNumberString);
 
                 preview = new PreviewVersion(previewNumber, buildNumber);
@@ -68,46 +69,65 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
                 preview = null;
             }
         }
-    }
 
-    internal class PreviewVersion : IEquatable<PreviewVersion>, IComparable<PreviewVersion>, IComparable
-    {
-        public int PreviewNumber { get; }
-        public int BuildNumber { get; }
-
-        public PreviewVersion(int previewNumber, int buildNumber)
+        internal class PreviewVersion : IEquatable<PreviewVersion>, IComparable<PreviewVersion>, IComparable
         {
-            PreviewNumber = previewNumber;
-            BuildNumber = buildNumber;
-        }
+            public int? PreviewNumber { get; }
+            public int BuildNumber { get; }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as PreviewVersion);
-        }
+            public PreviewVersion(int? previewNumber, int buildNumber)
+            {
+                PreviewNumber = previewNumber;
+                BuildNumber = buildNumber;
+            }
 
-        public bool Equals(PreviewVersion other)
-        {
-            return other != null &&
-                   PreviewNumber == other.PreviewNumber &&
-                   BuildNumber == other.BuildNumber;
-        }
+            public override bool Equals(object obj)
+            {
+                return Equals(obj as PreviewVersion);
+            }
 
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(PreviewNumber, BuildNumber);
-        }
+            public bool Equals(PreviewVersion other)
+            {
+                return other != null &&
+                       PreviewNumber == other.PreviewNumber &&
+                       BuildNumber == other.BuildNumber;
+            }
 
-        public int CompareTo(object obj)
-        {
-            return CompareTo(obj as PreviewVersion);
-        }
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(PreviewNumber, BuildNumber);
+            }
 
-        public int CompareTo(PreviewVersion other)
-        {
-            return PreviewNumber != other.PreviewNumber ?
-                PreviewNumber - other.PreviewNumber :
-                BuildNumber - other.BuildNumber;
+            public int CompareTo(object obj)
+            {
+                return CompareTo(obj as PreviewVersion);
+            }
+
+            public int CompareTo(PreviewVersion other)
+            {
+                if (PreviewNumber == other.PreviewNumber)
+                {
+                    return BuildNumber - other.BuildNumber;
+                }
+
+                if (PreviewNumber == null || other.PreviewNumber == null)
+                {
+                    return PreviewNumber == null ? -1 : 1;
+                }
+                else
+                {
+                    return PreviewNumber.Value - other.PreviewNumber.Value;
+                }
+            }
+
+            public string ToString(string buildNumberFormat)
+            {
+                var previewNumberString = PreviewNumber == null ?
+                    string.Empty :
+                    PreviewNumber.Value.ToString();
+
+                return $"-preview{previewNumberString}-{BuildNumber.ToString(buildNumberFormat)}";
+            }
         }
     }
 }

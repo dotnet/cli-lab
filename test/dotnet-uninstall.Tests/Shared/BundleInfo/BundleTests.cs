@@ -63,8 +63,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new Bundle(new RuntimeVersion(2, 2, 5, new PreviewVersion(5, 11736)), BundleArch.Arm32, "some uninstall command"),
-                new Bundle(new RuntimeVersion(2, 2, 5, new PreviewVersion(5, 11736)), BundleArch.Arm32, "yet another uninstall command")
+                new Bundle(new RuntimeVersion(2, 2, 5, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.Arm32, "some uninstall command"),
+                new Bundle(new RuntimeVersion(2, 2, 5, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.Arm32, "yet another uninstall command")
             };
         }
 
@@ -86,8 +86,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new Bundle(new SdkVersion(3, 0, 1, 0, new PreviewVersion(5, 12345)), BundleArch.X86, "some uninstall command"),
-                new Bundle(new SdkVersion(3, 0, 1, 0, new PreviewVersion(5, 23767)), BundleArch.X86, "some other uninstall command")
+                new Bundle(new SdkVersion(3, 0, 1, 0, new BundleVersion.PreviewVersion(5, 12345)), BundleArch.X86, "some uninstall command"),
+                new Bundle(new SdkVersion(3, 0, 1, 0, new BundleVersion.PreviewVersion(5, 23767)), BundleArch.X86, "some other uninstall command")
             };
 
             yield return new object[]
@@ -104,8 +104,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new Bundle(new RuntimeVersion(3, 0, 0, new PreviewVersion(5, 11736)), BundleArch.X86, "same uninstall command"),
-                new Bundle(new RuntimeVersion(3, 0, 0, new PreviewVersion(5, 11736)), BundleArch.X64, "same uninstall command")
+                new Bundle(new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.X86, "same uninstall command"),
+                new Bundle(new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.X64, "same uninstall command")
             };
         }
 
@@ -136,7 +136,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new SdkVersion(3, 0, 1, 0, new PreviewVersion(5, 23767)),
+                new SdkVersion(3, 0, 1, 0, new BundleVersion.PreviewVersion(5, 23767)),
                 BundleArch.Arm32
             };
         }
