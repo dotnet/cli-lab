@@ -5,22 +5,17 @@ using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal class RegistryKeyWrapper : Bundle
+    internal static class RegistryKeyWrapper
     {
-        public override BundleVersion Version { get; }
-        public override BundleArch Arch { get; }
-        public override string UninstallCommand { get; }
-
-        public RegistryKeyWrapper(RegistryKey registryKey)
+        public static Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;
             var displayVersion = registryKey.GetValue("DisplayVersion") as string;
+            var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
 
             ParseVersionFromDisplayNameAndBundleVersion(displayName, displayVersion, out var version, out var arch);
 
-            Version = version;
-            Arch = arch;
-            UninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
+            return new Bundle(version, arch, uninstallCommand);
         }
 
         private static void ParseVersionFromDisplayNameAndBundleVersion(string displayName, string displayVersion, out BundleVersion version, out BundleArch arch)

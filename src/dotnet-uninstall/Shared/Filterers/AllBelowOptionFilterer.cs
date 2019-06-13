@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public override IEnumerable<BundleInfo.Bundle> Filter(string argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             // TODO: add option handling for bundle type
-            var version = Regexes.ParseSdkVersionFromInput(argValue);
+            var version = SdkVersion.FromInput(argValue);
             return bundles.Where(bundle => bundle.Version.CompareTo(version) < 0);
         }
     }

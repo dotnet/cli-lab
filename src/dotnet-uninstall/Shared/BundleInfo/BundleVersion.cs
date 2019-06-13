@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text.RegularExpressions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
@@ -9,6 +11,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public int Patch { get; protected set; }
         public PreviewVersion Preview { get; protected set; }
         public abstract BundleType Type { get; }
+
+        public BundleVersion(int major, int minor, int patch, PreviewVersion preview)
+        {
+            Major = major;
+            Minor = minor;
+            Patch = patch;
+            Preview = preview;
+        }
 
         public override bool Equals(object obj)
         {
@@ -30,6 +40,34 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public abstract int CompareTo(BundleVersion other);
 
         public abstract override string ToString();
+
+        protected static void ParseFromInput(Regex regex, string input, out int major, out int minor, out int patch, out PreviewVersion preview, out Match match)
+        {
+            match = regex.Match(input);
+
+            var majorString = match.Groups[Regexes.MajorGroupName].Value;
+            var minorString = match.Groups[Regexes.MinorGroupName].Value;
+            var patchString = match.Groups[Regexes.PatchGroupName].Value;
+
+            major = int.Parse(majorString);
+            minor = int.Parse(minorString);
+            patch = int.Parse(patchString);
+
+            if (match.Groups[Regexes.PreviewGroupName].Success)
+            {
+                var previewNumberString = match.Groups[Regexes.PreviewGroupName].Value;
+                var buildNumberString = match.Groups[Regexes.BuildGroupName].Value;
+
+                var previewNumber = int.Parse(previewNumberString);
+                var buildNumber = int.Parse(buildNumberString);
+
+                preview = new PreviewVersion(previewNumber, buildNumber);
+            }
+            else
+            {
+                preview = null;
+            }
+        }
     }
 
     internal class PreviewVersion : IEquatable<PreviewVersion>, IComparable<PreviewVersion>, IComparable

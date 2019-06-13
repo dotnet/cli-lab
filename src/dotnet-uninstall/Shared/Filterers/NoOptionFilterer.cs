@@ -12,7 +12,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<string> argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             // TODO: add option handling for bundle type
-            var uninstallVersions = argValue.Select(versionString => Regexes.ParseSdkVersionFromInput(versionString));
+            var uninstallVersions = argValue.Select(versionString => SdkVersion.FromInput(versionString));
             var bundleVersions = bundles.Select(bundle => bundle.Version);
 
             foreach (var version in uninstallVersions)

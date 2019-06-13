@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
@@ -6,12 +7,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     {
         public override BundleType Type { get; } = BundleType.Runtime;
 
-        public RuntimeVersion(int major, int minor, int patch, PreviewVersion preview)
+        public RuntimeVersion(int major, int minor, int patch, PreviewVersion preview) : base(major, minor, patch, preview) { }
+
+        public static RuntimeVersion FromInput(string input)
         {
-            Major = major;
-            Minor = minor;
-            Patch = patch;
-            Preview = preview;
+            ParseFromInput(Regexes.RuntimeVersionInputRegex, input, out var major, out var minor, out var patch, out var preview, out var _);
+            return new RuntimeVersion(major, minor, patch, preview);
         }
 
         public override bool Equals(BundleVersion other)

@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<string> argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             // TODO: add option handling for bundle type
-            var excludedVersions = argValue.Select(versionString => Regexes.ParseSdkVersionFromInput(versionString));
+            var excludedVersions = argValue.Select(versionString => SdkVersion.FromInput(versionString));
             return bundles.Where(bundle => !excludedVersions.Contains(bundle.Version));
         }
     }

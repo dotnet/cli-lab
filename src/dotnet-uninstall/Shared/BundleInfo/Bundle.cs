@@ -3,11 +3,18 @@ using System.Collections.Generic;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal abstract class Bundle : IEquatable<Bundle>, IComparable<Bundle>, IComparable
+    internal class Bundle : IEquatable<Bundle>, IComparable<Bundle>, IComparable
     {
-        public abstract BundleVersion Version { get; }
-        public abstract BundleArch Arch { get; }
-        public abstract string UninstallCommand { get; }
+        public BundleVersion Version { get; }
+        public BundleArch Arch { get; }
+        public string UninstallCommand { get; }
+
+        public Bundle(BundleVersion version, BundleArch arch, string uninstallCommand)
+        {
+            Version = version;
+            Arch = arch;
+            UninstallCommand = uninstallCommand;
+        }
 
         public int CompareTo(object obj)
         {
