@@ -6,26 +6,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal interface IFilterer
     {
-        IEnumerable<BundleInfo.Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<BundleInfo.Bundle> bundles);
+        IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles);
     }
 
     internal abstract class ArgFilterer<TArg> : IFilterer
     {
-        public IEnumerable<BundleInfo.Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<BundleInfo.Bundle> bundles)
+        public IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles)
         {
             return Filter(parseResult.ValueForOption<TArg>(option.Name), bundles);
         }
 
-        public abstract IEnumerable<BundleInfo.Bundle> Filter(TArg argValue, IEnumerable<BundleInfo.Bundle> bundles);
+        public abstract IEnumerable<Bundle> Filter(TArg argValue, IEnumerable<Bundle> bundles);
     }
 
     internal abstract class NoArgFilterer : IFilterer
     {
-        public IEnumerable<BundleInfo.Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<BundleInfo.Bundle> bundles)
+        public IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles)
         {
             return Filter(bundles);
         }
 
-        public abstract IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<BundleInfo.Bundle> bundles);
+        public abstract IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles);
     }
 }

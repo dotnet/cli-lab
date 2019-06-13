@@ -6,7 +6,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllPreviewsButLatestOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<BundleInfo.Bundle> bundles)
+        public override IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles)
         {
             BundleVersion latest = null;
 

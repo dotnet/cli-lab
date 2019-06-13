@@ -7,7 +7,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllLowerPatchesOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<BundleInfo.Bundle> bundles)
+        public override IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles)
         {
             var highestPatches = new Dictionary<Tuple<int, int>, int>();
 
