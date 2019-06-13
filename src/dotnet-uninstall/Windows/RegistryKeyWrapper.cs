@@ -5,26 +5,32 @@ using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal class RegistryKeyWrapper : IBundleInfo
+    internal class RegistryKeyWrapper : Bundle
     {
-        public BundleVersion Version { get; }
-        public string DisplayName { get; }
-        public string UninstallCommand { get; }
+        public override BundleVersion Version { get; }
+        public override BundleArch Arch { get; }
+        public override string UninstallCommand { get; }
 
         public RegistryKeyWrapper(RegistryKey registryKey)
         {
-            DisplayName = registryKey.GetValue("DisplayName") as string;
-            UninstallCommand = registryKey.GetValue("UninstallString") as string;
-            Version = ParseVersionFromDisplayNameAndBundleVersion(DisplayName, registryKey.GetValue("DisplayVersion") as string);
+            var displayName = registryKey.GetValue("DisplayName") as string;
+            var displayVersion = registryKey.GetValue("DisplayVersion") as string;
+
+            ParseVersionFromDisplayNameAndBundleVersion(displayName, displayVersion, out var version, out var arch);
+
+            Version = version;
+            Arch = arch;
+            UninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
         }
 
-        private static BundleVersion ParseVersionFromDisplayNameAndBundleVersion(string displayName, string displayVersion)
+        private static void ParseVersionFromDisplayNameAndBundleVersion(string displayName, string displayVersion, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
 
             var majorString = match.Groups[Regexes.MajorGroupName].Value;
             var minorString = match.Groups[Regexes.MinorGroupName].Value;
             var patchString = match.Groups[Regexes.PatchGroupName].Value;
+            var archString = match.Groups[Regexes.ArchGroupName].Value;
 
             var major = int.Parse(majorString);
             var minor = int.Parse(minorString);
@@ -48,20 +54,28 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 preview = null;
             }
 
-            if (match.Groups[Regexes.TypeGroupName].Value == "SDK")
+            switch (match.Groups[Regexes.TypeGroupName].Value)
             {
-                var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
-                var sdkMinor = int.Parse(sdkMinorString);
+                case "SDK":
+                    var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
+                    var sdkMinor = int.Parse(sdkMinorString);
 
-                return new SdkVersion(major, minor, sdkMinor, patch, preview);
+                    version = new SdkVersion(major, minor, sdkMinor, patch, preview);
+
+                    break;
+                case "Runtime":
+                    version = new RuntimeVersion(major, minor, patch, preview);
+                    break;
+                default:
+                    throw new InvalidDataException();
             }
-            else if (match.Groups[Regexes.TypeGroupName].Value == "Runtime")
+
+            switch (archString)
             {
-                return new RuntimeVersion(major, minor, patch, preview);
-            }
-            else
-            {
-                throw new InvalidDataException();
+                case "x64": arch = BundleArch.X64; break;
+                case "x86": arch = BundleArch.X86; break;
+                case "arm32": arch = BundleArch.Arm32; break;
+                default: throw new InvalidDataException();
             }
         }
     }

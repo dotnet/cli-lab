@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class NoOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
-        public override IEnumerable<IBundleInfo> Filter(IEnumerable<string> argValue, IEnumerable<IBundleInfo> bundles)
+        public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<string> argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             // TODO: add option handling for bundle type
             var uninstallVersions = argValue.Select(versionString => Regexes.ParseSdkVersionFromInput(versionString));

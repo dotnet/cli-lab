@@ -5,7 +5,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<IBundleInfo> Filter(IEnumerable<IBundleInfo> bundle)
+        public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<BundleInfo.Bundle> bundle)
         {
             return bundle;
         }

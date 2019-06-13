@@ -7,7 +7,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllBelowOptionFilterer : ArgFilterer<string>
     {
-        public override IEnumerable<IBundleInfo> Filter(string argValue, IEnumerable<IBundleInfo> bundles)
+        public override IEnumerable<BundleInfo.Bundle> Filter(string argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             // TODO: add option handling for bundle type
             var version = Regexes.ParseSdkVersionFromInput(argValue);

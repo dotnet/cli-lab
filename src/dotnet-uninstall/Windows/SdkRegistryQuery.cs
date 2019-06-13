@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
     internal static class RegistryQuery
     {
-        public static IEnumerable<IBundleInfo> GetInstalledBundles()
+        public static IEnumerable<Bundle> GetInstalledBundles()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE")
@@ -24,7 +24,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .Select(name => uninstalls.OpenSubKey(name))
                 .Where(bundle => IsDotNetCoreBundle(bundle));
 
-            return bundles.Select(bundle => new RegistryKeyWrapper(bundle));
+            return bundles
+                .Select(bundle => new RegistryKeyWrapper(bundle))
+                .OrderByDescending(bundle => bundle);
         }
 
         private static bool IsDotNetCoreBundle(RegistryKey registryKey)

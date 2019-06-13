@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static void Execute(IEnumerable<IBundleInfo> bundles)
+        private static void Execute(IEnumerable<BundleInfo.Bundle> bundles)
         {
             var option = CommandLineParseResult.RootCommandResult.GetUniqueOption();
 
@@ -46,7 +46,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             ExecuteUninstall(filteredBundles);
         }
 
-        private static void ExecuteUninstall(IEnumerable<IBundleInfo> bundles)
+        private static void ExecuteUninstall(IEnumerable<BundleInfo.Bundle> bundles)
         {
             foreach (var bundle in bundles)
             {

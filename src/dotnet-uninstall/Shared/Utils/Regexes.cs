@@ -12,6 +12,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         public static readonly string PreviewGroupName = "preview";
         public static readonly string BuildGroupName = "build";
         public static readonly string TypeGroupName = "type";
+        public static readonly string ArchGroupName = "arch";
 
         private static readonly Regex _majorMinorRegex = new Regex(
             $@"(?<{MajorGroupName}>\d+)\.(?<{MinorGroupName}>\d+)");
@@ -48,7 +49,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         public static readonly Regex BundleMajorMinorRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}$");
         public static readonly Regex BundleDisplayNameRegex = new Regex(
-            $@"^Microsoft\s\.NET\sCore\s((?<{TypeGroupName}>SDK)\s{_sdkVersionDisplayNameRegex.ToString()}|(?<{TypeGroupName}>Runtime)\s\-\s{_runtimeVersionDisplayNameRegex.ToString()})\s\((x64|x86)\)$");
+            $@"^Microsoft\s\.NET\sCore\s((?<{TypeGroupName}>SDK)\s{_sdkVersionDisplayNameRegex.ToString()}|(?<{TypeGroupName}>Runtime)\s\-\s{_runtimeVersionDisplayNameRegex.ToString()})\s\((?<{ArchGroupName}>(x64|x86|arm32))\)$");
         public static readonly Regex BundleDisplayVersionStringRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}\.(?<{PatchGroupName}>\d+)\.(?<{BuildGroupName}>\d+)$");
 

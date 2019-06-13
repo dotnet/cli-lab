@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class MajorMinorOptionFilterer : ArgFilterer<string>
     {
-        public override IEnumerable<IBundleInfo> Filter(string argValue, IEnumerable<IBundleInfo> bundles)
+        public override IEnumerable<BundleInfo.Bundle> Filter(string argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             var match = Regexes.BundleMajorMinorRegex.Match(argValue);
 

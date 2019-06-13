@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllButOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
-        public override IEnumerable<IBundleInfo> Filter(IEnumerable<string> argValue, IEnumerable<IBundleInfo> bundles)
+        public override IEnumerable<BundleInfo.Bundle> Filter(IEnumerable<string> argValue, IEnumerable<BundleInfo.Bundle> bundles)
         {
             // TODO: add option handling for bundle type
             var excludedVersions = argValue.Select(versionString => Regexes.ParseSdkVersionFromInput(versionString));

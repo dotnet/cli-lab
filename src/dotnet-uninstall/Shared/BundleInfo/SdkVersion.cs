@@ -7,7 +7,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public int SdkMinor { get; }
         public override BundleType Type { get; } = BundleType.Sdk;
 
-        public SdkVersion(int major, int minor, int sdkMinor, int patch, PreviewVersion preview = null)
+        public SdkVersion(int major, int minor, int sdkMinor, int patch, PreviewVersion preview)
         {
             Major = major;
             Minor = minor;

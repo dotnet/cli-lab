@@ -6,7 +6,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     {
         public override BundleType Type { get; } = BundleType.Runtime;
 
-        public RuntimeVersion(int major, int minor, int patch, PreviewVersion preview = null)
+        public RuntimeVersion(int major, int minor, int patch, PreviewVersion preview)
         {
             Major = major;
             Minor = minor;
