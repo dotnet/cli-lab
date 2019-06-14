@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
+using System.CommandLine;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class UninstallCommandExec
     {
-        private static readonly ParseResult CommandLineParseResult
-            = CommandLineConfigs.UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
-
         public static void Execute()
         {
             if (RuntimeInfo.RunningOnWindows)
@@ -32,12 +29,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(IEnumerable<Bundle> bundles)
         {
-            var option = CommandLineParseResult.RootCommandResult.GetUninstallMainOptions();
-            var typeSelection = CommandLineParseResult.RootCommandResult.GetTypeSelection();
+            var commandLineParseResult = CommandLineConfigs.UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
+
+            var option = commandLineParseResult.RootCommandResult.GetUninstallMainOptions();
+            var typeSelection = commandLineParseResult.RootCommandResult.GetTypeSelection();
 
             var filteredBundles = option == null ?
-                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection) :
-                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles, typeSelection);
+                OptionFilterers.UninstallNoOptionFilterer.Filter(commandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection) :
+                OptionFilterers.OptionFiltererDictionary[option].Filter(commandLineParseResult, option, bundles, typeSelection);
 
             ExecuteUninstall(filteredBundles);
         }

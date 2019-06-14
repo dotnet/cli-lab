@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.CommandLine;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
@@ -28,21 +30,35 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(IEnumerable<Bundle> bundles)
         {
-            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
-            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
+            var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
-            Console.WriteLine(".NET Core SDKs:");
-            foreach (var sdk in sdks)
+            var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
+            var printed = false;
+
+            if ((typeSelection & BundleType.Sdk) > 0)
             {
-                Console.WriteLine($"\t{sdk.ToString()}");
+                var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
+                Console.WriteLine(".NET Core SDKs:");
+                foreach (var sdk in sdks)
+                {
+                    Console.WriteLine($"\t{sdk.ToString()}");
+                }
+                printed = true;
             }
 
-            Console.WriteLine();
-
-            Console.WriteLine(".NET Core Runtimes:");
-            foreach (var runtime in runtimes)
+            if ((typeSelection & BundleType.Runtime) > 0)
             {
-                Console.WriteLine($"\t{runtime.ToString()}");
+                if (printed)
+                {
+                    Console.WriteLine();
+                }
+
+                var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
+                Console.WriteLine(".NET Core Runtimes:");
+                foreach (var runtime in runtimes)
+                {
+                    Console.WriteLine($"\t{runtime.ToString()}");
+                }
             }
         }
     }

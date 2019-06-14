@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
-using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
@@ -109,9 +108,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             UninstallRootCommand.Add(ListCommand);
 
-            foreach (var option in UninstallMainOptions.Concat(AuxOptions))
+            foreach (var option in UninstallMainOptions)
             {
                 UninstallRootCommand.AddOption(option);
+            }
+
+            foreach (var option in AuxOptions)
+            {
+                UninstallRootCommand.AddOption(option);
+                ListCommand.Add(option);
             }
 
             ListCommand.Handler = CommandHandler.Create(ExceptionHandling.HandleException(() => ListCommandExec.Execute()));
@@ -160,7 +165,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (typeSelection == 0)
             {
-                typeSelection = (BundleType)3;
+                typeSelection = BundleType.Sdk | BundleType.Runtime;
             }
 
             return typeSelection;
