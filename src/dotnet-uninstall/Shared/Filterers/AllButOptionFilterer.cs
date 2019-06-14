@@ -2,28 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllButOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
-        public override IEnumerable<Bundle> Filter(IEnumerable<string> argValue, IEnumerable<Bundle> bundles, BundleType typeSelection)
+        public override bool AcceptMultipleBundleTypes { get; } = false;
+
+        public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<string> argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            if ((int)typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime))
-            {
-                throw new ArgumentOutOfRangeException();
-            }
-
-            if (typeSelection != BundleType.Sdk || typeSelection != BundleType.Runtime)
-            {
-                throw new BundleTypeNotSpecifiedException();
-            }
-
-            var bundlesWithSelectedType = bundles
-                .Where(bundle => (typeSelection & bundle.Version.Type) > 0);
-
-            var specifiedVersions = bundlesWithSelectedType
+            var specifiedVersions = bundles
                 .Select(bundle => bundle.Version)
                 .Where(version => argValue.Contains(version.ToString()))
                 .OrderBy(version => version);

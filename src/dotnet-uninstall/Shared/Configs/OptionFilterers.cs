@@ -6,8 +6,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
     internal static class OptionFilterers
     {
-        public static readonly IDictionary<Option, IFilterer> OptionFiltererDictionary
-            = new Dictionary<Option, IFilterer>
+        public static readonly IDictionary<Option, Filterer> OptionFiltererDictionary
+            = new Dictionary<Option, Filterer>
             {
                 {
                     CommandLineConfigs.UninstallAllOption,

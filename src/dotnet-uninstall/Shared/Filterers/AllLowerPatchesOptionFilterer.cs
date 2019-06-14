@@ -7,92 +7,51 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllLowerPatchesOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles, BundleType typeSelection)
+        public override bool AcceptMultipleBundleTypes { get; } = true;
+
+        public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            if ((int)typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime))
-            {
-                throw new ArgumentOutOfRangeException();
-            }
+            var highestPatches = new Dictionary<Tuple<int, int, int>, int>();
 
-            IEnumerable<Bundle> sdkBundles;
-            if ((typeSelection | BundleType.Sdk) > 0)
+            foreach (var version in bundles
+                .Select(bundle => bundle.Version))
             {
-                var highestPatches = new Dictionary<Tuple<int, int, int>, int>();
+                var key = GetVersionKey(version);
 
-                foreach (var version in bundles
-                    .Select(bundle => bundle.Version as SdkVersion)
-                    .Where(version => version is SdkVersion))
+                if (highestPatches.TryGetValue(key, out var highestPatch))
                 {
-                    var key = new Tuple<int, int, int>(version.Major, version.Minor, version.SdkMinor);
-
-                    if (highestPatches.TryGetValue(key, out var highestPatch))
+                    if (version.Patch > highestPatch)
                     {
-                        if (version.Patch > highestPatch)
-                        {
-                            highestPatches[key] = version.Patch;
-                        }
-                    }
-                    else
-                    {
-                        highestPatches.Add(key, version.Patch);
+                        highestPatches[key] = version.Patch;
                     }
                 }
-
-                sdkBundles = bundles
-                    .Where(bundle => bundle.Version is SdkVersion)
-                    .Where(bundle =>
-                    {
-                        var version = bundle.Version as SdkVersion;
-                        var key = new Tuple<int, int, int>(version.Major, version.Minor, version.SdkMinor);
-                        highestPatches.TryGetValue(key, out var highestPatch);
-                        return version.Patch < highestPatch;
-                    });
-            }
-            else
-            {
-                sdkBundles = new List<Bundle>();
-            }
-
-            IEnumerable<Bundle> runtimeBundles;
-            if ((typeSelection | BundleType.Runtime) > 0)
-            {
-                var highestPatches = new Dictionary<Tuple<int, int>, int>();
-
-                foreach (var version in bundles
-                    .Select(bundle => bundle.Version as RuntimeVersion)
-                    .Where(version => version is RuntimeVersion))
+                else
                 {
-                    var key = new Tuple<int, int>(version.Major, version.Minor);
-
-                    if (highestPatches.TryGetValue(key, out var highestPatch))
-                    {
-                        if (version.Patch > highestPatch)
-                        {
-                            highestPatches[key] = version.Patch;
-                        }
-                    }
-                    else
-                    {
-                        highestPatches.Add(key, version.Patch);
-                    }
+                    highestPatches.Add(key, version.Patch);
                 }
-
-                runtimeBundles = bundles
-                    .Where(bundle => bundle.Version is RuntimeVersion)
-                    .Where(bundle =>
-                    {
-                        var version = bundle.Version as RuntimeVersion;
-                        var key = new Tuple<int, int>(version.Major, version.Minor);
-                        highestPatches.TryGetValue(key, out var highestPatch);
-                        return version.Patch < highestPatch;
-                    });
             }
-            else
+
+            return bundles
+                .Where(bundle =>
+                {
+                    var version = bundle.Version;
+                    var key = GetVersionKey(version);
+                    highestPatches.TryGetValue(key, out var highestPatch);
+                    return version.Patch < highestPatch;
+                });
+        }
+
+        private Tuple<int, int, int> GetVersionKey<TBundleVersion>(TBundleVersion version) where TBundleVersion : BundleVersion
+        {
+            switch (version.Type)
             {
-                runtimeBundles = new List<Bundle>();
+                case BundleType.Sdk:
+                    return new Tuple<int, int, int>(version.Major, version.Minor, (version as SdkVersion).SdkMinor);
+                case BundleType.Runtime:
+                    return new Tuple<int, int, int>(version.Major, version.Minor, default);
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
-
-            return sdkBundles.Concat(runtimeBundles);
         }
     }
 }

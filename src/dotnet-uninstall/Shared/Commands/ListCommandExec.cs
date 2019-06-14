@@ -28,8 +28,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(IEnumerable<Bundle> bundles)
         {
-            var sdks = bundles.Where(sdk => sdk.Version.Type == BundleType.Sdk);
-            var runtimes = bundles.Where(sdk => sdk.Version.Type == BundleType.Runtime);
+            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles);
+            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles);
 
             Console.WriteLine(".NET Core SDKs:");
             foreach (var sdk in sdks)

@@ -13,12 +13,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var bundleVersion = registryKey.GetValue("BundleVersion") as string;
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
 
-            ParseVersionFromDisplayNameAndBundleVersion(displayName, bundleVersion, out var version, out var arch);
+            ParseVersionAndArch(displayName, bundleVersion, out var version, out var arch);
 
-            return new Bundle(version, arch, uninstallCommand);
+            return Bundle.From(version, arch, uninstallCommand);
         }
 
-        private static void ParseVersionFromDisplayNameAndBundleVersion(string displayName, string bundleVersion, out BundleVersion version, out BundleArch arch)
+        private static void ParseVersionAndArch(string displayName, string bundleVersion, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
 

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal class Bundle : IEquatable<Bundle>
+    internal abstract class Bundle : IEquatable<Bundle>
     {
         public BundleVersion Version { get; }
         public BundleArch Arch { get; }
@@ -19,6 +20,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             Version = version;
             Arch = arch;
             UninstallCommand = uninstallCommand;
+        }
+
+        public static Bundle From(BundleVersion version, BundleArch arch, string uninstallCommand)
+        {
+            switch (version.Type)
+            {
+                case BundleType.Sdk:
+                    return new Bundle<SdkVersion>(version as SdkVersion, arch, uninstallCommand);
+                case BundleType.Runtime:
+                    return new Bundle<RuntimeVersion>(version as RuntimeVersion, arch, uninstallCommand);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public override bool Equals(object obj)
@@ -41,6 +55,38 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public override string ToString()
         {
             return $"{Version.ToString()} ({Arch.ToString().ToLower()})";
+        }
+    }
+
+    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>
+        where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
+    {
+        public new TBundleVersion Version { get => base.Version as TBundleVersion; }
+
+        public Bundle(TBundleVersion version, BundleArch arch, string uninstallCommand) : base(version, arch, uninstallCommand) { }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo(obj as Bundle<TBundleVersion>);
+        }
+
+        public int CompareTo(Bundle<TBundleVersion> other)
+        {
+            if (other == null)
+            {
+                return 1;
+            }
+
+            return Version.Equals(other.Version) ?
+                Arch - other.Arch :
+                Version.CompareTo(other.Version);
+        }
+
+        public static IEnumerable<Bundle<TBundleVersion>> FilterWithSameBundleType(IEnumerable<Bundle> bundles)
+        {
+            return bundles
+                .Where(bundle => bundle.Version is TBundleVersion)
+                .Select(bundle => bundle as Bundle<TBundleVersion>);
         }
     }
 }
