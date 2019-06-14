@@ -34,11 +34,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var option = CommandLineParseResult.RootCommandResult.GetUninstallMainOptions();
 
-            if (option == CommandLineConfigs.UninstallVerbosityOption)
-            {
-                throw new NotImplementedException();
-            }
-
             var typeSelection = (BundleType)0;
 
             if (CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.SdkOption.Name) != null)

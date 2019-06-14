@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
@@ -177,6 +178,47 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             version.Equals(null).Should().BeFalse();
             version.CompareTo(null).Should().BeGreaterThan(0);
+        }
+
+        [Theory]
+        [InlineData("1.0.0", 1, 0, 0, 0, false)]
+        [InlineData("1.0.16", 1, 0, 16, 0, false)]
+        [InlineData("2.2.5", 2, 2, 5, 0, false)]
+        [InlineData("2.0.0-preview1-002111-00", 2, 0, 0, 2111, true)]
+        [InlineData("2.1.0-rc1", 2, 1, 0, 0, true)]
+        [InlineData("3.0.0-preview-27122-01", 3, 0, 0, 27122, true)]
+        [InlineData("3.0.0-preview5-27626-15", 3, 0, 0, 27626, true)]
+        internal void TestFromInputAccept(string input, int major, int minor, int patch, int build, bool preview)
+        {
+            var version = BundleVersion.FromInput<RuntimeVersion>(input) as RuntimeVersion;
+
+            version.Major.Should().Be(major);
+            version.Minor.Should().Be(minor);
+            version.Patch.Should().Be(patch);
+            version.Build.Should().Be(build);
+            version.Preview.Should().Be(preview);
+            version.ToString().Should().Be(input);
+        }
+
+        [Theory]
+        [InlineData("1.0")]
+        [InlineData("1.0.")]
+        [InlineData("2.2.5.002111")]
+        [InlineData("2.0.0-preview")]
+        [InlineData("2.0.0-preview1")]
+        [InlineData("2.0.0-preview1-002111")]
+        [InlineData("2.1.0-rc")]
+        [InlineData("2.1.0-rc1-002111")]
+        [InlineData("2.1.0-rc1-002111-01")]
+        [InlineData("2.1.0-rc1-final")]
+        [InlineData("a.0.0")]
+        [InlineData("0.a.0")]
+        [InlineData("0.0.a")]
+        [InlineData("2.0.0-preview1-abcdef")]
+        internal void TestFromInputReject(string input)
+        {
+            Action action = () => { _ = BundleVersion.FromInput<RuntimeVersion>(input) as RuntimeVersion; };
+            action.Should().Throw<InvalidInputVersionStringException>(string.Format(Messages.InvalidInputVersionStringExceptionMessageFormat, input));
         }
     }
 }

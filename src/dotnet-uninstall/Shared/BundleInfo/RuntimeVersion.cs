@@ -13,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public static RuntimeVersion FromInput(string input)
         {
-            FromInput(Regexes.SdkVersionCachePathRegex, input, out var major, out var minor, out var patch, out var build, out var preview, out var match);
+            FromInput(Regexes.RuntimeVersionCachePathRegex, input, out var major, out var minor, out var patch, out var build, out var preview, out var match);
             return new RuntimeVersion(major, minor, patch, build, preview, input);
         }
 
