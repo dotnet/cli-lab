@@ -25,8 +25,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .Where(bundle => IsDotNetCoreBundle(bundle));
 
             return bundles
-                .Select(bundle => RegistryKeyWrapper.WrapRegistryKey(bundle))
-                .OrderByDescending(bundle => bundle);
+                .Select(bundle => RegistryKeyWrapper.WrapRegistryKey(bundle));
         }
 
         private static bool IsDotNetCoreBundle(RegistryKey registryKey)

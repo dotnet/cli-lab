@@ -2,7 +2,7 @@
 {
     internal enum BundleType
     {
-        Sdk,
-        Runtime
+        Sdk = 1,
+        Runtime = 2
     }
 }

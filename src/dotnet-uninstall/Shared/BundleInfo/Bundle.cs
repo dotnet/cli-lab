@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal class Bundle : IEquatable<Bundle>, IComparable<Bundle>, IComparable
+    internal class Bundle : IEquatable<Bundle>
     {
         public BundleVersion Version { get; }
         public BundleArch Arch { get; }
@@ -19,23 +19,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             Version = version;
             Arch = arch;
             UninstallCommand = uninstallCommand;
-        }
-
-        public int CompareTo(object obj)
-        {
-            return CompareTo(obj as Bundle);
-        }
-
-        public int CompareTo(Bundle other)
-        {
-            if (other == null)
-            {
-                return 1;
-            }
-
-            return Version.Equals(other.Version) ?
-                Arch.CompareTo(other.Arch) :
-                Version.CompareTo(other.Version);
         }
 
         public override bool Equals(object obj)
@@ -57,7 +40,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public override string ToString()
         {
-            return $"{Version.ToString()} ({Arch.ToString()})";
+            return $"{Version.ToString()} ({Arch.ToString().ToLower()})";
         }
     }
 }

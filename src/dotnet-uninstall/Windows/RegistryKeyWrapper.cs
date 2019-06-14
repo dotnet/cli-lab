@@ -10,15 +10,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public static Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;
-            var displayVersion = registryKey.GetValue("DisplayVersion") as string;
+            var bundleVersion = registryKey.GetValue("BundleVersion") as string;
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
 
-            ParseVersionFromDisplayNameAndBundleVersion(displayName, displayVersion, out var version, out var arch);
+            ParseVersionFromDisplayNameAndBundleVersion(displayName, bundleVersion, out var version, out var arch);
 
             return new Bundle(version, arch, uninstallCommand);
         }
 
-        private static void ParseVersionFromDisplayNameAndBundleVersion(string displayName, string displayVersion, out BundleVersion version, out BundleArch arch)
+        private static void ParseVersionFromDisplayNameAndBundleVersion(string displayName, string bundleVersion, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
 
@@ -31,23 +31,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var minor = int.Parse(minorString);
             var patch = int.Parse(patchString);
 
-            BundleVersion.PreviewVersion preview;
-            if (match.Groups[Regexes.PreviewGroupName].Success)
-            {
-                var previewNumber = match.Groups[Regexes.PreviewNumberGroupName].Success ?
-                    int.Parse(match.Groups[Regexes.PreviewNumberGroupName].Value) as int? :
-                    null;
+            var preview = match.Groups[Regexes.PreviewGroupName].Success;
 
-                var buildNumberMatch = Regexes.BundleDisplayVersionStringRegex.Match(displayVersion);
-                var buildNumberString = buildNumberMatch.Groups[Regexes.BuildNumberGroupName].Value;
-                var buildNumber = int.Parse(buildNumberString);
-
-                preview = new BundleVersion.PreviewVersion(previewNumber, buildNumber);
-            }
-            else
-            {
-                preview = null;
-            }
+            var buildNumberMatch = Regexes.BundleDisplayVersionStringRegex.Match(bundleVersion);
+            var buildNumberString = buildNumberMatch.Groups[Regexes.BuildNumberGroupName].Value;
+            var buildNumber = int.Parse(buildNumberString);
 
             switch (match.Groups[Regexes.TypeGroupName].Value)
             {
@@ -55,11 +43,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
                     var sdkMinor = int.Parse(sdkMinorString);
 
-                    version = new SdkVersion(major, minor, sdkMinor, patch, preview);
+                    version = new SdkVersion(major, minor, sdkMinor, patch, buildNumber, preview, displayName);
 
                     break;
                 case "Runtime":
-                    version = new RuntimeVersion(major, minor, patch, preview);
+                    version = new RuntimeVersion(major, minor, patch, buildNumber, preview, displayName);
                     break;
                 default:
                     throw new InvalidDataException();

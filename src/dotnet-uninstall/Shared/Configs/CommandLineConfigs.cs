@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
@@ -64,7 +65,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 Description = Messages.UninstallVerbosityOptionArgumentDescription
             });
 
-        public static readonly IEnumerable<Option> Options = new Option[]
+        public static readonly IEnumerable<Option> MainOptions = new Option[]
         {
             UninstallAllOption,
             UninstallAllLowerPatchesOption,
@@ -74,6 +75,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallAllPreviewsOption,
             UninstallAllPreviewsButLatestOption,
             UninstallMajorMinorOption,
+        };
+
+        public static readonly IEnumerable<Option> AuxOptions = new Option[]
+        {
             UninstallVerbosityOption
         };
 
@@ -93,7 +98,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             UninstallRootCommand.Add(ListCommand);
 
-            foreach (var option in Options)
+            foreach (var option in MainOptions.Concat(AuxOptions))
             {
                 UninstallRootCommand.AddOption(option);
             }
@@ -106,7 +111,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             Option specifiedOption = null;
 
-            foreach (var option in Options)
+            foreach (var option in MainOptions)
             {
                 if (commandResult.OptionResult(option.Name) != null)
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
@@ -6,19 +7,46 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllButLatestOptionFilterer : NoArgFilterer
     {
-        public override IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles)
+        public override IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles, BundleType typeSelection)
         {
-            BundleVersion latest = null;
-
-            foreach (var bundle in bundles)
+            if ((int)typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime))
             {
-                if (latest == null || latest.CompareTo(bundle.Version) < 0)
-                {
-                    latest = bundle.Version;
-                }
+                throw new ArgumentOutOfRangeException();
             }
 
-            return bundles.Where(bundle => !bundle.Version.Equals(latest));
+            IEnumerable<Bundle> sdkBundles;
+            if ((typeSelection | BundleType.Sdk) > 0)
+            {
+                var latestSdk = bundles
+                    .Where(bundle => bundle.Version is SdkVersion)
+                    .Select(bundle => bundle.Version as SdkVersion)
+                    .Aggregate((SdkVersion)null, (latest, next) => latest.CompareTo(next) < 0 ? next : latest);
+
+                sdkBundles = bundles
+                    .Where(bundle => !bundle.Version.Equals(latestSdk));
+            }
+            else
+            {
+                sdkBundles = new List<Bundle>();
+            }
+
+            IEnumerable<Bundle> runtimeBundles;
+            if ((typeSelection | BundleType.Runtime) > 0)
+            {
+                var latestRuntime = bundles
+                    .Where(bundle => bundle.Version is RuntimeVersion)
+                    .Select(bundle => bundle.Version as RuntimeVersion)
+                    .Aggregate((RuntimeVersion)null, (latest, next) => latest.CompareTo(next) < 0 ? next : latest);
+
+                runtimeBundles = bundles
+                    .Where(bundle => !bundle.Version.Equals(latestRuntime));
+            }
+            else
+            {
+                runtimeBundles = new List<Bundle>();
+            }
+
+            return sdkBundles.Concat(runtimeBundles);
         }
     }
 }

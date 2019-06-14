@@ -1,32 +1,21 @@
 ﻿using System;
-using System.IO;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal class SdkVersion : BundleVersion, IEquatable<SdkVersion>, IComparable<SdkVersion>
+    internal class SdkVersion : BundleVersion, IEquatable<SdkVersion>, IComparable, IComparable<SdkVersion>
     {
         public int SdkMinor { get; }
         public override BundleType Type { get; } = BundleType.Sdk;
 
-        public SdkVersion(int major, int minor, int sdkMinor, int patch, PreviewVersion preview = null) : base(major, minor, patch, preview)
+        public SdkVersion(int major, int minor, int sdkMinor, int patch, int build, bool preview, string displayVersion) :
+            base(major, minor, patch, build, preview, displayVersion)
         {
             if (sdkMinor < 0 || patch >= 100)
             {
-                throw new InvalidDataException();
+                throw new ArgumentOutOfRangeException();
             }
 
             SdkMinor = sdkMinor;
-        }
-
-        public static SdkVersion FromInput(string input)
-        {
-            ParseFromInput(Regexes.SdkVersionInputRegex, input, out var major, out var minor, out var patch, out var preview, out var match);
-
-            var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
-            var sdkMinor = int.Parse(sdkMinorString);
-
-            return new SdkVersion(major, minor, sdkMinor, patch, preview);
         }
 
         public override bool Equals(BundleVersion other)
@@ -36,29 +25,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Major, Minor, SdkMinor, Patch, Preview);
-        }
-
-        public override int CompareTo(BundleVersion other)
-        {
-            if (other is SdkVersion)
-            {
-                return CompareTo(other as SdkVersion);
-            }
-            else
-            {
-                return -1;
-            }
+            return HashCode.Combine(Major, Minor, SdkMinor, Patch, Build);
         }
 
         public bool Equals(SdkVersion other)
         {
             return other != null &&
-                   Major == other.Major &&
-                   Minor == other.Minor &&
-                   SdkMinor == other.SdkMinor &&
-                   Patch == other.Patch &&
-                   (Preview == null ? other.Preview == null : Preview.Equals(other.Preview));
+                Major == other.Major &&
+                Minor == other.Minor &&
+                SdkMinor == other.SdkMinor &&
+                Patch == other.Patch &&
+                Build == other.Build;
+        }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo(obj as SdkVersion);
         }
 
         public int CompareTo(SdkVersion other)
@@ -88,18 +70,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
                 return Patch - other.Patch;
             }
 
-            if (Preview == other.Preview)
-            {
-                return 0;
-            }
-
-            return Preview == null ? 1 : Preview.CompareTo(other.Preview);
-        }
-
-        public override string ToString()
-        {
-            var previewString = Preview == null ? string.Empty : Preview.ToString("D6");
-            return $"{Major}.{Minor}.{SdkMinor}{Patch.ToString("D2")}{previewString}";
+            return Build - other.Build;
         }
     }
 }

@@ -40,8 +40,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
 
             var filteredBundles = option == null ?
-                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles) :
-                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles);
+                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles, (BundleType)3) :
+                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles, (BundleType)3);
 
             ExecuteUninstall(filteredBundles);
         }

@@ -8,21 +8,39 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class NoOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
-        public override IEnumerable<Bundle> Filter(IEnumerable<string> argValue, IEnumerable<Bundle> bundles)
+        public override IEnumerable<Bundle> Filter(IEnumerable<string> argValue, IEnumerable<Bundle> bundles, BundleType typeSelection)
         {
-            // TODO: add option handling for bundle type
-            var uninstallVersions = argValue.Select(versionString => SdkVersion.FromInput(versionString));
-            var bundleVersions = bundles.Select(bundle => bundle.Version);
-
-            foreach (var version in uninstallVersions)
+            if ((int)typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime))
             {
-                if (!bundleVersions.Contains(version))
-                {
-                    throw new SpecifiedVersionNotFoundException(version);
-                }
+                throw new ArgumentOutOfRangeException();
             }
 
-            return bundles.Where(bundle => uninstallVersions.Contains(bundle.Version));
+            if (typeSelection != BundleType.Sdk || typeSelection != BundleType.Runtime)
+            {
+                throw new BundleTypeNotSpecifiedException();
+            }
+
+            var bundlesWithSelectedType = bundles
+                .Where(bundle => (typeSelection & bundle.Version.Type) > 0);
+
+            var anyMissing = argValue
+                .Where(next => !bundles
+                    .Select(bundle => bundle.Version.ToString())
+                    .ToList()
+                    .Contains(next));
+
+            if (anyMissing.Count() > 0)
+            {
+                throw new SpecifiedVersionNotFoundException(anyMissing.First());
+            }
+
+            var specifiedVersions = bundlesWithSelectedType
+                .Select(bundle => bundle.Version)
+                .Where(version => argValue.Contains(version.ToString()))
+                .OrderBy(version => version);
+
+            return bundles
+                .Where(bundle => specifiedVersions.Contains(bundle.Version));
         }
     }
 }

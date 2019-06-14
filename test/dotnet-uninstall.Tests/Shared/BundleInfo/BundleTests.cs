@@ -8,11 +8,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 {
     public class BundleTests
     {
+        private static readonly BundleVersion TestVersion = new RuntimeVersion(2, 2, 5, 32768, false, "2.2.5");
+        private static readonly string TestUninstallCommand1 = "C:\\ProgramData\\Package Cache\\{a05f1bee-210e-401f-9e98-d52a4698bc91}\\dotnet-sdk-2.2.300-win-x64.exe\" /uninstall /quiet";
+        private static readonly string TestUninstallCommand2 = "some random uninstall command";
+
         [Fact]
         internal void TestConstructor()
         {
-            var version = new RuntimeVersion(2, 2, 5);
-            var uninstallCommand = "C:\\ProgramData\\Package Cache\\{a05f1bee-210e-401f-9e98-d52a4698bc91}\\dotnet-sdk-2.2.300-win-x64.exe\" /uninstall /quiet";
+            var version = TestVersion;
+            var uninstallCommand = TestUninstallCommand1;
 
             var bundle = new Bundle(version, BundleArch.X64, uninstallCommand);
 
@@ -27,12 +31,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             {
                 null,
                 BundleArch.X64,
-                "some random uninstall command"
+                TestUninstallCommand1
             };
 
             yield return new object[]
             {
-                new RuntimeVersion(2, 2, 5),
+                TestVersion,
                 BundleArch.X86,
                 null
             };
@@ -57,14 +61,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             yield return new object[]
             {
-                new Bundle(new SdkVersion(2, 2, 3, 0), BundleArch.X86, "same uninstall command"),
-                new Bundle(new SdkVersion(2, 2, 3, 0), BundleArch.X86, "same uninstall command")
+                new Bundle(TestVersion, BundleArch.X86, TestUninstallCommand1),
+                new Bundle(TestVersion, BundleArch.X86, TestUninstallCommand1)
             };
 
             yield return new object[]
             {
-                new Bundle(new RuntimeVersion(2, 2, 5, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.Arm32, "some uninstall command"),
-                new Bundle(new RuntimeVersion(2, 2, 5, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.Arm32, "yet another uninstall command")
+                new Bundle(TestVersion, BundleArch.Arm32, TestUninstallCommand1),
+                new Bundle(TestVersion, BundleArch.Arm32, TestUninstallCommand2)
             };
         }
 
@@ -73,91 +77,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         internal void TestEquality(Bundle bundle1, Bundle bundle2)
         {
             bundle1.Equals((object)bundle2).Should().BeTrue();
-            bundle1.CompareTo((object)bundle2).Should().Be(0);
-        }
-
-        public static IEnumerable<object[]> GetDataForTestInequality()
-        {
-            yield return new object[]
-            {
-                new Bundle(new SdkVersion(2, 1, 7, 0), BundleArch.X64, "some uninstall command"),
-                new Bundle(new SdkVersion(2, 2, 3, 0), BundleArch.X64, "some other uninstall command")
-            };
-
-            yield return new object[]
-            {
-                new Bundle(new SdkVersion(3, 0, 1, 0, new BundleVersion.PreviewVersion(5, 12345)), BundleArch.X86, "some uninstall command"),
-                new Bundle(new SdkVersion(3, 0, 1, 0, new BundleVersion.PreviewVersion(5, 23767)), BundleArch.X86, "some other uninstall command")
-            };
-
-            yield return new object[]
-            {
-                new Bundle(new RuntimeVersion(2, 1, 6), BundleArch.Arm32, "same uninstall command"),
-                new Bundle(new RuntimeVersion(2, 1, 6), BundleArch.X86, "same uninstall command")
-            };
-
-            yield return new object[]
-            {
-                new Bundle(new RuntimeVersion(2, 1, 6), BundleArch.Arm32, "same uninstall command"),
-                new Bundle(new RuntimeVersion(2, 1, 6), BundleArch.X64, "same uninstall command")
-            };
-
-            yield return new object[]
-            {
-                new Bundle(new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.X86, "same uninstall command"),
-                new Bundle(new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 11736)), BundleArch.X64, "same uninstall command")
-            };
-        }
-
-        [Theory]
-        [MemberData(nameof(GetDataForTestInequality))]
-        internal void TestInequality(Bundle bundle1, Bundle bundle2)
-        {
-            bundle1.Equals((object)bundle2).Should().BeFalse();
-            bundle1.CompareTo((object)bundle2).Should().BeLessThan(0);
-
-            bundle2.Equals((object)bundle1).Should().BeFalse();
-            bundle2.CompareTo((object)bundle1).Should().BeGreaterThan(0);
-        }
-
-        public static IEnumerable<object[]> GetDataForTestInequalityNull()
-        {
-            yield return new object[]
-            {
-                new Bundle(new SdkVersion(2, 1, 7, 0), BundleArch.X64, "some uninstall command")
-            };
-
-            yield return new object[]
-            {
-                new Bundle(new RuntimeVersion(3, 0, 0, new BundleVersion.PreviewVersion(5, 32768)), BundleArch.X86, "some uninstall command"),
-            };
-        }
-
-        [Theory]
-        [MemberData(nameof(GetDataForTestInequalityNull))]
-        internal void TestInequalityNull(Bundle bundle)
-        {
-            bundle.Equals(null).Should().BeFalse();
-            bundle.CompareTo(null).Should().BeGreaterThan(0);
         }
 
         public static IEnumerable<object[]> GetDataForTestToString()
         {
             yield return new object[]
             {
-                new SdkVersion(2, 1, 7, 0),
+                TestVersion,
                 BundleArch.X64
             };
 
             yield return new object[]
             {
-                new RuntimeVersion(2, 2, 5),
+                TestVersion,
                 BundleArch.X86
             };
 
             yield return new object[]
             {
-                new SdkVersion(3, 0, 1, 0, new BundleVersion.PreviewVersion(5, 23767)),
+                TestVersion,
                 BundleArch.Arm32
             };
         }
@@ -166,8 +104,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [MemberData(nameof(GetDataForTestToString))]
         internal void TestToString(BundleVersion version, BundleArch arch)
         {
-            new Bundle(version, arch, "some random uninstall command").ToString()
-                .Should().Be($"{version.ToString()} ({arch.ToString()})");
+            new Bundle(version, arch, TestUninstallCommand1).ToString()
+                .Should().Be($"{version.ToString()} ({arch.ToString().ToLower()})");
         }
     }
 }
