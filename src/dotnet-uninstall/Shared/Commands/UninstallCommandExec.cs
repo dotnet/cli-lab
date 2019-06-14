@@ -33,22 +33,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         private static void Execute(IEnumerable<Bundle> bundles)
         {
             var option = CommandLineParseResult.RootCommandResult.GetUninstallMainOptions();
-
-            var typeSelection = (BundleType)0;
-
-            if (CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.SdkOption.Name) != null)
-            {
-                typeSelection |= BundleType.Sdk;
-            }
-            if (CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.RuntimeOption.Name) != null)
-            {
-                typeSelection |= BundleType.Runtime;
-            }
-
-            if (typeSelection == 0)
-            {
-                typeSelection = (BundleType)3;
-            }
+            var typeSelection = CommandLineParseResult.RootCommandResult.GetTypeSelection();
 
             var filteredBundles = option == null ?
                 OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection) :

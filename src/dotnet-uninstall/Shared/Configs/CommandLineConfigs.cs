@@ -1,8 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
@@ -143,6 +143,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
 
             return specifiedOption;
+        }
+
+        public static BundleType GetTypeSelection(this CommandResult commandResult)
+        {
+            var typeSelection = (BundleType)0;
+
+            if (commandResult.OptionResult(SdkOption.Name) != null)
+            {
+                typeSelection |= BundleType.Sdk;
+            }
+            if (commandResult.OptionResult(RuntimeOption.Name) != null)
+            {
+                typeSelection |= BundleType.Runtime;
+            }
+
+            if (typeSelection == 0)
+            {
+                typeSelection = (BundleType)3;
+            }
+
+            return typeSelection;
         }
     }
 }
