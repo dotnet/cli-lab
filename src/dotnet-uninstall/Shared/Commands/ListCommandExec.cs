@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;

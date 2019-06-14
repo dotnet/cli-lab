@@ -32,16 +32,32 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(IEnumerable<Bundle> bundles)
         {
-            var option = CommandLineParseResult.RootCommandResult.GetUniqueOption();
+            var option = CommandLineParseResult.RootCommandResult.GetUninstallMainOptions();
 
             if (option == CommandLineConfigs.UninstallVerbosityOption)
             {
                 throw new NotImplementedException();
             }
 
+            var typeSelection = (BundleType)0;
+
+            if (CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.SdkOption.Name) != null)
+            {
+                typeSelection |= BundleType.Sdk;
+            }
+            if (CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.RuntimeOption.Name) != null)
+            {
+                typeSelection |= BundleType.Runtime;
+            }
+
+            if (typeSelection == 0)
+            {
+                typeSelection = (BundleType)3;
+            }
+
             var filteredBundles = option == null ?
-                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles, (BundleType)3) :
-                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles, (BundleType)3);
+                OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection) :
+                OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineParseResult, option, bundles, typeSelection);
 
             ExecuteUninstall(filteredBundles);
         }

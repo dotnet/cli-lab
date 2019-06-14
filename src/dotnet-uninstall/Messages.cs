@@ -34,6 +34,9 @@
         public static readonly string UninstallVerbosityOptionArgumentName = "VERBOSITY-LEVEL";
         public static readonly string UninstallVerbosityOptionArgumentDescription = "The specified MSBuild verbosity level";
 
+        public static readonly string SdkOptionDescription = "Uninstall the .NET Core SDKs only";
+        public static readonly string RuntimeOptionDescription = "Uninstall the .NET Core Runtimes only";
+
         public static readonly string LinuxNotSupportedExceptionMessage = "The Linux operating systems are not supported";
         public static readonly string BundleTypeNotSpecifiedExceptionMessage = "Please specified the bundle type to uninstall";
         public static readonly string OptionsConflictExceptionMessageFormat = "Please specify only one of the options: {0}, {1}";

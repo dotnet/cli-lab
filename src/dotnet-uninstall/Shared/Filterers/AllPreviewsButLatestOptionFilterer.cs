@@ -13,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             var latestSdk = bundles
                 .Where(bundle => bundle.Version.Preview)
                 .Select(bundle => bundle.Version)
-                .Aggregate((TBundleVersion)null, (latest, next) => latest.CompareTo(next) < 0 ? next : latest);
+                .Aggregate((TBundleVersion)null, (latest, next) => latest == null || latest.CompareTo(next) < 0 ? next : latest);
 
             return bundles
                 .Where(bundle => bundle.Version.Preview && !bundle.Version.Equals(latestSdk));

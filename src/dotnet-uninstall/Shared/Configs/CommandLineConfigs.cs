@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -65,7 +66,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 Description = Messages.UninstallVerbosityOptionArgumentDescription
             });
 
-        public static readonly IEnumerable<Option> MainOptions = new Option[]
+        public static readonly Option SdkOption = new Option(
+            "--sdk",
+            Messages.SdkOptionDescription);
+
+        public static readonly Option RuntimeOption = new Option(
+            "--runtime",
+            Messages.RuntimeOptionDescription);
+
+        public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
             UninstallAllOption,
             UninstallAllLowerPatchesOption,
@@ -79,7 +88,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly IEnumerable<Option> AuxOptions = new Option[]
         {
-            UninstallVerbosityOption
+            UninstallVerbosityOption,
+            SdkOption,
+            RuntimeOption
         };
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
@@ -98,7 +109,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             UninstallRootCommand.Add(ListCommand);
 
-            foreach (var option in MainOptions.Concat(AuxOptions))
+            foreach (var option in UninstallMainOptions.Concat(AuxOptions))
             {
                 UninstallRootCommand.AddOption(option);
             }
@@ -107,11 +118,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandling.HandleException(() => UninstallCommandExec.Execute()));
         }
 
-        public static Option GetUniqueOption(this CommandResult commandResult)
+        public static Option GetUninstallMainOptions(this CommandResult commandResult)
         {
             Option specifiedOption = null;
 
-            foreach (var option in MainOptions)
+            foreach (var option in UninstallMainOptions)
             {
                 if (commandResult.OptionResult(option.Name) != null)
                 {

@@ -1,5 +1,4 @@
 ﻿using System.Text.RegularExpressions;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
 {
