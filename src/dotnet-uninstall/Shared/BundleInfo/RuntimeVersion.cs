@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
@@ -9,6 +10,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public RuntimeVersion(int major, int minor, int patch, int build, bool preview, string displayVersion) :
             base(major, minor, patch, build, preview, displayVersion)
         { }
+
+        public static RuntimeVersion FromInput(string input)
+        {
+            FromInput(Regexes.SdkVersionCachePathRegex, input, out var major, out var minor, out var patch, out var build, out var preview, out var match);
+            return new RuntimeVersion(major, minor, patch, build, preview, input);
+        }
 
         public override bool Equals(BundleVersion other)
         {

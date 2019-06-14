@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
@@ -27,8 +28,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(IEnumerable<Bundle> bundles)
         {
-            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles);
-            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles);
+            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
+            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
 
             Console.WriteLine(".NET Core SDKs:");
             foreach (var sdk in sdks)

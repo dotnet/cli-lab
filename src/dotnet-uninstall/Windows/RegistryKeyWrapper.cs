@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.Win32;
@@ -12,13 +12,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var displayName = registryKey.GetValue("DisplayName") as string;
             var bundleVersion = registryKey.GetValue("BundleVersion") as string;
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
+            var bundleCachePath = registryKey.GetValue("BundleCachePath") as string;
 
-            ParseVersionAndArch(displayName, bundleVersion, out var version, out var arch);
+            ParseVersionAndArch(displayName, bundleVersion, bundleCachePath, out var version, out var arch);
 
             return Bundle.From(version, arch, uninstallCommand);
         }
 
-        private static void ParseVersionAndArch(string displayName, string bundleVersion, out BundleVersion version, out BundleArch arch)
+        private static void ParseVersionAndArch(string displayName, string bundleVersion, string bundleCachePath, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
 
@@ -33,9 +34,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             var preview = match.Groups[Regexes.PreviewGroupName].Success;
 
-            var buildNumberMatch = Regexes.BundleDisplayVersionStringRegex.Match(bundleVersion);
-            var buildNumberString = buildNumberMatch.Groups[Regexes.BuildNumberGroupName].Value;
-            var buildNumber = int.Parse(buildNumberString);
+            var buildMatch = Regexes.BundleVersionStringRegex.Match(bundleVersion);
+            var buildString = buildMatch.Groups[Regexes.BuildGroupName].Value;
+            var build = buildString.Equals(string.Empty) ? default : int.Parse(buildString);
+
+            var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
+            var displayVersion = cachePathMatch.Groups[Regexes.VersionGroupName].Value;
 
             switch (match.Groups[Regexes.TypeGroupName].Value)
             {
@@ -43,14 +47,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
                     var sdkMinor = int.Parse(sdkMinorString);
 
-                    version = new SdkVersion(major, minor, sdkMinor, patch, buildNumber, preview, displayName);
+                    version = new SdkVersion(major, minor, sdkMinor, patch, build, preview, displayVersion);
 
                     break;
                 case "Runtime":
-                    version = new RuntimeVersion(major, minor, patch, buildNumber, preview, displayName);
+                    version = new RuntimeVersion(major, minor, patch, build, preview, displayVersion);
                     break;
                 default:
-                    throw new InvalidDataException();
+                    throw new ArgumentOutOfRangeException();
             }
 
             switch (archString)
@@ -58,7 +62,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 case "x64": arch = BundleArch.X64; break;
                 case "x86": arch = BundleArch.X86; break;
                 case "arm32": arch = BundleArch.Arm32; break;
-                default: throw new InvalidDataException();
+                default: throw new ArgumentOutOfRangeException();
             }
         }
     }

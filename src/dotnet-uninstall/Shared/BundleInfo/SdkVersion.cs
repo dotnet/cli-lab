@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
@@ -16,6 +17,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             }
 
             SdkMinor = sdkMinor;
+        }
+
+        public static SdkVersion FromInput(string input)
+        {
+            FromInput(Regexes.SdkVersionCachePathRegex, input, out var major, out var minor, out var patch, out var build, out var preview, out var match);
+
+            var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
+            var sdkMinor = int.Parse(sdkMinorString);
+
+            return new SdkVersion(major, minor, sdkMinor, patch, build, preview, input);
         }
 
         public override bool Equals(BundleVersion other)
