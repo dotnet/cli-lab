@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
@@ -180,6 +181,60 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             version.Equals(null).Should().BeFalse();
             version.CompareTo(null).Should().BeGreaterThan(0);
+        }
+
+        [Theory]
+        [InlineData("1.0.0-preview2-003121", 1, 0, 0, 0, 3121, true)]
+        [InlineData("1.0.4", 1, 0, 0, 4, 0, false)]
+        [InlineData("1.1.14", 1, 1, 0, 14, 0, false)]
+        [InlineData("1.0.0-preview2.1-003177", 1, 0, 0, 0, 3177, true)]
+        [InlineData("2.0.0-preview1-005977", 2, 0, 0, 0, 5977, true)]
+        [InlineData("2.0.0", 2, 0, 0, 0, 0, false)]
+        [InlineData("2.1.100", 2, 1, 1, 0, 0, false)]
+        [InlineData("2.1.105", 2, 1, 1, 5, 0, false)]
+        [InlineData("2.1.202", 2, 1, 2, 2, 0, false)]
+        [InlineData("2.1.300-preview1-008174", 2, 1, 3, 0, 8174, true)]
+        [InlineData("2.1.300-rc1-008673", 2, 1, 3, 0, 8673, true)]
+        [InlineData("2.1.302", 2, 1, 3, 2, 0, false)]
+        [InlineData("2.2.300", 2, 2, 3, 0, 0, false)]
+        [InlineData("3.0.100-preview-009812", 3, 0, 1, 0, 9812, true)]
+        [InlineData("3.0.100-preview6-012264", 3, 0, 1, 0, 12264, true)]
+        internal void TestFromInputAccept(string input, int major, int minor, int sdkMinor, int patch, int build, bool preview)
+        {
+            var version = BundleVersion.FromInput<SdkVersion>(input) as SdkVersion;
+
+            version.Major.Should().Be(major);
+            version.Minor.Should().Be(minor);
+            version.SdkMinor.Should().Be(sdkMinor);
+            version.Patch.Should().Be(patch);
+            version.Build.Should().Be(build);
+            version.Preview.Should().Be(preview);
+            version.ToString().Should().Be(input);
+        }
+
+        [Theory]
+        [InlineData("1.0")]
+        [InlineData("1.0.")]
+        [InlineData("2.2.5.002111")]
+        [InlineData("2.2.500.002111")]
+        [InlineData("2.0.0-preview")]
+        [InlineData("2.0.0-preview1")]
+        [InlineData("2.0.0-preview1-008174-01")]
+        [InlineData("2.1.300-preview")]
+        [InlineData("2.1.300-preview1")]
+        [InlineData("2.0.300-preview1-008174-01")]
+        [InlineData("2.1.300-rc")]
+        [InlineData("2.1.300-rc1")]
+        [InlineData("2.1.300-rc1-002111-01")]
+        [InlineData("2.1.300-rc1-final")]
+        [InlineData("a.0.100")]
+        [InlineData("0.a.302")]
+        [InlineData("0.0.abc")]
+        [InlineData("2.0.100-preview1-abcdef")]
+        internal void TestFromInputReject(string input)
+        {
+            Action action = () => { _ = BundleVersion.FromInput<SdkVersion>(input) as SdkVersion; };
+            action.Should().Throw<InvalidInputVersionStringException>(string.Format(Messages.InvalidInputVersionStringExceptionMessageFormat, input));
         }
     }
 }

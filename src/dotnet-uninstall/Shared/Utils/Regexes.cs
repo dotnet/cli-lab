@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
             $@"(?<{PreviewGroupName}>\-(preview{_previewVersionNumberRegex.ToString()}\-(?<{BuildGroupName}>\d+)\-\d+|rc{_rcVersionNumberRegex.ToString()}))");
 
         private static readonly string _sdkVersionBasicRegexFormat =
-            $@"(?<{VersionGroupName}>{_majorMinorRegex.ToString()}\.(?<{SdkMinorGroupName}>\d+)(?<{PatchGroupName}>\d{{{{2}}}})({{0}})?)";
+            $@"(?<{VersionGroupName}>{_majorMinorRegex.ToString()}\.((?<{SdkMinorGroupName}>\d+)(?<{PatchGroupName}>\d{{{{2}}}})|(?<{PatchGroupName}>\d{{{{1,2}}}}))({{0}})?)";
         private static readonly string _runtimeVersionBasicRegexFormat =
             $@"(?<{VersionGroupName}>{_majorMinorRegex.ToString()}\.(?<{PatchGroupName}>\d+)({{0}})?)";
         private static readonly Regex _sdkVersionDisplayNameRegex = new Regex(string.Format(

@@ -24,7 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             FromInput(Regexes.SdkVersionCachePathRegex, input, out var major, out var minor, out var patch, out var build, out var preview, out var match);
 
             var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
-            var sdkMinor = int.Parse(sdkMinorString);
+            var sdkMinor = sdkMinorString.Equals(string.Empty) ? default : int.Parse(sdkMinorString);
 
             return new SdkVersion(major, minor, sdkMinor, patch, build, preview, input);
         }

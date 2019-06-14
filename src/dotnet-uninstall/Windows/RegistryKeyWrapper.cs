@@ -45,7 +45,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 case "SDK":
                     var sdkMinorString = match.Groups[Regexes.SdkMinorGroupName].Value;
-                    var sdkMinor = int.Parse(sdkMinorString);
+                    var sdkMinor = sdkMinorString.Equals(string.Empty) ? default : int.Parse(sdkMinorString);
 
                     version = new SdkVersion(major, minor, sdkMinor, patch, build, preview, displayVersion);
 
