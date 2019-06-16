@@ -34,7 +34,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             var preview = match.Groups[Regexes.PreviewGroupName].Success;
 
-            var buildMatch = Regexes.BundleVersionStringRegex.Match(bundleVersion);
+            var buildMatch = Regexes.BundleVersionRegex.Match(bundleVersion);
             var buildString = buildMatch.Groups[Regexes.BuildGroupName].Value;
             var build = buildString.Equals(string.Empty) ? default : int.Parse(buildString);
 

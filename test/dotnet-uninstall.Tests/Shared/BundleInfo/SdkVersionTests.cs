@@ -231,6 +231,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("0.a.302")]
         [InlineData("0.0.abc")]
         [InlineData("2.0.100-preview1-abcdef")]
+        [InlineData("Hello2.2.300World")]
+        [InlineData("Hello 2.2.300 World")]
         internal void TestFromInputReject(string input)
         {
             Action action = () => { _ = BundleVersion.FromInput<SdkVersion>(input) as SdkVersion; };

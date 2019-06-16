@@ -39,6 +39,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         private static readonly Regex _runtimeVersionDisplayNameRegex = new Regex(string.Format(
             _runtimeVersionBasicRegexFormat,
             _previewVersionRuntimeDisplayNameRegex.ToString()));
+        private static readonly Regex _sdkDisplayNameRegex = new Regex(
+            $@"\.NET\sCore\s(?<{TypeGroupName}>SDK)\s{_sdkVersionDisplayNameRegex.ToString()}|Microsoft\s\.NET\sCore\s(?<{TypeGroupName}>SDK)\s(\-\s)?{_sdkVersionDisplayNameRegex.ToString()}");
+        private static readonly Regex _runtimeDisplayNameRegex = new Regex(
+            $@"Microsoft\s\.NET\sCore\s(?<{TypeGroupName}>Runtime)\s\-\s{_runtimeVersionDisplayNameRegex.ToString()}|Microsoft\s\.NET\sCore\s{_runtimeVersionDisplayNameRegex.ToString()}\s\-\s(?<{TypeGroupName}>Runtime)");
+        private static readonly Regex _archRegex = new Regex(
+            $@"(?<{ArchGroupName}>(x64|x86|arm32))");
         private static readonly Regex _sdkVersionCachePathRegex = new Regex(string.Format(
             _sdkVersionBasicRegexFormat,
             _previewVersionSdkCachePathRegex.ToString()));
@@ -51,14 +57,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         public static readonly Regex BundleMajorMinorRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}$");
         public static readonly Regex BundleDisplayNameRegex = new Regex(
-            $@"^Microsoft\s\.NET\sCore\s((?<{TypeGroupName}>SDK)\s{_sdkVersionDisplayNameRegex.ToString()}|(?<{TypeGroupName}>Runtime)\s\-\s{_runtimeVersionDisplayNameRegex.ToString()})\s\((?<{ArchGroupName}>(x64|x86|arm32))\)$");
-        public static readonly Regex BundleVersionStringRegex = new Regex(
+            $@"^({_sdkDisplayNameRegex.ToString()}|{_runtimeDisplayNameRegex.ToString()})\s\({_archRegex.ToString()}\)$");
+        public static readonly Regex BundleVersionRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}\.(?<{PatchGroupName}>\d+)\.(?<{BuildGroupName}>\d+)$");
         public static readonly Regex BundleCachePathRegex = new Regex(
-            $@"\\dotnet\-((?<{TypeGroupName}>sdk)\-{_sdkVersionCachePathRegex}|(?<{TypeGroupName}>runtime)\-{_runtimeVersionCachePathRegex})\-win\-(?<{ArchGroupName}>x64|x86|arm32)\.exe$");
-        public static readonly Regex SdkVersionCachePathRegex = new Regex(
+            $@"(\\dotnet\-((?<{TypeGroupName}>sdk)\-{_sdkVersionCachePathRegex}|(?<{TypeGroupName}>runtime)\-{_runtimeVersionCachePathRegex})\-win\-{_archRegex.ToString()}\.exe$)|(\\dotnet\-dev\-win\-{_archRegex.ToString()}\.{_sdkVersionCachePathRegex.ToString()}\.exe$)|(\\dotnet\-win\-{_archRegex.ToString()}\.{_runtimeVersionCachePathRegex.ToString()}\.exe$)");
+        public static readonly Regex SdkVersionInputRegex = new Regex(
             $@"^{_sdkVersionCachePathRegex}$");
-        public static readonly Regex RuntimeVersionCachePathRegex = new Regex(
+        public static readonly Regex RuntimeVersionInputRegex = new Regex(
             $@"^{_runtimeVersionCachePathRegex}$");
     }
 }

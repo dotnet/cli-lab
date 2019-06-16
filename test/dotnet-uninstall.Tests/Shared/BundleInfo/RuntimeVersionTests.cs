@@ -216,6 +216,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("0.0.a")]
         [InlineData("2.0.0-preview1-abcdef-01")]
         [InlineData("2.0.0-preview1-002111-ab")]
+        [InlineData("Hello2.2.5World")]
+        [InlineData("Hello 2.2.5 World")]
         internal void TestFromInputReject(string input)
         {
             Action action = () => { _ = BundleVersion.FromInput<RuntimeVersion>(input) as RuntimeVersion; };
