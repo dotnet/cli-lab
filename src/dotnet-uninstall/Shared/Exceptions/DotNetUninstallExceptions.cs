@@ -1,6 +1,5 @@
 ﻿using System;
 using System.CommandLine;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
@@ -48,6 +47,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
     {
         public BundleTypeNotSpecifiedException():
             base(Messages.BundleTypeNotSpecifiedExceptionMessage)
+        { }
+    }
+
+    internal class RequiredArgMissingForUninstallCommandException : DotNetUninstallException
+    {
+        public RequiredArgMissingForUninstallCommandException():
+            base(Messages.RequiredArgMissingForUninstallCommandExceptionMessage)
         { }
     }
 }

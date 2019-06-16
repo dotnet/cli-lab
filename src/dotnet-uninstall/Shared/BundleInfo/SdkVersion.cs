@@ -6,7 +6,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     internal class SdkVersion : BundleVersion, IEquatable<SdkVersion>, IComparable, IComparable<SdkVersion>
     {
         public int SdkMinor { get; }
-        public override BundleType Type { get; } = BundleType.Sdk;
+        public override BundleType Type => BundleType.Sdk;
 
         public SdkVersion(int major, int minor, int sdkMinor, int patch, int build, bool preview, string displayVersion) :
             base(major, minor, patch, build, preview, displayVersion)

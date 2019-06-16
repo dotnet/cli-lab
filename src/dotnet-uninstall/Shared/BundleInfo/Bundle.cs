@@ -61,7 +61,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>
         where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
     {
-        public new TBundleVersion Version { get => base.Version as TBundleVersion; }
+        public new TBundleVersion Version => base.Version as TBundleVersion;
 
         public Bundle(TBundleVersion version, BundleArch arch, string uninstallCommand) : base(version, arch, uninstallCommand) { }
 
