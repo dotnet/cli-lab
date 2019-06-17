@@ -119,8 +119,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 ListCommand.Add(option);
             }
 
-            ListCommand.Handler = CommandHandler.Create(ExceptionHandling.HandleException(() => ListCommandExec.Execute()));
-            UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandling.HandleException(() => UninstallCommandExec.Execute()));
+            ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
+            UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
         }
 
         public static Option GetUninstallMainOptions(this CommandResult commandResult)
