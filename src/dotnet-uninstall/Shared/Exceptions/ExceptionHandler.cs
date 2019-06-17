@@ -2,7 +2,7 @@
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
-    internal static class ExceptionHandling
+    internal static class ExceptionHandler
     {
         public static Action HandleException(Action action)
         {
