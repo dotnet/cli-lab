@@ -13,13 +13,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
     {
         public static void Execute()
         {
-            if (RuntimeInfo.RunningOnWindows)
+            if (RuntimeInfo.RunningOnWindows || RuntimeInfo.RunningOnOSX)
             {
                 Execute(RegistryQuery.GetInstalledBundles());
-            }
-            else if (RuntimeInfo.RunningOnOSX)
-            {
-                throw new NotImplementedException();
             }
             else if (RuntimeInfo.RunningOnLinux)
             {
@@ -49,18 +45,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 filteredBundles = OptionFilterers.OptionFiltererDictionary[option].Filter(commandLineParseResult, option, bundles, typeSelection);
             }
 
-            ExecuteUninstall(filteredBundles);
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                ExecuteUninstallWindows(filteredBundles);
+            }
+            else if (RuntimeInfo.RunningOnOSX)
+            {
+                throw new NotImplementedException();
+            }
         }
 
-        private static void ExecuteUninstall(IEnumerable<Bundle> bundles)
+        private static void ExecuteUninstallWindows(IEnumerable<Bundle> bundles)
         {
-            foreach (var bundle in bundles)
-            {
-                // TODO: replace this
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(string.Format("Uninstalling: {0}", bundle.UninstallCommand));
-                Console.ResetColor();
-            }
+            ProcessHandler.ExecuteUninstallCommand(bundles);
         }
     }
 }

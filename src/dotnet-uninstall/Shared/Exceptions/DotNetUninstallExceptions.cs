@@ -45,15 +45,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 
     internal class BundleTypeNotSpecifiedException : DotNetUninstallException
     {
-        public BundleTypeNotSpecifiedException():
+        public BundleTypeNotSpecifiedException() :
             base(Messages.BundleTypeNotSpecifiedExceptionMessage)
         { }
     }
 
     internal class RequiredArgMissingForUninstallCommandException : DotNetUninstallException
     {
-        public RequiredArgMissingForUninstallCommandException():
+        public RequiredArgMissingForUninstallCommandException() :
             base(Messages.RequiredArgMissingForUninstallCommandExceptionMessage)
+        { }
+    }
+
+    internal class UninstallationFailedException : DotNetUninstallException
+    {
+        public UninstallationFailedException(string command) :
+            base(string.Format(Messages.UninstallationFailedExceptionMessageFormat, command))
+        { }
+
+        public UninstallationFailedException(string command, int exitCode) :
+            base(string.Format(Messages.UninstallationFailedExceptionWithExitCodeMessageFormat, command, exitCode))
         { }
     }
 }
