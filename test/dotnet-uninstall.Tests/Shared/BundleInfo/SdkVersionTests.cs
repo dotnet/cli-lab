@@ -236,7 +236,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         internal void TestFromInputReject(string input)
         {
             Action action = () => { _ = BundleVersion.FromInput<SdkVersion>(input) as SdkVersion; };
-            action.Should().Throw<InvalidInputVersionStringException>(string.Format(Messages.InvalidInputVersionStringExceptionMessageFormat, input));
+            action.Should().Throw<InvalidInputVersionException>(string.Format(Messages.InvalidInputVersionExceptionMessageFormat, input));
         }
     }
 }

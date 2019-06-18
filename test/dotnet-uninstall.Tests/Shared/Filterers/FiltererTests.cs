@@ -79,7 +79,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             if (TestBundleTypeNotSpecifiedException)
             {
-                TestFiltererException<BundleTypeNotSpecifiedException>(DefaultArgValue, BundleType.Sdk | BundleType.Runtime);
+                TestFiltererException<BundleTypeMissingException>(DefaultArgValue, BundleType.Sdk | BundleType.Runtime);
             }
         }
 

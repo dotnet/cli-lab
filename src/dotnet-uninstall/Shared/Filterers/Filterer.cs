@@ -22,7 +22,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
             if (!AcceptMultipleBundleTypes && typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime)
             {
-                throw new BundleTypeNotSpecifiedException();
+                throw new BundleTypeMissingException();
             }
         }
     }
