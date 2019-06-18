@@ -17,6 +17,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.1",
                 new List<Bundle>
                 {
@@ -29,6 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2",
                 new List<Bundle>
                 {
@@ -42,6 +44,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.1",
                 new List<Bundle>
                 {
@@ -55,6 +58,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2",
                 new List<Bundle>
                 {
@@ -72,6 +76,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.5",
                 new List<Bundle>(),
                 BundleType.Sdk
@@ -79,6 +84,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.5",
                 new List<Bundle>(),
                 BundleType.Runtime
@@ -86,6 +92,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.5",
                 new List<Bundle>(),
                 BundleType.Sdk | BundleType.Runtime
@@ -94,9 +101,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
-        internal void TestMajorMinorOptionFiltererGood(string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal void TestMajorMinorOptionFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
-            TestFiltererGood(argValue, expected, typeSelection);
+            TestFiltererGood(testBundles, argValue, expected, typeSelection);
         }
 
         [Theory]
@@ -114,7 +121,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData("3.0.100-preview5-011568")]
         internal void TestMajorMinorOptionFiltererInvalidInputVersionStringException(string argValue)
         {
-            TestFiltererException<InvalidInputVersionException>(argValue, BundleType.Sdk | BundleType.Runtime);
+            TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Sdk | BundleType.Runtime);
         }
     }
 }

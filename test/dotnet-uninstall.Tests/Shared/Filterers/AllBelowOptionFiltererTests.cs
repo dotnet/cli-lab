@@ -16,6 +16,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.202",
                 new List<Bundle>
                 {
@@ -28,6 +29,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.5",
                 new List<Bundle>
                 {
@@ -40,6 +42,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "3.0.200",
                 new List<Bundle>
                 {
@@ -57,6 +60,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "3.1.2",
                 new List<Bundle>
                 {
@@ -74,6 +78,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.0.100-preview-021378",
                 new List<Bundle>(),
                 BundleType.Sdk
@@ -81,6 +86,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "1.0.3",
                 new List<Bundle>(),
                 BundleType.Runtime
@@ -88,6 +94,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.1.907",
                 new List<Bundle>
                 {
@@ -100,6 +107,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.4-preview5-27626-15",
                 new List<Bundle>
                 {
@@ -113,9 +121,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
-        internal void TestAllBelowOptionFiltererGood(string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal void TestAllBelowOptionFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
-            TestFiltererGood(argValue, expected, typeSelection);
+            TestFiltererGood(testBundles, argValue, expected, typeSelection);
         }
     }
 }

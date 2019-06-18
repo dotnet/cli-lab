@@ -36,7 +36,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         internal static Bundle<RuntimeVersion> Runtime_2_2_2_X64 = GetBundleFromInput<RuntimeVersion>("2.2.2", BundleArch.X64);
         internal static Bundle<RuntimeVersion> Runtime_2_1_0_Rc1_X64 = GetBundleFromInput<RuntimeVersion>("2.1.0-rc1", BundleArch.X64);
 
-        internal static readonly IEnumerable<Bundle<SdkVersion>> TestSdks = new List<Bundle<SdkVersion>>
+        internal static readonly IEnumerable<Bundle<SdkVersion>> DefaultTestSdks = new List<Bundle<SdkVersion>>
         {
             Sdk_2_2_202_X64,
             Sdk_2_1_300_Rc1_X64,
@@ -48,7 +48,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             Sdk_2_1_300_Rc1_X86
         };
 
-        internal static readonly IEnumerable<Bundle<RuntimeVersion>> TestRuntimes = new List<Bundle<RuntimeVersion>>
+        internal static readonly IEnumerable<Bundle<RuntimeVersion>> DefaultTestRuntimes = new List<Bundle<RuntimeVersion>>
         {
             Runtime_2_2_2_X64,
             Runtime_3_0_0_P5_X64,
@@ -60,9 +60,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             Runtime_2_1_0_Rc1_X64
         };
 
-        internal static readonly IEnumerable<Bundle> TestBundles = TestSdks
+        internal static readonly IEnumerable<Bundle> DefaultTestBundles = DefaultTestSdks
             .Select(sdk => sdk as Bundle)
-            .Concat(TestRuntimes.Select(runtime => runtime as Bundle));
+            .Concat(DefaultTestRuntimes.Select(runtime => runtime as Bundle));
 
         [Theory]
         [InlineData((BundleType)0)]
@@ -71,7 +71,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData((BundleType.Sdk | BundleType.Runtime) + 10)]
         internal void TestFiltererArgumentOutOfRangeException(BundleType typeSelection)
         {
-            TestFiltererException<ArgumentOutOfRangeException>(DefaultArgValue, typeSelection);
+            TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultArgValue, typeSelection);
         }
 
         [Fact]
@@ -79,24 +79,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             if (TestBundleTypeNotSpecifiedException)
             {
-                TestFiltererException<BundleTypeMissingException>(DefaultArgValue, BundleType.Sdk | BundleType.Runtime);
+                TestFiltererException<BundleTypeMissingException>(DefaultTestBundles, DefaultArgValue, BundleType.Sdk | BundleType.Runtime);
             }
         }
 
-        internal virtual void TestFiltererGood(string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal virtual void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
 
-            OptionFilterer.Filter(parseResult, Option, TestBundles, typeSelection)
+            OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection)
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal virtual void TestFiltererException<TException>(string argValue, BundleType typeSelection)
+        internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection)
             where TException : Exception
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
 
-            Action action = () => OptionFilterer.Filter(parseResult, Option, TestBundles, typeSelection);
+            Action action = () => OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection);
             action.Should().Throw<TException>();
         }
 

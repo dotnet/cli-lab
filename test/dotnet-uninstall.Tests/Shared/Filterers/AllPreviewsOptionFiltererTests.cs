@@ -16,6 +16,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             yield return new object[]
             {
+                DefaultTestBundles,
                 new List<Bundle>
                 {
                     Sdk_3_0_100_P5_X64,
@@ -27,6 +28,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 new List<Bundle>
                 {
                     Runtime_3_0_0_P5_X64,
@@ -39,6 +41,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 new List<Bundle>
                 {
                     Sdk_3_0_100_P5_X64,
@@ -55,9 +58,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
-        internal void TestAllPreviewsOptionFiltererGood(IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal void TestAllPreviewsOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
-            TestFiltererGood(DefaultArgValue, expected, typeSelection);
+            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection);
         }
     }
 }
