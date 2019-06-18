@@ -56,10 +56,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             foreach (var bundle in bundles)
             {
-                // TODO: replace this
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine(string.Format("Uninstalling: {0}", bundle.UninstallCommand));
-                Console.ResetColor();
+                throw new NotImplementedException();
             }
         }
     }
