@@ -53,7 +53,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
             if (!match.Success)
             {
-                throw new InvalidInputVersionStringException(input);
+                throw new InvalidInputVersionException(input);
             }
 
             var majorString = match.Groups[Regexes.MajorGroupName].Value;

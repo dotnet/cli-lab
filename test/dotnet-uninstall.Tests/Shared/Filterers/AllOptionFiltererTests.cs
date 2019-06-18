@@ -16,28 +16,31 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             yield return new object[]
             {
-                TestSdks,
+                DefaultTestBundles,
+                DefaultTestSdks,
                 BundleType.Sdk
             };
 
             yield return new object[]
             {
-                TestRuntimes,
+                DefaultTestBundles,
+                DefaultTestRuntimes,
                 BundleType.Runtime
             };
 
             yield return new object[]
             {
-                TestBundles,
+                DefaultTestBundles,
+                DefaultTestBundles,
                 BundleType.Sdk | BundleType.Runtime
             };
         }
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
-        internal void TestAllOptionFiltererGood(IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal void TestAllOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
-            TestFiltererGood(DefaultArgValue, expected, typeSelection);
+            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection);
         }
     }
 }

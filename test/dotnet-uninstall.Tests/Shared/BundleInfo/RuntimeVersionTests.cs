@@ -221,7 +221,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         internal void TestFromInputReject(string input)
         {
             Action action = () => { _ = BundleVersion.FromInput<RuntimeVersion>(input) as RuntimeVersion; };
-            action.Should().Throw<InvalidInputVersionStringException>(string.Format(Messages.InvalidInputVersionStringExceptionMessageFormat, input));
+            action.Should().Throw<InvalidInputVersionException>(string.Format(Messages.InvalidInputVersionExceptionMessageFormat, input));
         }
     }
 }

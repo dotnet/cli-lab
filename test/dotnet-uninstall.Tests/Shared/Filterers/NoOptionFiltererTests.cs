@@ -21,6 +21,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.202",
                 new List<Bundle>
                 {
@@ -32,6 +33,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.5",
                 new List<Bundle>
                 {
@@ -43,6 +45,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.202 2.1.300-rc1-008673",
                 new List<Bundle>
                 {
@@ -56,6 +59,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.5 3.0.0-preview5-27626-15",
                 new List<Bundle>
                 {
@@ -69,6 +73,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.202 2.2.202 2.2.202",
                 new List<Bundle>
                 {
@@ -80,6 +85,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
             yield return new object[]
             {
+                DefaultTestBundles,
                 "2.2.5 2.1.0-rc1 3.0.0-preview5-27626-15 3.0.0-preview5-27626-15 2.1.0-rc1 2.1.0-rc1",
                 new List<Bundle>
                 {
@@ -95,9 +101,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
-        internal void TestNoOptionFiltererGood(string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal void TestNoOptionFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
-            TestFiltererGood(argValue, expected, typeSelection);
+            TestFiltererGood(testBundles, argValue, expected, typeSelection);
         }
 
         [Theory]
@@ -115,24 +121,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData("2.2.202", BundleType.Runtime)]
         internal void TestNoOptionFiltererSpecifiedVersionNotFoundException(string argValue, BundleType typeSelection)
         {
-            TestFiltererException<SpecifiedVersionNotFoundException>(argValue, typeSelection);
+            TestFiltererException<SpecifiedVersionNotFoundException>(DefaultTestBundles, argValue, typeSelection);
         }
 
-        internal override void TestFiltererGood(string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal override void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
 
             (OptionFilterer as ArgFilterer<IEnumerable<string>>)
-                .Filter(parseResult.RootCommandResult.Arguments, TestBundles, typeSelection)
+                .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection)
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal override void TestFiltererException<TException>(string argValue, BundleType typeSelection)
+        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
 
             Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
-                .Filter(parseResult.RootCommandResult.Arguments, TestBundles, typeSelection);
+                .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection);
 
             action.Should().Throw<TException>();
         }

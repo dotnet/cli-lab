@@ -123,7 +123,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
         }
 
-        public static Option GetUninstallMainOptions(this CommandResult commandResult)
+        public static Option GetUninstallMainOption(this CommandResult commandResult)
         {
             Option specifiedOption = null;
 

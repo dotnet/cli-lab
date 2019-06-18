@@ -27,7 +27,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var commandLineParseResult = CommandLineConfigs.UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
 
-            var option = commandLineParseResult.RootCommandResult.GetUninstallMainOptions();
+            var option = commandLineParseResult.RootCommandResult.GetUninstallMainOption();
             var typeSelection = commandLineParseResult.RootCommandResult.GetTypeSelection();
 
             IEnumerable<Bundle> filteredBundles;

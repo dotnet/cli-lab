@@ -151,11 +151,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("", "2.2.300 3.0.100")]
         [InlineData("", "--unknown-option")]
         [InlineData("", "--unknown-option argument")]
-        internal void TestGetUniqueOptionAccept(string option, string argValue = "")
+        internal void TestGetUninstallMainOptionAccept(string option, string argValue = "")
         {
             var rootCommandResult = CommandLineConfigs.UninstallRootCommand.Parse($"{option} {argValue}").RootCommandResult;
 
-            rootCommandResult.GetUninstallMainOptions()
+            rootCommandResult.GetUninstallMainOption()
                 .Should().Be(option.Equals(string.Empty) ? null : rootCommandResult.OptionResult(option).Option);
         }
 
@@ -168,13 +168,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below", "--all-but", "2.2.300", "2.1.700 3.0.100 --unknown-option")]
         [InlineData("--all-below", "--all-but", "--unknown-option", "2.1.700 3.0.100")]
         [InlineData("--all-below", "--major-minor", "2.2.300", "--unknown-option")]
-        internal void TestGetUniqueOptionRejectOptionsConflictException(string option1, string option2, string argValue1 = "", string argValue2 = "")
+        internal void TestGetUninstallMainOptionOptionsConflictException(string option1, string option2, string argValue1 = "", string argValue2 = "")
         {
             Action action1 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option1} {argValue1} {option2} {argValue2}")
-            .RootCommandResult.GetUninstallMainOptions();
+            .RootCommandResult.GetUninstallMainOption();
 
             Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option2} {argValue2} {option1} {argValue1}")
-            .RootCommandResult.GetUninstallMainOptions();
+            .RootCommandResult.GetUninstallMainOption();
 
             action1.Should().Throw<OptionsConflictException>(string.Format(Messages.OptionsConflictExceptionMessageFormat, option1, option2));
             action2.Should().Throw<OptionsConflictException>(string.Format(Messages.OptionsConflictExceptionMessageFormat, option1, option2));
@@ -185,10 +185,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below", "2.1.700", "2.2.300")]
         [InlineData("--all", "--unknown-option")]
         [InlineData("--all-below", "--unknown-option-1", "--unknown-option-2")]
-        internal void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgAfter(string option, string commandArgValue, string optionArgValue = "")
+        internal void TestGetUninstallMainOptionCommandArgOptionConflictExceptionCommandArgAfter(string option, string commandArgValue, string optionArgValue = "")
         {
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {optionArgValue} {commandArgValue}")
-            .RootCommandResult.GetUninstallMainOptions();
+            .RootCommandResult.GetUninstallMainOption();
 
             action.Should().Throw<CommandArgOptionConflictException>(string.Format(Messages.CommandArgOptionConflictExceptionMessageFormat, option));
         }
@@ -202,10 +202,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-but", "--unknown-option 2.1.700")]
         [InlineData("--all-but", "2.1.700 --unknown-option")]
         [InlineData("--all-but", "--unknown-option-1 --unknown-option-2")]
-        internal void TestGetUniqueOptionRejectCommandArgOptionConflictExceptionCommandArgBefore(string option, string commandArgValue, string optionArgValue = "")
+        internal void TestGetUninstallMainOptionCommandArgOptionConflictExceptionCommandArgBefore(string option, string commandArgValue, string optionArgValue = "")
         {
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
-            .RootCommandResult.GetUninstallMainOptions();
+            .RootCommandResult.GetUninstallMainOption();
 
             action.Should().Throw<CommandArgOptionConflictException>(string.Format(Messages.CommandArgOptionConflictExceptionMessageFormat, option));
         }

@@ -16,7 +16,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
             if (!match.Success)
             {
-                throw new InvalidInputVersionStringException(argValue);
+                throw new InvalidInputVersionException(argValue);
             }
 
             var versionMajorString = match.Groups[Regexes.MajorGroupName].Value;
