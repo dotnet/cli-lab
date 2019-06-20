@@ -54,7 +54,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             }
         }
 
-        internal static bool IsAdmin()
+        private static bool IsAdmin()
         {
             try
             {
@@ -68,7 +68,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             }
         }
 
-        internal static void RunAsAdmin()
+        private static void RunAsAdmin()
         {
             var location = Assembly.GetEntryAssembly().Location;
 
