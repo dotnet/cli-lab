@@ -44,8 +44,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles);
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles);
 
-            return ((typeSelection & BundleType.Sdk) > 0 ? Filter(argValue, sdks).Select(sdk => sdk as Bundle) : new List<Bundle>())
-                .Concat((typeSelection & BundleType.Runtime) > 0 ? Filter(argValue, runtimes).Select(runtime => runtime as Bundle) : new List<Bundle>());
+            var filteredSdks = (typeSelection & BundleType.Sdk) > 0 ?
+                Filter(argValue, sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
+                new List<Bundle>();
+
+            var filteredRuntimes = (typeSelection & BundleType.Runtime) > 0 ?
+                Filter(argValue, runtimes).OrderBy(runtime => runtime).Select(runtime => runtime as Bundle) :
+                new List<Bundle>();
+
+            return filteredSdks.Concat(filteredRuntimes);
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(TArg argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
@@ -68,8 +75,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles);
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles);
 
-            return ((typeSelection & BundleType.Sdk) > 0 ? Filter(sdks).Select(sdk => sdk as Bundle) : new List<Bundle>())
-                .Concat((typeSelection & BundleType.Runtime) > 0 ? Filter(runtimes).Select(runtime => runtime as Bundle) : new List<Bundle>());
+            var filteredSdks = (typeSelection & BundleType.Sdk) > 0 ?
+                Filter(sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
+                new List<Bundle>();
+
+            var filteredRuntimes = (typeSelection & BundleType.Runtime) > 0 ?
+                Filter(runtimes).OrderBy(runtime => runtime).Select(runtime => runtime as Bundle) :
+                new List<Bundle>();
+
+            return filteredSdks.Concat(filteredRuntimes);
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)
