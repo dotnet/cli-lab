@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.Win32;
@@ -11,8 +12,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public static IEnumerable<Bundle> GetInstalledBundles()
         {
             var uninstalls = Registry.LocalMachine
-                .OpenSubKey("SOFTWARE")
-                .OpenSubKey("WOW6432Node")
+                .OpenSubKey("SOFTWARE");
+
+            if (RuntimeInformation.ProcessArchitecture == Architecture.X64 || RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
+            {
+                uninstalls = uninstalls.OpenSubKey("WOW6432Node");
+            }
+
+            uninstalls = uninstalls
                 .OpenSubKey("Microsoft")
                 .OpenSubKey("Windows")
                 .OpenSubKey("CurrentVersion")
