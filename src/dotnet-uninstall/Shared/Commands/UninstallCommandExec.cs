@@ -13,41 +13,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
     {
         public static void Execute()
         {
-            if (RuntimeInfo.RunningOnWindows || RuntimeInfo.RunningOnOSX)
-            {
-                Execute(RegistryQuery.GetInstalledBundles());
-            }
-            else if (RuntimeInfo.RunningOnLinux)
+            if (RuntimeInfo.RunningOnLinux)
             {
                 throw new LinuxNotSupportedException();
             }
-        }
 
-        private static void Execute(IEnumerable<Bundle> bundles)
-        {
-            var commandLineParseResult = CommandLineConfigs.UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
-
-            var option = commandLineParseResult.RootCommandResult.GetUninstallMainOption();
-            var typeSelection = commandLineParseResult.RootCommandResult.GetTypeSelection();
-
-            IEnumerable<Bundle> filteredBundles;
-            if (option == null)
-            {
-                if (commandLineParseResult.RootCommandResult.Arguments.Count == 0)
-                {
-                    throw new RequiredArgMissingForUninstallCommandException();
-                }
-
-                filteredBundles = OptionFilterers.UninstallNoOptionFilterer.Filter(commandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection);
-            }
-            else
-            {
-                filteredBundles = OptionFilterers.OptionFiltererDictionary[option].Filter(commandLineParseResult, option, bundles, typeSelection);
-            }
+            var filtered = GetFilteredBundles(RegistryQuery.GetInstalledBundles());
 
             if (RuntimeInfo.RunningOnWindows)
             {
-                ExecuteUninstallWindows(filteredBundles);
+                ProcessHandler.ExecuteUninstallCommand(filtered);
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
@@ -55,9 +30,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static void ExecuteUninstallWindows(IEnumerable<Bundle> bundles)
+        private static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> bundles)
         {
-            ProcessHandler.ExecuteUninstallCommand(bundles);
+            var commandLineParseResult = CommandLineConfigs.UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
+
+            var option = commandLineParseResult.RootCommandResult.GetUninstallMainOption();
+            var typeSelection = commandLineParseResult.RootCommandResult.GetTypeSelection();
+
+            if (option == null)
+            {
+                if (commandLineParseResult.RootCommandResult.Arguments.Count == 0)
+                {
+                    throw new RequiredArgMissingForUninstallCommandException();
+                }
+
+                return OptionFilterers.UninstallNoOptionFilterer.Filter(commandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection);
+            }
+            else
+            {
+                return OptionFilterers.OptionFiltererDictionary[option].Filter(commandLineParseResult, option, bundles, typeSelection);
+            }
         }
     }
 }

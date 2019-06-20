@@ -40,6 +40,7 @@
         public static readonly string LinuxNotSupportedExceptionMessage = "The Linux operating systems are not supported";
         public static readonly string BundleTypeNotSpecifiedExceptionMessage = "Please specified the bundle type to uninstall";
         public static readonly string RequiredArgMissingForUninstallCommandExceptionMessage = "Required argument missing for the uninstall command";
+        public static readonly string ElevationFailedExceptionMessage = "Failed to run as administrator";
 
         public static readonly string UninstallationFailedExceptionMessageFormat = "Failed to wait for the uninstallation operation to complete: {0}";
         public static readonly string UninstallationFailedExceptionWithExitCodeMessageFormat = "The uninstallation operation failed with the exit code: {1}. Command: {0}";

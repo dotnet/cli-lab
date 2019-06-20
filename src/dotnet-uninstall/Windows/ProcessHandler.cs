@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
@@ -19,32 +21,74 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         internal static void ExecuteUninstallCommand(IEnumerable<Bundle> bundles)
         {
+            if (!IsAdmin())
+            {
+                RunAsAdmin();
+                return;
+            }
+
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
-                var args = ParseCommand(bundle.UninstallCommand, out var argc).ToList();
+                var args = ParseCommand(bundle.UninstallCommand, out var argc);
 
                 var process = new Process
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = args[0],
+                        FileName = args.First(),
                         Arguments = string.Join(" ", args.Skip(1)),
-                        Verb = "runas",
-                        UseShellExecute = true
+                        UseShellExecute = true,
+                        Verb = "runas"
                     }
                 };
 
-                process.Start();
-
-                if (!process.WaitForExit(PROCESS_TIMEOUT))
+                if (!process.Start() || !process.WaitForExit(PROCESS_TIMEOUT))
                 {
                     throw new UninstallationFailedException(bundle.UninstallCommand);
                 }
-                else if (process.ExitCode != 0)
+
+                if (process.ExitCode != 0)
                 {
                     throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
                 }
             }
+        }
+
+        internal static bool IsAdmin()
+        {
+            try
+            {
+                var identity = WindowsIdentity.GetCurrent();
+                var principal = new WindowsPrincipal(identity);
+                return principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        internal static void RunAsAdmin()
+        {
+            var location = Assembly.GetEntryAssembly().Location;
+
+            var process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = $"/c dotnet {location} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}",
+                    UseShellExecute = true,
+                    Verb = "runas"
+                }
+            };
+
+            if (!process.Start())
+            {
+                throw new ElevationFailedException();
+            }
+
+            Environment.Exit(0);
         }
 
         private static IEnumerable<string> ParseCommand(string command, out int argc)
