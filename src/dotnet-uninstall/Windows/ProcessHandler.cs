@@ -17,7 +17,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         [DllImport("shell32.dll", SetLastError = true)]
         static extern IntPtr CommandLineToArgvW(
-            [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine, out int pNumArgs);
+            [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
+            out int pNumArgs);
 
         internal static void ExecuteUninstallCommand(IEnumerable<Bundle> bundles)
         {
