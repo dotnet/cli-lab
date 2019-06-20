@@ -2,8 +2,8 @@
 {
     internal enum BundleArch
     {
-        Arm32,
-        X86,
-        X64,
+        Arm32 = 0x1,
+        X86 = 0x2,
+        X64 = 0x4
     }
 }

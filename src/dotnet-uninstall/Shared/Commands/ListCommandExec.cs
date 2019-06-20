@@ -33,11 +33,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
+            var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
             var printed = false;
+
+            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
 
             if ((typeSelection & BundleType.Sdk) > 0)
             {
-                var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
+                var sdks = Bundle<SdkVersion>
+                    .FilterWithSameBundleType(filteredBundlesByArch)
+                    .OrderByDescending(sdk => sdk);
+
                 Console.WriteLine(".NET Core SDKs:");
                 foreach (var sdk in sdks)
                 {
@@ -53,7 +59,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     Console.WriteLine();
                 }
 
-                var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
+                var runtimes = Bundle<RuntimeVersion>
+                    .FilterWithSameBundleType(filteredBundlesByArch)
+                    .OrderByDescending(runtime => runtime);
+
                 Console.WriteLine(".NET Core Runtimes:");
                 foreach (var runtime in runtimes)
                 {

@@ -73,6 +73,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--runtime",
             Messages.RuntimeOptionDescription);
 
+        public static readonly Option Arm32Option = new Option(
+            "--arm32",
+            Messages.Arm32OptionDescription);
+
+        public static readonly Option X86Option = new Option(
+            "--x86",
+            Messages.X86OptionDescription);
+
+        public static readonly Option X64Option = new Option(
+            "--x64",
+            Messages.X64OptionDescription);
+
         public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
             UninstallAllOption,
@@ -89,7 +101,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             UninstallVerbosityOption,
             SdkOption,
-            RuntimeOption
+            RuntimeOption,
+            Arm32Option,
+            X86Option,
+            X64Option
         };
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
@@ -158,6 +173,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 typeSelection |= BundleType.Sdk;
             }
+
             if (commandResult.OptionResult(RuntimeOption.Name) != null)
             {
                 typeSelection |= BundleType.Runtime;
@@ -169,6 +185,33 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
 
             return typeSelection;
+        }
+
+        public static BundleArch GetArchSelection(this CommandResult commandResult)
+        {
+            var archSelection = (BundleArch)0;
+
+            if (commandResult.OptionResult(Arm32Option.Name) != null)
+            {
+                archSelection |= BundleArch.Arm32;
+            }
+
+            if (commandResult.OptionResult(X86Option.Name) != null)
+            {
+                archSelection |= BundleArch.X86;
+            }
+
+            if (commandResult.OptionResult(X64Option.Name) != null)
+            {
+                archSelection |= BundleArch.X64;
+            }
+
+            if (archSelection == 0)
+            {
+                archSelection = BundleArch.Arm32 | BundleArch.X86 | BundleArch.X64;
+            }
+
+            return archSelection;
         }
     }
 }
