@@ -19,10 +19,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestBundles,
                 new List<Bundle>
                 {
-                    Sdk_2_2_202_X64,
+                    Sdk_2_2_202_Arm32,
                     Sdk_2_2_202_X86
                 },
-                BundleType.Sdk
+                BundleType.Sdk,
+                DefaultTestArchSelection
             };
 
             yield return new object[]
@@ -33,7 +34,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                     Runtime_2_2_4_X86,
                     Runtime_2_2_2_X64
                 },
-                BundleType.Runtime
+                BundleType.Runtime,
+                DefaultTestArchSelection
             };
 
             yield return new object[]
@@ -41,20 +43,54 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestBundles,
                 new List<Bundle>
                 {
-                    Sdk_2_2_202_X64,
+                    Sdk_2_2_202_Arm32,
                     Sdk_2_2_202_X86,
                     Runtime_2_2_4_X86,
                     Runtime_2_2_2_X64
                 },
-                BundleType.Sdk | BundleType.Runtime
+                BundleType.Sdk | BundleType.Runtime,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                new List<Bundle>
+                {
+                    Sdk_2_2_202_Arm32,
+                    Sdk_2_2_202_X86
+                },
+                BundleType.Sdk,
+                BundleArch.X86 | BundleArch.Arm32
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                new List<Bundle>(),
+                BundleType.Runtime,
+                BundleArch.X64
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                new List<Bundle>
+                {
+                    Sdk_2_2_202_Arm32,
+                    Sdk_2_2_202_X86,
+                    Runtime_2_2_4_X86
+                },
+                BundleType.Sdk | BundleType.Runtime,
+                BundleArch.Arm32 | BundleArch.X86
             };
         }
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
-        internal void TestAllLowerPatchesOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection)
+        internal void TestAllLowerPatchesOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
         {
-            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection);
+            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection, archSelection);
         }
     }
 }
