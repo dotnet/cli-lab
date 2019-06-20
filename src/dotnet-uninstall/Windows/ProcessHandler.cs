@@ -13,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
     public static class ProcessHandler
     {
-        private const int PROCESS_TIMEOUT = 5 * 60 * 1000;
+        private const int UNINSTALL_TIMEOUT = 5 * 60 * 1000;
 
         [DllImport("shell32.dll", SetLastError = true)]
         static extern IntPtr CommandLineToArgvW(
@@ -42,7 +42,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     }
                 };
 
-                if (!process.Start() || !process.WaitForExit(PROCESS_TIMEOUT))
+                if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
                 {
                     throw new UninstallationFailedException(bundle.UninstallCommand);
                 }
