@@ -35,14 +35,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
             var printed = false;
 
+            var alignPrinter = new AlignPrinter<(string, string)>(new[] { AlignType.Left, AlignType.Left }, "    ", "  ");
+
             if ((typeSelection & BundleType.Sdk) > 0)
             {
                 var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
+
                 Console.WriteLine(".NET Core SDKs:");
-                foreach (var sdk in sdks)
-                {
-                    Console.WriteLine($"\t{sdk.ToString()}");
-                }
+                alignPrinter.Print(sdks.Select(sdk => GetTupleForAlignPrinter(sdk)));
+
                 printed = true;
             }
 
@@ -54,12 +55,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 }
 
                 var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
+
                 Console.WriteLine(".NET Core Runtimes:");
-                foreach (var runtime in runtimes)
-                {
-                    Console.WriteLine($"\t{runtime.ToString()}");
-                }
+                alignPrinter.Print(runtimes.Select(runtime => GetTupleForAlignPrinter(runtime)));
             }
+        }
+
+        private static (string, string) GetTupleForAlignPrinter(Bundle bundle)
+        {
+            return (bundle.Version.ToString(), $"({bundle.Arch.ToString().ToLower()})");
         }
     }
 }
