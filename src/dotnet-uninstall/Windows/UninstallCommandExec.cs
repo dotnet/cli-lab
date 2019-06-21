@@ -87,7 +87,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         private static void RunAsAdmin()
         {
-            var location = Assembly.GetEntryAssembly().Location;
+            var entryFile = Process.GetCurrentProcess().MainModule.FileName;
+            var dllLocation = Assembly.GetEntryAssembly().Location;
 
             try
             {
@@ -96,7 +97,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     StartInfo = new ProcessStartInfo
                     {
                         FileName = "cmd.exe",
-                        Arguments = $"/c dotnet {location} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}",
+                        Arguments = $"/c {entryFile} {dllLocation} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}",
                         UseShellExecute = true,
                         Verb = "runas"
                     }
