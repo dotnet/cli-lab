@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 
@@ -50,7 +51,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 case BundleType.Runtime:
                     return new Tuple<int, int, int>(version.Major, version.Minor, default);
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException();
             }
         }
     }

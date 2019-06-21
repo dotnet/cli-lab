@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public abstract bool AcceptMultipleBundleTypes { get; }
 
-        public abstract IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection);
+        public abstract IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection);
 
         protected void ValidateTypeSelection(BundleType typeSelection)
         {
@@ -31,18 +31,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public abstract override bool AcceptMultipleBundleTypes { get; }
 
-        public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection)
+        public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             var argValue = parseResult.ValueForOption<TArg>(option.Name);
-            return Filter(argValue, bundles, typeSelection);
+            return Filter(argValue, bundles, typeSelection, archSelection);
         }
 
-        public IEnumerable<Bundle> Filter(TArg argValue, IEnumerable<Bundle> bundles, BundleType typeSelection)
+        public IEnumerable<Bundle> Filter(TArg argValue, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             ValidateTypeSelection(typeSelection);
 
-            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles);
-            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles);
+            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
+
+            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(filteredBundlesByArch);
+            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
             var filteredSdks = (typeSelection & BundleType.Sdk) > 0 ?
                 Filter(argValue, sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
@@ -63,17 +65,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public abstract override bool AcceptMultipleBundleTypes { get; }
 
-        public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection)
+        public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
-            return Filter(bundles, typeSelection);
+            return Filter(bundles, typeSelection, archSelection);
         }
 
-        public IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles, BundleType typeSelection)
+        public IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             ValidateTypeSelection(typeSelection);
 
-            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles);
-            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles);
+            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
+
+            var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(filteredBundlesByArch);
+            var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
             var filteredSdks = (typeSelection & BundleType.Sdk) > 0 ?
                 Filter(sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :

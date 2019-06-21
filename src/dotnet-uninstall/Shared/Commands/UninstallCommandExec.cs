@@ -36,6 +36,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var option = commandLineParseResult.RootCommandResult.GetUninstallMainOption();
             var typeSelection = commandLineParseResult.RootCommandResult.GetTypeSelection();
+            var archSelection = commandLineParseResult.RootCommandResult.GetArchSelection();
 
             if (option == null)
             {
@@ -44,11 +45,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     throw new RequiredArgMissingForUninstallCommandException();
                 }
 
-                return OptionFilterers.UninstallNoOptionFilterer.Filter(commandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection);
+                return OptionFilterers.UninstallNoOptionFilterer.Filter(commandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection, archSelection);
             }
             else
             {
-                return OptionFilterers.OptionFiltererDictionary[option].Filter(commandLineParseResult, option, bundles, typeSelection);
+                return OptionFilterers.OptionFiltererDictionary[option].Filter(commandLineParseResult, option, bundles, typeSelection, archSelection);
             }
         }
     }

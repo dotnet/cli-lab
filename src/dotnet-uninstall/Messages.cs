@@ -34,8 +34,11 @@
         public static readonly string UninstallVerbosityOptionArgumentName = "VERBOSITY-LEVEL";
         public static readonly string UninstallVerbosityOptionArgumentDescription = "The specified MSBuild verbosity level";
 
-        public static readonly string SdkOptionDescription = "Uninstall the .NET Core SDKs only";
-        public static readonly string RuntimeOptionDescription = "Uninstall the .NET Core Runtimes only";
+        public static readonly string SdkOptionDescription = "Uninstall .NET Core SDKs only";
+        public static readonly string RuntimeOptionDescription = "Uninstall .NET Core Runtimes only";
+        public static readonly string Arm32OptionDescription = "Uninstall arm32 .NET Core bundles only";
+        public static readonly string X86OptionDescription = "Uninstall x86 .NET Core bundles only";
+        public static readonly string X64OptionDescription = "Uninstall x64 .NET Core bundles only";
 
         public static readonly string ListCommandSdkHeader = ".NET Core SDKs:";
         public static readonly string ListCommandRuntimeHeader = ".NET Core Runtimes:";
