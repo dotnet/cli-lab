@@ -3,7 +3,7 @@
     internal class ElevationFailedException : DotNetUninstallException
     {
         public ElevationFailedException() :
-            base(Messages.ElevationFailedExceptionMessage)
+            base(LocalizableStrings.ElevationFailedExceptionMessage)
         { }
     }
 }

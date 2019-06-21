@@ -3,7 +3,7 @@
     internal class LinuxNotSupportedException : DotNetUninstallException
     {
         public LinuxNotSupportedException() :
-            base(Messages.LinuxNotSupportedExceptionMessage)
+            base(LocalizableStrings.LinuxNotSupportedExceptionMessage)
         { }
     }
 }

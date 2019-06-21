@@ -176,8 +176,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option2} {argValue2} {option1} {argValue1}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action1.Should().Throw<OptionsConflictException>(string.Format(Messages.OptionsConflictExceptionMessageFormat, option1, option2));
-            action2.Should().Throw<OptionsConflictException>(string.Format(Messages.OptionsConflictExceptionMessageFormat, option1, option2));
+            action1.Should().Throw<OptionsConflictException>(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, option1, option2));
+            action2.Should().Throw<OptionsConflictException>(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, option1, option2));
         }
 
         [Theory]
@@ -190,7 +190,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {optionArgValue} {commandArgValue}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action.Should().Throw<CommandArgOptionConflictException>(string.Format(Messages.CommandArgOptionConflictExceptionMessageFormat, option));
+            action.Should().Throw<CommandArgOptionConflictException>(string.Format(LocalizableStrings.CommandArgOptionConflictExceptionMessageFormat, option));
         }
 
         [Theory]
@@ -207,7 +207,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action.Should().Throw<CommandArgOptionConflictException>(string.Format(Messages.CommandArgOptionConflictExceptionMessageFormat, option));
+            action.Should().Throw<CommandArgOptionConflictException>(string.Format(LocalizableStrings.CommandArgOptionConflictExceptionMessageFormat, option));
         }
 
         [Theory]
