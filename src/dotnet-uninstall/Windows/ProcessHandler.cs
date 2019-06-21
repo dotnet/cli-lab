@@ -31,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
-                var args = ParseCommand(bundle.UninstallCommand, out var argc);
+                var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
 
                 try
                 {
@@ -108,7 +108,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             Environment.Exit(0);
         }
 
-        private static IEnumerable<string> ParseCommand(string command, out int argc)
+        private static IEnumerable<string> ParseCommandToArgs(string command, out int argc)
         {
             var argv = CommandLineToArgvW(command, out argc);
 
