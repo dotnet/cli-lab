@@ -14,6 +14,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
     public static class ProcessHandler
     {
         private const int UNINSTALL_TIMEOUT = 5 * 60 * 1000;
+        private const int NATIVE_ERROR_CODE_CANCELED = 1223;
 
         [DllImport("shell32.dll", SetLastError = true)]
         static extern IntPtr CommandLineToArgvW(
@@ -32,25 +33,40 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 var args = ParseCommand(bundle.UninstallCommand, out var argc);
 
-                var process = new Process
+                try
                 {
-                    StartInfo = new ProcessStartInfo
+                    var process = new Process
                     {
-                        FileName = args.First(),
-                        Arguments = string.Join(" ", args.Skip(1)),
-                        UseShellExecute = true,
-                        Verb = "runas"
+                        StartInfo = new ProcessStartInfo
+                        {
+                            FileName = args.First(),
+                            Arguments = string.Join(" ", args.Skip(1)),
+                            UseShellExecute = true,
+                            Verb = "runas"
+                        }
+                    };
+
+                    if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
+                    {
+                        throw new UninstallationFailedException(bundle.UninstallCommand);
                     }
-                };
 
-                if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
-                {
-                    throw new UninstallationFailedException(bundle.UninstallCommand);
+                    if (process.ExitCode != 0)
+                    {
+                        throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
+                    }
                 }
-
-                if (process.ExitCode != 0)
+                catch (Win32Exception e)
                 {
-                    throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
+                    if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
+                    {
+                        ExceptionHandler.PrintExceptionMessage(e.Message);
+                        Environment.Exit(NATIVE_ERROR_CODE_CANCELED);
+                    }
+                    else
+                    {
+                        throw e;
+                    }
                 }
             }
         }
