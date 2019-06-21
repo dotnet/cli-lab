@@ -3,11 +3,11 @@
     internal class UninstallationFailedException : DotNetUninstallException
     {
         public UninstallationFailedException(string command) :
-            base(string.Format(Messages.UninstallationFailedExceptionMessageFormat, command))
+            base(string.Format(LocalizableStrings.UninstallationFailedExceptionMessageFormat, command))
         { }
 
         public UninstallationFailedException(string command, int exitCode) :
-            base(string.Format(Messages.UninstallationFailedExceptionWithExitCodeMessageFormat, command, exitCode))
+            base(string.Format(LocalizableStrings.UninstallationFailedExceptionWithExitCodeMessageFormat, command, exitCode))
         { }
     }
 }

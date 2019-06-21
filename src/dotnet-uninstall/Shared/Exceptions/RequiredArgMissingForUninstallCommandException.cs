@@ -3,7 +3,7 @@
     internal class RequiredArgMissingForUninstallCommandException : DotNetUninstallException
     {
         public RequiredArgMissingForUninstallCommandException() :
-            base(Messages.RequiredArgMissingForUninstallCommandExceptionMessage)
+            base(LocalizableStrings.RequiredArgMissingForUninstallCommandExceptionMessage)
         { }
     }
 }

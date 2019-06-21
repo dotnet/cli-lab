@@ -3,7 +3,7 @@
     internal class SpecifiedVersionNotFoundException : DotNetUninstallException
     {
         public SpecifiedVersionNotFoundException(string versionString) :
-            base(string.Format(Messages.SpecifiedVersionNotFoundExceptionMessageFormat, versionString))
+            base(string.Format(LocalizableStrings.SpecifiedVersionNotFoundExceptionMessageFormat, versionString))
         { }
     }
 }

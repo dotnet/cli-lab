@@ -47,7 +47,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     .FilterWithSameBundleType(filteredBundlesByArch)
                     .OrderByDescending(sdk => sdk);
 
-                stackView.Add(GetTableView(sdks, Messages.ListCommandSdkHeader));
+                stackView.Add(GetTableView(sdks,LocalizableStrings.ListCommandSdkHeader));
                 stackView.Add(new ContentView(string.Empty));
             }
 
@@ -57,7 +57,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     .FilterWithSameBundleType(filteredBundlesByArch)
                     .OrderByDescending(runtime => runtime);
 
-                stackView.Add(GetTableView(runtimes, Messages.ListCommandRuntimeHeader));
+                stackView.Add(GetTableView(runtimes,LocalizableStrings.ListCommandRuntimeHeader));
                 stackView.Add(new ContentView(string.Empty));
             }
 

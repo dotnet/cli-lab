@@ -3,7 +3,7 @@
     internal class UserCancelationException : DotNetUninstallException
     {
         public UserCancelationException() :
-            base(Messages.UserCancelationExceptionMessage)
+            base(LocalizableStrings.UserCancelationExceptionMessage)
         { }
     }
 }

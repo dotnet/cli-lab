@@ -11,79 +11,79 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
     {
         public static readonly Option UninstallAllOption = new Option(
             "--all",
-            Messages.UninstallAllOptionDescription);
+            LocalizableStrings.UninstallAllOptionDescription);
 
         public static readonly Option UninstallAllLowerPatchesOption = new Option(
             "--all-lower-patches",
-            Messages.UninstallAllLowerPatchesOptionDescription);
+            LocalizableStrings.UninstallAllLowerPatchesOptionDescription);
 
         public static readonly Option UninstallAllButLatestOption = new Option(
             "--all-but-latest",
-            Messages.UninstallAllButLatestOptionDescription);
+            LocalizableStrings.UninstallAllButLatestOptionDescription);
 
         public static readonly Option UninstallAllButOption = new Option(
             "--all-but",
-            Messages.UninstallAllButOptionDescription,
+            LocalizableStrings.UninstallAllButOptionDescription,
             new Argument<IEnumerable<string>>
             {
-                Name = Messages.UninstallAllButOptionArgumentName,
-                Description = Messages.UninstallAllButOptionArgumentDescription
+                Name = LocalizableStrings.UninstallAllButOptionArgumentName,
+                Description = LocalizableStrings.UninstallAllButOptionArgumentDescription
             });
 
         public static readonly Option UninstallAllBelowOption = new Option(
             "--all-below",
-            Messages.UninstallAllBelowOptionDescription,
+            LocalizableStrings.UninstallAllBelowOptionDescription,
             new Argument<string>
             {
-                Name = Messages.UninstallAllBelowOptionArgumentName,
-                Description = Messages.UninstallAllBelowOptionArgumentDescription
+                Name = LocalizableStrings.UninstallAllBelowOptionArgumentName,
+                Description = LocalizableStrings.UninstallAllBelowOptionArgumentDescription
             });
 
         public static readonly Option UninstallAllPreviewsOption = new Option(
             "--all-previews",
-            Messages.UninstallAllPreviewsOptionDescription);
+            LocalizableStrings.UninstallAllPreviewsOptionDescription);
 
         public static readonly Option UninstallAllPreviewsButLatestOption = new Option(
             "--all-previews-but-latest",
-            Messages.UninstallAllPreviewsButLatestOptionDescription);
+            LocalizableStrings.UninstallAllPreviewsButLatestOptionDescription);
 
         public static readonly Option UninstallMajorMinorOption = new Option(
             "--major-minor",
-            Messages.UninstallMajorMinorOptionDescription,
+            LocalizableStrings.UninstallMajorMinorOptionDescription,
             new Argument<string>
             {
-                Name = Messages.UninstallMajorMinorOptionArgumentName,
-                Description = Messages.UninstallMajorMinorOptionArgumentDescription
+                Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName,
+                Description = LocalizableStrings.UninstallMajorMinorOptionArgumentDescription
             });
 
         public static readonly Option UninstallVerbosityOption = new Option(
             new[] { "--verbosity", "-v" },
-            Messages.UninstallVerbosityOptionDescription,
+            LocalizableStrings.UninstallVerbosityOptionDescription,
             new Argument<string>
             {
-                Name = Messages.UninstallVerbosityOptionArgumentName,
-                Description = Messages.UninstallVerbosityOptionArgumentDescription
+                Name = LocalizableStrings.UninstallVerbosityOptionArgumentName,
+                Description = LocalizableStrings.UninstallVerbosityOptionArgumentDescription
             });
 
         public static readonly Option SdkOption = new Option(
             "--sdk",
-            Messages.SdkOptionDescription);
+            LocalizableStrings.SdkOptionDescription);
 
         public static readonly Option RuntimeOption = new Option(
             "--runtime",
-            Messages.RuntimeOptionDescription);
+            LocalizableStrings.RuntimeOptionDescription);
 
         public static readonly Option Arm32Option = new Option(
             "--arm32",
-            Messages.Arm32OptionDescription);
+            LocalizableStrings.Arm32OptionDescription);
 
         public static readonly Option X86Option = new Option(
             "--x86",
-            Messages.X86OptionDescription);
+            LocalizableStrings.X86OptionDescription);
 
         public static readonly Option X64Option = new Option(
             "--x64",
-            Messages.X64OptionDescription);
+            LocalizableStrings.X64OptionDescription);
 
         public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
@@ -108,16 +108,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         };
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
-            Messages.UninstallNoOptionDescription,
+            LocalizableStrings.UninstallNoOptionDescription,
             argument: new Argument<IEnumerable<string>>
             {
-                Name = Messages.UninstallNoOptionArgumentName,
-                Description = Messages.UninstallNoOptionArgumentDescription
+                Name = LocalizableStrings.UninstallNoOptionArgumentName,
+                Description = LocalizableStrings.UninstallNoOptionArgumentDescription
             });
 
         public static readonly Command ListCommand = new Command(
             "list",
-            Messages.ListCommandDescription);
+            LocalizableStrings.ListCommandDescription);
 
         static CommandLineConfigs()
         {
