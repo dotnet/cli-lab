@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Rendering;
+using System.CommandLine.Rendering.Views;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
@@ -33,33 +35,41 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
-            var printed = false;
+
+            var stackView = new StackLayoutView();
 
             if ((typeSelection & BundleType.Sdk) > 0)
             {
                 var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
-                Console.WriteLine(".NET Core SDKs:");
-                foreach (var sdk in sdks)
-                {
-                    Console.WriteLine($"\t{sdk.ToString()}");
-                }
-                printed = true;
+
+                stackView.Add(GetTableView(sdks, Messages.ListCommandSdkHeader));
+                stackView.Add(new ContentView(string.Empty));
             }
 
             if ((typeSelection & BundleType.Runtime) > 0)
             {
-                if (printed)
-                {
-                    Console.WriteLine();
-                }
-
                 var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
-                Console.WriteLine(".NET Core Runtimes:");
-                foreach (var runtime in runtimes)
-                {
-                    Console.WriteLine($"\t{runtime.ToString()}");
-                }
+
+                stackView.Add(GetTableView(runtimes, Messages.ListCommandRuntimeHeader));
+                stackView.Add(new ContentView(string.Empty));
             }
+
+            stackView.Render(
+                new ConsoleRenderer(new SystemConsole()),
+                new Region(0, 0, Console.WindowWidth, Console.WindowHeight));
+        }
+
+        private static TableView<Bundle> GetTableView(IEnumerable<Bundle> bundles, string header)
+        {
+            var tableView = new TableView<Bundle>
+            {
+                Items = bundles.ToList().AsReadOnly()
+            };
+
+            tableView.AddColumn(bundle => $"  {bundle.Version.ToString()}", header);
+            tableView.AddColumn(bundle => $"({bundle.Arch.ToString().ToLower()})", string.Empty);
+
+            return tableView;
         }
     }
 }
