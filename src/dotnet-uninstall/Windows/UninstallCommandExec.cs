@@ -11,7 +11,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    public static class ProcessHandler
+    public static class UninstallCommandExec
     {
         private const int UNINSTALL_TIMEOUT = 5 * 60 * 1000;
         private const int NATIVE_ERROR_CODE_CANCELED = 1223;
