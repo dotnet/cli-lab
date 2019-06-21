@@ -60,8 +60,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 {
                     if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
                     {
-                        ExceptionHandler.PrintExceptionMessage(e.Message);
-                        Environment.Exit(NATIVE_ERROR_CODE_CANCELED);
+                        throw new UserCancelationException();
                     }
                     else
                     {
@@ -112,8 +111,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
                 {
-                    ExceptionHandler.PrintExceptionMessage(e.Message);
-                    Environment.Exit(NATIVE_ERROR_CODE_CANCELED);
+                    throw new UserCancelationException();
                 }
                 else
                 {
