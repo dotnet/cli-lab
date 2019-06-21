@@ -39,7 +39,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             if ((typeSelection & BundleType.Sdk) > 0)
             {
-                var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk.Version);
+                var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(bundles).OrderByDescending(sdk => sdk);
 
                 Console.WriteLine(".NET Core SDKs:");
                 alignPrinter.Print(sdks.Select(sdk => GetTupleForAlignPrinter(sdk)));
@@ -54,7 +54,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     Console.WriteLine();
                 }
 
-                var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime.Version);
+                var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(bundles).OrderByDescending(runtime => runtime);
 
                 Console.WriteLine(".NET Core Runtimes:");
                 alignPrinter.Print(runtimes.Select(runtime => GetTupleForAlignPrinter(runtime)));
