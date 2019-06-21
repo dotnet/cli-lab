@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
@@ -31,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
                 case BundleType.Runtime:
                     return new Bundle<RuntimeVersion>(version as RuntimeVersion, arch, uninstallCommand);
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new InvalidEnumArgumentException();
             }
         }
 

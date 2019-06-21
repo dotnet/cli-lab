@@ -44,7 +44,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
                 return RuntimeVersion.FromInput(input);
             }
 
-            throw new ArgumentOutOfRangeException();
+            throw new ArgumentException();
         }
 
         protected static void FromInput(Regex regex, string input, out int major, out int minor, out int patch, out int build, out bool preview, out Match match)
