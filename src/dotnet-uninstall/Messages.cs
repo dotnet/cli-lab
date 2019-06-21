@@ -40,6 +40,9 @@
         public static readonly string X86OptionDescription = "Uninstall x86 .NET Core bundles only";
         public static readonly string X64OptionDescription = "Uninstall x64 .NET Core bundles only";
 
+        public static readonly string ListCommandSdkHeader = ".NET Core SDKs:";
+        public static readonly string ListCommandRuntimeHeader = ".NET Core Runtimes:";
+
         public static readonly string LinuxNotSupportedExceptionMessage = "The Linux operating systems are not supported";
         public static readonly string BundleTypeNotSpecifiedExceptionMessage = "Please specified the bundle type to uninstall";
         public static readonly string RequiredArgMissingForUninstallCommandExceptionMessage = "Required argument missing for the uninstall command";
