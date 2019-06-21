@@ -89,20 +89,35 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             var location = Assembly.GetEntryAssembly().Location;
 
-            var process = new Process
+            try
             {
-                StartInfo = new ProcessStartInfo
+                var process = new Process
                 {
-                    FileName = "cmd.exe",
-                    Arguments = $"/c dotnet {location} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}",
-                    UseShellExecute = true,
-                    Verb = "runas"
-                }
-            };
+                    StartInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = $"/c dotnet {location} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}",
+                        UseShellExecute = true,
+                        Verb = "runas"
+                    }
+                };
 
-            if (!process.Start())
+                if (!process.Start())
+                {
+                    throw new ElevationFailedException();
+                }
+            }
+            catch (Win32Exception e)
             {
-                throw new ElevationFailedException();
+                if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
+                {
+                    ExceptionHandler.PrintExceptionMessage(e.Message);
+                    Environment.Exit(NATIVE_ERROR_CODE_CANCELED);
+                }
+                else
+                {
+                    throw e;
+                }
             }
 
             Environment.Exit(0);
