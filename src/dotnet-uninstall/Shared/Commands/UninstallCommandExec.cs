@@ -22,7 +22,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             if (RuntimeInfo.RunningOnWindows)
             {
-                ProcessHandler.ExecuteUninstallCommand(filtered);
+                Windows.UninstallCommandExec.ExecuteUninstallCommand(filtered);
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
