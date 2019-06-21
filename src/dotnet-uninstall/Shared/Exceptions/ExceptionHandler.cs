@@ -15,11 +15,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
                 catch (DotNetUninstallException e)
                 {
                     PrintExceptionMessage(e.Message);
+                    Environment.Exit(1);
                 }
             };
         }
 
-        private static void PrintExceptionMessage(string message)
+        public static void PrintExceptionMessage(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
