@@ -63,7 +63,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
             major = int.Parse(majorString);
             minor = int.Parse(minorString);
-            patch = int.Parse(patchString);
+            patch = patchString.Equals(string.Empty) ? default : int.Parse(patchString);
             build = buildString.Equals(string.Empty) ? default : int.Parse(buildString);
             preview = match.Groups[Regexes.PreviewGroupName].Success;
         }

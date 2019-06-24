@@ -223,6 +223,74 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.X64 | BundleArch.Arm32
             };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.3",
+                new List<Bundle>
+                {
+                    Sdk_2_2_300_X64,
+                    Sdk_2_2_222_X86,
+                    Sdk_2_2_202_X86,
+                    Sdk_2_2_202_Arm32,
+                    Sdk_2_1_700_X64,
+                    Sdk_2_1_300_Rc1_X86,
+                    Sdk_2_1_300_Rc1_Arm32
+                },
+                BundleType.Sdk,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "3.0",
+                new List<Bundle>
+                {
+                    Runtime_2_2_5_Arm32,
+                    Runtime_2_2_2_X64,
+                    Runtime_2_1_0_Rc1_X64
+                },
+                BundleType.Runtime,
+                BundleArch.Arm32 | BundleArch.X64
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.0",
+                new List<Bundle>(),
+                BundleType.Sdk,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.1",
+                new List<Bundle>(),
+                BundleType.Runtime,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "3.1",
+                DefaultTestSdks,
+                BundleType.Sdk,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "3.1",
+                DefaultTestRuntimes,
+                BundleType.Runtime,
+                DefaultTestArchSelection
+            };
         }
 
         [Theory]

@@ -63,8 +63,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         public static readonly Regex BundleCachePathRegex = new Regex(
             $@"(\\dotnet\-((?<{TypeGroupName}>sdk)\-{_sdkVersionCachePathRegex}|(?<{TypeGroupName}>runtime)\-{_runtimeVersionCachePathRegex})\-win\-{_archRegex.ToString()}\.exe$)|(\\dotnet\-dev\-win\-{_archRegex.ToString()}\.{_sdkVersionCachePathRegex.ToString()}\.exe$)|(\\dotnet\-win\-{_archRegex.ToString()}\.{_runtimeVersionCachePathRegex.ToString()}\.exe$)");
         public static readonly Regex SdkVersionInputRegex = new Regex(
-            $@"^{_sdkVersionCachePathRegex}$");
+            $@"^{_sdkVersionCachePathRegex}$|^{_majorMinorRegex.ToString()}$");
         public static readonly Regex RuntimeVersionInputRegex = new Regex(
-            $@"^{_runtimeVersionCachePathRegex}$");
+            $@"^{_runtimeVersionCachePathRegex}$|^{_majorMinorRegex.ToString()}$");
     }
 }

@@ -211,13 +211,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("2.2.300")]
         [InlineData("3.0.100-preview-009812")]
         [InlineData("3.0.100-preview6-012264")]
+        [InlineData("1.0")]
+        [InlineData("1.1")]
+        [InlineData("2.0")]
+        [InlineData("2.1")]
+        [InlineData("2.2")]
+        [InlineData("3.0")]
+        [InlineData("12.345")]
+        [InlineData("0012.00345")]
         internal void TestSdkVersionInputRegexAccept(string input)
         {
             TestRegexAccept(Regexes.SdkVersionInputRegex, input);
         }
 
         [Theory]
-        [InlineData("1.0")]
         [InlineData("1.0.")]
         [InlineData("2.2.5.002111")]
         [InlineData("2.2.500.002111")]
@@ -250,13 +257,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("2.2.5")]
         [InlineData("3.0.0-preview-27122-01")]
         [InlineData("3.0.0-preview5-27626-15")]
+        [InlineData("1.0")]
+        [InlineData("1.1")]
+        [InlineData("2.0")]
+        [InlineData("2.1")]
+        [InlineData("2.2")]
+        [InlineData("3.0")]
+        [InlineData("12.345")]
+        [InlineData("0012.00345")]
         internal void TestRuntimeVersionInputRegexAccept(string input)
         {
             TestRegexAccept(Regexes.RuntimeVersionInputRegex, input);
         }
 
         [Theory]
-        [InlineData("1.0")]
         [InlineData("1.0.")]
         [InlineData("2.0.0-preview")]
         [InlineData("2.0.0-preview1")]
