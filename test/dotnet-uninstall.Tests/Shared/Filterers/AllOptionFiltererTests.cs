@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public class AllOptionFiltererTests : FiltererTests
     {
         internal override Option Option => CommandLineConfigs.UninstallAllOption;
-        internal override string DefaultArgValue => "";
+        internal override string DefaultTestArgValue => "";
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
         {
@@ -62,7 +62,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [MemberData(nameof(GetDataForTestFiltererGood))]
         internal void TestAllOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
         {
-            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection, archSelection);
+            TestFiltererGood(testBundles, DefaultTestArgValue, expected, typeSelection, archSelection);
         }
     }
 }

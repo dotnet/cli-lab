@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public class MajorMinorOptionFiltererTests : FiltererTests
     {
         internal override Option Option => CommandLineConfigs.UninstallMajorMinorOption;
-        internal override string DefaultArgValue => "2.2";
+        internal override string DefaultTestArgValue => "2.2";
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
         {

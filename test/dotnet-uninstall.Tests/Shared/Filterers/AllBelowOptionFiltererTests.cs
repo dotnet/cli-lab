@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public class AllBelowOptionFiltererTests : FiltererTests
     {
         internal override Option Option => CommandLineConfigs.UninstallAllBelowOption;
-        internal override string DefaultArgValue => "2.2.5";
+        internal override string DefaultTestArgValue => "2.2.5";
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
         {

@@ -13,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public class NoOptionFiltererTests : FiltererTests
     {
         internal override Option Option => null;
-        internal override string DefaultArgValue => "2.2.5";
+        internal override string DefaultTestArgValue => "2.2.5";
         internal override Filterer OptionFilterer => OptionFilterers.UninstallNoOptionFilterer;
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
