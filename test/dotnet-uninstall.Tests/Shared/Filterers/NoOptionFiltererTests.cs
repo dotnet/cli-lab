@@ -14,7 +14,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     {
         internal override Option Option => null;
         internal override string DefaultArgValue => "2.2.5";
-        internal override bool TestBundleTypeNotSpecifiedException => true;
         internal override Filterer OptionFilterer => OptionFilterers.UninstallNoOptionFilterer;
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()

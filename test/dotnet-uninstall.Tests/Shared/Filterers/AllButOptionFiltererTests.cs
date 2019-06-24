@@ -10,7 +10,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     {
         internal override Option Option => CommandLineConfigs.UninstallAllButOption;
         internal override string DefaultArgValue => "2.2.5";
-        internal override bool TestBundleTypeNotSpecifiedException => true;
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
         {

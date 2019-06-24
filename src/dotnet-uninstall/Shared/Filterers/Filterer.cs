@@ -9,8 +9,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal abstract class Filterer
     {
-        public abstract bool AcceptMultipleBundleTypes { get; }
-
         public abstract IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection);
 
         protected void ValidateTypeSelection(BundleType typeSelection)
@@ -20,7 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (!AcceptMultipleBundleTypes && typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime)
+            if (typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime)
             {
                 throw new BundleTypeMissingException();
             }
@@ -29,8 +27,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
     internal abstract class ArgFilterer<TArg> : Filterer
     {
-        public abstract override bool AcceptMultipleBundleTypes { get; }
-
         public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             var argValue = parseResult.ValueForOption<TArg>(option.Name);
@@ -63,8 +59,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
     internal abstract class NoArgFilterer : Filterer
     {
-        public abstract override bool AcceptMultipleBundleTypes { get; }
-
         public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             return Filter(bundles, typeSelection, archSelection);
