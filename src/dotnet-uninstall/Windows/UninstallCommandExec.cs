@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -87,7 +86,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         private static void RunAsAdmin()
         {
             var entryFile = Process.GetCurrentProcess().MainModule.FileName;
-            var dllLocation = Assembly.GetEntryAssembly().Location;
 
             try
             {
@@ -95,8 +93,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 {
                     StartInfo = new ProcessStartInfo
                     {
-                        FileName = "cmd.exe",
-                        Arguments = $"/c {entryFile} {dllLocation} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}",
+                        FileName = entryFile,
+                        Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1)),
                         UseShellExecute = true,
                         Verb = "runas"
                     }
