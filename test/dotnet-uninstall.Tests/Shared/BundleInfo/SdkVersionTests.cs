@@ -199,6 +199,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("2.2.300", 2, 2, 3, 0, 0, false)]
         [InlineData("3.0.100-preview-009812", 3, 0, 1, 0, 9812, true)]
         [InlineData("3.0.100-preview6-012264", 3, 0, 1, 0, 12264, true)]
+        [InlineData("1.0", 1, 0, 0, 0, 0, false)]
+        [InlineData("1.1", 1, 1, 0, 0, 0, false)]
+        [InlineData("2.0", 2, 0, 0, 0, 0, false)]
+        [InlineData("2.1", 2, 1, 0, 0, 0, false)]
+        [InlineData("2.2", 2, 2, 0, 0, 0, false)]
+        [InlineData("3.0", 3, 0, 0, 0, 0, false)]
+        [InlineData("12.345", 12, 345, 0, 0, 0, false)]
+        [InlineData("0012.00345", 12, 345, 0, 0, 0, false)]
         internal void TestFromInputAccept(string input, int major, int minor, int sdkMinor, int patch, int build, bool preview)
         {
             var version = BundleVersion.FromInput<SdkVersion>(input) as SdkVersion;
@@ -213,7 +221,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         }
 
         [Theory]
-        [InlineData("1.0")]
         [InlineData("1.0.")]
         [InlineData("2.2.5.002111")]
         [InlineData("2.2.500.002111")]
