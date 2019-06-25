@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)
         {
             return bundles
-                .Where(bundle => bundle.Version.Preview);
+                .Where(bundle => bundle.Version.IsPrerelease);
         }
     }
 }

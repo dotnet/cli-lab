@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 {
     public class BundleTests
     {
-        private static readonly SdkVersion TestSdkVersion1 = new SdkVersion(3, 0, 1, 0, 11568, true, "3.0.100-preview5-011568");
-        private static readonly SdkVersion TestSdkVersion2 = new SdkVersion(2, 1, 7, 0, 22757, false, "2.1.700");
-        private static readonly RuntimeVersion TestRuntimeVersion1 = new RuntimeVersion(2, 2, 5, 32768, false, "2.2.5");
-        private static readonly RuntimeVersion TestRuntimeVersion2 = new RuntimeVersion(3, 0, 0, 27122, true, "3.0.0-preview5-27122-01");
+        private static readonly SdkVersion TestSdkVersion1 = new SdkVersion("3.0.100-preview5-011568");
+        private static readonly SdkVersion TestSdkVersion2 = new SdkVersion("2.1.700");
+        private static readonly RuntimeVersion TestRuntimeVersion1 = new RuntimeVersion("2.2.5");
+        private static readonly RuntimeVersion TestRuntimeVersion2 = new RuntimeVersion("3.0.0-preview5-27122-01");
         private static readonly string TestUninstallCommand1 = "C:\\ProgramData\\Package Cache\\{a05f1bee-210e-401f-9e98-d52a4698bc91}\\dotnet-sdk-2.2.300-win-x64.exe\" /uninstall /quiet";
         private static readonly string TestUninstallCommand2 = "some random uninstall command";
 
@@ -143,14 +144,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             yield return new object[]
             {
-                Bundle.From(new RuntimeVersion(3, 0, 0, 27122, true, "3.0.0-preview5-27122-01"), BundleArch.X64, TestUninstallCommand1),
-                Bundle.From(new RuntimeVersion(3, 0, 0, 27626, true, "3.0.0-preview5-27626-15"), BundleArch.X64, TestUninstallCommand1)
+                Bundle.From(new RuntimeVersion("3.0.0-preview5-27122-01"), BundleArch.X64, TestUninstallCommand1),
+                Bundle.From(new RuntimeVersion("3.0.0-preview5-27626-15"), BundleArch.X64, TestUninstallCommand1)
             };
 
             yield return new object[]
             {
-                Bundle.From(new SdkVersion(2, 1, 7, 0, 22757, false, "2.1.700"), BundleArch.X64, TestUninstallCommand1),
-                Bundle.From(new SdkVersion(2, 2, 3, 0, 32768, false, "2.2.300"), BundleArch.X64, TestUninstallCommand1)
+                Bundle.From(new SdkVersion("2.1.700"), BundleArch.X64, TestUninstallCommand1),
+                Bundle.From(new SdkVersion("2.2.300"), BundleArch.X64, TestUninstallCommand1)
             };
 
             yield return new object[]

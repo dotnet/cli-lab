@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Xunit;
 

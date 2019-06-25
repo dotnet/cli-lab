@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {

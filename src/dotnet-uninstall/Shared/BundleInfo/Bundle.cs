@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    internal abstract class Bundle : IEquatable<Bundle>
+    public abstract class Bundle : IEquatable<Bundle>
     {
         public BundleVersion Version { get; }
         public BundleArch Arch { get; }
