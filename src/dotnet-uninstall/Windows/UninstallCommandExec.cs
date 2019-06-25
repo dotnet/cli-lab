@@ -24,8 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             if (!IsAdmin())
             {
-                RunAsAdmin();
-                return;
+                throw new NotAdminException();
             }
 
             foreach (var bundle in bundles.ToList().AsReadOnly())
@@ -81,43 +80,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 return false;
             }
-        }
-
-        private static void RunAsAdmin()
-        {
-            var entryFile = Process.GetCurrentProcess().MainModule.FileName;
-
-            try
-            {
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = entryFile,
-                        Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1)),
-                        UseShellExecute = true,
-                        Verb = "runas"
-                    }
-                };
-
-                if (!process.Start())
-                {
-                    throw new ElevationFailedException();
-                }
-            }
-            catch (Win32Exception e)
-            {
-                if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
-                {
-                    throw new UserCancelationException();
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-
-            Environment.Exit(0);
         }
 
         private static IEnumerable<string> ParseCommandToArgs(string command, out int argc)

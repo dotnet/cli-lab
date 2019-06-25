@@ -47,6 +47,11 @@
         <target state="new">.NET Core SDKs:</target>
         <note />
       </trans-unit>
+      <trans-unit id="NotAdminExceptionMessage">
+        <source>The current user does not have administrator privileges. Please re-run the command prompt as administrator</source>
+        <target state="new">The current user does not have administrator privileges. Please re-run the command prompt as administrator</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OptionsConflictExceptionMessageFormat">
         <source>Please specify only one of the options: {0}, {1}</source>
         <target state="new">Please specify only one of the options: {0}, {1}</target>

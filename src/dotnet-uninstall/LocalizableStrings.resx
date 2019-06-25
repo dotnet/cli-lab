@@ -234,4 +234,7 @@
   <data name="X86OptionDescription" xml:space="preserve">
     <value>Uninstall x86 .NET Core bundles only</value>
   </data>
+  <data name="NotAdminExceptionMessage" xml:space="preserve">
+    <value>The current user does not have administrator privileges. Please re-run the command prompt as administrator</value>
+  </data>
 </root>

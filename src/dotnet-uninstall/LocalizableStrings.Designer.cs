@@ -142,6 +142,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current user does not have administrator privileges. Please re-run the command prompt as administrator.
+        /// </summary>
+        internal static string NotAdminExceptionMessage {
+            get {
+                return ResourceManager.GetString("NotAdminExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please specify only one of the options: {0}, {1}.
         /// </summary>
         internal static string OptionsConflictExceptionMessageFormat {
