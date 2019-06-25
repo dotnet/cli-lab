@@ -9,8 +9,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class NoOptionFilterer : ArgFilterer<IEnumerable<string>>
     {
-        public override bool AcceptMultipleBundleTypes { get; } = false;
-
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<string> argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
             var versions = argValue

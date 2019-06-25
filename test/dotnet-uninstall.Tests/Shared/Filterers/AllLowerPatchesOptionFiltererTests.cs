@@ -9,8 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public class AllLowerPatchesOptionFiltererTests : FiltererTests
     {
         internal override Option Option => CommandLineConfigs.UninstallAllLowerPatchesOption;
-        internal override string DefaultArgValue => "";
-        internal override bool TestBundleTypeNotSpecifiedException => false;
+        internal override string DefaultTestArgValue => "";
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
         {
@@ -45,21 +44,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 new List<Bundle>
                 {
                     Sdk_2_2_202_Arm32,
-                    Sdk_2_2_202_X86,
-                    Runtime_3_0_0_P_Arm32,
-                    Runtime_2_2_4_X86,
-                    Runtime_2_2_2_X64
-                },
-                BundleType.Sdk | BundleType.Runtime,
-                DefaultTestArchSelection
-            };
-
-            yield return new object[]
-            {
-                DefaultTestBundles,
-                new List<Bundle>
-                {
-                    Sdk_2_2_202_Arm32,
                     Sdk_2_2_202_X86
                 },
                 BundleType.Sdk,
@@ -73,27 +57,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.X64
             };
-
-            yield return new object[]
-            {
-                DefaultTestBundles,
-                new List<Bundle>
-                {
-                    Sdk_2_2_202_Arm32,
-                    Sdk_2_2_202_X86,
-                    Runtime_3_0_0_P_Arm32,
-                    Runtime_2_2_4_X86
-                },
-                BundleType.Sdk | BundleType.Runtime,
-                BundleArch.Arm32 | BundleArch.X86
-            };
         }
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
         internal void TestAllLowerPatchesOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
         {
-            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection, archSelection);
+            TestFiltererGood(testBundles, DefaultTestArgValue, expected, typeSelection, archSelection);
         }
     }
 }

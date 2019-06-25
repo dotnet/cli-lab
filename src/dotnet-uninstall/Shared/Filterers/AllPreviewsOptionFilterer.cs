@@ -6,8 +6,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllPreviewsOptionFilterer : NoArgFilterer
     {
-        public override bool AcceptMultipleBundleTypes { get; } = true;
-
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)
         {
             return bundles

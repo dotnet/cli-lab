@@ -8,8 +8,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
     internal class AllBelowOptionFilterer : ArgFilterer<string>
     {
-        public override bool AcceptMultipleBundleTypes { get; } = false;
-
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(string argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
             try

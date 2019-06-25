@@ -15,8 +15,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public abstract class FiltererTests
     {
         internal abstract Option Option { get; }
-        internal abstract string DefaultArgValue { get; }
-        internal abstract bool TestBundleTypeNotSpecifiedException { get; }
+        internal abstract string DefaultTestArgValue { get; }
         internal virtual Filterer OptionFilterer => OptionFilterers.OptionFiltererDictionary[Option];
 
         internal const BundleArch DefaultTestArchSelection = BundleArch.Arm32 | BundleArch.X86 | BundleArch.X64;
@@ -74,16 +73,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData((BundleType.Sdk | BundleType.Runtime) + 10)]
         internal void TestFiltererArgumentOutOfRangeException(BundleType typeSelection)
         {
-            TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultArgValue, typeSelection, DefaultTestArchSelection);
+            TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultTestArgValue, typeSelection, DefaultTestArchSelection);
         }
 
         [Fact]
         internal void TestFiltererBundleTypeNotSpecifiedException()
         {
-            if (TestBundleTypeNotSpecifiedException)
-            {
-                TestFiltererException<BundleTypeMissingException>(DefaultTestBundles, DefaultArgValue, BundleType.Sdk | BundleType.Runtime, DefaultTestArchSelection);
-            }
+            TestFiltererException<BundleTypeMissingException>(DefaultTestBundles, DefaultTestArgValue, BundleType.Sdk | BundleType.Runtime, DefaultTestArchSelection);
         }
 
         internal virtual void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
