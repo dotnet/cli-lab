@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo

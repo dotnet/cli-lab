@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using NuGet.Versioning;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
+namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
     public abstract class BundleVersion : IEquatable<BundleVersion>
     {
-        public SemanticVersion SemVer { get; }
         public abstract BundleType Type { get; }
+        
+        protected readonly SemanticVersion _semVer;
 
-        public virtual int Major => SemVer.Major;
-        public virtual int Minor => SemVer.Minor;
-        public virtual int Patch => SemVer.Patch;
-        public virtual bool IsPrerelease => SemVer.IsPrerelease;
+        public virtual int Major => _semVer.Major;
+        public virtual int Minor => _semVer.Minor;
+        public virtual int Patch => _semVer.Patch;
+        public virtual bool IsPrerelease => _semVer.IsPrerelease;
+        public virtual MajorMinorVersion MajorMinor => new MajorMinorVersion(Major, Minor);
 
         public BundleVersion(string value)
         {
             if (SemanticVersion.TryParse(value, out var version))
             {
-                SemVer = version;
+                _semVer = version;
             }
             else
             {
@@ -29,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
 
         public override string ToString()
         {
-            return SemVer.ToString();
+            return _semVer.ToString();
         }
 
         public static BundleVersion FromInput<TBundleVersion>(string value)
@@ -56,12 +58,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
         public bool Equals(BundleVersion other)
         {
             return other != null &&
-                   EqualityComparer<SemanticVersion>.Default.Equals(SemVer, other.SemVer);
+                   EqualityComparer<SemanticVersion>.Default.Equals(_semVer, other._semVer);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(SemVer);
+            return HashCode.Combine(_semVer);
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -11,10 +12,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(string argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            var specifiedVersion = BundleVersion.FromInput<TBundleVersion>(argValue) as TBundleVersion;
+            try
+            {
+                var version = BundleVersion.FromInput<TBundleVersion>(argValue) as TBundleVersion;
 
-            return bundles
-                .Where(bundle => bundle.Version.CompareTo(specifiedVersion) < 0);
+                return bundles
+                    .Where(bundle => bundle.Version.CompareTo(version) < 0);
+            }
+            catch (InvalidInputVersionException)
+            {
+                var majorMinor = new MajorMinorVersion(argValue);
+
+                return bundles
+                    .Where(bundle => bundle.Version.MajorMinor.CompareTo(majorMinor) < 0);
+            }
         }
     }
 }

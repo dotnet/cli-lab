@@ -1,11 +1,12 @@
 ﻿using System;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
+namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
     public class SdkVersion : BundleVersion, IComparable, IComparable<SdkVersion>
     {
-        public int SdkMinor => SemVer.Patch / 100;
-        public override int Patch => SemVer.Patch % 100;
+        public int SdkMinor => _semVer.Patch / 100;
+        public override int Patch => _semVer.Patch % 100;
+        public override MajorMinorVersion MajorMinor => new MajorMinorSdkMinorVersion(Major, Minor, SdkMinor);
 
         public override BundleType Type => BundleType.Sdk;
 
@@ -18,12 +19,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
 
         public int CompareTo(SdkVersion other)
         {
-            if (other == null)
-            {
-                return 1;
-            }
-
-            return SemVer.CompareTo(other.SemVer);
+            return other == null ? 1 : _semVer.CompareTo(other._semVer);
         }
     }
 }

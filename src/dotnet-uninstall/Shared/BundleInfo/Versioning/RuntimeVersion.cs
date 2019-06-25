@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
+namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
     public class RuntimeVersion : BundleVersion, IComparable, IComparable<RuntimeVersion>
     {
@@ -15,12 +15,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version
 
         public int CompareTo(RuntimeVersion other)
         {
-            if (other == null)
-            {
-                return 1;
-            }
-
-            return SemVer.CompareTo(other.SemVer);
+            return other == null ? 1 : _semVer.CompareTo(other._semVer);
         }
     }
 }

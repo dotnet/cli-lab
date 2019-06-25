@@ -4,7 +4,7 @@ using System.CommandLine;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Filterers;

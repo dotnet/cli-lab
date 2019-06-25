@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Version;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
