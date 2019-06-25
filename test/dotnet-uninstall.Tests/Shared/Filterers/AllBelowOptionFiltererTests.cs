@@ -240,7 +240,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.X64 | BundleArch.Arm32
             };
-            /*
+
             yield return new object[]
             {
                 DefaultTestBundles,
@@ -307,7 +307,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestRuntimes,
                 BundleType.Runtime,
                 DefaultTestArchSelection
-            };*/
+            };
         }
 
         [Theory]
