@@ -1,12 +1,13 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Xunit;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
+namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
 {
-    public class SdkVersionTests : BundleVersionTests<SdkVersion>
+    public class SdkVersionTests
     {
         [Theory]
         [InlineData("2.2.300", 2, 2, 3, 0, false)]
@@ -20,8 +21,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             var version = new SdkVersion(input);
 
-            TestBundleVersionConstructor(version, major, minor, patch, isPrerelease, BundleType.Sdk);
+            version.Major.Should().Be(major);
+            version.Minor.Should().Be(minor);
             version.SdkMinor.Should().Be(sdkMinor);
+            version.Patch.Should().Be(patch);
+            version.IsPrerelease.Should().Be(isPrerelease);
+            version.Type.Should().Be(BundleType.Sdk);
         }
 
         [Theory]
@@ -32,7 +37,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             var version1 = new SdkVersion(input1);
             var version2 = new SdkVersion(input2);
 
-            TestBundleVersionEquality(version1, version2);
+            TestUtils.EqualityComparisonTestUtils<SdkVersion>.TestEquality(version1, version2);
         }
 
         [Theory]
@@ -49,7 +54,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             var lowerVersion = new SdkVersion(lower);
             var higherVersion = new SdkVersion(higher);
 
-            TestBundleVersionInequality(lowerVersion, higherVersion);
+            TestUtils.EqualityComparisonTestUtils<SdkVersion>.TestInequality(lowerVersion, higherVersion);
         }
 
         [Theory]
@@ -59,7 +64,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             var version = new SdkVersion(input);
 
-            TestBundleVersionInequalityNull(version);
+            TestUtils.EqualityComparisonTestUtils<SdkVersion>.TestInequalityNull(version);
         }
 
         [Theory]
@@ -91,9 +96,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("2.0.100-preview1-abcdef")]
         internal void TestFromInputAccept(string input)
         {
-            SdkVersion action() => new SdkVersion(input);
+            Action action = () => new SdkVersion(input);
 
-            TestBundleVersionNotThrow(action);
+            action.Should().NotThrow();
         }
 
         [Theory]
@@ -117,9 +122,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("Hello 2.2.300 World")]
         internal void TestFromInputReject(string input)
         {
-            SdkVersion action() => new SdkVersion(input);
+            Action action = () => new SdkVersion(input);
 
-            TestBundleVersionThrow<InvalidInputVersionException>(action, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, input));
+            action.Should().Throw<InvalidInputVersionException>(string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, input));
         }
     }
 }

@@ -1,11 +1,13 @@
-﻿using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+﻿using System;
+using FluentAssertions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Xunit;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
+namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
 {
-    public class RuntimeVersionTests : BundleVersionTests<RuntimeVersion>
+    public class RuntimeVersionTests
     {
         [Theory]
         [InlineData("2.2.5", 2, 2, 5, false)]
@@ -17,7 +19,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             var version = new RuntimeVersion(input);
 
-            TestBundleVersionConstructor(version, major, minor, patch, isPrerelease, BundleType.Runtime);
+            version.Major.Should().Be(major);
+            version.Minor.Should().Be(minor);
+            version.Patch.Should().Be(patch);
+            version.IsPrerelease.Should().Be(isPrerelease);
+            version.Type.Should().Be(BundleType.Runtime);
         }
 
         [Theory]
@@ -28,7 +34,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             var version1 = new RuntimeVersion(input1);
             var version2 = new RuntimeVersion(input2);
 
-            TestBundleVersionEquality(version1, version2);
+            TestUtils.EqualityComparisonTestUtils<RuntimeVersion>.TestEquality(version1, version2);
         }
 
         [Theory]
@@ -45,7 +51,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             var lowerVersion = new RuntimeVersion(lower);
             var higherVersion = new RuntimeVersion(higher);
 
-            TestBundleVersionInequality(lowerVersion, higherVersion);
+            TestUtils.EqualityComparisonTestUtils<RuntimeVersion>.TestInequality(lowerVersion, higherVersion);
         }
 
         [Theory]
@@ -55,7 +61,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         {
             var version = new RuntimeVersion(input);
 
-            TestBundleVersionInequalityNull(version);
+            TestUtils.EqualityComparisonTestUtils<RuntimeVersion>.TestInequalityNull(version);
         }
 
         [Theory]
@@ -77,9 +83,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("2.0.0-preview1-002111-ab")]
         internal void TestFromInputAccept(string input)
         {
-            RuntimeVersion action() => new RuntimeVersion(input);
+            Action action = () => new RuntimeVersion(input);
 
-            TestBundleVersionNotThrow(action);
+            action.Should().NotThrow();
         }
 
         [Theory]
@@ -101,9 +107,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         [InlineData("Hello 2.2.5 World")]
         internal void TestFromInputReject(string input)
         {
-            RuntimeVersion action() => new RuntimeVersion(input);
+            Action action = () => new RuntimeVersion(input);
 
-            TestBundleVersionThrow<InvalidInputVersionException>(action, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, input));
+            action.Should().Throw<InvalidInputVersionException>(string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, input));
         }
     }
 }

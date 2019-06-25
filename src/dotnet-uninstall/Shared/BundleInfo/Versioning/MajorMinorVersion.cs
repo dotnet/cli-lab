@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         private readonly Version _version;
 
         public int Major => _version.Major;
-        public int Minor => _version.Major;
+        public int Minor => _version.Minor;
 
         public MajorMinorVersion(string value)
         {

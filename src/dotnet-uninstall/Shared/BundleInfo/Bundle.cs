@@ -60,8 +60,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         }
     }
 
-    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>
-        where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
+    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>, IEquatable<Bundle<TBundleVersion>> where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
     {
         public new TBundleVersion Version => base.Version as TBundleVersion;
 
@@ -89,6 +88,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             return bundles
                 .Where(bundle => bundle.Version is TBundleVersion)
                 .Select(bundle => bundle as Bundle<TBundleVersion>);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Bundle<TBundleVersion>);
+        }
+
+        public bool Equals(Bundle<TBundleVersion> other)
+        {
+            return other != null &&
+                   base.Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode());
         }
     }
 }

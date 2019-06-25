@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Tests.TestUtils;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
@@ -58,6 +59,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         internal void TestConstructorNull(RuntimeVersion version, BundleArch arch, string uninstallCommand)
         {
             Action action = () => new Bundle<RuntimeVersion>(version, arch, uninstallCommand);
+
             action.Should().Throw<ArgumentNullException>();
         }
 
@@ -99,16 +101,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new Bundle<RuntimeVersion>(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1),
-                new Bundle<RuntimeVersion>(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand2)
+                new Bundle<RuntimeVersion>(TestRuntimeVersion2, BundleArch.Arm32, TestUninstallCommand1),
+                new Bundle<RuntimeVersion>(TestRuntimeVersion2, BundleArch.Arm32, TestUninstallCommand2)
+            };
+
+            yield return new object[]
+            {
+                new Bundle<SdkVersion>(TestSdkVersion1, BundleArch.X64, TestUninstallCommand1),
+                new Bundle<SdkVersion>(TestSdkVersion1, BundleArch.X64, TestUninstallCommand1)
+            };
+
+            yield return new object[]
+            {
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand1),
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand2)
             };
         }
 
         [Theory]
         [MemberData(nameof(GetDataForTestEquality))]
-        internal void TestEquality(Bundle<RuntimeVersion> bundle1, Bundle<RuntimeVersion> bundle2)
+        internal void TestEquality<TBundleVersion>(Bundle<TBundleVersion> bundle1, Bundle<TBundleVersion> bundle2)
+            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>
         {
-            bundle1.Equals((object)bundle2).Should().BeTrue();
+            EqualityComparisonTestUtils<Bundle<TBundleVersion>>.TestEquality(bundle1, bundle2);
         }
 
         public static IEnumerable<object[]> GetDataForTestToString()
@@ -187,14 +202,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
         [Theory]
         [MemberData(nameof(GetDataForTestInequality))]
-        internal void TestInequality<TBundleVersion>(Bundle<TBundleVersion> bundle1, Bundle<TBundleVersion> bundle2)
+        internal void TestInequality<TBundleVersion>(Bundle<TBundleVersion> lower, Bundle<TBundleVersion> higher)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>
         {
-            bundle1.Equals((object)bundle2).Should().BeFalse();
-            bundle1.CompareTo((object)bundle2).Should().BeLessThan(0);
-
-            bundle2.Equals((object)bundle1).Should().BeFalse();
-            bundle2.CompareTo((object)bundle1).Should().BeGreaterThan(0);
+            EqualityComparisonTestUtils<Bundle<TBundleVersion>>.TestInequality(lower, higher);
         }
 
         public static IEnumerable<object[]> GetDataForTestInequalityNull()
@@ -215,8 +226,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         internal void TestInequalityNull<TBundleVersion>(Bundle<TBundleVersion> bundle)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>
         {
-            bundle.Equals(null).Should().BeFalse();
-            bundle.CompareTo(null).Should().BeGreaterThan(0);
+            EqualityComparisonTestUtils<Bundle<TBundleVersion>>.TestInequalityNull(bundle);
         }
 
         public static IEnumerable<object[]> GetDataForTestFilterWithSameBundleType()
