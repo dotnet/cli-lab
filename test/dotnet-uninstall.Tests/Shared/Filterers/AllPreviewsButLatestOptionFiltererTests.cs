@@ -9,8 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     public class AllPreviewsButLatestOptionFiltererTests : FiltererTests
     {
         internal override Option Option => CommandLineConfigs.UninstallAllPreviewsButLatestOption;
-        internal override string DefaultArgValue => "";
-        internal override bool TestBundleTypeNotSpecifiedException => false;
+        internal override string DefaultTestArgValue => "";
 
         public static IEnumerable<object[]> GetDataForTestFiltererGood()
         {
@@ -35,20 +34,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                     Runtime_2_1_0_Rc1_X64
                 },
                 BundleType.Runtime,
-                DefaultTestArchSelection
-            };
-
-            yield return new object[]
-            {
-                DefaultTestBundles,
-                new List<Bundle>
-                {
-                    Sdk_2_1_300_Rc1_Arm32,
-                    Sdk_2_1_300_Rc1_X86,
-                    Runtime_3_0_0_P_Arm32,
-                    Runtime_2_1_0_Rc1_X64
-                },
-                BundleType.Sdk | BundleType.Runtime,
                 DefaultTestArchSelection
             };
 
@@ -89,26 +74,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.Arm32 | BundleArch.X86
             };
-
-            yield return new object[]
-            {
-                DefaultTestBundles,
-                new List<Bundle>
-                {
-                    Sdk_2_1_300_Rc1_Arm32,
-                    Runtime_3_0_0_P_Arm32,
-                    Runtime_2_1_0_Rc1_X64
-                },
-                BundleType.Sdk | BundleType.Runtime,
-                BundleArch.X64 | BundleArch.Arm32
-            };
         }
 
         [Theory]
         [MemberData(nameof(GetDataForTestFiltererGood))]
         internal void TestAllPreviewsButLatestOptionFiltererGood(IEnumerable<Bundle> testBundles, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
         {
-            TestFiltererGood(testBundles, DefaultArgValue, expected, typeSelection, archSelection);
+            TestFiltererGood(testBundles, DefaultTestArgValue, expected, typeSelection, archSelection);
         }
     }
 }
