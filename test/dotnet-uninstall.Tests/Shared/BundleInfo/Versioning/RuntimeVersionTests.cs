@@ -23,7 +23,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
             version.Minor.Should().Be(minor);
             version.Patch.Should().Be(patch);
             version.IsPrerelease.Should().Be(isPrerelease);
+            version.MajorMinor.Should().Be(new MajorMinorVersion(major, minor));
+
             version.Type.Should().Be(BundleType.Runtime);
+            version.BeforePatch.Should().Be(new MajorMinorVersion(major, minor));
         }
 
         [Theory]

@@ -9,21 +9,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            var highestVersions = new Dictionary<MajorMinorVersion, TBundleVersion>();
+            var highestVersions = new Dictionary<BeforePatch, TBundleVersion>();
 
             foreach (var version in bundles
                 .Select(bundle => bundle.Version))
             {
-                if (highestVersions.TryGetValue(version.MajorMinor, out var highest))
+                if (highestVersions.TryGetValue(version.BeforePatch, out var highest))
                 {
                     if (version.CompareTo(highest) > 0)
                     {
-                        highestVersions[version.MajorMinor] = version;
+                        highestVersions[version.BeforePatch] = version;
                     }
                 }
                 else
                 {
-                    highestVersions.Add(version.MajorMinor, version);
+                    highestVersions.Add(version.BeforePatch, version);
                 }
             }
 
@@ -31,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 .Where(bundle =>
                 {
                     var version = bundle.Version;
-                    highestVersions.TryGetValue(version.MajorMinor, out var highest);
+                    highestVersions.TryGetValue(version.BeforePatch, out var highest);
                     return version.CompareTo(highest) < 0;
                 });
         }

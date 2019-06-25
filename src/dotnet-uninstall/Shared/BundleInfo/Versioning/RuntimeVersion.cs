@@ -5,6 +5,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
     public class RuntimeVersion : BundleVersion, IComparable, IComparable<RuntimeVersion>, IEquatable<RuntimeVersion>
     {
         public override BundleType Type => BundleType.Runtime;
+        public override BeforePatch BeforePatch => new MajorMinorVersion(Major, Minor);
 
         public RuntimeVersion(string value) : base(value) { }
 

@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(string argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            var majorMinor = new MajorMinorVersion(argValue);
+            var majorMinor = MajorMinorVersion.From(argValue);
 
             return bundles
                 .Where(bundle => bundle.Version.MajorMinor.Equals(majorMinor));

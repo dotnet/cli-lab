@@ -11,16 +11,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public static Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;
-            var bundleVersion = registryKey.GetValue("BundleVersion") as string;
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
             var bundleCachePath = registryKey.GetValue("BundleCachePath") as string;
 
-            ParseVersionAndArch(displayName, bundleVersion, bundleCachePath, out var version, out var arch);
+            ParseVersionAndArch(displayName, bundleCachePath, out var version, out var arch);
 
             return Bundle.From(version, arch, uninstallCommand);
         }
 
-        private static void ParseVersionAndArch(string displayName, string bundleVersion, string bundleCachePath, out BundleVersion version, out BundleArch arch)
+        private static void ParseVersionAndArch(string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);

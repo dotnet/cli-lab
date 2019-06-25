@@ -8,7 +8,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
     public abstract class BundleVersion : IEquatable<BundleVersion>
     {
         public abstract BundleType Type { get; }
-        
+        public abstract BeforePatch BeforePatch { get; }
+
         protected readonly SemanticVersion _semVer;
 
         public virtual int Major => _semVer.Major;

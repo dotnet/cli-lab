@@ -6,7 +6,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
     {
         public int SdkMinor => _semVer.Patch / 100;
         public override int Patch => _semVer.Patch % 100;
-        public override MajorMinorVersion MajorMinor => new MajorMinorSdkMinorVersion(Major, Minor, SdkMinor);
+        public override BeforePatch BeforePatch => new MajorMinorSdkMinorVersion(Major, Minor, SdkMinor);
 
         public override BundleType Type => BundleType.Sdk;
 

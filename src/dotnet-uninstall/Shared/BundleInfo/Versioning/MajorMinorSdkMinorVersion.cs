@@ -2,12 +2,17 @@
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    public class MajorMinorSdkMinorVersion : MajorMinorVersion, IEquatable<MajorMinorSdkMinorVersion>, IComparable<MajorMinorSdkMinorVersion>
+    public class MajorMinorSdkMinorVersion : BeforePatch, IEquatable<MajorMinorSdkMinorVersion>, IComparable, IComparable<MajorMinorSdkMinorVersion>
     {
         public int SdkMinor { get; }
 
         public MajorMinorSdkMinorVersion(int major, int minor, int sdkMinor) : base(major, minor)
         {
+            if (sdkMinor < 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             SdkMinor = sdkMinor;
         }
 
@@ -28,6 +33,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             return HashCode.Combine(base.GetHashCode(), SdkMinor);
         }
 
+        public int CompareTo(object obj)
+        {
+            return CompareTo(obj as MajorMinorSdkMinorVersion);
+        }
+
         public int CompareTo(MajorMinorSdkMinorVersion other)
         {
             if (other == null)
@@ -37,7 +47,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 
             return base.Equals(other) ?
                 SdkMinor.CompareTo(other.SdkMinor) :
-                base.CompareTo(other);
+                _version.CompareTo(other._version);
         }
     }
 }
