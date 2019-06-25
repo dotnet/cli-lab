@@ -88,15 +88,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to run as administrator.
-        /// </summary>
-        internal static string ElevationFailedExceptionMessage {
-            get {
-                return ResourceManager.GetString("ElevationFailedExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: {0}.
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {

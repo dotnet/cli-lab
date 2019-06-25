@@ -126,9 +126,6 @@
   <data name="CommandArgOptionConflictExceptionMessageFormat" xml:space="preserve">
     <value>Please use either command arguments or the specified option: {0}</value>
   </data>
-  <data name="ElevationFailedExceptionMessage" xml:space="preserve">
-    <value>Failed to run as administrator</value>
-  </data>
   <data name="InvalidInputVersionExceptionMessageFormat" xml:space="preserve">
     <value>The specified version is not valid: {0}</value>
   </data>

@@ -17,11 +17,6 @@
         <target state="new">Please use either command arguments or the specified option: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ElevationFailedExceptionMessage">
-        <source>Failed to run as administrator</source>
-        <target state="new">Failed to run as administrator</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: {0}</source>
         <target state="new">The specified version is not valid: {0}</target>
