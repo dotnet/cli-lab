@@ -31,39 +31,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
 
-                try
+                var process = new Process
                 {
-                    var process = new Process
+                    StartInfo = new ProcessStartInfo
                     {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = args.First(),
-                            Arguments = string.Join(" ", args.Skip(1)),
-                            UseShellExecute = true,
-                            Verb = "runas"
-                        }
-                    };
-
-                    if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
-                    {
-                        throw new UninstallationFailedException(bundle.UninstallCommand);
+                        FileName = args.First(),
+                        Arguments = string.Join(" ", args.Skip(1)),
+                        UseShellExecute = true,
+                        Verb = "runas"
                     }
+                };
 
-                    if (process.ExitCode != 0)
-                    {
-                        throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
-                    }
+                if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
+                {
+                    throw new UninstallationFailedException(bundle.UninstallCommand);
                 }
-                catch (Win32Exception e)
+
+                if (process.ExitCode != 0)
                 {
-                    if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
-                    {
-                        throw new UserCancelationException();
-                    }
-                    else
-                    {
-                        throw e;
-                    }
+                    throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
                 }
             }
         }

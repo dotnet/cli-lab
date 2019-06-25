@@ -182,11 +182,6 @@
         <target state="new">The uninstallation operation failed with the exit code: {1}. Command: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="UserCancelationExceptionMessage">
-        <source>The operation was canceled by the user</source>
-        <target state="new">The operation was canceled by the user</target>
-        <note />
-      </trans-unit>
       <trans-unit id="X64OptionDescription">
         <source>Uninstall x64 .NET Core bundles only</source>
         <target state="new">Uninstall x64 .NET Core bundles only</target>

@@ -222,9 +222,6 @@
   <data name="UninstallVerbosityOptionDescription" xml:space="preserve">
     <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]</value>
   </data>
-  <data name="UserCancelationExceptionMessage" xml:space="preserve">
-    <value>The operation was canceled by the user</value>
-  </data>
   <data name="X64OptionDescription" xml:space="preserve">
     <value>Uninstall x64 .NET Core bundles only</value>
   </data>

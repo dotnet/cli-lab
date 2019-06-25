@@ -385,15 +385,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The operation was canceled by the user.
-        /// </summary>
-        internal static string UserCancelationExceptionMessage {
-            get {
-                return ResourceManager.GetString("UserCancelationExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Uninstall x64 .NET Core bundles only.
         /// </summary>
         internal static string X64OptionDescription {
