@@ -13,7 +13,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
     public static class UninstallCommandExec
     {
         private const int UNINSTALL_TIMEOUT = 5 * 60 * 1000;
-        private const int NATIVE_ERROR_CODE_CANCELED = 1223;
 
         [DllImport("shell32.dll", SetLastError = true)]
         static extern IntPtr CommandLineToArgvW(
