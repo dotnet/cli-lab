@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -9,13 +10,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<string> argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            var specifiedVersions = bundles
-                .Select(bundle => bundle.Version)
-                .Where(version => argValue.Contains(version.ToString()))
-                .OrderBy(version => version);
+            var versions = argValue
+                .Select(value => BundleVersion.FromInput<TBundleVersion>(value));
 
             return bundles
-                .Where(bundle => !specifiedVersions.Contains(bundle.Version));
+                .Where(bundle => !versions.Contains(bundle.Version));
         }
     }
 }

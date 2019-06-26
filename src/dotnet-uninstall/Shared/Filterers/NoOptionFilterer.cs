@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -10,24 +11,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<string> argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            var anyMissing = argValue
-                .Where(next => !bundles
-                    .Select(bundle => bundle.Version.ToString())
-                    .ToList()
-                    .Contains(next));
-
-            if (anyMissing.Count() > 0)
-            {
-                throw new SpecifiedVersionNotFoundException(anyMissing.First());
-            }
-
-            var specifiedVersions = bundles
-                .Select(bundle => bundle.Version)
-                .Where(version => argValue.Contains(version.ToString()))
+            var versions = argValue
+                .Select(value => BundleVersion.FromInput<TBundleVersion>(value))
                 .OrderBy(version => version);
 
+            if (versions.Any(version => !bundles.Select(bundle => bundle.Version).ToList().Contains(version)))
+            {
+                throw new SpecifiedVersionNotFoundException(versions
+                    .Where(version => !bundles.Select(bundle => bundle.Version).ToList().Contains(version)));
+            }
+
             return bundles
-                .Where(bundle => specifiedVersions.Contains(bundle.Version));
+                .Where(bundle => versions.Contains(bundle.Version));
         }
     }
 }

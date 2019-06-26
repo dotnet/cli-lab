@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 {
@@ -10,23 +9,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            var highestPatches = new Dictionary<Tuple<int, int, int>, int>();
+            var highestVersions = new Dictionary<BeforePatch, TBundleVersion>();
 
             foreach (var version in bundles
                 .Select(bundle => bundle.Version))
             {
-                var key = GetVersionKey(version);
-
-                if (highestPatches.TryGetValue(key, out var highestPatch))
+                if (highestVersions.TryGetValue(version.BeforePatch, out var highest))
                 {
-                    if (version.Patch > highestPatch)
+                    if (version.CompareTo(highest) > 0)
                     {
-                        highestPatches[key] = version.Patch;
+                        highestVersions[version.BeforePatch] = version;
                     }
                 }
                 else
                 {
-                    highestPatches.Add(key, version.Patch);
+                    highestVersions.Add(version.BeforePatch, version);
                 }
             }
 
@@ -34,23 +31,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 .Where(bundle =>
                 {
                     var version = bundle.Version;
-                    var key = GetVersionKey(version);
-                    highestPatches.TryGetValue(key, out var highestPatch);
-                    return version.Patch < highestPatch;
+                    highestVersions.TryGetValue(version.BeforePatch, out var highest);
+                    return version.CompareTo(highest) < 0;
                 });
-        }
-
-        private Tuple<int, int, int> GetVersionKey<TBundleVersion>(TBundleVersion version) where TBundleVersion : BundleVersion
-        {
-            switch (version.Type)
-            {
-                case BundleType.Sdk:
-                    return new Tuple<int, int, int>(version.Major, version.Minor, (version as SdkVersion).SdkMinor);
-                case BundleType.Runtime:
-                    return new Tuple<int, int, int>(version.Major, version.Minor, default);
-                default:
-                    throw new InvalidEnumArgumentException();
-            }
         }
     }
 }

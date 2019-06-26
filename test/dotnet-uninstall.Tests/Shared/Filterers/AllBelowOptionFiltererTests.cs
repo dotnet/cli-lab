@@ -117,6 +117,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.4-preview5-27626-15",
                 new List<Bundle>
                 {
+                    Runtime_2_2_2_X64,
+                    Runtime_2_1_0_Rc1_X64
+                },
+                BundleType.Runtime,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "3.0.0",
+                new List<Bundle>
+                {
+                    Runtime_3_0_0_P5_X64,
+                    Runtime_3_0_0_P5_X86,
+                    Runtime_3_0_0_P_Arm32,
+                    Runtime_2_2_5_X86,
+                    Runtime_2_2_5_Arm32,
                     Runtime_2_2_4_X86,
                     Runtime_2_2_2_X64,
                     Runtime_2_1_0_Rc1_X64

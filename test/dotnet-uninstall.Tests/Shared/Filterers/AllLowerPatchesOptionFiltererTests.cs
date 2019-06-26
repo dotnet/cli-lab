@@ -30,6 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestBundles,
                 new List<Bundle>
                 {
+                    Runtime_3_0_0_P_Arm32,
                     Runtime_2_2_4_X86,
                     Runtime_2_2_2_X64
                 },
