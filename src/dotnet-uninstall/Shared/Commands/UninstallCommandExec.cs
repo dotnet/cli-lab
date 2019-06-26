@@ -18,10 +18,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 throw new LinuxNotSupportedException();
             }
 
-            var filtered = GetFilteredBundles(RegistryQuery.GetInstalledBundles());
-
             if (RuntimeInfo.RunningOnWindows)
             {
+                var filtered = GetFilteredBundles(RegistryQuery.GetInstalledBundles());
                 Windows.UninstallCommandExec.ExecuteUninstallCommand(filtered);
             }
             else if (RuntimeInfo.RunningOnOSX)
