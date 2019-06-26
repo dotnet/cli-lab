@@ -21,7 +21,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         internal void TestFromInput(string input, int major, int minor)
         {
             var majorMinor = MajorMinorVersion.FromInput(input);
+            TestProperties(majorMinor, major, minor);
 
+            MajorMinorVersion.TryFromInput(input, out majorMinor)
+                .Should().BeTrue();
             TestProperties(majorMinor, major, minor);
         }
 
@@ -47,8 +50,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         internal void TestFromInputReject(string input)
         {
             Action action = () => MajorMinorVersion.FromInput(input);
-
             action.Should().Throw<InvalidInputVersionException>();
+
+            MajorMinorVersion.TryFromInput(input, out var majorMinor)
+                .Should().BeFalse();
         }
 
         [Theory]

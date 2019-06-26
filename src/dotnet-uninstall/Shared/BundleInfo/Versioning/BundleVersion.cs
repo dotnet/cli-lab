@@ -36,7 +36,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         }
 
         public static BundleVersion FromInput<TBundleVersion>(string value)
-            where TBundleVersion :BundleVersion
+            where TBundleVersion : BundleVersion
         {
             if (typeof(TBundleVersion).Equals(typeof(SdkVersion)))
             {

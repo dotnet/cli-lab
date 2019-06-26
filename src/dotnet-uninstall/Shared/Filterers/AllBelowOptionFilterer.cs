@@ -10,19 +10,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(string argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
         {
-            try
+            if (MajorMinorVersion.TryFromInput(argValue, out var majorMinor))
+            {
+                return bundles
+                    .Where(bundle => bundle.Version.MajorMinor.CompareTo(majorMinor) < 0);
+            }
+            else
             {
                 var version = BundleVersion.FromInput<TBundleVersion>(argValue) as TBundleVersion;
 
                 return bundles
                     .Where(bundle => bundle.Version.CompareTo(version) < 0);
-            }
-            catch (InvalidInputVersionException)
-            {
-                var majorMinor = MajorMinorVersion.FromInput(argValue);
-
-                return bundles
-                    .Where(bundle => bundle.Version.MajorMinor.CompareTo(majorMinor) < 0);
             }
         }
     }

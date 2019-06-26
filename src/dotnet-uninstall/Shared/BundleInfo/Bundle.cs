@@ -60,7 +60,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         }
     }
 
-    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>, IEquatable<Bundle<TBundleVersion>> where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
+    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>, IEquatable<Bundle<TBundleVersion>>
+        where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
     {
         public new TBundleVersion Version => base.Version as TBundleVersion;
 

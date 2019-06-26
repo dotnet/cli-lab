@@ -18,6 +18,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             return new MajorMinorVersion(version.Major, version.Minor);
         }
 
+        public static bool TryFromInput(string value, out MajorMinorVersion majorMinor)
+        {
+            if (!Regexes.BundleMajorMinorRegex.IsMatch(value) || !Version.TryParse(value, out var version))
+            {
+                majorMinor = null;
+                return false;
+            }
+
+            majorMinor = new MajorMinorVersion(version.Major, version.Minor);
+            return true;
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as MajorMinorVersion);
