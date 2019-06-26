@@ -5,7 +5,7 @@ using NuGet.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    public abstract class BundleVersion : IEquatable<BundleVersion>
+    internal abstract class BundleVersion : IEquatable<BundleVersion>
     {
         public abstract BundleType Type { get; }
         public abstract BeforePatch BeforePatch { get; }

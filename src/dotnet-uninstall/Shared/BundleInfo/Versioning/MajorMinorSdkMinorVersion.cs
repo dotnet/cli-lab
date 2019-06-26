@@ -2,7 +2,7 @@
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    public class MajorMinorSdkMinorVersion : BeforePatch, IEquatable<MajorMinorSdkMinorVersion>, IComparable, IComparable<MajorMinorSdkMinorVersion>
+    internal class MajorMinorSdkMinorVersion : BeforePatch, IEquatable<MajorMinorSdkMinorVersion>, IComparable, IComparable<MajorMinorSdkMinorVersion>
     {
         public int SdkMinor { get; }
 

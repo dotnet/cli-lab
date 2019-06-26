@@ -4,7 +4,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    public class MajorMinorVersion : BeforePatch, IEquatable<MajorMinorVersion>, IComparable, IComparable<MajorMinorVersion>
+    internal class MajorMinorVersion : BeforePatch, IEquatable<MajorMinorVersion>, IComparable, IComparable<MajorMinorVersion>
     {
         public MajorMinorVersion(int major, int minor) : base(major, minor) { }
 

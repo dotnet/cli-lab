@@ -2,7 +2,7 @@
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    public class SdkVersion : BundleVersion, IComparable, IComparable<SdkVersion>, IEquatable<SdkVersion>
+    internal class SdkVersion : BundleVersion, IComparable, IComparable<SdkVersion>, IEquatable<SdkVersion>
     {
         public int SdkMinor => _semVer.Patch / 100;
         public override int Patch => _semVer.Patch % 100;

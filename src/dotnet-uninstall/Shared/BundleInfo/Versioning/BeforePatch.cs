@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    public abstract class BeforePatch : IEquatable<BeforePatch>
+    internal abstract class BeforePatch : IEquatable<BeforePatch>
     {
         protected internal readonly Version _version;
 

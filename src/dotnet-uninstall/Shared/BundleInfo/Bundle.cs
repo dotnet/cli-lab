@@ -6,7 +6,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
-    public abstract class Bundle : IEquatable<Bundle>
+    internal abstract class Bundle : IEquatable<Bundle>
     {
         public BundleVersion Version { get; }
         public BundleArch Arch { get; }
