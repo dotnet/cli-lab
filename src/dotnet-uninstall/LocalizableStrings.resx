@@ -126,9 +126,6 @@
   <data name="CommandArgOptionConflictExceptionMessageFormat" xml:space="preserve">
     <value>Please use either command arguments or the specified option: {0}</value>
   </data>
-  <data name="ElevationFailedExceptionMessage" xml:space="preserve">
-    <value>Failed to run as administrator</value>
-  </data>
   <data name="InvalidInputVersionExceptionMessageFormat" xml:space="preserve">
     <value>The specified version is not valid: {0}</value>
   </data>
@@ -225,13 +222,13 @@
   <data name="UninstallVerbosityOptionDescription" xml:space="preserve">
     <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]</value>
   </data>
-  <data name="UserCancelationExceptionMessage" xml:space="preserve">
-    <value>The operation was canceled by the user</value>
-  </data>
   <data name="X64OptionDescription" xml:space="preserve">
     <value>Uninstall x64 .NET Core bundles only</value>
   </data>
   <data name="X86OptionDescription" xml:space="preserve">
     <value>Uninstall x86 .NET Core bundles only</value>
+  </data>
+  <data name="NotAdminExceptionMessage" xml:space="preserve">
+    <value>The current user does not have administrator privileges. Please re-run the command prompt as administrator</value>
   </data>
 </root>
