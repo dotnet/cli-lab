@@ -19,7 +19,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             }
             catch (InvalidInputVersionException)
             {
-                var majorMinor = MajorMinorVersion.From(argValue);
+                var majorMinor = MajorMinorVersion.FromInput(argValue);
 
                 return bundles
                     .Where(bundle => bundle.Version.MajorMinor.CompareTo(majorMinor) < 0);

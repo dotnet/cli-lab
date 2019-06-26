@@ -18,9 +18,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("3.0", 3, 0)]
         [InlineData("12.345", 12, 345)]
         [InlineData("0012.00345", 12, 345)]
-        internal void TestFrom(string input, int major, int minor)
+        internal void TestFromInput(string input, int major, int minor)
         {
-            var majorMinor = MajorMinorVersion.From(input);
+            var majorMinor = MajorMinorVersion.FromInput(input);
 
             TestProperties(majorMinor, major, minor);
         }
@@ -44,9 +44,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("2. 2")]
         [InlineData("2 .2")]
         [InlineData("2 . 2")]
-        internal void TestFromReject(string input)
+        internal void TestFromInputReject(string input)
         {
-            Action action = () => MajorMinorVersion.From(input);
+            Action action = () => MajorMinorVersion.FromInput(input);
 
             action.Should().Throw<InvalidInputVersionException>();
         }
@@ -93,8 +93,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("12.345", "0012.00345")]
         internal void TestEquality(string input1, string input2)
         {
-            var majorMinor1 = MajorMinorVersion.From(input1);
-            var majorMinor2 = MajorMinorVersion.From(input2);
+            var majorMinor1 = MajorMinorVersion.FromInput(input1);
+            var majorMinor2 = MajorMinorVersion.FromInput(input2);
 
             EqualityComparisonTestUtils<MajorMinorVersion>.TestEquality(majorMinor1, majorMinor2);
         }
@@ -106,8 +106,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("6.66", "23.33")]
         internal void TestInequality(string lower, string higher)
         {
-            var lowerMajorMinor = MajorMinorVersion.From(lower);
-            var higherMajorMinor = MajorMinorVersion.From(higher);
+            var lowerMajorMinor = MajorMinorVersion.FromInput(lower);
+            var higherMajorMinor = MajorMinorVersion.FromInput(higher);
 
             EqualityComparisonTestUtils<MajorMinorVersion>.TestInequality(lowerMajorMinor, higherMajorMinor);
         }
@@ -117,7 +117,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("12.345")]
         internal void TestInequalityNull(string input)
         {
-            var majorMinor = MajorMinorVersion.From(input);
+            var majorMinor = MajorMinorVersion.FromInput(input);
 
             EqualityComparisonTestUtils<MajorMinorVersion>.TestInequalityNull(majorMinor);
         }

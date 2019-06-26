@@ -8,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
     {
         public MajorMinorVersion(int major, int minor) : base(major, minor) { }
 
-        public static MajorMinorVersion From(string value)
+        public static MajorMinorVersion FromInput(string value)
         {
             if (!Regexes.BundleMajorMinorRegex.IsMatch(value) || !Version.TryParse(value, out var version))
             {
