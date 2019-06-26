@@ -13,7 +13,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
     public static class UninstallCommandExec
     {
         private const int UNINSTALL_TIMEOUT = 5 * 60 * 1000;
-        private const int NATIVE_ERROR_CODE_CANCELED = 1223;
 
         [DllImport("shell32.dll", SetLastError = true)]
         static extern IntPtr CommandLineToArgvW(
@@ -24,47 +23,32 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             if (!IsAdmin())
             {
-                RunAsAdmin();
-                return;
+                throw new NotAdminException();
             }
 
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
                 var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
 
-                try
+                var process = new Process
                 {
-                    var process = new Process
+                    StartInfo = new ProcessStartInfo
                     {
-                        StartInfo = new ProcessStartInfo
-                        {
-                            FileName = args.First(),
-                            Arguments = string.Join(" ", args.Skip(1)),
-                            UseShellExecute = true,
-                            Verb = "runas"
-                        }
-                    };
-
-                    if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
-                    {
-                        throw new UninstallationFailedException(bundle.UninstallCommand);
+                        FileName = args.First(),
+                        Arguments = string.Join(" ", args.Skip(1)),
+                        UseShellExecute = true,
+                        Verb = "runas"
                     }
+                };
 
-                    if (process.ExitCode != 0)
-                    {
-                        throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
-                    }
+                if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
+                {
+                    throw new UninstallationFailedException(bundle.UninstallCommand);
                 }
-                catch (Win32Exception e)
+
+                if (process.ExitCode != 0)
                 {
-                    if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
-                    {
-                        throw new UserCancelationException();
-                    }
-                    else
-                    {
-                        throw e;
-                    }
+                    throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
                 }
             }
         }
@@ -81,43 +65,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 return false;
             }
-        }
-
-        private static void RunAsAdmin()
-        {
-            var entryFile = Process.GetCurrentProcess().MainModule.FileName;
-
-            try
-            {
-                var process = new Process
-                {
-                    StartInfo = new ProcessStartInfo
-                    {
-                        FileName = entryFile,
-                        Arguments = string.Join(" ", Environment.GetCommandLineArgs().Skip(1)),
-                        UseShellExecute = true,
-                        Verb = "runas"
-                    }
-                };
-
-                if (!process.Start())
-                {
-                    throw new ElevationFailedException();
-                }
-            }
-            catch (Win32Exception e)
-            {
-                if (e.NativeErrorCode == NATIVE_ERROR_CODE_CANCELED)
-                {
-                    throw new UserCancelationException();
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-
-            Environment.Exit(0);
         }
 
         private static IEnumerable<string> ParseCommandToArgs(string command, out int argc)

@@ -88,15 +88,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to run as administrator.
-        /// </summary>
-        internal static string ElevationFailedExceptionMessage {
-            get {
-                return ResourceManager.GetString("ElevationFailedExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: {0}.
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
@@ -138,6 +129,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandSdkHeader {
             get {
                 return ResourceManager.GetString("ListCommandSdkHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current user does not have administrator privileges. Please re-run the command prompt as administrator.
+        /// </summary>
+        internal static string NotAdminExceptionMessage {
+            get {
+                return ResourceManager.GetString("NotAdminExceptionMessage", resourceCulture);
             }
         }
         
@@ -381,15 +381,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallVerbosityOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallVerbosityOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The operation was canceled by the user.
-        /// </summary>
-        internal static string UserCancelationExceptionMessage {
-            get {
-                return ResourceManager.GetString("UserCancelationExceptionMessage", resourceCulture);
             }
         }
         

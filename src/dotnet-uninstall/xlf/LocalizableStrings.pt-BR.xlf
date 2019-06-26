@@ -17,11 +17,6 @@
         <target state="new">Please use either command arguments or the specified option: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ElevationFailedExceptionMessage">
-        <source>Failed to run as administrator</source>
-        <target state="new">Failed to run as administrator</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: {0}</source>
         <target state="new">The specified version is not valid: {0}</target>
@@ -45,6 +40,11 @@
       <trans-unit id="ListCommandSdkHeader">
         <source>.NET Core SDKs:</source>
         <target state="new">.NET Core SDKs:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="NotAdminExceptionMessage">
+        <source>The current user does not have administrator privileges. Please re-run the command prompt as administrator</source>
+        <target state="new">The current user does not have administrator privileges. Please re-run the command prompt as administrator</target>
         <note />
       </trans-unit>
       <trans-unit id="OptionsConflictExceptionMessageFormat">
@@ -180,11 +180,6 @@
       <trans-unit id="UninstallationFailedExceptionWithExitCodeMessageFormat">
         <source>The uninstallation operation failed with the exit code: {1}. Command: {0}</source>
         <target state="new">The uninstallation operation failed with the exit code: {1}. Command: {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UserCancelationExceptionMessage">
-        <source>The operation was canceled by the user</source>
-        <target state="new">The operation was canceled by the user</target>
         <note />
       </trans-unit>
       <trans-unit id="X64OptionDescription">
