@@ -17,8 +17,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("3.0.1-rc1-final", 3, 0, 1, true)]
         internal void TestConstructor(string input, int major, int minor, int patch, bool isPrerelease)
         {
-            var version = new RuntimeVersion(input);
+            TestProperties(new RuntimeVersion(input), major, minor, patch, isPrerelease);
+            TestProperties(BundleVersion.FromInput<RuntimeVersion>(input), major, minor, patch, isPrerelease);
+        }
 
+        private static void TestProperties(RuntimeVersion version, int major, int minor, int patch, bool isPrerelease)
+        {
             version.Major.Should().Be(major);
             version.Minor.Should().Be(minor);
             version.Patch.Should().Be(patch);

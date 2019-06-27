@@ -100,7 +100,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         }
 
         private static Bundle<TBundleVersion> GetBundleFromInput<TBundleVersion>(string input, BundleArch arch)
-            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>
+            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
             return Bundle.From(BundleVersion.FromInput<TBundleVersion>(input), arch, input) as Bundle<TBundleVersion>;
         }

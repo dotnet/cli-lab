@@ -4,11 +4,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
     internal class SdkVersion : BundleVersion, IComparable, IComparable<SdkVersion>, IEquatable<SdkVersion>
     {
-        public int SdkMinor => _semVer.Patch / 100;
-        public override int Patch => _semVer.Patch % 100;
+        public int SdkMinor => SemVer.Patch / 100;
+        public override int Patch => SemVer.Patch % 100;
         public override BeforePatch BeforePatch => new MajorMinorSdkMinorVersion(Major, Minor, SdkMinor);
 
         public override BundleType Type => BundleType.Sdk;
+
+        public SdkVersion() { }
 
         public SdkVersion(string value) : base(value) { }
 
@@ -19,7 +21,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 
         public int CompareTo(SdkVersion other)
         {
-            return other == null ? 1 : _semVer.CompareTo(other._semVer);
+            return other == null ? 1 : SemVer.CompareTo(other.SemVer);
         }
 
         public override bool Equals(object obj)
