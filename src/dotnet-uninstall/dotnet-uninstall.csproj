@@ -46,4 +46,7 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MacOs\" />
+  </ItemGroup>
 </Project>

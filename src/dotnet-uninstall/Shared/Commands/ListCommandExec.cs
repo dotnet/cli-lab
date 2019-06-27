@@ -4,6 +4,7 @@ using System.CommandLine;
 using System.CommandLine.Rendering;
 using System.CommandLine.Rendering.Views;
 using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
@@ -23,7 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
-                throw new NotImplementedException();
+                Execute(FileSystemExplorer.GetInstalledBundles());
             }
             else if (RuntimeInfo.RunningOnLinux)
             {

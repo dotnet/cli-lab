@@ -10,29 +10,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         public abstract BundleType Type { get; }
         public abstract BeforePatch BeforePatch { get; }
 
-        protected readonly SemanticVersion _semVer;
+        protected SemanticVersion SemVer { get; private set; }
 
-        public virtual int Major => _semVer.Major;
-        public virtual int Minor => _semVer.Minor;
-        public virtual int Patch => _semVer.Patch;
-        public virtual bool IsPrerelease => _semVer.IsPrerelease;
+        public virtual int Major => SemVer.Major;
+        public virtual int Minor => SemVer.Minor;
+        public virtual int Patch => SemVer.Patch;
+        public virtual bool IsPrerelease => SemVer.IsPrerelease;
         public virtual MajorMinorVersion MajorMinor => new MajorMinorVersion(Major, Minor);
+
+        protected BundleVersion()
+        {
+            SemVer = null;
+        }
 
         public BundleVersion(string value)
         {
-            if (SemanticVersion.TryParse(value, out var version))
+            if (SemanticVersion.TryParse(value, out var semVer))
             {
-                _semVer = version;
+                SemVer = semVer;
             }
             else
             {
                 throw new InvalidInputVersionException(value);
             }
-        }
-
-        public override string ToString()
-        {
-            return _semVer.ToString();
         }
 
         public static BundleVersion FromInput<TBundleVersion>(string value)
@@ -51,6 +51,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             throw new ArgumentException();
         }
 
+        public static bool TryFromInput<TBundleVersion>(string value, out TBundleVersion version)
+            where TBundleVersion : BundleVersion, new()
+        {
+            if (SemanticVersion.TryParse(value, out var semVer))
+            {
+                version = new TBundleVersion
+                {
+                    SemVer = semVer
+                };
+                return true;
+            }
+
+            version = null;
+            return false;
+        }
+
+        public override string ToString()
+        {
+            return SemVer.ToString();
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as BundleVersion);
@@ -59,12 +80,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         public bool Equals(BundleVersion other)
         {
             return other != null &&
-                   EqualityComparer<SemanticVersion>.Default.Equals(_semVer, other._semVer);
+                   EqualityComparer<SemanticVersion>.Default.Equals(SemVer, other.SemVer);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_semVer);
+            return HashCode.Combine(SemVer);
         }
     }
 }

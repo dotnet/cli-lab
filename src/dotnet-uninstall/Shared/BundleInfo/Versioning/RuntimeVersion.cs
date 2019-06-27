@@ -7,6 +7,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         public override BundleType Type => BundleType.Runtime;
         public override BeforePatch BeforePatch => new MajorMinorVersion(Major, Minor);
 
+        public RuntimeVersion() { }
+
         public RuntimeVersion(string value) : base(value) { }
 
         public int CompareTo(object obj)
@@ -16,7 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 
         public int CompareTo(RuntimeVersion other)
         {
-            return other == null ? 1 : _semVer.CompareTo(other._semVer);
+            return other == null ? 1 : SemVer.CompareTo(other.SemVer);
         }
 
         public override bool Equals(object obj)
