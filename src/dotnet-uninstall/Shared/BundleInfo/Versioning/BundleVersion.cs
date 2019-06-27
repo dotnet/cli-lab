@@ -10,19 +10,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         public abstract BundleType Type { get; }
         public abstract BeforePatch BeforePatch { get; }
 
-        protected readonly SemanticVersion _semVer;
+        protected SemanticVersion SemVer { get; private set; }
 
-        public virtual int Major => _semVer.Major;
-        public virtual int Minor => _semVer.Minor;
-        public virtual int Patch => _semVer.Patch;
-        public virtual bool IsPrerelease => _semVer.IsPrerelease;
+        public virtual int Major => SemVer.Major;
+        public virtual int Minor => SemVer.Minor;
+        public virtual int Patch => SemVer.Patch;
+        public virtual bool IsPrerelease => SemVer.IsPrerelease;
         public virtual MajorMinorVersion MajorMinor => new MajorMinorVersion(Major, Minor);
 
-        public BundleVersion(string value)
+        protected BundleVersion()
         {
-            if (SemanticVersion.TryParse(value, out var version))
+            SemVer = null;
+        }
+
+        protected BundleVersion(string value)
+        {
+            if (SemanticVersion.TryParse(value, out var semVer))
             {
-                _semVer = version;
+                SemVer = semVer;
             }
             else
             {
@@ -30,25 +35,39 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             }
         }
 
-        public override string ToString()
+        public static TBundleVersion FromInput<TBundleVersion>(string value)
+            where TBundleVersion : BundleVersion, new()
         {
-            return _semVer.ToString();
+            if (SemanticVersion.TryParse(value, out var semVer))
+            {
+                return new TBundleVersion
+                {
+                    SemVer = semVer
+                };
+            }
+
+            throw new InvalidInputVersionException(value);
         }
 
-        public static BundleVersion FromInput<TBundleVersion>(string value)
-            where TBundleVersion : BundleVersion
+        public static bool TryFromInput<TBundleVersion>(string value, out TBundleVersion version)
+            where TBundleVersion : BundleVersion, new()
         {
-            if (typeof(TBundleVersion).Equals(typeof(SdkVersion)))
+            if (SemanticVersion.TryParse(value, out var semVer))
             {
-                return new SdkVersion(value);
+                version = new TBundleVersion
+                {
+                    SemVer = semVer
+                };
+                return true;
             }
 
-            if (typeof(TBundleVersion).Equals(typeof(RuntimeVersion)))
-            {
-                return new RuntimeVersion(value);
-            }
+            version = null;
+            return false;
+        }
 
-            throw new ArgumentException();
+        public override string ToString()
+        {
+            return SemVer.ToString();
         }
 
         public override bool Equals(object obj)
@@ -59,12 +78,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         public bool Equals(BundleVersion other)
         {
             return other != null &&
-                   EqualityComparer<SemanticVersion>.Default.Equals(_semVer, other._semVer);
+                   EqualityComparer<SemanticVersion>.Default.Equals(SemVer, other.SemVer);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_semVer);
+            return HashCode.Combine(SemVer);
         }
     }
 }
