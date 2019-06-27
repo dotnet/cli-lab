@@ -19,8 +19,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("2.0.2-rc1-abcdef", 2, 0, 0, 2, true)]
         internal void TestConstructor(string input, int major, int minor, int sdkMinor, int patch, bool isPrerelease)
         {
-            var version = new SdkVersion(input);
+            TestProperties(new SdkVersion(input), major, minor, sdkMinor, patch, isPrerelease);
+            TestProperties(BundleVersion.FromInput<SdkVersion>(input), major, minor, sdkMinor, patch, isPrerelease);
+        }
 
+        private static void TestProperties(SdkVersion version, int major, int minor, int sdkMinor, int patch, bool isPrerelease)
+        {
             version.Major.Should().Be(major);
             version.Minor.Should().Be(minor);
             version.SdkMinor.Should().Be(sdkMinor);

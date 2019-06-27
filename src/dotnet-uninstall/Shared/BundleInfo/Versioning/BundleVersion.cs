@@ -23,7 +23,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             SemVer = null;
         }
 
-        public BundleVersion(string value)
+        protected BundleVersion(string value)
         {
             if (SemanticVersion.TryParse(value, out var semVer))
             {
@@ -35,20 +35,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             }
         }
 
-        public static BundleVersion FromInput<TBundleVersion>(string value)
-            where TBundleVersion : BundleVersion
+        public static TBundleVersion FromInput<TBundleVersion>(string value)
+            where TBundleVersion : BundleVersion, new()
         {
-            if (typeof(TBundleVersion).Equals(typeof(SdkVersion)))
+            if (SemanticVersion.TryParse(value, out var semVer))
             {
-                return new SdkVersion(value);
+                return new TBundleVersion
+                {
+                    SemVer = semVer
+                };
             }
 
-            if (typeof(TBundleVersion).Equals(typeof(RuntimeVersion)))
-            {
-                return new RuntimeVersion(value);
-            }
-
-            throw new ArgumentException();
+            throw new InvalidInputVersionException(value);
         }
 
         public static bool TryFromInput<TBundleVersion>(string value, out TBundleVersion version)

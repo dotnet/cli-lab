@@ -55,7 +55,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(TArg argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
-            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>;
+            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new();
     }
 
     internal abstract class NoArgFilterer : Filterer
