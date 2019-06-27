@@ -48,7 +48,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     .FilterWithSameBundleType(filteredBundlesByArch)
                     .OrderByDescending(sdk => sdk);
 
-                stackView.Add(GetTableView(sdks,LocalizableStrings.ListCommandSdkHeader));
+                stackView.Add(new ContentView(LocalizableStrings.ListCommandSdkHeader));
+                stackView.Add(GetGridView(sdks.ToArray()));
                 stackView.Add(new ContentView(string.Empty));
             }
 
@@ -58,7 +59,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     .FilterWithSameBundleType(filteredBundlesByArch)
                     .OrderByDescending(runtime => runtime);
 
-                stackView.Add(GetTableView(runtimes,LocalizableStrings.ListCommandRuntimeHeader));
+                stackView.Add(new ContentView(LocalizableStrings.ListCommandRuntimeHeader));
+                stackView.Add(GetGridView(runtimes.ToArray()));
                 stackView.Add(new ContentView(string.Empty));
             }
 
@@ -67,17 +69,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 new Region(0, 0, Console.WindowWidth, Console.WindowHeight));
         }
 
-        private static TableView<Bundle> GetTableView(IEnumerable<Bundle> bundles, string header)
+        private static GridView GetGridView(IList<Bundle> bundles)
         {
-            var tableView = new TableView<Bundle>
+            var gridView = new GridView();
+
+            gridView.SetColumns(Enumerable.Repeat(ColumnDefinition.SizeToContent(), 3).ToArray());
+            gridView.SetRows(Enumerable.Repeat(RowDefinition.SizeToContent(), Math.Max(bundles.Count, 1)).ToArray());
+
+            foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
             {
-                Items = bundles.ToList().AsReadOnly()
-            };
+                gridView.SetChild(new ContentView(string.Empty), 0, index);
+                gridView.SetChild(new ContentView(bundle.Version.ToString()), 1, index);
+                gridView.SetChild(new ContentView($"({bundle.Arch.ToString().ToLower()})"), 2, index);
+            }
 
-            tableView.AddColumn(bundle => $"  {bundle.Version.ToString()}", header);
-            tableView.AddColumn(bundle => $"({bundle.Arch.ToString().ToLower()})", string.Empty);
-
-            return tableView;
+            return gridView;
         }
     }
 }
