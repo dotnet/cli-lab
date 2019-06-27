@@ -74,7 +74,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var gridView = new GridView();
 
             gridView.SetColumns(Enumerable.Repeat(ColumnDefinition.SizeToContent(), 3).ToArray());
-            gridView.SetRows(Enumerable.Repeat(RowDefinition.SizeToContent(), bundles.Count).ToArray());
+            gridView.SetRows(Enumerable.Repeat(RowDefinition.SizeToContent(), Math.Max(bundles.Count, 1)).ToArray());
 
             foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
             {
