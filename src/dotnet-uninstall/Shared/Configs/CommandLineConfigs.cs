@@ -78,6 +78,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--x64",
             LocalizableStrings.X64OptionDescription);
 
+        public static readonly Option VersionOption = new Option(
+            "--version",
+            isHidden: true);
+
         public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
             UninstallAllOption,
@@ -117,6 +121,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             foreach (var option in UninstallMainOptions
                 .Concat(AuxOptions)
+                .Append(VersionOption)
                 .OrderBy(option => option.Name))
             {
                 UninstallRootCommand.AddOption(option);
