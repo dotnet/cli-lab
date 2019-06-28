@@ -3,8 +3,8 @@
   <file datatype="xml" source-language="en" target-language="tr" original="../LocalizableStrings.resx">
     <body>
       <trans-unit id="Arm32OptionDescription">
-        <source>Uninstall arm32 .NET Core bundles only</source>
-        <target state="new">Uninstall arm32 .NET Core bundles only</target>
+        <source>Can be used with --sdk and --runtime to remove arm32.</source>
+        <target state="new">Can be used with --sdk and --runtime to remove arm32.</target>
         <note />
       </trans-unit>
       <trans-unit id="BundleTypeNotSpecifiedExceptionMessage">
@@ -28,8 +28,8 @@
         <note />
       </trans-unit>
       <trans-unit id="ListCommandDescription">
-        <source>List the .NET Core bundles that are installed globally on the machine</source>
-        <target state="new">List the .NET Core bundles that are installed globally on the machine</target>
+        <source>List .NET Core SDKs and Runtimes that can be removed with this tool.</source>
+        <target state="new">List .NET Core SDKs and Runtimes that can be removed with this tool.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">
@@ -58,13 +58,13 @@
         <note />
       </trans-unit>
       <trans-unit id="RuntimeOptionDescription">
-        <source>Uninstall .NET Core Runtimes only</source>
-        <target state="new">Uninstall .NET Core Runtimes only</target>
+        <source>Remove .NET Core Runtimes only.</source>
+        <target state="new">Remove .NET Core Runtimes only.</target>
         <note />
       </trans-unit>
       <trans-unit id="SdkOptionDescription">
-        <source>Uninstall .NET Core SDKs only</source>
-        <target state="new">Uninstall .NET Core SDKs only</target>
+        <source>Remove .NET Core SDKs only.</source>
+        <target state="new">Remove .NET Core SDKs only.</target>
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
@@ -73,103 +73,103 @@
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllBelowOptionArgumentDescription">
-        <source>The specified .NET Core bundle version</source>
-        <target state="new">The specified .NET Core bundle version</target>
+        <source>The specified version to remain.</source>
+        <target state="new">The specified version to remain.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllBelowOptionArgumentName">
-        <source>BUNDLE-VERSION</source>
-        <target state="new">BUNDLE-VERSION</target>
+        <source>VERSION</source>
+        <target state="new">VERSION</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllBelowOptionDescription">
-        <source>Remove all .NET Core bundles below specified version. The specified version will remain</source>
-        <target state="new">Remove all .NET Core bundles below specified version. The specified version will remain</target>
+        <source>Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButLatestOptionDescription">
-        <source>Remove all .NET Core bundles, except the highest version</source>
-        <target state="new">Remove all .NET Core bundles, except the highest version</target>
+        <source>Remove .NET Core SDKs or Runtimes, except the one highest version.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes, except the one highest version.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButOptionArgumentDescription">
-        <source>The specified .NET Core bundle versions to remain</source>
-        <target state="new">The specified .NET Core bundle versions to remain</target>
+        <source>The specified versions to remain.</source>
+        <target state="new">The specified versions to remain.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButOptionArgumentName">
-        <source>BUNDLE-VERSIONS</source>
-        <target state="new">BUNDLE-VERSIONS</target>
+        <source>VERSIONS</source>
+        <target state="new">VERSIONS</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButOptionDescription">
-        <source>Remove all .NET Core bundles, except those listed</source>
-        <target state="new">Remove all .NET Core bundles, except those listed</target>
+        <source>Remove .NET Core SDKs or Runtimes, except those specified.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes, except those specified.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllLowerPatchesOptionDescription">
-        <source>Remove .NET Core bundles that have been replaced by higher patches</source>
-        <target state="new">Remove .NET Core bundles that have been replaced by higher patches</target>
+        <source>Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllOptionDescription">
-        <source>Remove all .NET Core bundles installed globally on the machine</source>
-        <target state="new">Remove all .NET Core bundles installed globally on the machine</target>
+        <source>Remove installed .NET Core SDKs or Runtimes.</source>
+        <target state="new">Remove installed .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsButLatestOptionDescription">
-        <source>Remove all .NET Core Preview bundles that are marked as previews, except the latest preview</source>
-        <target state="new">Remove all .NET Core Preview bundles that are marked as previews, except the latest preview</target>
+        <source>Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsOptionDescription">
-        <source>Remove all .NET Core Preview bundles that are marked as previews</source>
-        <target state="new">Remove all .NET Core Preview bundles that are marked as previews</target>
+        <source>Remove .NET Core SDKs or Runtimes that are marked as previews.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallMajorMinorOptionArgumentDescription">
-        <source>The specified major.minor version</source>
-        <target state="new">The specified major.minor version</target>
+        <source>The specified `major.minor` version to uninstall</source>
+        <target state="new">The specified `major.minor` version to uninstall</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallMajorMinorOptionArgumentName">
-        <source>MAJOR-MINOR</source>
-        <target state="new">MAJOR-MINOR</target>
+        <source>MAJOR_MINOR</source>
+        <target state="new">MAJOR_MINOR</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallMajorMinorOptionDescription">
-        <source>Remove .NET Core bundles that match the specified major.minor version</source>
-        <target state="new">Remove .NET Core bundles that match the specified major.minor version</target>
+        <source>Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentDescription">
-        <source>The specified .NET Core bundle versions to uninstall</source>
-        <target state="new">The specified .NET Core bundle versions to uninstall</target>
+        <source>The specified versions to uninstall.</source>
+        <target state="new">The specified versions to uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentName">
-        <source>BUNDLE-VERSIONS</source>
-        <target state="new">BUNDLE-VERSIONS</target>
+        <source>VERSIONS</source>
+        <target state="new">VERSIONS</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescription">
-        <source>Remove the .NET Core bundles specified</source>
-        <target state="new">Remove the .NET Core bundles specified</target>
+        <source>Remove specified .NET Core SDKs and Runtimes.</source>
+        <target state="new">Remove specified .NET Core SDKs and Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallVerbosityOptionArgumentDescription">
-        <source>The specified verbosity level</source>
-        <target state="new">The specified verbosity level</target>
+        <source>The specified verbosity level.</source>
+        <target state="new">The specified verbosity level.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallVerbosityOptionArgumentName">
-        <source>VERBOSITY-LEVEL</source>
-        <target state="new">VERBOSITY-LEVEL</target>
+        <source>LEVEL</source>
+        <target state="new">LEVEL</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallVerbosityOptionDescription">
-        <source>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]</source>
-        <target state="new">Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]</target>
+        <source>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
+        <target state="new">Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallationFailedExceptionMessageFormat">
@@ -183,13 +183,13 @@
         <note />
       </trans-unit>
       <trans-unit id="X64OptionDescription">
-        <source>Uninstall x64 .NET Core bundles only</source>
-        <target state="new">Uninstall x64 .NET Core bundles only</target>
+        <source>Can be used with --sdk and --runtime to remove x64.</source>
+        <target state="new">Can be used with --sdk and --runtime to remove x64.</target>
         <note />
       </trans-unit>
       <trans-unit id="X86OptionDescription">
-        <source>Uninstall x86 .NET Core bundles only</source>
-        <target state="new">Uninstall x86 .NET Core bundles only</target>
+        <source>Can be used with --sdk and --runtime to remove x86.</source>
+        <target state="new">Can be used with --sdk and --runtime to remove x86.</target>
         <note />
       </trans-unit>
     </body>
