@@ -61,7 +61,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specified the bundle type to uninstall.
+        ///   Looks up a localized string similar to Specify either --sdk or --runtime..
         /// </summary>
         internal static string BundleTypeNotSpecifiedExceptionMessage {
             get {
@@ -79,7 +79,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified version is not valid: {0}.
+        ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
             get {
@@ -88,7 +88,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Linux operating systems are not supported.
+        ///   Looks up a localized string similar to This command is not supported on this operating system..
         /// </summary>
         internal static string LinuxNotSupportedExceptionMessage {
             get {

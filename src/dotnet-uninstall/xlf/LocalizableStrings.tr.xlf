@@ -3,8 +3,8 @@
   <file datatype="xml" source-language="en" target-language="tr" original="../LocalizableStrings.resx">
     <body>
       <trans-unit id="BundleTypeNotSpecifiedExceptionMessage">
-        <source>Please specified the bundle type to uninstall</source>
-        <target state="new">Please specified the bundle type to uninstall</target>
+        <source>Specify either --sdk or --runtime.</source>
+        <target state="new">Specify either --sdk or --runtime.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandArgOptionConflictExceptionMessageFormat">
@@ -13,13 +13,13 @@
         <note />
       </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
-        <source>The specified version is not valid: {0}</source>
-        <target state="new">The specified version is not valid: {0}</target>
+        <source>The specified version is not valid: "{0}".</source>
+        <target state="new">The specified version is not valid: "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="LinuxNotSupportedExceptionMessage">
-        <source>The Linux operating systems are not supported</source>
-        <target state="new">The Linux operating systems are not supported</target>
+        <source>This command is not supported on this operating system.</source>
+        <target state="new">This command is not supported on this operating system.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandDescription">

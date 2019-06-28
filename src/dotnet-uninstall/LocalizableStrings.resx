@@ -118,16 +118,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BundleTypeNotSpecifiedExceptionMessage" xml:space="preserve">
-    <value>Please specified the bundle type to uninstall</value>
+    <value>Specify either --sdk or --runtime.</value>
   </data>
   <data name="CommandArgOptionConflictExceptionMessageFormat" xml:space="preserve">
     <value>Please use either command arguments or the specified option: {0}</value>
   </data>
   <data name="InvalidInputVersionExceptionMessageFormat" xml:space="preserve">
-    <value>The specified version is not valid: {0}</value>
+    <value>The specified version is not valid: "{0}".</value>
   </data>
   <data name="LinuxNotSupportedExceptionMessage" xml:space="preserve">
-    <value>The Linux operating systems are not supported</value>
+    <value>This command is not supported on this operating system.</value>
   </data>
   <data name="ListCommandDescription" xml:space="preserve">
     <value>List .NET Core SDKs or Runtimes that can be removed with this tool.</value>
