@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
@@ -114,14 +115,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             UninstallRootCommand.Add(ListCommand);
 
-            foreach (var option in UninstallMainOptions)
+            foreach (var option in UninstallMainOptions
+                .Concat(AuxOptions)
+                .OrderBy(option => option.Name))
             {
                 UninstallRootCommand.AddOption(option);
             }
 
-            foreach (var option in AuxOptions)
+            foreach (var option in AuxOptions
+                .OrderBy(option => option.Name))
             {
-                UninstallRootCommand.AddOption(option);
                 ListCommand.Add(option);
             }
 
