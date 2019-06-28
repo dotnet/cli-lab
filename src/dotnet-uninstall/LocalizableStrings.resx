@@ -130,7 +130,7 @@
     <value>The Linux operating systems are not supported</value>
   </data>
   <data name="ListCommandDescription" xml:space="preserve">
-    <value>List .NET Core SDKs and Runtimes that can be removed with this tool.</value>
+    <value>List .NET Core SDKs or Runtimes that can be removed with this tool.</value>
   </data>
   <data name="ListCommandRuntimeHeader" xml:space="preserve">
     <value>.NET Core Runtimes:</value>
@@ -172,7 +172,7 @@
     <value>Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</value>
   </data>
   <data name="UninstallAllOptionDescription" xml:space="preserve">
-    <value>Remove installed .NET Core SDKs or Runtimes.</value>
+    <value>Remove all .NET Core SDKs or Runtimes.</value>
   </data>
   <data name="UninstallAllPreviewsButLatestOptionDescription" xml:space="preserve">
     <value>Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</value>
@@ -199,7 +199,7 @@
     <value>VERSIONS</value>
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs and Runtimes.</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</value>
   </data>
   <data name="UninstallVerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>

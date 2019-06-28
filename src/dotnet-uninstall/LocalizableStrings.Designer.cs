@@ -97,7 +97,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List .NET Core SDKs and Runtimes that can be removed with this tool..
+        ///   Looks up a localized string similar to List .NET Core SDKs or Runtimes that can be removed with this tool..
         /// </summary>
         internal static string ListCommandDescription {
             get {
@@ -232,7 +232,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove installed .NET Core SDKs or Runtimes..
+        ///   Looks up a localized string similar to Remove all .NET Core SDKs or Runtimes..
         /// </summary>
         internal static string UninstallAllOptionDescription {
             get {
@@ -313,7 +313,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove specified .NET Core SDKs and Runtimes..
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers..
         /// </summary>
         internal static string UninstallNoOptionDescription {
             get {

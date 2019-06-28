@@ -23,8 +23,8 @@
         <note />
       </trans-unit>
       <trans-unit id="ListCommandDescription">
-        <source>List .NET Core SDKs and Runtimes that can be removed with this tool.</source>
-        <target state="new">List .NET Core SDKs and Runtimes that can be removed with this tool.</target>
+        <source>List .NET Core SDKs or Runtimes that can be removed with this tool.</source>
+        <target state="new">List .NET Core SDKs or Runtimes that can be removed with this tool.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">
@@ -98,8 +98,8 @@
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllOptionDescription">
-        <source>Remove installed .NET Core SDKs or Runtimes.</source>
-        <target state="new">Remove installed .NET Core SDKs or Runtimes.</target>
+        <source>Remove all .NET Core SDKs or Runtimes.</source>
+        <target state="new">Remove all .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsButLatestOptionDescription">
@@ -133,8 +133,8 @@
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescription">
-        <source>Remove specified .NET Core SDKs and Runtimes.</source>
-        <target state="new">Remove specified .NET Core SDKs and Runtimes.</target>
+        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallVerbosityOptionArgumentName">
