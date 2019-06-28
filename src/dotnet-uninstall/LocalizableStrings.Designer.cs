@@ -61,15 +61,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove arm32..
-        /// </summary>
-        internal static string Arm32OptionDescription {
-            get {
-                return ResourceManager.GetString("Arm32OptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please specified the bundle type to uninstall.
         /// </summary>
         internal static string BundleTypeNotSpecifiedExceptionMessage {
@@ -187,15 +178,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified version to remain..
-        /// </summary>
-        internal static string UninstallAllBelowOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallAllBelowOptionArgumentDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to VERSION.
         /// </summary>
         internal static string UninstallAllBelowOptionArgumentName {
@@ -219,15 +201,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallAllButLatestOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallAllButLatestOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The specified versions to remain..
-        /// </summary>
-        internal static string UninstallAllButOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallAllButOptionArgumentDescription", resourceCulture);
             }
         }
         
@@ -304,15 +277,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified `major.minor` version to uninstall.
-        /// </summary>
-        internal static string UninstallMajorMinorOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallMajorMinorOptionArgumentDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to MAJOR_MINOR.
         /// </summary>
         internal static string UninstallMajorMinorOptionArgumentName {
@@ -354,15 +318,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallNoOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallNoOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The specified verbosity level..
-        /// </summary>
-        internal static string UninstallVerbosityOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallVerbosityOptionArgumentDescription", resourceCulture);
             }
         }
         

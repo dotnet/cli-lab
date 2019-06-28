@@ -26,8 +26,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallAllButOptionDescription,
             new Argument<IEnumerable<string>>
             {
-                Name = LocalizableStrings.UninstallAllButOptionArgumentName,
-                Description = LocalizableStrings.UninstallAllButOptionArgumentDescription
+                Name = LocalizableStrings.UninstallAllButOptionArgumentName
             });
 
         public static readonly Option UninstallAllBelowOption = new Option(
@@ -35,8 +34,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallAllBelowOptionDescription,
             new Argument<string>
             {
-                Name = LocalizableStrings.UninstallAllBelowOptionArgumentName,
-                Description = LocalizableStrings.UninstallAllBelowOptionArgumentDescription
+                Name = LocalizableStrings.UninstallAllBelowOptionArgumentName
             });
 
         public static readonly Option UninstallAllPreviewsOption = new Option(
@@ -52,8 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallMajorMinorOptionDescription,
             new Argument<string>
             {
-                Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName,
-                Description = LocalizableStrings.UninstallMajorMinorOptionArgumentDescription
+                Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName
             });
 
         public static readonly Option UninstallVerbosityOption = new Option(
@@ -61,8 +58,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallVerbosityOptionDescription,
             new Argument<string>
             {
-                Name = LocalizableStrings.UninstallVerbosityOptionArgumentName,
-                Description = LocalizableStrings.UninstallVerbosityOptionArgumentDescription
+                Name = LocalizableStrings.UninstallVerbosityOptionArgumentName
             });
 
         public static readonly Option SdkOption = new Option(
@@ -72,10 +68,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly Option RuntimeOption = new Option(
             "--runtime",
             LocalizableStrings.RuntimeOptionDescription);
-
-        public static readonly Option Arm32Option = new Option(
-            "--arm32",
-            LocalizableStrings.Arm32OptionDescription);
 
         public static readonly Option X86Option = new Option(
             "--x86",
@@ -102,7 +94,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallVerbosityOption,
             SdkOption,
             RuntimeOption,
-            Arm32Option,
             X86Option,
             X64Option
         };
@@ -191,11 +182,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             var archSelection = (BundleArch)0;
 
-            if (commandResult.OptionResult(Arm32Option.Name) != null)
-            {
-                archSelection |= BundleArch.Arm32;
-            }
-
             if (commandResult.OptionResult(X86Option.Name) != null)
             {
                 archSelection |= BundleArch.X86;
@@ -208,7 +194,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (archSelection == 0)
             {
-                archSelection = BundleArch.Arm32 | BundleArch.X86 | BundleArch.X64;
+                archSelection = BundleArch.X86 | BundleArch.X64;
             }
 
             return archSelection;

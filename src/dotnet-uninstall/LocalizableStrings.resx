@@ -117,9 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Arm32OptionDescription" xml:space="preserve">
-    <value>Can be used with --sdk and --runtime to remove arm32.</value>
-  </data>
   <data name="BundleTypeNotSpecifiedExceptionMessage" xml:space="preserve">
     <value>Please specified the bundle type to uninstall</value>
   </data>
@@ -156,9 +153,6 @@
   <data name="SpecifiedVersionNotFoundExceptionMessageFormat" xml:space="preserve">
     <value>The specified version is not found: {0}</value>
   </data>
-  <data name="UninstallAllBelowOptionArgumentDescription" xml:space="preserve">
-    <value>The specified version to remain.</value>
-  </data>
   <data name="UninstallAllBelowOptionArgumentName" xml:space="preserve">
     <value>VERSION</value>
   </data>
@@ -167,9 +161,6 @@
   </data>
   <data name="UninstallAllButLatestOptionDescription" xml:space="preserve">
     <value>Remove .NET Core SDKs or Runtimes, except the one highest version.</value>
-  </data>
-  <data name="UninstallAllButOptionArgumentDescription" xml:space="preserve">
-    <value>The specified versions to remain.</value>
   </data>
   <data name="UninstallAllButOptionArgumentName" xml:space="preserve">
     <value>VERSIONS</value>
@@ -195,9 +186,6 @@
   <data name="UninstallationFailedExceptionWithExitCodeMessageFormat" xml:space="preserve">
     <value>The uninstallation operation failed with the exit code: {1}. Command: {0}</value>
   </data>
-  <data name="UninstallMajorMinorOptionArgumentDescription" xml:space="preserve">
-    <value>The specified `major.minor` version to uninstall</value>
-  </data>
   <data name="UninstallMajorMinorOptionArgumentName" xml:space="preserve">
     <value>MAJOR_MINOR</value>
   </data>
@@ -212,9 +200,6 @@
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
     <value>Remove specified .NET Core SDKs and Runtimes.</value>
-  </data>
-  <data name="UninstallVerbosityOptionArgumentDescription" xml:space="preserve">
-    <value>The specified verbosity level.</value>
   </data>
   <data name="UninstallVerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>

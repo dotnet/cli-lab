@@ -2,11 +2,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="zh-Hans" original="../LocalizableStrings.resx">
     <body>
-      <trans-unit id="Arm32OptionDescription">
-        <source>Can be used with --sdk and --runtime to remove arm32.</source>
-        <target state="new">Can be used with --sdk and --runtime to remove arm32.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="BundleTypeNotSpecifiedExceptionMessage">
         <source>Please specified the bundle type to uninstall</source>
         <target state="new">Please specified the bundle type to uninstall</target>
@@ -72,11 +67,6 @@
         <target state="new">The specified version is not found: {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallAllBelowOptionArgumentDescription">
-        <source>The specified version to remain.</source>
-        <target state="new">The specified version to remain.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="UninstallAllBelowOptionArgumentName">
         <source>VERSION</source>
         <target state="new">VERSION</target>
@@ -90,11 +80,6 @@
       <trans-unit id="UninstallAllButLatestOptionDescription">
         <source>Remove .NET Core SDKs or Runtimes, except the one highest version.</source>
         <target state="new">Remove .NET Core SDKs or Runtimes, except the one highest version.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UninstallAllButOptionArgumentDescription">
-        <source>The specified versions to remain.</source>
-        <target state="new">The specified versions to remain.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButOptionArgumentName">
@@ -127,11 +112,6 @@
         <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews.</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallMajorMinorOptionArgumentDescription">
-        <source>The specified `major.minor` version to uninstall</source>
-        <target state="new">The specified `major.minor` version to uninstall</target>
-        <note />
-      </trans-unit>
       <trans-unit id="UninstallMajorMinorOptionArgumentName">
         <source>MAJOR_MINOR</source>
         <target state="new">MAJOR_MINOR</target>
@@ -155,11 +135,6 @@
       <trans-unit id="UninstallNoOptionDescription">
         <source>Remove specified .NET Core SDKs and Runtimes.</source>
         <target state="new">Remove specified .NET Core SDKs and Runtimes.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UninstallVerbosityOptionArgumentDescription">
-        <source>The specified verbosity level.</source>
-        <target state="new">The specified verbosity level.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallVerbosityOptionArgumentName">
