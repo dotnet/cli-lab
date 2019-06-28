@@ -33,11 +33,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             HandleVersionOption();
 
-            if (RuntimeInfo.RunningOnLinux)
-            {
-                throw new LinuxNotSupportedException();
-            }
-
             if (RuntimeInfo.RunningOnWindows)
             {
                 var filtered = GetFilteredBundles(RegistryQuery.GetInstalledBundles());
@@ -46,6 +41,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             else if (RuntimeInfo.RunningOnOSX)
             {
                 throw new NotImplementedException();
+            }
+            else
+            {
+                throw new OperatingSystemNotSupportedException();
             }
         }
 

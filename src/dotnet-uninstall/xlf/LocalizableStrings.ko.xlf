@@ -17,11 +17,6 @@
         <target state="new">The specified version is not valid: "{0}".</target>
         <note />
       </trans-unit>
-      <trans-unit id="LinuxNotSupportedExceptionMessage">
-        <source>This command is not supported on this operating system.</source>
-        <target state="new">This command is not supported on this operating system.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListCommandDescription">
         <source>List .NET Core SDKs or Runtimes that can be removed with this tool.</source>
         <target state="new">List .NET Core SDKs or Runtimes that can be removed with this tool.</target>
@@ -40,6 +35,11 @@
       <trans-unit id="NotAdminExceptionMessage">
         <source>The current user does not have administrator privileges. Please re-run the command prompt as administrator</source>
         <target state="new">The current user does not have administrator privileges. Please re-run the command prompt as administrator</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OperatingSystemNotSupportedExceptionMessage">
+        <source>This command is not supported on this operating system.</source>
+        <target state="new">This command is not supported on this operating system.</target>
         <note />
       </trans-unit>
       <trans-unit id="OptionsConflictExceptionMessageFormat">

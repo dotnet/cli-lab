@@ -88,15 +88,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This command is not supported on this operating system..
-        /// </summary>
-        internal static string LinuxNotSupportedExceptionMessage {
-            get {
-                return ResourceManager.GetString("LinuxNotSupportedExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to List .NET Core SDKs or Runtimes that can be removed with this tool..
         /// </summary>
         internal static string ListCommandDescription {
@@ -129,6 +120,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string NotAdminExceptionMessage {
             get {
                 return ResourceManager.GetString("NotAdminExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This command is not supported on this operating system..
+        /// </summary>
+        internal static string OperatingSystemNotSupportedExceptionMessage {
+            get {
+                return ResourceManager.GetString("OperatingSystemNotSupportedExceptionMessage", resourceCulture);
             }
         }
         

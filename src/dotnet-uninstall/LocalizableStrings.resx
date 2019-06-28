@@ -126,7 +126,7 @@
   <data name="InvalidInputVersionExceptionMessageFormat" xml:space="preserve">
     <value>The specified version is not valid: "{0}".</value>
   </data>
-  <data name="LinuxNotSupportedExceptionMessage" xml:space="preserve">
+  <data name="OperatingSystemNotSupportedExceptionMessage" xml:space="preserve">
     <value>This command is not supported on this operating system.</value>
   </data>
   <data name="ListCommandDescription" xml:space="preserve">

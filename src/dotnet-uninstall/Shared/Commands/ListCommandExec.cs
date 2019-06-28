@@ -25,9 +25,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 throw new NotImplementedException();
             }
-            else if (RuntimeInfo.RunningOnLinux)
+            else
             {
-                throw new LinuxNotSupportedException();
+                throw new OperatingSystemNotSupportedException();
             }
         }
 
