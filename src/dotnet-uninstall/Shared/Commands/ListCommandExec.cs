@@ -80,7 +80,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
                 gridView.SetChild(new ContentView(bundle.Version.ToString()), 1, index);
-                gridView.SetChild(new ContentView($"({bundle.Arch.ToString().ToLower()})"), 2, index);
+                gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 2, index);
             }
 
             return gridView;
