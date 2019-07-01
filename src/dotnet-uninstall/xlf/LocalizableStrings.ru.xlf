@@ -3,8 +3,8 @@
   <file datatype="xml" source-language="en" target-language="ru" original="../LocalizableStrings.resx">
     <body>
       <trans-unit id="BundleTypeNotSpecifiedExceptionMessage">
-        <source>Specify either --sdk or --runtime.</source>
-        <target state="new">Specify either --sdk or --runtime.</target>
+        <source>You must specify either --sdk or --runtime.</source>
+        <target state="new">You must specify either --sdk or --runtime.</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandArgOptionConflictExceptionMessageFormat">

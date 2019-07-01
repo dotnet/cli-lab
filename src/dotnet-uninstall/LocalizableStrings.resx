@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BundleTypeNotSpecifiedExceptionMessage" xml:space="preserve">
-    <value>Specify either --sdk or --runtime.</value>
+    <value>You must specify either --sdk or --runtime.</value>
   </data>
   <data name="CommandArgOptionConflictExceptionMessageFormat" xml:space="preserve">
     <value>Please use either command arguments or the specified option: {0}</value>

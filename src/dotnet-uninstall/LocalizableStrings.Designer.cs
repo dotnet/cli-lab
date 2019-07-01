@@ -61,7 +61,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Specify either --sdk or --runtime..
+        ///   Looks up a localized string similar to You must specify either --sdk or --runtime..
         /// </summary>
         internal static string BundleTypeNotSpecifiedExceptionMessage {
             get {
