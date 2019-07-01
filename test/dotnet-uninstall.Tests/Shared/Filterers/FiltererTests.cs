@@ -20,6 +20,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         internal const BundleArch DefaultTestArchSelection = BundleArch.Arm32 | BundleArch.X86 | BundleArch.X64;
 
+        private static readonly string TestUninstallCommand = "some random uninstall command";
+        private static readonly string TestDisplayName = "some random display name";
+
         internal static Bundle<SdkVersion> Sdk_3_0_100_P5_X64 = GetBundleFromInput<SdkVersion>("3.0.100-preview5-011568", BundleArch.X64);
         internal static Bundle<SdkVersion> Sdk_2_2_300_X64 = GetBundleFromInput<SdkVersion>("2.2.300", BundleArch.X64);
         internal static Bundle<SdkVersion> Sdk_2_2_222_X86 = GetBundleFromInput<SdkVersion>("2.2.222", BundleArch.X86);
@@ -102,7 +105,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         private static Bundle<TBundleVersion> GetBundleFromInput<TBundleVersion>(string input, BundleArch arch)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
-            return Bundle.From(BundleVersion.FromInput<TBundleVersion>(input), arch, input) as Bundle<TBundleVersion>;
+            var version = BundleVersion.FromInput<TBundleVersion>(input);
+            return Bundle.From(version, arch, TestUninstallCommand, TestDisplayName) as Bundle<TBundleVersion>;
         }
     }
 }

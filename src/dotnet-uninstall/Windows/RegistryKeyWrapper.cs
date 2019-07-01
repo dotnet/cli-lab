@@ -16,7 +16,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             ParseVersionAndArch(displayName, bundleCachePath, out var version, out var arch);
 
-            return Bundle.From(version, arch, uninstallCommand);
+            return Bundle.From(version, arch, uninstallCommand, displayName);
         }
 
         private static void ParseVersionAndArch(string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)

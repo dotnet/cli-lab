@@ -85,5 +85,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         {
             return HashCode.Combine(SemVer);
         }
+
+        public abstract Bundle ToBundle(BundleArch arch, string uninstallCommand, string displayName);
     }
 }
