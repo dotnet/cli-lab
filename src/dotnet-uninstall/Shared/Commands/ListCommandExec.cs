@@ -4,6 +4,7 @@ using System.CommandLine;
 using System.CommandLine.Rendering;
 using System.CommandLine.Rendering.Views;
 using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
@@ -19,11 +20,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             if (RuntimeInfo.RunningOnWindows)
             {
-                Execute(RegistryQuery.GetInstalledBundles());
+                Execute(RegistryQuery.GetInstalledBundles(), bundles => Windows.ListCommandExec.GetGridView(bundles.ToList()));
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
-                throw new NotImplementedException();
+                Execute(FileSystemExplorer.GetInstalledBundles(), bundles => MacOs.ListCommandExec.GetGridView(bundles.ToList()));
             }
             else
             {
@@ -31,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static void Execute(IEnumerable<Bundle> bundles)
+        private static void Execute(IEnumerable<Bundle> bundles, Func<IEnumerable<Bundle>, GridView> gridViewGetter)
         {
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
@@ -49,7 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     .OrderByDescending(sdk => sdk);
 
                 stackView.Add(new ContentView(LocalizableStrings.ListCommandSdkHeader));
-                stackView.Add(GetGridView(sdks.ToArray()));
+                stackView.Add(gridViewGetter.Invoke(sdks.ToArray()));
                 stackView.Add(new ContentView(string.Empty));
             }
 
@@ -60,30 +61,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     .OrderByDescending(runtime => runtime);
 
                 stackView.Add(new ContentView(LocalizableStrings.ListCommandRuntimeHeader));
-                stackView.Add(GetGridView(runtimes.ToArray()));
+                stackView.Add(gridViewGetter.Invoke(runtimes.ToArray()));
                 stackView.Add(new ContentView(string.Empty));
             }
 
             stackView.Render(
                 new ConsoleRenderer(new SystemConsole()),
                 new Region(0, 0, Console.WindowWidth, Console.WindowHeight));
-        }
-
-        private static GridView GetGridView(IList<Bundle> bundles)
-        {
-            var gridView = new GridView();
-
-            gridView.SetColumns(Enumerable.Repeat(ColumnDefinition.SizeToContent(), 3).ToArray());
-            gridView.SetRows(Enumerable.Repeat(RowDefinition.SizeToContent(), Math.Max(bundles.Count, 1)).ToArray());
-
-            foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
-            {
-                gridView.SetChild(new ContentView(string.Empty), 0, index);
-                gridView.SetChild(new ContentView(bundle.Version.ToString()), 1, index);
-                gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 2, index);
-            }
-
-            return gridView;
         }
     }
 }
