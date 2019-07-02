@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using System.CommandLine.Rendering.Views;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
     internal static class ListCommandExec
     {
+        public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
+            new BundleTypePrintInfo[]
+            {
+                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader),
+                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader)
+            };
+
         public static GridView GetGridView(IList<Bundle> bundles)
         {
             var gridView = new GridView();

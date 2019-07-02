@@ -6,7 +6,6 @@ using System.CommandLine.Rendering.Views;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
-using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
@@ -20,11 +19,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             if (RuntimeInfo.RunningOnWindows)
             {
-                Execute(RegistryQuery.GetInstalledBundles(), bundles => Windows.ListCommandExec.GetGridView(bundles.ToList()));
+                Execute(
+                    RegistryQuery.GetInstalledBundles(),
+                    Windows.ListCommandExec.SupportedBundleTypes,
+                    bundles => Windows.ListCommandExec.GetGridView(bundles.ToList()));
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
-                Execute(FileSystemExplorer.GetInstalledBundles(), bundles => MacOs.ListCommandExec.GetGridView(bundles.ToList()));
+                Execute(
+                    FileSystemExplorer.GetInstalledBundles(),
+                    MacOs.ListCommandExec.SupportedBundleTypes,
+                    bundles => MacOs.ListCommandExec.GetGridView(bundles.ToList()));
             }
             else
             {
@@ -32,7 +37,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static void Execute(IEnumerable<Bundle> bundles, Func<IEnumerable<Bundle>, GridView> gridViewGetter)
+        private static void Execute(
+            IEnumerable<Bundle> bundles,
+            IEnumerable<BundleTypePrintInfo> supportedBundleTypes,
+            Func<IEnumerable<Bundle>, GridView> gridViewGetter)
         {
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
@@ -43,26 +51,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
 
-            if ((typeSelection & BundleType.Sdk) > 0)
+            foreach (var bundleType in supportedBundleTypes)
             {
-                var sdks = Bundle<SdkVersion>
-                    .FilterWithSameBundleType(filteredBundlesByArch)
-                    .OrderByDescending(sdk => sdk);
+                if ((typeSelection & bundleType.Type) > 0)
+                {
+                    var filteredBundlesByType = bundleType
+                        .Filter(filteredBundlesByArch)
+                        .OrderByDescending(bundle => bundle);
 
-                stackView.Add(new ContentView(LocalizableStrings.ListCommandSdkHeader));
-                stackView.Add(gridViewGetter.Invoke(sdks.ToArray()));
-                stackView.Add(new ContentView(string.Empty));
-            }
-
-            if ((typeSelection & BundleType.Runtime) > 0)
-            {
-                var runtimes = Bundle<RuntimeVersion>
-                    .FilterWithSameBundleType(filteredBundlesByArch)
-                    .OrderByDescending(runtime => runtime);
-
-                stackView.Add(new ContentView(LocalizableStrings.ListCommandRuntimeHeader));
-                stackView.Add(gridViewGetter.Invoke(runtimes.ToArray()));
-                stackView.Add(new ContentView(string.Empty));
+                    stackView.Add(new ContentView(bundleType.Header));
+                    stackView.Add(gridViewGetter.Invoke(filteredBundlesByType.ToArray()));
+                    stackView.Add(new ContentView(string.Empty));
+                }
             }
 
             stackView.Render(
