@@ -27,14 +27,14 @@
         <target state="new">.NET Core SDKs:</target>
         <note />
       </trans-unit>
-      <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessage">
-        <source>You must specify exactly one version.</source>
-        <target state="new">You must specify exactly one version.</target>
+      <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
+        <source>You must specify exactly one version for option: {0}.</source>
+        <target state="new">You must specify exactly one version for option: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="MoreThanZeroVersionSpecifiedExceptionMessage">
-        <source>You cannot specify a version.</source>
-        <target state="new">You cannot specify a version.</target>
+      <trans-unit id="MoreThanZeroVersionSpecifiedExceptionMessageFormat">
+        <source>You cannot specify a version for option: {0}.</source>
+        <target state="new">You cannot specify a version for option: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotAdminExceptionMessage">

@@ -159,17 +159,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (specifiedOption != null && commandResult.Arguments.Count > 0)
             {
+                var optionName = $"--{specifiedOption.Name}";
+
                 if (specifiedOption.Equals(UninstallAllButOption))
                 {
-                    throw new VersionBeforeOptionException($"--{UninstallAllButOption.Name}");
+                    throw new VersionBeforeOptionException(optionName);
                 }
                 else if (specifiedOption.Equals(UninstallAllBelowOption) || specifiedOption.Equals(UninstallMajorMinorOption))
                 {
-                    throw new MoreThanOneVersionSpecifiedException();
+                    throw new MoreThanOneVersionSpecifiedException(optionName);
                 }
                 else
                 {
-                    throw new MoreThanZeroVersionSpecifiedException();
+                    throw new MoreThanZeroVersionSpecifiedException(optionName);
                 }
             }
 

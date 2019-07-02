@@ -191,8 +191,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action1.Should().Throw<MoreThanZeroVersionSpecifiedException>(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessage);
-            action2.Should().Throw<MoreThanZeroVersionSpecifiedException>(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessage);
+            action1.Should().Throw<MoreThanZeroVersionSpecifiedException>(string.Format(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessageFormat, option));
+            action2.Should().Throw<MoreThanZeroVersionSpecifiedException>(string.Format(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessageFormat, option));
         }
 
         [Theory]
@@ -206,8 +206,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action1.Should().Throw<MoreThanOneVersionSpecifiedException>(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessage);
-            action2.Should().Throw<MoreThanOneVersionSpecifiedException>(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessage);
+            action1.Should().Throw<MoreThanOneVersionSpecifiedException>(string.Format(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessageFormat, option));
+            action2.Should().Throw<MoreThanOneVersionSpecifiedException>(string.Format(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessageFormat, option));
         }
 
         [Theory]

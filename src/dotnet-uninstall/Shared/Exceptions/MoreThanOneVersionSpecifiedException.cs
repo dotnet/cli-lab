@@ -2,8 +2,8 @@
 {
     internal class MoreThanOneVersionSpecifiedException : DotNetUninstallException
     {
-        public MoreThanOneVersionSpecifiedException() :
-            base(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessage)
+        public MoreThanOneVersionSpecifiedException(string option) :
+            base(string.Format(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessageFormat, option))
         { }
     }
 }

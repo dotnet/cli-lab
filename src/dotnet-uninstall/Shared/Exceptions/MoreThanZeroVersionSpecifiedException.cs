@@ -2,8 +2,8 @@
 {
     internal class MoreThanZeroVersionSpecifiedException : DotNetUninstallException
     {
-        public MoreThanZeroVersionSpecifiedException() :
-            base(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessage)
+        public MoreThanZeroVersionSpecifiedException(string option) :
+            base(string.Format(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessageFormat, option))
         { }
     }
 }

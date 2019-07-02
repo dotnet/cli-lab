@@ -106,20 +106,20 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must specify exactly one version..
+        ///   Looks up a localized string similar to You must specify exactly one version for option: {0}..
         /// </summary>
-        internal static string MoreThanOneVersionSpecifiedExceptionMessage {
+        internal static string MoreThanOneVersionSpecifiedExceptionMessageFormat {
             get {
-                return ResourceManager.GetString("MoreThanOneVersionSpecifiedExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("MoreThanOneVersionSpecifiedExceptionMessageFormat", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You cannot specify a version..
+        ///   Looks up a localized string similar to You cannot specify a version for option: {0}..
         /// </summary>
-        internal static string MoreThanZeroVersionSpecifiedExceptionMessage {
+        internal static string MoreThanZeroVersionSpecifiedExceptionMessageFormat {
             get {
-                return ResourceManager.GetString("MoreThanZeroVersionSpecifiedExceptionMessage", resourceCulture);
+                return ResourceManager.GetString("MoreThanZeroVersionSpecifiedExceptionMessageFormat", resourceCulture);
             }
         }
         
