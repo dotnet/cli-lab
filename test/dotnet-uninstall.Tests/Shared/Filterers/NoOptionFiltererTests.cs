@@ -195,7 +195,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData("2.1.0-rc1", BundleType.Runtime, BundleArch.Arm32 | BundleArch.X86)]
         internal void TestNoOptionFiltererSpecifiedVersionNotFoundException(string argValue, BundleType typeSelection, BundleArch archSelection)
         {
-            TestFiltererException<SpecifiedVersionNotFoundException>(DefaultTestBundles, argValue, typeSelection, archSelection);
+            TestFiltererException<SpecifiedVersionNotFoundException>(DefaultTestBundles, argValue, typeSelection, archSelection, string.Format(LocalizableStrings.SpecifiedVersionNotFoundExceptionMessageFormat, argValue));
         }
 
         internal override void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
@@ -207,14 +207,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
+        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage = null)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
 
             Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
                 .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection);
 
-            action.Should().Throw<TException>();
+            if (errorMessage == null)
+            {
+                action.Should().Throw<TException>();
+            }
+            else
+            {
+                action.Should().Throw<TException>(errorMessage);
+            }
         }
     }
 }

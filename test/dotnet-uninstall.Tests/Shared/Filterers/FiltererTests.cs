@@ -82,7 +82,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [Fact]
         internal void TestFiltererBundleTypeNotSpecifiedException()
         {
-            TestFiltererException<BundleTypeMissingException>(DefaultTestBundles, DefaultTestArgValue, BundleType.Sdk | BundleType.Runtime, DefaultTestArchSelection);
+            TestFiltererException<BundleTypeMissingException>(DefaultTestBundles, DefaultTestArgValue, BundleType.Sdk | BundleType.Runtime, DefaultTestArchSelection, LocalizableStrings.BundleTypeMissingExceptionMessage);
         }
 
         internal virtual void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
@@ -93,13 +93,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
+        internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage = null)
             where TException : Exception
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
 
             Action action = () => OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection, archSelection);
-            action.Should().Throw<TException>();
+
+            if (errorMessage == null)
+            {
+                action.Should().Throw<TException>();
+            }
+            else
+            {
+                action.Should().Throw<TException>(errorMessage);
+            }
         }
 
         private static Bundle<TBundleVersion> GetBundleFromInput<TBundleVersion>(string input, BundleArch arch)

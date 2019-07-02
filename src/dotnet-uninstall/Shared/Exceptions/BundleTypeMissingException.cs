@@ -3,7 +3,7 @@
     internal class BundleTypeMissingException : DotNetUninstallException
     {
         public BundleTypeMissingException() :
-            base(LocalizableStrings.BundleTypeNotSpecifiedExceptionMessage)
+            base(LocalizableStrings.BundleTypeMissingExceptionMessage)
         { }
     }
 }

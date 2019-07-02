@@ -127,8 +127,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData("3.0.100-preview5-011568")]
         internal void TestMajorMinorOptionFiltererInvalidInputVersionStringException(string argValue)
         {
-            TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Sdk, DefaultTestArchSelection);
-            TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Runtime, DefaultTestArchSelection);
+            TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Sdk, DefaultTestArchSelection, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, argValue));
+            TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Runtime, DefaultTestArchSelection, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, argValue));
         }
     }
 }

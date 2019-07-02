@@ -50,7 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         internal void TestFromInputReject(string input)
         {
             Action action = () => MajorMinorVersion.FromInput(input);
-            action.Should().Throw<InvalidInputVersionException>();
+            action.Should().Throw<InvalidInputVersionException>(string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, input));
 
             MajorMinorVersion.TryFromInput(input, out var majorMinor)
                 .Should().BeFalse();
