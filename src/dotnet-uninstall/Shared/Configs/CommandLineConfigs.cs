@@ -140,22 +140,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)
         {
-            Option specifiedOption = null;
+            var specified = UninstallMainOptions
+                .Where(option => commandResult.OptionResult(option.Name) != null);
 
-            foreach (var option in UninstallMainOptions)
+            if (specified.Count() > 1)
             {
-                if (commandResult.OptionResult(option.Name) != null)
-                {
-                    if (specifiedOption == null)
-                    {
-                        specifiedOption = option;
-                    }
-                    else
-                    {
-                        throw new OptionsConflictException(specifiedOption, option);
-                    }
-                }
+                throw new OptionsConflictException(specified);
             }
+
+            var specifiedOption = specified.FirstOrDefault();
 
             if (specifiedOption != null && commandResult.Arguments.Count > 0)
             {

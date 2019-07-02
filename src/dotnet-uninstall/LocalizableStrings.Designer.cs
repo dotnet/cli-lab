@@ -124,7 +124,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current user does not have administrator privileges. Please re-run the command prompt as administrator.
+        ///   Looks up a localized string similar to The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup..
         /// </summary>
         internal static string NotAdminExceptionMessage {
             get {
@@ -142,7 +142,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify only one of the options: {0}, {1}.
+        ///   Looks up a localized string similar to You must specify only one of the options: {0}..
         /// </summary>
         internal static string OptionsConflictExceptionMessageFormat {
             get {
@@ -151,7 +151,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Required argument missing for the uninstall command.
+        ///   Looks up a localized string similar to Required argument missing for the uninstall command..
         /// </summary>
         internal static string RequiredArgMissingForUninstallCommandExceptionMessage {
             get {
@@ -178,7 +178,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified version is not found: {0}.
+        ///   Looks up a localized string similar to The specified version is not found: {0}..
         /// </summary>
         internal static string SpecifiedVersionNotFoundExceptionMessageFormat {
             get {
@@ -268,7 +268,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to wait for the uninstallation operation to complete: {0}.
+        ///   Looks up a localized string similar to Timeout during uninstall: {0}..
         /// </summary>
         internal static string UninstallationFailedExceptionMessageFormat {
             get {
@@ -277,7 +277,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The uninstallation operation failed with the exit code: {1}. Command: {0}.
+        ///   Looks up a localized string similar to The uninstallation operation failed. Exit code was {1} for {0}..
         /// </summary>
         internal static string UninstallationFailedExceptionWithExitCodeMessageFormat {
             get {

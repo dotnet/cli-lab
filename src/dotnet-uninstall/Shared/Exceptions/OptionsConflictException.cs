@@ -1,11 +1,13 @@
-﻿using System.CommandLine;
+﻿using System.Collections.Generic;
+using System.CommandLine;
+using System.Linq;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
     internal class OptionsConflictException : DotNetUninstallException
     {
-        public OptionsConflictException(Option option1, Option option2) :
-            base(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, $"--{option1.Name}", $"--{option2.Name}"))
+        public OptionsConflictException(IEnumerable<Option> options) :
+            base(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, string.Join(", ", options.Select(option => $"--{option.Name}"))))
         { }
     }
 }
