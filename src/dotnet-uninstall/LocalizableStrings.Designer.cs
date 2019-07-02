@@ -70,15 +70,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please use either command arguments or the specified option: {0}.
-        /// </summary>
-        internal static string CommandArgOptionConflictExceptionMessageFormat {
-            get {
-                return ResourceManager.GetString("CommandArgOptionConflictExceptionMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
@@ -111,6 +102,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandSdkHeader {
             get {
                 return ResourceManager.GetString("ListCommandSdkHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must specify exactly one version..
+        /// </summary>
+        internal static string MoreThanOneVersionSpecifiedExceptionMessage {
+            get {
+                return ResourceManager.GetString("MoreThanOneVersionSpecifiedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot specify a version..
+        /// </summary>
+        internal static string MoreThanZeroVersionSpecifiedExceptionMessage {
+            get {
+                return ResourceManager.GetString("MoreThanZeroVersionSpecifiedExceptionMessage", resourceCulture);
             }
         }
         
@@ -336,6 +345,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallVerbosityOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallVerbosityOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do not use a version before an option: {0}..
+        /// </summary>
+        internal static string VersionBeforeOptionExceptionMessageFormat {
+            get {
+                return ResourceManager.GetString("VersionBeforeOptionExceptionMessageFormat", resourceCulture);
             }
         }
         

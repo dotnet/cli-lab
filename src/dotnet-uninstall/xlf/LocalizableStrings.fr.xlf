@@ -7,11 +7,6 @@
         <target state="new">You must specify either --sdk or --runtime.</target>
         <note />
       </trans-unit>
-      <trans-unit id="CommandArgOptionConflictExceptionMessageFormat">
-        <source>Please use either command arguments or the specified option: {0}</source>
-        <target state="new">Please use either command arguments or the specified option: {0}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
@@ -30,6 +25,16 @@
       <trans-unit id="ListCommandSdkHeader">
         <source>.NET Core SDKs:</source>
         <target state="new">.NET Core SDKs:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessage">
+        <source>You must specify exactly one version.</source>
+        <target state="new">You must specify exactly one version.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MoreThanZeroVersionSpecifiedExceptionMessage">
+        <source>You cannot specify a version.</source>
+        <target state="new">You cannot specify a version.</target>
         <note />
       </trans-unit>
       <trans-unit id="NotAdminExceptionMessage">
@@ -155,6 +160,11 @@
       <trans-unit id="UninstallationFailedExceptionWithExitCodeMessageFormat">
         <source>The uninstallation operation failed with the exit code: {1}. Command: {0}</source>
         <target state="new">The uninstallation operation failed with the exit code: {1}. Command: {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
+        <source>Do not use a version before an option: {0}.</source>
+        <target state="new">Do not use a version before an option: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="X64OptionDescription">

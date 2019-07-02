@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -158,7 +159,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (specifiedOption != null && commandResult.Arguments.Count > 0)
             {
-                throw new CommandArgOptionConflictException(specifiedOption);
+                if (specifiedOption.Equals(UninstallAllButOption))
+                {
+                    throw new VersionBeforeOptionException($"--{UninstallAllButOption.Name}");
+                }
+                else if (specifiedOption.Equals(UninstallAllBelowOption) || specifiedOption.Equals(UninstallMajorMinorOption))
+                {
+                    throw new MoreThanOneVersionSpecifiedException();
+                }
+                else
+                {
+                    throw new MoreThanZeroVersionSpecifiedException();
+                }
             }
 
             return specifiedOption;

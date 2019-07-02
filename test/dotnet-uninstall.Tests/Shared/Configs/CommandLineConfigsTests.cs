@@ -182,32 +182,51 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
         [Theory]
         [InlineData("--all", "2.2.300")]
-        [InlineData("--all-below", "2.1.700", "2.2.300")]
         [InlineData("--all", "--unknown-option")]
-        [InlineData("--all-below", "--unknown-option-1", "--unknown-option-2")]
-        internal void TestGetUninstallMainOptionCommandArgOptionConflictExceptionCommandArgAfter(string option, string commandArgValue, string optionArgValue = "")
+        internal void TestGetUninstallMainOptionMoreThanZeroVersionSpecifiedException(string option, string commandArgValue)
         {
-            Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {optionArgValue} {commandArgValue}")
+            Action action1 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {commandArgValue}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action.Should().Throw<CommandArgOptionConflictException>(string.Format(LocalizableStrings.CommandArgOptionConflictExceptionMessageFormat, option));
+            Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option}")
+            .RootCommandResult.GetUninstallMainOption();
+
+            action1.Should().Throw<MoreThanZeroVersionSpecifiedException>(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessage);
+            action2.Should().Throw<MoreThanZeroVersionSpecifiedException>(LocalizableStrings.MoreThanZeroVersionSpecifiedExceptionMessage);
         }
 
         [Theory]
-        [InlineData("--all", "2.2.300")]
         [InlineData("--all-below", "2.1.700", "2.2.300")]
-        [InlineData("--all-but", "2.2.300 2.1.700")]
-        [InlineData("--all", "--unknown-option")]
         [InlineData("--all-below", "--unknown-option-1", "--unknown-option-2")]
+        internal void TestGetUninstallMainOptionMoreThanOneVersionSpecifiedException(string option, string commandArgValue, string optionArgValue)
+        {
+            Action action1 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option} {optionArgValue} {commandArgValue}")
+            .RootCommandResult.GetUninstallMainOption();
+
+            Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
+            .RootCommandResult.GetUninstallMainOption();
+
+            action1.Should().Throw<MoreThanOneVersionSpecifiedException>(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessage);
+            action2.Should().Throw<MoreThanOneVersionSpecifiedException>(LocalizableStrings.MoreThanOneVersionSpecifiedExceptionMessage);
+        }
+
+        [Theory]
+        [InlineData("--all-but", "2.2.300")]
+        [InlineData("--all-but", "2.2.300 2.1.700")]
         [InlineData("--all-but", "--unknown-option 2.1.700")]
         [InlineData("--all-but", "2.1.700 --unknown-option")]
         [InlineData("--all-but", "--unknown-option-1 --unknown-option-2")]
-        internal void TestGetUninstallMainOptionCommandArgOptionConflictExceptionCommandArgBefore(string option, string commandArgValue, string optionArgValue = "")
+        [InlineData("--all-but", "2.2.300", "2.1.700")]
+        [InlineData("--all-but", "2.2.300 2.1.700", "2.1.202 2.2.233")]
+        [InlineData("--all-but", "--unknown-option 2.1.700", "--unknown-option-2")]
+        [InlineData("--all-but", "2.1.700 --unknown-option", "--unknown-option-2 2.3.333")]
+        [InlineData("--all-but", "--unknown-option-1 --unknown-option-2", "3.0.100")]
+        internal void TestGetUninstallMainOptionVersionBeforeOptionException(string option, string commandArgValue, string optionArgValue = "")
         {
             Action action = () => CommandLineConfigs.UninstallRootCommand.Parse($"{commandArgValue} {option} {optionArgValue}")
             .RootCommandResult.GetUninstallMainOption();
 
-            action.Should().Throw<CommandArgOptionConflictException>(string.Format(LocalizableStrings.CommandArgOptionConflictExceptionMessageFormat, option));
+            action.Should().Throw<VersionBeforeOptionException>(string.Format(LocalizableStrings.VersionBeforeOptionExceptionMessageFormat, option));
         }
 
         [Theory]
