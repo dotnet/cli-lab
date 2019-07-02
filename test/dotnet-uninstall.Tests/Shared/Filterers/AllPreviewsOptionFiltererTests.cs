@@ -19,7 +19,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 new List<Bundle>
                 {
                     Sdk_3_0_100_P5_X64,
-                    Sdk_2_1_300_Rc1_Arm32,
+                    Sdk_2_1_300_Rc1_X64,
                     Sdk_2_1_300_Rc1_X86
                 },
                 BundleType.Sdk,
@@ -33,7 +33,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 {
                     Runtime_3_0_0_P5_X64,
                     Runtime_3_0_0_P5_X86,
-                    Runtime_3_0_0_P_Arm32,
+                    Runtime_3_0_0_P_X86,
                     Runtime_2_1_0_Rc1_X64
                 },
                 BundleType.Runtime,
@@ -45,10 +45,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestBundles,
                 new List<Bundle>
                 {
-                    Sdk_2_1_300_Rc1_Arm32
+                    Sdk_3_0_100_P5_X64,
+                    Sdk_2_1_300_Rc1_X64
                 },
                 BundleType.Sdk,
-                BundleArch.Arm32
+                BundleArch.X64
             };
 
             yield return new object[]
@@ -57,10 +58,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 new List<Bundle>
                 {
                     Runtime_3_0_0_P5_X86,
-                    Runtime_3_0_0_P_Arm32
+                    Runtime_3_0_0_P_X86
                 },
                 BundleType.Runtime,
-                BundleArch.Arm32 | BundleArch.X86
+                BundleArch.X86
             };
         }
 

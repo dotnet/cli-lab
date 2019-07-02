@@ -24,6 +24,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 throw new BundleTypeMissingException();
             }
         }
+
+        protected void ValidateArchSelection(BundleArch archSelection)
+        {
+            if ((int)archSelection < 1 || archSelection > (BundleArch.X86 | BundleArch.X64))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+        }
     }
 
     internal abstract class ArgFilterer<TArg> : Filterer
@@ -37,6 +45,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public IEnumerable<Bundle> Filter(TArg argValue, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             ValidateTypeSelection(typeSelection);
+            ValidateArchSelection(archSelection);
 
             var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
 
@@ -68,6 +77,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
         public IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
             ValidateTypeSelection(typeSelection);
+            ValidateArchSelection(archSelection);
 
             var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
 

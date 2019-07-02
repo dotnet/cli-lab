@@ -110,8 +110,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new Bundle<RuntimeVersion>(TestRuntimeVersion2, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
-                new Bundle<RuntimeVersion>(TestRuntimeVersion2, BundleArch.Arm32, TestUninstallCommand2, TestDisplayName1)
+                new Bundle<RuntimeVersion>(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
+                new Bundle<RuntimeVersion>(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1)
             };
 
             yield return new object[]
@@ -122,20 +122,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
 
             yield return new object[]
             {
-                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
-                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand2, TestDisplayName1)
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.X86, TestUninstallCommand2, TestDisplayName1)
             };
 
             yield return new object[]
             {
-                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
-                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName2)
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.X64, TestUninstallCommand1, TestDisplayName2)
             };
 
             yield return new object[]
             {
-                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
-                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.Arm32, TestUninstallCommand2, TestDisplayName2)
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
+                new Bundle<SdkVersion>(TestSdkVersion2, BundleArch.X86, TestUninstallCommand2, TestDisplayName2)
             };
         }
 
@@ -160,12 +160,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 TestRuntimeVersion1,
                 BundleArch.X86
             };
-
-            yield return new object[]
-            {
-                TestRuntimeVersion1,
-                BundleArch.Arm32
-            };
         }
 
         [Theory]
@@ -188,18 +182,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             {
                 Bundle.From(new SdkVersion("2.1.700"), BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
                 Bundle.From(new SdkVersion("2.2.300"), BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
-            };
-
-            yield return new object[]
-            {
-                Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
-                Bundle.From(TestRuntimeVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1)
-            };
-
-            yield return new object[]
-            {
-                Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
-                Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
             };
 
             yield return new object[]
@@ -259,16 +241,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                     Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand2, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
-                    Bundle.From(TestSdkVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
+                    Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
-                    Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1)
+                    Bundle.From(TestRuntimeVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1)
                 },
                 new List<Bundle<RuntimeVersion>>
                 {
                     Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1) as Bundle<RuntimeVersion>,
                     Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1) as Bundle<RuntimeVersion>,
-                    Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1) as Bundle<RuntimeVersion>
+                    Bundle.From(TestRuntimeVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1) as Bundle<RuntimeVersion>
                 }
             };
 
@@ -278,13 +260,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 {
                     Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
-                    Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1)
+                    Bundle.From(TestRuntimeVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1)
                 },
                 new List<Bundle<RuntimeVersion>>
                 {
                     Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1) as Bundle<RuntimeVersion>,
                     Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1) as Bundle<RuntimeVersion>,
-                    Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1) as Bundle<RuntimeVersion>
+                    Bundle.From(TestRuntimeVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1) as Bundle<RuntimeVersion>
                 }
             };
 
@@ -294,7 +276,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 {
                     Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand2, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
-                    Bundle.From(TestSdkVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
+                    Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1)
                 },
                 new List<Bundle<RuntimeVersion>>()
@@ -306,7 +288,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 {
                     Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
-                    Bundle.From(TestRuntimeVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1)
+                    Bundle.From(TestRuntimeVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1)
                 },
                 new List<Bundle<SdkVersion>>()
             };
@@ -317,14 +299,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 {
                     Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand2, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
-                    Bundle.From(TestSdkVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1),
+                    Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1)
                 },
                 new List<Bundle<SdkVersion>>
                 {
                     Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand2, TestDisplayName1) as Bundle<SdkVersion>,
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1) as Bundle<SdkVersion>,
-                    Bundle.From(TestSdkVersion1, BundleArch.Arm32, TestUninstallCommand1, TestDisplayName1) as Bundle<SdkVersion>,
+                    Bundle.From(TestSdkVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1) as Bundle<SdkVersion>,
                     Bundle.From(TestSdkVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1) as Bundle<SdkVersion>
                 }
             };

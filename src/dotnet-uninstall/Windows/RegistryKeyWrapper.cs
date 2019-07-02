@@ -36,7 +36,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 case "x64": arch = BundleArch.X64; break;
                 case "x86": arch = BundleArch.X86; break;
-                case "arm32": arch = BundleArch.Arm32; break;
                 default: throw new ArgumentException();
             }
         }
