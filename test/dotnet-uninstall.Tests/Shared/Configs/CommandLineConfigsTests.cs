@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.Linq;
 using FluentAssertions;
@@ -159,25 +160,147 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
                 .Should().Be(option.Equals(string.Empty) ? null : rootCommandResult.OptionResult(option).Option);
         }
 
-        [Theory]
-        [InlineData("--all", "--all-lower-patches")]
-        [InlineData("--all", "--all-below", "", "2.2.300")]
-        [InlineData("--all", "--all-but", "", "2.2.300 2.1.700")]
-        [InlineData("--all-below", "--major-minor", "2.2.300", "2.1")]
-        [InlineData("--all-below", "--all-but", "2.2.300", "2.1.700 3.0.100")]
-        [InlineData("--all-below", "--all-but", "2.2.300", "2.1.700 3.0.100 --unknown-option")]
-        [InlineData("--all-below", "--all-but", "--unknown-option", "2.1.700 3.0.100")]
-        [InlineData("--all-below", "--major-minor", "2.2.300", "--unknown-option")]
-        internal void TestGetUninstallMainOptionOptionsConflictException(string option1, string option2, string argValue1 = "", string argValue2 = "")
+        public static IEnumerable<object[]> GetDataForTestGetUninstallMainOptionOptionsConflictException()
         {
-            Action action1 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option1} {argValue1} {option2} {argValue2}")
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-lower-patches", ArgValue: "")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-below", ArgValue: "2.2.300")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-but", ArgValue: "2.2.300 2.1.700")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-below", ArgValue: "2.1.700"),
+                (Option: "--major-minor", ArgValue: "2.1")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-below", ArgValue: "2.1.700"),
+                (Option: "--all-but", ArgValue: "2.2.300 3.0.100")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-below", ArgValue: "2.1.700"),
+                (Option: "--all-but", ArgValue: "2.2.300 3.0.100 --unknown-option")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-below", ArgValue: "--unknown-option"),
+                (Option: "--all-but", ArgValue: "2.2.300 3.0.100")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-below", ArgValue: "2.2.300"),
+                (Option: "--major-minor", ArgValue: "--unknown-option")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-lower-patches", ArgValue: ""),
+                (Option: "--all", ArgValue: "")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-below", ArgValue: "2.2.300"),
+                (Option: "--all", ArgValue: "")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-but", ArgValue: "2.2.300 2.1.700"),
+                (Option: "--all", ArgValue: "")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--major-minor", ArgValue: "2.1"),
+                (Option: "--all-below", ArgValue: "2.1.700")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-but", ArgValue: "2.2.300 3.0.100"),
+                (Option: "--all-below", ArgValue: "2.1.700")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-but", ArgValue: "2.2.300 3.0.100 --unknown-option"),
+                (Option: "--all-below", ArgValue: "2.1.700")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all-but", ArgValue: "2.2.300 3.0.100"),
+                (Option: "--all-below", ArgValue: "--unknown-option")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--major-minor", ArgValue: "--unknown-option"),
+                (Option: "--all-below", ArgValue: "2.2.300")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-lower-patches", ArgValue: ""),
+                (Option: "--all-below", ArgValue: "2.2.300")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-below", ArgValue: "2.1.700"),
+                (Option: "--all-but", ArgValue: "2.2.300 --unknown-option")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-but", ArgValue: "2.1.700 3.0.100"),
+                (Option: "--all-but", ArgValue: "2.2.300 --unknown-option")
+            };
+
+            yield return new object[]
+            {
+                (Option: "--all", ArgValue: ""),
+                (Option: "--all-below", ArgValue: "2.1.700"),
+                (Option: "--all-but", ArgValue: "2.2.300 --unknown-option"),
+                (Option: "--all-lower-patches", ArgValue: ""),
+                (Option: "--major-minor", ArgValue: "2.2"),
+                (Option: "--all-previews-but-latest", ArgValue: "")
+            };
+        }
+
+        [Theory]
+        [MemberData(nameof(GetDataForTestGetUninstallMainOptionOptionsConflictException))]
+        internal void TestGetUninstallMainOptionOptionsConflictException(params (string Option, string ArgValue)[] options)
+        {
+            var command = string.Join(" ", options.Select(option => $"{option.Option} {option.ArgValue}"));
+            var optionNames = string.Join(", ", options.Select(option => $"--{option.Option}"));
+
+            Action action = () => CommandLineConfigs.UninstallRootCommand.Parse(command)
             .RootCommandResult.GetUninstallMainOption();
 
-            Action action2 = () => CommandLineConfigs.UninstallRootCommand.Parse($"{option2} {argValue2} {option1} {argValue1}")
-            .RootCommandResult.GetUninstallMainOption();
-
-            action1.Should().Throw<OptionsConflictException>(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, option1, option2));
-            action2.Should().Throw<OptionsConflictException>(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, option1, option2));
+            action.Should().Throw<OptionsConflictException>(string.Format(LocalizableStrings.OptionsConflictExceptionMessageFormat, optionNames));
         }
 
         [Theory]

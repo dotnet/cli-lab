@@ -136,10 +136,10 @@
     <value>.NET Core SDKs:</value>
   </data>
   <data name="OptionsConflictExceptionMessageFormat" xml:space="preserve">
-    <value>Please specify only one of the options: {0}, {1}</value>
+    <value>You must specify only one of the options: {0}.</value>
   </data>
   <data name="RequiredArgMissingForUninstallCommandExceptionMessage" xml:space="preserve">
-    <value>Required argument missing for the uninstall command</value>
+    <value>Required argument missing for the uninstall command.</value>
   </data>
   <data name="RuntimeOptionDescription" xml:space="preserve">
     <value>Remove .NET Core Runtimes only.</value>
@@ -148,7 +148,7 @@
     <value>Remove .NET Core SDKs only.</value>
   </data>
   <data name="SpecifiedVersionNotFoundExceptionMessageFormat" xml:space="preserve">
-    <value>The specified version is not found: {0}</value>
+    <value>The specified version is not found: {0}.</value>
   </data>
   <data name="UninstallAllBelowOptionArgumentName" xml:space="preserve">
     <value>VERSION</value>
@@ -178,10 +178,10 @@
     <value>Remove .NET Core SDKs or Runtimes that are marked as previews.</value>
   </data>
   <data name="UninstallationFailedExceptionMessageFormat" xml:space="preserve">
-    <value>Failed to wait for the uninstallation operation to complete: {0}</value>
+    <value>Timeout during uninstall: {0}.</value>
   </data>
   <data name="UninstallationFailedExceptionWithExitCodeMessageFormat" xml:space="preserve">
-    <value>The uninstallation operation failed with the exit code: {1}. Command: {0}</value>
+    <value>The uninstallation operation failed. Exit code was {1} for {0}.</value>
   </data>
   <data name="UninstallMajorMinorOptionArgumentName" xml:space="preserve">
     <value>MAJOR_MINOR</value>
@@ -211,7 +211,7 @@
     <value>Can be used with --sdk and --runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
-    <value>The current user does not have administrator privileges. Please re-run the command prompt as administrator</value>
+    <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup.</value>
   </data>
   <data name="MoreThanOneVersionSpecifiedExceptionMessageFormat" xml:space="preserve">
     <value>You must specify exactly one version for option: {0}.</value>
