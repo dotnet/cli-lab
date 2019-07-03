@@ -58,6 +58,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list --all --sdk -v")]
         [InlineData("list --all-but 2.2.5 --verbosity --runtime")]
         [InlineData("list --major-minor 2.2 --sdk -v --runtime")]
+        [InlineData("list --version")]
+        [InlineData("list -v q --version")]
+        [InlineData("list --sdk --version")]
+        [InlineData("list --sdk --runtime --version")]
         internal void TestListCommandReject(string command)
         {
             CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
@@ -375,6 +379,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             parseResult.RootCommandResult.GetTypeSelection()
                 .Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("--version")]
+        [InlineData("--all --sdk --version")]
+        [InlineData("2.2.300 --runtime --version")]
+        [InlineData("--version 2.2.300 --runtime")]
+        [InlineData("--version --major-minor 2.1")]
+        [InlineData("--version --all-but 2.2.300 2.1.700")]
+        internal void TestVersionOption(string command)
+        {
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
+
+            parseResult.Errors.Should().BeEmpty();
+            parseResult.UnparsedTokens.Should().BeEmpty();
+            parseResult.UnmatchedTokens.Should().BeEmpty();
+
+            parseResult.HasOption(CommandLineConfigs.VersionOption)
+                .Should().BeTrue();
         }
     }
 }
