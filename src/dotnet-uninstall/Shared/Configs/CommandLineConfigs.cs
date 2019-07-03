@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -116,6 +115,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "list",
             LocalizableStrings.ListCommandDescription);
 
+        public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel>
+        {
+            { "q", VerbosityLevel.Quiet }, { "quiet", VerbosityLevel.Quiet },
+            { "m", VerbosityLevel.Minimal }, { "minimal", VerbosityLevel.Minimal },
+            { "n", VerbosityLevel.Normal }, { "normal", VerbosityLevel.Normal },
+            { "d", VerbosityLevel.Detailed }, { "detailed", VerbosityLevel.Detailed },
+            { "diag", VerbosityLevel.Diagnostic }, { "diagnostic", VerbosityLevel.Diagnostic }
+        };
+
         static CommandLineConfigs()
         {
             UninstallRootCommand.Add(ListCommand);
@@ -213,6 +221,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
 
             return archSelection;
+        }
+
+        public static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
+        {
+            var optionResult = commandResult.OptionResult(UninstallVerbosityOption.Name);
+
+            if (optionResult == null)
+            {
+                return VerbosityLevel.Normal;
+            }
+
+            var levelString = optionResult.GetValueOrDefault<string>();
+
+            if (VerbosityLevels.TryGetValue(levelString, out var level))
+            {
+                return level;
+            }
+            else
+            {
+                throw new VerbosityLevelInvalidException();
+            }
         }
     }
 }

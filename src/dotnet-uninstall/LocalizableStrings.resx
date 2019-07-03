@@ -222,4 +222,7 @@
   <data name="VersionBeforeOptionExceptionMessageFormat" xml:space="preserve">
     <value>Do not use a version before an option: {0}.</value>
   </data>
+  <data name="VerbosityLevelInvalidExceptionMessage" xml:space="preserve">
+    <value>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
+  </data>
 </root>

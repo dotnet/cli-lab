@@ -162,6 +162,11 @@
         <target state="new">The uninstallation operation failed. Exit code was {1} for {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="VerbosityLevelInvalidExceptionMessage">
+        <source>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
+        <target state="new">Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
+        <note />
+      </trans-unit>
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
         <source>Do not use a version before an option: {0}.</source>
         <target state="new">Do not use a version before an option: {0}.</target>

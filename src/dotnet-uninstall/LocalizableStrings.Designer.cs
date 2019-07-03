@@ -349,6 +349,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]..
+        /// </summary>
+        internal static string VerbosityLevelInvalidExceptionMessage {
+            get {
+                return ResourceManager.GetString("VerbosityLevelInvalidExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not use a version before an option: {0}..
         /// </summary>
         internal static string VersionBeforeOptionExceptionMessageFormat {
