@@ -93,21 +93,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage = null)
+        internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
             where TException : Exception
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
-
             Action action = () => OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection, archSelection);
 
-            if (errorMessage == null)
-            {
-                action.Should().Throw<TException>();
-            }
-            else
-            {
-                action.Should().Throw<TException>(errorMessage);
-            }
+            action.Should().Throw<TException>();
+        }
+
+        internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage)
+            where TException : Exception
+        {
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
+            Action action = () => OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection, archSelection);
+
+            action.Should().Throw<TException>(errorMessage);
         }
 
         private static Bundle<TBundleVersion> GetBundleFromInput<TBundleVersion>(string input, BundleArch arch)
