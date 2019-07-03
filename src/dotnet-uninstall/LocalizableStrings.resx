@@ -117,23 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Arm32OptionDescription" xml:space="preserve">
-    <value>Uninstall arm32 .NET Core bundles only</value>
-  </data>
-  <data name="BundleTypeNotSpecifiedExceptionMessage" xml:space="preserve">
-    <value>Please specified the bundle type to uninstall</value>
-  </data>
-  <data name="CommandArgOptionConflictExceptionMessageFormat" xml:space="preserve">
-    <value>Please use either command arguments or the specified option: {0}</value>
+  <data name="BundleTypeMissingExceptionMessage" xml:space="preserve">
+    <value>You must specify either --sdk or --runtime.</value>
   </data>
   <data name="InvalidInputVersionExceptionMessageFormat" xml:space="preserve">
-    <value>The specified version is not valid: {0}</value>
+    <value>The specified version is not valid: "{0}".</value>
   </data>
-  <data name="LinuxNotSupportedExceptionMessage" xml:space="preserve">
-    <value>The Linux operating systems are not supported</value>
+  <data name="OperatingSystemNotSupportedExceptionMessage" xml:space="preserve">
+    <value>This command is not supported on this operating system.</value>
   </data>
   <data name="ListCommandDescription" xml:space="preserve">
-    <value>List the .NET Core bundles that are installed globally on the machine</value>
+    <value>List .NET Core SDKs or Runtimes that can be removed with this tool.</value>
   </data>
   <data name="ListCommandRuntimeHeader" xml:space="preserve">
     <value>.NET Core Runtimes:</value>
@@ -142,93 +136,90 @@
     <value>.NET Core SDKs:</value>
   </data>
   <data name="OptionsConflictExceptionMessageFormat" xml:space="preserve">
-    <value>Please specify only one of the options: {0}, {1}</value>
+    <value>You must specify only one of the options: {0}.</value>
   </data>
   <data name="RequiredArgMissingForUninstallCommandExceptionMessage" xml:space="preserve">
-    <value>Required argument missing for the uninstall command</value>
+    <value>Required argument missing for the uninstall command.</value>
   </data>
   <data name="RuntimeOptionDescription" xml:space="preserve">
-    <value>Uninstall .NET Core Runtimes only</value>
+    <value>Remove .NET Core Runtimes only.</value>
   </data>
   <data name="SdkOptionDescription" xml:space="preserve">
-    <value>Uninstall .NET Core SDKs only</value>
+    <value>Remove .NET Core SDKs only.</value>
   </data>
   <data name="SpecifiedVersionNotFoundExceptionMessageFormat" xml:space="preserve">
-    <value>The specified version is not found: {0}</value>
-  </data>
-  <data name="UninstallAllBelowOptionArgumentDescription" xml:space="preserve">
-    <value>The specified .NET Core bundle version</value>
+    <value>The specified version is not found: {0}.</value>
   </data>
   <data name="UninstallAllBelowOptionArgumentName" xml:space="preserve">
-    <value>BUNDLE-VERSION</value>
+    <value>VERSION</value>
   </data>
   <data name="UninstallAllBelowOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core bundles below specified version. The specified version will remain</value>
+    <value>Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain.</value>
   </data>
   <data name="UninstallAllButLatestOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core bundles, except the highest version</value>
-  </data>
-  <data name="UninstallAllButOptionArgumentDescription" xml:space="preserve">
-    <value>The specified .NET Core bundle versions to remain</value>
+    <value>Remove .NET Core SDKs or Runtimes, except the one highest version.</value>
   </data>
   <data name="UninstallAllButOptionArgumentName" xml:space="preserve">
-    <value>BUNDLE-VERSIONS</value>
+    <value>VERSIONS</value>
   </data>
   <data name="UninstallAllButOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core bundles, except those listed</value>
+    <value>Remove .NET Core SDKs or Runtimes, except those specified.</value>
   </data>
   <data name="UninstallAllLowerPatchesOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core bundles that have been replaced by higher patches</value>
+    <value>Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</value>
   </data>
   <data name="UninstallAllOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core bundles installed globally on the machine</value>
+    <value>Remove all .NET Core SDKs or Runtimes.</value>
   </data>
   <data name="UninstallAllPreviewsButLatestOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core Preview bundles that are marked as previews, except the latest preview</value>
+    <value>Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</value>
   </data>
   <data name="UninstallAllPreviewsOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core Preview bundles that are marked as previews</value>
+    <value>Remove .NET Core SDKs or Runtimes that are marked as previews.</value>
   </data>
   <data name="UninstallationFailedExceptionMessageFormat" xml:space="preserve">
-    <value>Failed to wait for the uninstallation operation to complete: {0}</value>
+    <value>Timeout during uninstall: {0}.</value>
   </data>
   <data name="UninstallationFailedExceptionWithExitCodeMessageFormat" xml:space="preserve">
-    <value>The uninstallation operation failed with the exit code: {1}. Command: {0}</value>
-  </data>
-  <data name="UninstallMajorMinorOptionArgumentDescription" xml:space="preserve">
-    <value>The specified major.minor version</value>
+    <value>The uninstallation operation failed. Exit code was {1} for {0}.</value>
   </data>
   <data name="UninstallMajorMinorOptionArgumentName" xml:space="preserve">
-    <value>MAJOR-MINOR</value>
+    <value>MAJOR_MINOR</value>
   </data>
   <data name="UninstallMajorMinorOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core bundles that match the specified major.minor version</value>
+    <value>Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</value>
   </data>
   <data name="UninstallNoOptionArgumentDescription" xml:space="preserve">
-    <value>The specified .NET Core bundle versions to uninstall</value>
+    <value>The specified versions to uninstall.</value>
   </data>
   <data name="UninstallNoOptionArgumentName" xml:space="preserve">
-    <value>BUNDLE-VERSIONS</value>
+    <value>VERSIONS</value>
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
-    <value>Remove the .NET Core bundles specified</value>
-  </data>
-  <data name="UninstallVerbosityOptionArgumentDescription" xml:space="preserve">
-    <value>The specified verbosity level</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</value>
   </data>
   <data name="UninstallVerbosityOptionArgumentName" xml:space="preserve">
-    <value>VERBOSITY-LEVEL</value>
+    <value>LEVEL</value>
   </data>
   <data name="UninstallVerbosityOptionDescription" xml:space="preserve">
-    <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]</value>
+    <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
   </data>
   <data name="X64OptionDescription" xml:space="preserve">
-    <value>Uninstall x64 .NET Core bundles only</value>
+    <value>Can be used with --sdk and --runtime to remove x64.</value>
   </data>
   <data name="X86OptionDescription" xml:space="preserve">
-    <value>Uninstall x86 .NET Core bundles only</value>
+    <value>Can be used with --sdk and --runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
-    <value>The current user does not have administrator privileges. Please re-run the command prompt as administrator</value>
+    <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup.</value>
+  </data>
+  <data name="MoreThanOneVersionSpecifiedExceptionMessageFormat" xml:space="preserve">
+    <value>You must specify exactly one version for option: {0}.</value>
+  </data>
+  <data name="MoreThanZeroVersionSpecifiedExceptionMessageFormat" xml:space="preserve">
+    <value>You cannot specify a version for option: {0}.</value>
+  </data>
+  <data name="VersionBeforeOptionExceptionMessageFormat" xml:space="preserve">
+    <value>Do not use a version before an option: {0}.</value>
   </data>
 </root>

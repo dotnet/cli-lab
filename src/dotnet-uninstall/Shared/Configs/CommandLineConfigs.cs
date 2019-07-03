@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
+using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
@@ -26,8 +28,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallAllButOptionDescription,
             new Argument<IEnumerable<string>>
             {
-                Name = LocalizableStrings.UninstallAllButOptionArgumentName,
-                Description = LocalizableStrings.UninstallAllButOptionArgumentDescription
+                Name = LocalizableStrings.UninstallAllButOptionArgumentName
             });
 
         public static readonly Option UninstallAllBelowOption = new Option(
@@ -35,8 +36,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallAllBelowOptionDescription,
             new Argument<string>
             {
-                Name = LocalizableStrings.UninstallAllBelowOptionArgumentName,
-                Description = LocalizableStrings.UninstallAllBelowOptionArgumentDescription
+                Name = LocalizableStrings.UninstallAllBelowOptionArgumentName
             });
 
         public static readonly Option UninstallAllPreviewsOption = new Option(
@@ -52,8 +52,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallMajorMinorOptionDescription,
             new Argument<string>
             {
-                Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName,
-                Description = LocalizableStrings.UninstallMajorMinorOptionArgumentDescription
+                Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName
             });
 
         public static readonly Option UninstallVerbosityOption = new Option(
@@ -61,8 +60,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.UninstallVerbosityOptionDescription,
             new Argument<string>
             {
-                Name = LocalizableStrings.UninstallVerbosityOptionArgumentName,
-                Description = LocalizableStrings.UninstallVerbosityOptionArgumentDescription
+                Name = LocalizableStrings.UninstallVerbosityOptionArgumentName
             });
 
         public static readonly Option SdkOption = new Option(
@@ -73,10 +71,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--runtime",
             LocalizableStrings.RuntimeOptionDescription);
 
-        public static readonly Option Arm32Option = new Option(
-            "--arm32",
-            LocalizableStrings.Arm32OptionDescription);
-
         public static readonly Option X86Option = new Option(
             "--x86",
             LocalizableStrings.X86OptionDescription);
@@ -84,6 +78,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly Option X64Option = new Option(
             "--x64",
             LocalizableStrings.X64OptionDescription);
+
+        public static readonly Option VersionOption = new Option(
+            "--version",
+            isHidden: true);
 
         public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
@@ -102,7 +100,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallVerbosityOption,
             SdkOption,
             RuntimeOption,
-            Arm32Option,
             X86Option,
             X64Option
         };
@@ -123,14 +120,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             UninstallRootCommand.Add(ListCommand);
 
-            foreach (var option in UninstallMainOptions)
+            foreach (var option in UninstallMainOptions
+                .Concat(AuxOptions)
+                .Append(VersionOption)
+                .OrderBy(option => option.Name))
             {
                 UninstallRootCommand.AddOption(option);
             }
 
-            foreach (var option in AuxOptions)
+            foreach (var option in AuxOptions
+                .OrderBy(option => option.Name))
             {
-                UninstallRootCommand.AddOption(option);
                 ListCommand.Add(option);
             }
 
@@ -140,26 +140,32 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)
         {
-            Option specifiedOption = null;
+            var specified = UninstallMainOptions
+                .Where(option => commandResult.OptionResult(option.Name) != null);
 
-            foreach (var option in UninstallMainOptions)
+            if (specified.Count() > 1)
             {
-                if (commandResult.OptionResult(option.Name) != null)
-                {
-                    if (specifiedOption == null)
-                    {
-                        specifiedOption = option;
-                    }
-                    else
-                    {
-                        throw new OptionsConflictException(specifiedOption, option);
-                    }
-                }
+                throw new OptionsConflictException(specified);
             }
+
+            var specifiedOption = specified.FirstOrDefault();
 
             if (specifiedOption != null && commandResult.Arguments.Count > 0)
             {
-                throw new CommandArgOptionConflictException(specifiedOption);
+                var optionName = $"--{specifiedOption.Name}";
+
+                if (specifiedOption.Equals(UninstallAllButOption))
+                {
+                    throw new VersionBeforeOptionException(optionName);
+                }
+                else if (specifiedOption.Equals(UninstallAllBelowOption) || specifiedOption.Equals(UninstallMajorMinorOption))
+                {
+                    throw new MoreThanOneVersionSpecifiedException(optionName);
+                }
+                else
+                {
+                    throw new MoreThanZeroVersionSpecifiedException(optionName);
+                }
             }
 
             return specifiedOption;
@@ -191,11 +197,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             var archSelection = (BundleArch)0;
 
-            if (commandResult.OptionResult(Arm32Option.Name) != null)
-            {
-                archSelection |= BundleArch.Arm32;
-            }
-
             if (commandResult.OptionResult(X86Option.Name) != null)
             {
                 archSelection |= BundleArch.X86;
@@ -208,7 +209,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (archSelection == 0)
             {
-                archSelection = BundleArch.Arm32 | BundleArch.X86 | BundleArch.X64;
+                archSelection = BundleArch.X86 | BundleArch.X64;
             }
 
             return archSelection;

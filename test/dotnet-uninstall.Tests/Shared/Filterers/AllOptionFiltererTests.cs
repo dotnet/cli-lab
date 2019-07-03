@@ -35,6 +35,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestBundles,
                 new List<Bundle<SdkVersion>>
                 {
+                    Sdk_2_2_202_X64,
+                    Sdk_2_1_300_Rc1_X64,
                     Sdk_2_1_700_X64,
                     Sdk_3_0_100_P5_X64,
                     Sdk_2_2_300_X64
@@ -51,11 +53,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                     Runtime_2_2_4_X86,
                     Runtime_2_2_5_X86,
                     Runtime_3_0_0_P5_X86,
-                    Runtime_2_2_5_Arm32,
-                    Runtime_3_0_0_P_Arm32
+                    Runtime_3_0_0_P_X86
                 },
                 BundleType.Runtime,
-                BundleArch.Arm32 | BundleArch.X86
+                BundleArch.X86
             };
         }
 

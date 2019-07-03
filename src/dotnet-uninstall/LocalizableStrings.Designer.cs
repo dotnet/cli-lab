@@ -61,34 +61,16 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall arm32 .NET Core bundles only.
+        ///   Looks up a localized string similar to You must specify either --sdk or --runtime..
         /// </summary>
-        internal static string Arm32OptionDescription {
+        internal static string BundleTypeMissingExceptionMessage {
             get {
-                return ResourceManager.GetString("Arm32OptionDescription", resourceCulture);
+                return ResourceManager.GetString("BundleTypeMissingExceptionMessage", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specified the bundle type to uninstall.
-        /// </summary>
-        internal static string BundleTypeNotSpecifiedExceptionMessage {
-            get {
-                return ResourceManager.GetString("BundleTypeNotSpecifiedExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please use either command arguments or the specified option: {0}.
-        /// </summary>
-        internal static string CommandArgOptionConflictExceptionMessageFormat {
-            get {
-                return ResourceManager.GetString("CommandArgOptionConflictExceptionMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The specified version is not valid: {0}.
+        ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
             get {
@@ -97,16 +79,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The Linux operating systems are not supported.
-        /// </summary>
-        internal static string LinuxNotSupportedExceptionMessage {
-            get {
-                return ResourceManager.GetString("LinuxNotSupportedExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to List the .NET Core bundles that are installed globally on the machine.
+        ///   Looks up a localized string similar to List .NET Core SDKs or Runtimes that can be removed with this tool..
         /// </summary>
         internal static string ListCommandDescription {
             get {
@@ -133,7 +106,25 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current user does not have administrator privileges. Please re-run the command prompt as administrator.
+        ///   Looks up a localized string similar to You must specify exactly one version for option: {0}..
+        /// </summary>
+        internal static string MoreThanOneVersionSpecifiedExceptionMessageFormat {
+            get {
+                return ResourceManager.GetString("MoreThanOneVersionSpecifiedExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot specify a version for option: {0}..
+        /// </summary>
+        internal static string MoreThanZeroVersionSpecifiedExceptionMessageFormat {
+            get {
+                return ResourceManager.GetString("MoreThanZeroVersionSpecifiedExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup..
         /// </summary>
         internal static string NotAdminExceptionMessage {
             get {
@@ -142,7 +133,16 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please specify only one of the options: {0}, {1}.
+        ///   Looks up a localized string similar to This command is not supported on this operating system..
+        /// </summary>
+        internal static string OperatingSystemNotSupportedExceptionMessage {
+            get {
+                return ResourceManager.GetString("OperatingSystemNotSupportedExceptionMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You must specify only one of the options: {0}..
         /// </summary>
         internal static string OptionsConflictExceptionMessageFormat {
             get {
@@ -151,7 +151,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Required argument missing for the uninstall command.
+        ///   Looks up a localized string similar to Required argument missing for the uninstall command..
         /// </summary>
         internal static string RequiredArgMissingForUninstallCommandExceptionMessage {
             get {
@@ -160,7 +160,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall .NET Core Runtimes only.
+        ///   Looks up a localized string similar to Remove .NET Core Runtimes only..
         /// </summary>
         internal static string RuntimeOptionDescription {
             get {
@@ -169,7 +169,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall .NET Core SDKs only.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs only..
         /// </summary>
         internal static string SdkOptionDescription {
             get {
@@ -178,7 +178,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified version is not found: {0}.
+        ///   Looks up a localized string similar to The specified version is not found: {0}..
         /// </summary>
         internal static string SpecifiedVersionNotFoundExceptionMessageFormat {
             get {
@@ -187,16 +187,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified .NET Core bundle version.
-        /// </summary>
-        internal static string UninstallAllBelowOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallAllBelowOptionArgumentDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to BUNDLE-VERSION.
+        ///   Looks up a localized string similar to VERSION.
         /// </summary>
         internal static string UninstallAllBelowOptionArgumentName {
             get {
@@ -205,7 +196,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core bundles below specified version. The specified version will remain.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain..
         /// </summary>
         internal static string UninstallAllBelowOptionDescription {
             get {
@@ -214,7 +205,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core bundles, except the highest version.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes, except the one highest version..
         /// </summary>
         internal static string UninstallAllButLatestOptionDescription {
             get {
@@ -223,16 +214,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified .NET Core bundle versions to remain.
-        /// </summary>
-        internal static string UninstallAllButOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallAllButOptionArgumentDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to BUNDLE-VERSIONS.
+        ///   Looks up a localized string similar to VERSIONS.
         /// </summary>
         internal static string UninstallAllButOptionArgumentName {
             get {
@@ -241,7 +223,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core bundles, except those listed.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes, except those specified..
         /// </summary>
         internal static string UninstallAllButOptionDescription {
             get {
@@ -250,7 +232,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core bundles that have been replaced by higher patches.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that have been superceded by higher patches..
         /// </summary>
         internal static string UninstallAllLowerPatchesOptionDescription {
             get {
@@ -259,7 +241,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core bundles installed globally on the machine.
+        ///   Looks up a localized string similar to Remove all .NET Core SDKs or Runtimes..
         /// </summary>
         internal static string UninstallAllOptionDescription {
             get {
@@ -268,7 +250,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core Preview bundles that are marked as previews, except the latest preview.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview..
         /// </summary>
         internal static string UninstallAllPreviewsButLatestOptionDescription {
             get {
@@ -277,7 +259,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core Preview bundles that are marked as previews.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that are marked as previews..
         /// </summary>
         internal static string UninstallAllPreviewsOptionDescription {
             get {
@@ -286,7 +268,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Failed to wait for the uninstallation operation to complete: {0}.
+        ///   Looks up a localized string similar to Timeout during uninstall: {0}..
         /// </summary>
         internal static string UninstallationFailedExceptionMessageFormat {
             get {
@@ -295,7 +277,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The uninstallation operation failed with the exit code: {1}. Command: {0}.
+        ///   Looks up a localized string similar to The uninstallation operation failed. Exit code was {1} for {0}..
         /// </summary>
         internal static string UninstallationFailedExceptionWithExitCodeMessageFormat {
             get {
@@ -304,16 +286,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified major.minor version.
-        /// </summary>
-        internal static string UninstallMajorMinorOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallMajorMinorOptionArgumentDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to MAJOR-MINOR.
+        ///   Looks up a localized string similar to MAJOR_MINOR.
         /// </summary>
         internal static string UninstallMajorMinorOptionArgumentName {
             get {
@@ -322,7 +295,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core bundles that match the specified major.minor version.
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version..
         /// </summary>
         internal static string UninstallMajorMinorOptionDescription {
             get {
@@ -331,7 +304,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified .NET Core bundle versions to uninstall.
+        ///   Looks up a localized string similar to The specified versions to uninstall..
         /// </summary>
         internal static string UninstallNoOptionArgumentDescription {
             get {
@@ -340,7 +313,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BUNDLE-VERSIONS.
+        ///   Looks up a localized string similar to VERSIONS.
         /// </summary>
         internal static string UninstallNoOptionArgumentName {
             get {
@@ -349,7 +322,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove the .NET Core bundles specified.
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers..
         /// </summary>
         internal static string UninstallNoOptionDescription {
             get {
@@ -358,16 +331,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified verbosity level.
-        /// </summary>
-        internal static string UninstallVerbosityOptionArgumentDescription {
-            get {
-                return ResourceManager.GetString("UninstallVerbosityOptionArgumentDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to VERBOSITY-LEVEL.
+        ///   Looks up a localized string similar to LEVEL.
         /// </summary>
         internal static string UninstallVerbosityOptionArgumentName {
             get {
@@ -376,7 +340,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
+        ///   Looks up a localized string similar to Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]..
         /// </summary>
         internal static string UninstallVerbosityOptionDescription {
             get {
@@ -385,7 +349,16 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall x64 .NET Core bundles only.
+        ///   Looks up a localized string similar to Do not use a version before an option: {0}..
+        /// </summary>
+        internal static string VersionBeforeOptionExceptionMessageFormat {
+            get {
+                return ResourceManager.GetString("VersionBeforeOptionExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove x64..
         /// </summary>
         internal static string X64OptionDescription {
             get {
@@ -394,7 +367,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstall x86 .NET Core bundles only.
+        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove x86..
         /// </summary>
         internal static string X86OptionDescription {
             get {

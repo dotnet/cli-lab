@@ -36,5 +36,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         {
             return HashCode.Combine(base.GetHashCode());
         }
+
+        public override Bundle ToBundle(BundleArch arch, string uninstallCommand, string displayName)
+        {
+            return new Bundle<RuntimeVersion>(this, arch, uninstallCommand, displayName);
+        }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
@@ -11,10 +10,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public BundleVersion Version { get; }
         public BundleArch Arch { get; }
         public string UninstallCommand { get; }
+        public string DisplayName { get; }
 
-        public Bundle(BundleVersion version, BundleArch arch, string uninstallCommand)
+        public Bundle(BundleVersion version, BundleArch arch, string uninstallCommand, string displayName)
         {
-            if (version == null || uninstallCommand == null)
+            if (version == null || uninstallCommand == null || displayName == null)
             {
                 throw new ArgumentNullException();
             }
@@ -22,19 +22,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             Version = version;
             Arch = arch;
             UninstallCommand = uninstallCommand;
+            DisplayName = displayName;
         }
 
-        public static Bundle From(BundleVersion version, BundleArch arch, string uninstallCommand)
+        public static Bundle From(BundleVersion version, BundleArch arch, string uninstallCommand, string displayName)
         {
-            switch (version.Type)
-            {
-                case BundleType.Sdk:
-                    return new Bundle<SdkVersion>(version as SdkVersion, arch, uninstallCommand);
-                case BundleType.Runtime:
-                    return new Bundle<RuntimeVersion>(version as RuntimeVersion, arch, uninstallCommand);
-                default:
-                    throw new InvalidEnumArgumentException();
-            }
+            return version.ToBundle(arch, uninstallCommand, displayName);
         }
 
         public override bool Equals(object obj)
@@ -65,7 +58,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     {
         public new TBundleVersion Version => base.Version as TBundleVersion;
 
-        public Bundle(TBundleVersion version, BundleArch arch, string uninstallCommand) : base(version, arch, uninstallCommand) { }
+        public Bundle(TBundleVersion version, BundleArch arch, string uninstallCommand, string displayName) :
+            base(version, arch, uninstallCommand, displayName)
+        { }
 
         public int CompareTo(object obj)
         {

@@ -24,7 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.202",
                 new List<Bundle>
                 {
-                    Sdk_2_2_202_Arm32,
+                    Sdk_2_2_202_X64,
                     Sdk_2_2_202_X86
                 },
                 BundleType.Sdk,
@@ -37,7 +37,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.5",
                 new List<Bundle>
                 {
-                    Runtime_2_2_5_Arm32,
+                    Runtime_2_2_5_X64,
                     Runtime_2_2_5_X86
                 },
                 BundleType.Runtime,
@@ -50,9 +50,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.202 2.1.300-rc1-008673",
                 new List<Bundle>
                 {
-                    Sdk_2_2_202_Arm32,
+                    Sdk_2_2_202_X64,
                     Sdk_2_2_202_X86,
-                    Sdk_2_1_300_Rc1_Arm32,
+                    Sdk_2_1_300_Rc1_X64,
                     Sdk_2_1_300_Rc1_X86
                 },
                 BundleType.Sdk,
@@ -67,7 +67,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 {
                     Runtime_3_0_0_P5_X64,
                     Runtime_3_0_0_P5_X86,
-                    Runtime_2_2_5_Arm32,
+                    Runtime_2_2_5_X64,
                     Runtime_2_2_5_X86
                 },
                 BundleType.Runtime,
@@ -80,7 +80,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.202 2.2.202 2.2.202",
                 new List<Bundle>
                 {
-                    Sdk_2_2_202_Arm32,
+                    Sdk_2_2_202_X64,
                     Sdk_2_2_202_X86
                 },
                 BundleType.Sdk,
@@ -95,7 +95,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 {
                     Runtime_3_0_0_P5_X64,
                     Runtime_3_0_0_P5_X86,
-                    Runtime_2_2_5_Arm32,
+                    Runtime_2_2_5_X64,
                     Runtime_2_2_5_X86,
                     Runtime_2_1_0_Rc1_X64
                 },
@@ -109,10 +109,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.5",
                 new List<Bundle>
                 {
-                    Runtime_2_2_5_Arm32
+                    Runtime_2_2_5_X64
                 },
                 BundleType.Runtime,
-                BundleArch.Arm32
+                BundleArch.X64
             };
 
             yield return new object[]
@@ -125,7 +125,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                     Sdk_2_1_300_Rc1_X86
                 },
                 BundleType.Sdk,
-                BundleArch.X86 | BundleArch.X64
+                BundleArch.X86
             };
 
             yield return new object[]
@@ -134,12 +134,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.5 3.0.0-preview5-27626-15",
                 new List<Bundle>
                 {
-                    Runtime_3_0_0_P5_X64,
                     Runtime_3_0_0_P5_X86,
                     Runtime_2_2_5_X86
                 },
                 BundleType.Runtime,
-                BundleArch.X64 | BundleArch.X86
+                BundleArch.X86
             };
 
             yield return new object[]
@@ -148,10 +147,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 "2.2.202 2.2.202 2.2.202",
                 new List<Bundle>
                 {
-                    Sdk_2_2_202_Arm32
+                    Sdk_2_2_202_X64
                 },
                 BundleType.Sdk,
-                BundleArch.X64 | BundleArch.Arm32
+                BundleArch.X64
             };
 
             yield return new object[]
@@ -161,11 +160,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 new List<Bundle>
                 {
                     Runtime_3_0_0_P5_X64,
-                    Runtime_2_2_5_Arm32,
+                    Runtime_2_2_5_X64,
                     Runtime_2_1_0_Rc1_X64
                 },
                 BundleType.Runtime,
-                BundleArch.Arm32 | BundleArch.X64
+                BundleArch.X64
             };
         }
 
@@ -189,13 +188,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData("2.1.0-rc1-008673", BundleType.Runtime, DefaultTestArchSelection)]
         [InlineData("2.2.5", BundleType.Sdk, DefaultTestArchSelection)]
         [InlineData("2.2.202", BundleType.Runtime, DefaultTestArchSelection)]
-        [InlineData("2.2.222", BundleType.Sdk, BundleArch.Arm32)]
-        [InlineData("3.0.100-preview5-011568", BundleType.Sdk, BundleArch.X86 | BundleArch.Arm32)]
+        [InlineData("2.2.222", BundleType.Sdk, BundleArch.X64)]
+        [InlineData("3.0.100-preview5-011568", BundleType.Sdk, BundleArch.X86 | BundleArch.X86)]
         [InlineData("2.2.4", BundleType.Runtime, BundleArch.X64)]
-        [InlineData("2.1.0-rc1", BundleType.Runtime, BundleArch.Arm32 | BundleArch.X86)]
+        [InlineData("2.1.0-rc1", BundleType.Runtime, BundleArch.X86)]
         internal void TestNoOptionFiltererSpecifiedVersionNotFoundException(string argValue, BundleType typeSelection, BundleArch archSelection)
         {
-            TestFiltererException<SpecifiedVersionNotFoundException>(DefaultTestBundles, argValue, typeSelection, archSelection);
+            TestFiltererException<SpecifiedVersionNotFoundException>(DefaultTestBundles, argValue, typeSelection, archSelection, string.Format(LocalizableStrings.SpecifiedVersionNotFoundExceptionMessageFormat, argValue));
         }
 
         internal override void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
@@ -207,14 +206,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
+        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage = null)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
 
             Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
                 .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection);
 
-            action.Should().Throw<TException>();
+            if (errorMessage == null)
+            {
+                action.Should().Throw<TException>();
+            }
+            else
+            {
+                action.Should().Throw<TException>(errorMessage);
+            }
         }
     }
 }
