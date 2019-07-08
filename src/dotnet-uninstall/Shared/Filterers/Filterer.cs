@@ -47,16 +47,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             ValidateTypeSelection(typeSelection);
             ValidateArchSelection(archSelection);
 
-            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
+            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
 
             var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
-            var filteredSdks = (typeSelection & BundleType.Sdk) > 0 ?
+            var filteredSdks = typeSelection.HasFlag(BundleType.Sdk) ?
                 Filter(argValue, sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
                 new List<Bundle>();
 
-            var filteredRuntimes = (typeSelection & BundleType.Runtime) > 0 ?
+            var filteredRuntimes = typeSelection.HasFlag(BundleType.Runtime) ?
                 Filter(argValue, runtimes).OrderBy(runtime => runtime).Select(runtime => runtime as Bundle) :
                 new List<Bundle>();
 
@@ -79,16 +79,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             ValidateTypeSelection(typeSelection);
             ValidateArchSelection(archSelection);
 
-            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
+            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
 
             var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
-            var filteredSdks = (typeSelection & BundleType.Sdk) > 0 ?
+            var filteredSdks = typeSelection.HasFlag(BundleType.Sdk) ?
                 Filter(sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
                 new List<Bundle>();
 
-            var filteredRuntimes = (typeSelection & BundleType.Runtime) > 0 ?
+            var filteredRuntimes = typeSelection.HasFlag(BundleType.Runtime) ?
                 Filter(runtimes).OrderBy(runtime => runtime).Select(runtime => runtime as Bundle) :
                 new List<Bundle>();
 

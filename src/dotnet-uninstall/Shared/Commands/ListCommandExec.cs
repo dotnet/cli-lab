@@ -40,9 +40,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var stackView = new StackLayoutView();
 
-            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
+            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
 
-            if ((typeSelection & BundleType.Sdk) > 0)
+            if (typeSelection.HasFlag(BundleType.Sdk))
             {
                 var sdks = Bundle<SdkVersion>
                     .FilterWithSameBundleType(filteredBundlesByArch)
@@ -53,7 +53,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 stackView.Add(new ContentView(string.Empty));
             }
 
-            if ((typeSelection & BundleType.Runtime) > 0)
+            if (typeSelection.HasFlag(BundleType.Runtime))
             {
                 var runtimes = Bundle<RuntimeVersion>
                     .FilterWithSameBundleType(filteredBundlesByArch)
