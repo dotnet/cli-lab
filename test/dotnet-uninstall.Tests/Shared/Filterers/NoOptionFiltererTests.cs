@@ -206,21 +206,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 .Should().BeEquivalentTo(expected);
         }
 
-        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage = null)
+        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
-
             Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
                 .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection);
 
-            if (errorMessage == null)
-            {
-                action.Should().Throw<TException>();
-            }
-            else
-            {
-                action.Should().Throw<TException>(errorMessage);
-            }
+            action.Should().Throw<TException>();
+        }
+
+        internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage)
+        {
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
+            Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
+                .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection);
+
+            action.Should().Throw<TException>(errorMessage);
         }
     }
 }
