@@ -1,0 +1,68 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+
+namespace Microsoft.DotNet.Tools.Uninstall.MacOs
+{
+    internal static class FileSystemExplorer
+    {
+        private static readonly string DotNetInstallPath = Path.Combine("/", "usr", "local", "share", "dotnet");
+        private static readonly string DotNetSdkInstallPath = Path.Combine(DotNetInstallPath, "sdk");
+        private static readonly string DotNetRuntimeInstallPath = Path.Combine(DotNetInstallPath, "shared", "Microsoft.NETCore.App");
+        private static readonly string DotNetAspAllInstallPath = Path.Combine(DotNetInstallPath, "shared", "Microsoft.AspNetCore.All");
+        private static readonly string DotNetAspAppInstallPath = Path.Combine(DotNetInstallPath, "shared", "Microsoft.AspNetCore.App");
+        private static readonly string DotNetHostFxrInstallPath = Path.Combine(DotNetInstallPath, "host", "fxr");
+
+        public static IEnumerable<Bundle> GetInstalledBundles()
+        {
+            var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath);
+            var runtimes = GetInstalledBundles<RuntimeVersion>(
+                DotNetRuntimeInstallPath,
+                DotNetAspAllInstallPath,
+                DotNetAspAppInstallPath,
+                DotNetHostFxrInstallPath);
+
+            return sdks.Concat(runtimes);
+        }
+
+        private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)
+            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
+        {
+            return paths
+                .SelectMany(path => GetInstalledVersionsAndUninstallCommands<TBundleVersion>(path))
+                .GroupBy(tuple => tuple.Version)
+                .Select(group => Bundle.From(
+                    group.First().Version,
+                    BundleArch.X64,
+                    CombineUninstallCommands(group.Select(tuple => tuple.UninstallCommand)),
+                    ""));
+        }
+
+        private static IEnumerable<(TBundleVersion Version, string UninstallCommand)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
+            where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
+        {
+            return new DirectoryInfo(path)
+                .EnumerateDirectories()
+                .Select(dirInfo =>
+                {
+                    var success = BundleVersion.TryFromInput<TBundleVersion>(dirInfo.Name, out var version);
+                    return (Success: success, Version: version, UninstallCommand: GetUninstallCommand(dirInfo.FullName));
+                })
+                .Where(tuple => tuple.Success)
+                .Select(tuple => (tuple.Version, tuple.UninstallCommand));
+        }
+
+        private static string GetUninstallCommand(string path)
+        {
+            return $"sudo rm -rf {path}";
+        }
+
+        private static string CombineUninstallCommands(IEnumerable<string> commands)
+        {
+            return string.Join(" && ", commands);
+        }
+    }
+}
