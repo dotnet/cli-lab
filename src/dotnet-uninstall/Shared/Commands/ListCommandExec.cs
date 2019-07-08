@@ -49,11 +49,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var stackView = new StackLayoutView();
 
-            var filteredBundlesByArch = bundles.Where(bundle => (bundle.Arch & archSelection) > 0);
+            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
 
             foreach (var bundleType in supportedBundleTypes)
             {
-                if ((typeSelection & bundleType.Type) > 0)
+                if (typeSelection.HasFlag(bundleType.Type))
                 {
                     var filteredBundlesByType = bundleType
                         .Filter(filteredBundlesByArch)
