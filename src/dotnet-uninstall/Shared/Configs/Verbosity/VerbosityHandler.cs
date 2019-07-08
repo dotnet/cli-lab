@@ -15,7 +15,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity
 
         public void Register(VerbosityLevel level, Action<TArg> action)
         {
-            _actions.Add(level, action);
+            _actions[level] = action;
         }
 
         public void Execute(VerbosityLevel level, TArg argValue)
