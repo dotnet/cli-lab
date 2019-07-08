@@ -331,6 +331,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstalling:.
+        /// </summary>
+        internal static string UninstallNormalVerbosityPrefix {
+            get {
+                return ResourceManager.GetString("UninstallNormalVerbosityPrefix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LEVEL.
         /// </summary>
         internal static string UninstallVerbosityOptionArgumentName {

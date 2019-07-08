@@ -6,6 +6,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
@@ -26,8 +28,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 throw new NotAdminException();
             }
 
+            var verbosityHandler = new VerbosityHandler<Bundle>();
+            verbosityHandler.Register(
+                VerbosityLevel.Normal,
+                bundle => Console.WriteLine($"{LocalizableStrings.UninstallNormalVerbosityPrefix} {bundle.DisplayName}"));
+
+            var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
+
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
+                verbosityHandler.Execute(verbosityLevel, bundle);
+
                 var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
 
                 var process = new Process

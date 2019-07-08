@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.Linq;
@@ -125,6 +126,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             { "diag", VerbosityLevel.Diagnostic }, { "diagnostic", VerbosityLevel.Diagnostic }
         };
 
+        public static readonly ParseResult CommandLineParseResult;
+
         static CommandLineConfigs()
         {
             UninstallRootCommand.Add(ListCommand);
@@ -145,6 +148,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
             UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
+
+            CommandLineParseResult = UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)

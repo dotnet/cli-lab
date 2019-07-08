@@ -396,8 +396,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            parseResult.HasOption(CommandLineConfigs.VersionOption)
-                .Should().BeTrue();
+            parseResult.RootCommandResult.OptionResult(CommandLineConfigs.VersionOption.Name)
+                .Should().NotBeNull();
         }
     }
 }
