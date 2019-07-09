@@ -15,7 +15,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         private const int UNINSTALL_TIMEOUT = 10 * 60 * 1000;
 
         [DllImport("shell32.dll", SetLastError = true)]
-        static extern IntPtr CommandLineToArgvW(
+        internal static extern IntPtr CommandLineToArgvW(
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
