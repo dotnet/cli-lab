@@ -6,6 +6,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
 using System.Reflection;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -29,14 +30,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             HandleVersionOption();
 
+            var filtered = GetFilteredBundles(GetAllBundles());
+
+            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DoItOption.Name) != null)
+            {
+                DoIt(filtered);
+            }
+            else
+            {
+                TryIt(filtered);
+            }
+        }
+
+        private static IEnumerable<Bundle> GetAllBundles()
+        {
             if (RuntimeInfo.RunningOnWindows)
             {
-                var filtered = GetFilteredBundles(RegistryQuery.GetInstalledBundles());
-                Windows.UninstallCommandExec.ExecuteUninstallCommand(filtered);
+                return RegistryQuery.GetInstalledBundles();
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
-                throw new NotImplementedException();
+                return FileSystemExplorer.GetInstalledBundles();
             }
             else
             {
@@ -63,6 +77,38 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 return OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineConfigs.CommandLineParseResult, option, bundles, typeSelection, archSelection);
             }
+        }
+
+        private static void DoIt(IEnumerable<Bundle> bundles)
+        {
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                Windows.UninstallCommandExec.ExecuteUninstallCommand(bundles);
+            }
+            else if (RuntimeInfo.RunningOnOSX)
+            {
+                throw new NotImplementedException();
+            }
+            else
+            {
+                throw new OperatingSystemNotSupportedException();
+            }
+        }
+
+        private static void TryIt(IEnumerable<Bundle> bundles)
+        {
+            Console.WriteLine(LocalizableStrings.DryRunStartMessage);
+
+            foreach (var bundle in bundles)
+            {
+                Console.WriteLine(string.Format(LocalizableStrings.DryRunBundleFormat, bundle.DisplayName));
+            }
+
+            Console.WriteLine(LocalizableStrings.DryRunEndMessage);
+            Console.WriteLine();
+            Console.WriteLine(string.Format(
+                LocalizableStrings.DryRunHowToDoItMessageFormat,
+                string.Join(" ", Environment.GetCommandLineArgs())));
         }
 
         private static void HandleVersionOption()

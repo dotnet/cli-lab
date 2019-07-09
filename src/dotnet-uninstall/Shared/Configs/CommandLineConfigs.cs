@@ -84,6 +84,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--version",
             isHidden: true);
 
+        public static readonly Option DoItOption = new Option(
+            "--do-it",
+            LocalizableStrings.DoItOptionDescription);
+
         public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
             UninstallAllOption,
@@ -135,6 +139,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             foreach (var option in UninstallMainOptions
                 .Concat(AuxOptions)
                 .Append(VersionOption)
+                .Append(DoItOption)
                 .OrderBy(option => option.Name))
             {
                 UninstallRootCommand.AddOption(option);

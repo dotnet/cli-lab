@@ -31,6 +31,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
+            string bundleTypeString;
+            switch (new TBundleVersion().Type)
+            {
+                case BundleType.Sdk: bundleTypeString = "SDK"; break;
+                case BundleType.Runtime: bundleTypeString = "Runtime"; break;
+                default: throw new ArgumentException();
+            }
+
             return paths
                 .SelectMany(path => GetInstalledVersionsAndUninstallCommands<TBundleVersion>(path))
                 .GroupBy(tuple => tuple.Version)
@@ -38,7 +46,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                     group.First().Version,
                     BundleArch.X64,
                     CombineUninstallCommands(group.Select(tuple => tuple.UninstallCommand)),
-                    ""));
+                    string.Format(bundleTypeString, group.First().Version.ToString())));
         }
 
         private static IEnumerable<(TBundleVersion Version, string UninstallCommand)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)

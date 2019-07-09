@@ -7,6 +7,31 @@
         <target state="new">You must specify either --sdk or --runtime.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DoItOptionDescription">
+        <source>Actually uninstall specified .NET Core SDKs or Runtimes.</source>
+        <target state="new">Actually uninstall specified .NET Core SDKs or Runtimes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DryRunBundleFormat">
+        <source>Would uninstall: {0}.</source>
+        <target state="new">Would uninstall: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DryRunEndMessage">
+        <source>*** END DRY RUN</source>
+        <target state="new">*** END DRY RUN</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DryRunHowToDoItMessageFormat">
+        <source>To actually uninstall, add --do-it: {0} --do-it.</source>
+        <target state="new">To actually uninstall, add --do-it: {0} --do-it.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DryRunStartMessage">
+        <source>*** DRY RUN</source>
+        <target state="new">*** DRY RUN</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
@@ -25,6 +50,11 @@
       <trans-unit id="ListCommandSdkHeader">
         <source>.NET Core SDKs:</source>
         <target state="new">.NET Core SDKs:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacOsBundleDisplayNameFormat">
+        <source>Microsoft .NET Core {0} {1} (x64)</source>
+        <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
         <note />
       </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
