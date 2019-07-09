@@ -28,16 +28,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 throw new NotAdminException();
             }
 
-            var verbosityHandler = new VerbosityHandler<Bundle>();
-            verbosityHandler.Register(
-                VerbosityLevel.Normal,
-                bundle => Console.WriteLine(string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName)));
-
             var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
+            var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
-                verbosityHandler.Execute(verbosityLevel, bundle);
+                verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
 
                 var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
 
