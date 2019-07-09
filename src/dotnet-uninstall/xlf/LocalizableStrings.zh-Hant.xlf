@@ -38,8 +38,8 @@
         <note />
       </trans-unit>
       <trans-unit id="NotAdminExceptionMessage">
-        <source>The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup.</source>
-        <target state="new">The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup.</target>
+        <source>The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperatingSystemNotSupportedExceptionMessage">
