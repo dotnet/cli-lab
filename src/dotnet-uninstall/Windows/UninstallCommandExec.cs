@@ -31,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var verbosityHandler = new VerbosityHandler<Bundle>();
             verbosityHandler.Register(
                 VerbosityLevel.Normal,
-                bundle => Console.WriteLine($"{LocalizableStrings.UninstallNormalVerbosityPrefix} {bundle.DisplayName}"));
+                bundle => Console.WriteLine(string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName)));
 
             var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
 

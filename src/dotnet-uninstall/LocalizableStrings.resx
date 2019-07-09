@@ -225,7 +225,7 @@
   <data name="VerbosityLevelInvalidExceptionMessage" xml:space="preserve">
     <value>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
   </data>
-  <data name="UninstallNormalVerbosityPrefix" xml:space="preserve">
-    <value>Uninstalling:</value>
+  <data name="UninstallNormalVerbosityFormat" xml:space="preserve">
+    <value>Uninstalling: {0}.</value>
   </data>
 </root>

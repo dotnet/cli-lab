@@ -142,9 +142,9 @@
         <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallNormalVerbosityPrefix">
-        <source>Uninstalling:</source>
-        <target state="new">Uninstalling:</target>
+      <trans-unit id="UninstallNormalVerbosityFormat">
+        <source>Uninstalling: {0}.</source>
+        <target state="new">Uninstalling: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallVerbosityOptionArgumentName">
