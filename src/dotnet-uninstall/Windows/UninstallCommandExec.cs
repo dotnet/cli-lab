@@ -10,16 +10,16 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    public static class UninstallCommandExec
+    internal static class UninstallCommandExec
     {
         private const int UNINSTALL_TIMEOUT = 10 * 60 * 1000;
 
         [DllImport("shell32.dll", SetLastError = true)]
-        internal static extern IntPtr CommandLineToArgvW(
+        private static extern IntPtr CommandLineToArgvW(
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
-        internal static void ExecuteUninstallCommand(IEnumerable<Bundle> bundles)
+        public static void ExecuteUninstallCommand(IEnumerable<Bundle> bundles)
         {
             if (!IsAdmin())
             {
