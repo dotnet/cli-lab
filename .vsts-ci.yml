@@ -81,6 +81,7 @@ jobs:
           -configuration $(_BuildConfig)
           -prepareMachine
           $(_BuildArgs)
+          /p:RID=win-x64
         displayName: Build and Publish
       - task: PublishBuildArtifacts@1
         displayName: Upload package artifacts
@@ -112,4 +113,5 @@ jobs:
       - script: eng/common/cibuild.sh
           --configuration $(_BuildConfig)
           --prepareMachine
+          /p:RID=osx-x64
         displayName: Build

@@ -1,9 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <AssemblyName>dotnet-core-uninstall</AssemblyName>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeIdentifiers>win-x64;win-x86;osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifier>$(RID)</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
     <SignAssembly>true</SignAssembly>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
