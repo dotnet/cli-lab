@@ -7,6 +7,9 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
 using System.Reflection;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
+using System.Linq;
+using System.Diagnostics;
+using System.IO;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -108,7 +111,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             Console.WriteLine();
             Console.WriteLine(string.Format(
                 LocalizableStrings.DryRunHowToDoItMessageFormat,
-                string.Join(" ", Environment.GetCommandLineArgs())));
+                $"{Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName)} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}"));
         }
 
         private static void HandleVersionOption()
