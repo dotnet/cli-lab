@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Threading;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
@@ -31,8 +32,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
+            var bundleMutex = new Mutex();
+
+            var canceled = false;
+            var cancelMutex = new Mutex();
+
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
+                bundleMutex.WaitOne();
+
                 verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
 
                 var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
@@ -47,6 +55,38 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                         Verb = "runas"
                     }
                 };
+
+                var cancelProcessHandler = new ConsoleCancelEventHandler((sender, cancelArgs) =>
+                {
+                    cancelMutex.WaitOne();
+
+                    if (!canceled)
+                    {
+                        canceled = true;
+                        Console.WriteLine(LocalizableStrings.CancelingMessage);
+                    }
+
+                    cancelArgs.Cancel = true;
+
+                    cancelMutex.ReleaseMutex();
+                });
+
+                Console.CancelKeyPress += cancelProcessHandler;
+
+                process.Exited += new EventHandler((sender, e) =>
+                {
+                    Console.CancelKeyPress -= cancelProcessHandler;
+
+                    cancelMutex.WaitOne();
+
+                    if (canceled)
+                    {
+                        Environment.Exit(1);
+                    }
+
+                    cancelMutex.ReleaseMutex();
+                    bundleMutex.ReleaseMutex();
+                });
 
                 if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
                 {

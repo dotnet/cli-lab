@@ -7,6 +7,11 @@
         <target state="new">You must specify either --sdk or --runtime.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CancelingMessage">
+        <source>Canceling: waiting for the current uninstall to complete.</source>
+        <target state="new">Canceling: waiting for the current uninstall to complete.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DoItOptionDescription">
         <source>Actually uninstall specified .NET Core SDKs or Runtimes.</source>
         <target state="new">Actually uninstall specified .NET Core SDKs or Runtimes.</target>
