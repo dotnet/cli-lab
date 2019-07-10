@@ -87,7 +87,7 @@ jobs:
         displayName: Upload package artifacts
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
-          pathtoPublish: artifacts/packages/
+          pathtoPublish: artifacts/bin/
           artifactName: artifacts
           artifactType: Container
           parallel: true
@@ -115,3 +115,11 @@ jobs:
           --prepareMachine
           /p:RID=osx-x64
         displayName: Build
+      - task: PublishBuildArtifacts@1
+        displayName: Upload package artifacts
+        condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+        inputs:
+          pathtoPublish: artifacts/bin/
+          artifactName: artifacts
+          artifactType: Container
+          parallel: true
