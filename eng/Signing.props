@@ -1,0 +1,5 @@
+<Project>
+  <ItemGroup>
+    <ItemsToSign Include="$(ArtifactsBinDir)**\*.exe" />
+  </ItemGroup>
+</Project>
