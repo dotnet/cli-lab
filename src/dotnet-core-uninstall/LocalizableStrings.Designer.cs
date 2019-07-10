@@ -331,6 +331,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstalling: {0}..
+        /// </summary>
+        internal static string UninstallNormalVerbosityFormat {
+            get {
+                return ResourceManager.GetString("UninstallNormalVerbosityFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to LEVEL.
         /// </summary>
         internal static string UninstallVerbosityOptionArgumentName {
@@ -345,6 +354,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallVerbosityOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallVerbosityOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]..
+        /// </summary>
+        internal static string VerbosityLevelInvalidExceptionMessage {
+            get {
+                return ResourceManager.GetString("VerbosityLevelInvalidExceptionMessage", resourceCulture);
             }
         }
         

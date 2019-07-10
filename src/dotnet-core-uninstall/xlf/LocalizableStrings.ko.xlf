@@ -142,6 +142,11 @@
         <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UninstallNormalVerbosityFormat">
+        <source>Uninstalling: {0}.</source>
+        <target state="new">Uninstalling: {0}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UninstallVerbosityOptionArgumentName">
         <source>LEVEL</source>
         <target state="new">LEVEL</target>
@@ -160,6 +165,11 @@
       <trans-unit id="UninstallationFailedExceptionWithExitCodeMessageFormat">
         <source>The uninstallation operation failed. Exit code was {1} for {0}.</source>
         <target state="new">The uninstallation operation failed. Exit code was {1} for {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VerbosityLevelInvalidExceptionMessage">
+        <source>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
+        <target state="new">Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
         <note />
       </trans-unit>
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
