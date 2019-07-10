@@ -12,32 +12,28 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    public static class UninstallCommandExec
+    internal static class UninstallCommandExec
     {
-        private const int UNINSTALL_TIMEOUT = 5 * 60 * 1000;
+        private const int UNINSTALL_TIMEOUT = 10 * 60 * 1000;
 
         [DllImport("shell32.dll", SetLastError = true)]
-        static extern IntPtr CommandLineToArgvW(
+        private static extern IntPtr CommandLineToArgvW(
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
-        internal static void ExecuteUninstallCommand(IEnumerable<Bundle> bundles)
+        public static void ExecuteUninstallCommand(IEnumerable<Bundle> bundles)
         {
             if (!IsAdmin())
             {
                 throw new NotAdminException();
             }
 
-            var verbosityHandler = new VerbosityHandler<Bundle>();
-            verbosityHandler.Register(
-                VerbosityLevel.Normal,
-                bundle => Console.WriteLine($"{LocalizableStrings.UninstallNormalVerbosityPrefix} {bundle.DisplayName}"));
-
             var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
+            var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
-                verbosityHandler.Execute(verbosityLevel, bundle);
+                verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
 
                 var args = ParseCommandToArgs(bundle.UninstallCommand, out var argc);
 

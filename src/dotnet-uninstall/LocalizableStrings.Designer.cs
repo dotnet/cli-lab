@@ -178,7 +178,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup..
+        ///   Looks up a localized string similar to The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall..
         /// </summary>
         internal static string NotAdminExceptionMessage {
             get {
@@ -385,11 +385,11 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstalling:.
+        ///   Looks up a localized string similar to Uninstalling: {0}..
         /// </summary>
-        internal static string UninstallNormalVerbosityPrefix {
+        internal static string UninstallNormalVerbosityFormat {
             get {
-                return ResourceManager.GetString("UninstallNormalVerbosityPrefix", resourceCulture);
+                return ResourceManager.GetString("UninstallNormalVerbosityFormat", resourceCulture);
             }
         }
         

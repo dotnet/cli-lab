@@ -211,7 +211,7 @@
     <value>Can be used with --sdk and --runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
-    <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-cleanup.</value>
+    <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall.</value>
   </data>
   <data name="MoreThanOneVersionSpecifiedExceptionMessageFormat" xml:space="preserve">
     <value>You must specify exactly one version for option: {0}.</value>
@@ -225,8 +225,8 @@
   <data name="VerbosityLevelInvalidExceptionMessage" xml:space="preserve">
     <value>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
   </data>
-  <data name="UninstallNormalVerbosityPrefix" xml:space="preserve">
-    <value>Uninstalling:</value>
+  <data name="UninstallNormalVerbosityFormat" xml:space="preserve">
+    <value>Uninstalling: {0}.</value>
   </data>
   <data name="DoItOptionDescription" xml:space="preserve">
     <value>Actually uninstall specified .NET Core SDKs or Runtimes.</value>
