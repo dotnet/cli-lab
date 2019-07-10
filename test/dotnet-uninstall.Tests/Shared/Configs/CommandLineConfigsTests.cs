@@ -5,6 +5,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Xunit;
 
@@ -109,9 +110,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all -v quiet --sdk", new string[] { "verbosity", "sdk" })]
         [InlineData("--major-minor 2.3 --verbosity m --runtime", new string[] { "verbosity", "runtime" })]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk -v n --runtime", new string[] { "verbosity", "sdk", "runtime" })]
-        internal void TestOptionsAcceptAux(string options, string[] expectedAuxOptions)
+        internal void TestOptionsAcceptAux(string command, string[] expectedAuxOptions)
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(options);
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
             parseResult.Errors.Should().BeEmpty();
             parseResult.UnparsedTokens.Should().BeEmpty();
@@ -136,9 +137,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below 1.23.456 -v")]
         [InlineData("--major-minor 3.0 --verbosity")]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0 --sdk --verbosity")]
-        internal void TestOptionsReject(string options)
+        internal void TestOptionsReject(string command)
         {
-            CommandLineConfigs.UninstallRootCommand.Parse(options).Errors
+            CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
                 .Should().NotBeEmpty();
         }
 
@@ -369,9 +370,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--sdk --all-but 2.2.300 2.1.700", BundleType.Sdk)]
         [InlineData("--runtime --all-below 3.0.1-preview-10086", BundleType.Runtime)]
         [InlineData("--sdk --runtime --all-previews", BundleType.Sdk | BundleType.Runtime)]
-        internal void TestGetTypeSelectionRootCommand(string options, BundleType expected)
+        internal void TestGetTypeSelectionRootCommand(string command, BundleType expected)
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(options);
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
             parseResult.Errors.Should().BeEmpty();
             parseResult.UnparsedTokens.Should().BeEmpty();
@@ -379,6 +380,53 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             parseResult.RootCommandResult.GetTypeSelection()
                 .Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("2.2.300 --sdk", VerbosityLevel.Normal)]
+        [InlineData("--all -v q --sdk", VerbosityLevel.Quiet)]
+        [InlineData("--all-below 2.2 --verbosity minimal --sdk", VerbosityLevel.Minimal)]
+        [InlineData("--all-but 2.2.300 2.1.700 -v normal --runtime", VerbosityLevel.Normal)]
+        [InlineData("--runtime --all-previews --verbosity d", VerbosityLevel.Detailed)]
+        [InlineData("-v diag --runtime --major-minor 2.2", VerbosityLevel.Diagnostic)]
+        [InlineData("-v diagnostic --major-minor 2.2 --runtime", VerbosityLevel.Diagnostic)]
+        [InlineData("list", VerbosityLevel.Normal)]
+        [InlineData("list -v q", VerbosityLevel.Quiet)]
+        [InlineData("list --verbosity minimal", VerbosityLevel.Minimal)]
+        [InlineData("list -v normal", VerbosityLevel.Normal)]
+        [InlineData("list --verbosity d", VerbosityLevel.Detailed)]
+        [InlineData("list -v diag", VerbosityLevel.Diagnostic)]
+        [InlineData("list -v diagnostic", VerbosityLevel.Diagnostic)]
+        [InlineData("-v q list", VerbosityLevel.Normal)]
+        [InlineData("-v m list -v d", VerbosityLevel.Detailed)]
+        [InlineData("-v unknown list -v d", VerbosityLevel.Detailed)]
+        internal void TestGetVerbosityLevel(string command, VerbosityLevel expected)
+        {
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
+
+            parseResult.Errors.Should().BeEmpty();
+            parseResult.UnparsedTokens.Should().BeEmpty();
+            parseResult.UnmatchedTokens.Should().BeEmpty();
+
+            parseResult.CommandResult.GetVerbosityLevel()
+                .Should().Be(expected);
+        }
+
+        [Theory]
+        [InlineData("2.2.300 --sdk -v qu")]
+        [InlineData("--all --sdk --verbosity mini")]
+        [InlineData("--major-minor 2.1 -v unknown")]
+        [InlineData("list -v qu")]
+        [InlineData("list --verbosity mini")]
+        [InlineData("list -v unknown")]
+        [InlineData("-v q list -v unknown")]
+        [InlineData("-v mini list -v unknown")]
+        internal void TestGetVerbosityLevelVerbosityLevelInvalidException(string command)
+        {
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
+            Action action = () => parseResult.CommandResult.GetVerbosityLevel();
+
+            action.Should().Throw<VerbosityLevelInvalidException>(LocalizableStrings.VerbosityLevelInvalidExceptionMessage);
         }
 
         [Theory]
@@ -396,8 +444,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            parseResult.HasOption(CommandLineConfigs.VersionOption)
-                .Should().BeTrue();
+            parseResult.RootCommandResult.OptionResult(CommandLineConfigs.VersionOption.Name)
+                .Should().NotBeNull();
         }
     }
 }

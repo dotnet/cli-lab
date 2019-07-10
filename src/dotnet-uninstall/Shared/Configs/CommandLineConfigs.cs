@@ -5,6 +5,7 @@ using System.CommandLine.Invocation;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
@@ -116,6 +117,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "list",
             LocalizableStrings.ListCommandDescription);
 
+        public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel>
+        {
+            { "q", VerbosityLevel.Quiet }, { "quiet", VerbosityLevel.Quiet },
+            { "m", VerbosityLevel.Minimal }, { "minimal", VerbosityLevel.Minimal },
+            { "n", VerbosityLevel.Normal }, { "normal", VerbosityLevel.Normal },
+            { "d", VerbosityLevel.Detailed }, { "detailed", VerbosityLevel.Detailed },
+            { "diag", VerbosityLevel.Diagnostic }, { "diagnostic", VerbosityLevel.Diagnostic }
+        };
+
+        public static readonly ParseResult CommandLineParseResult;
+
         static CommandLineConfigs()
         {
             UninstallRootCommand.Add(ListCommand);
@@ -136,6 +148,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
             UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
+
+            CommandLineParseResult = UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)
@@ -213,6 +227,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
 
             return archSelection;
+        }
+
+        public static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
+        {
+            var optionResult = commandResult.OptionResult(UninstallVerbosityOption.Name);
+
+            if (optionResult == null)
+            {
+                return VerbosityLevel.Normal;
+            }
+
+            var levelString = optionResult.GetValueOrDefault<string>();
+
+            if (VerbosityLevels.TryGetValue(levelString, out var level))
+            {
+                return level;
+            }
+            else
+            {
+                throw new VerbosityLevelInvalidException();
+            }
         }
     }
 }
