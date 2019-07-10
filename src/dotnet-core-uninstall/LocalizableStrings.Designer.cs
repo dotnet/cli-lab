@@ -70,6 +70,51 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actually uninstall specified .NET Core SDKs or Runtimes..
+        /// </summary>
+        internal static string DoItOptionDescription {
+            get {
+                return ResourceManager.GetString("DoItOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Would uninstall: {0}..
+        /// </summary>
+        internal static string DryRunBundleFormat {
+            get {
+                return ResourceManager.GetString("DryRunBundleFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *** END DRY RUN.
+        /// </summary>
+        internal static string DryRunEndMessage {
+            get {
+                return ResourceManager.GetString("DryRunEndMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to To actually uninstall, add --do-it: {0} --do-it..
+        /// </summary>
+        internal static string DryRunHowToDoItMessageFormat {
+            get {
+                return ResourceManager.GetString("DryRunHowToDoItMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *** DRY RUN.
+        /// </summary>
+        internal static string DryRunStartMessage {
+            get {
+                return ResourceManager.GetString("DryRunStartMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
@@ -102,6 +147,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandSdkHeader {
             get {
                 return ResourceManager.GetString("ListCommandSdkHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft .NET Core {0} {1} (x64).
+        /// </summary>
+        internal static string MacOsBundleDisplayNameFormat {
+            get {
+                return ResourceManager.GetString("MacOsBundleDisplayNameFormat", resourceCulture);
             }
         }
         
