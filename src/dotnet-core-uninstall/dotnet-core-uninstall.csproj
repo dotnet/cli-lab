@@ -1,13 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <AssemblyName>dotnet-core-uninstall</AssemblyName>
     <OutputType>Exe</OutputType>
+    <RuntimeIdentifier>$(RID)</RuntimeIdentifier>
+    <SelfContained>true</SelfContained>
+    <SignAssembly>true</SignAssembly>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <IsPackable>true</IsPackable>
-    <PackAsTool>true</PackAsTool>
-    <PackageId>dotnet-uninstall</PackageId>
-    <ToolCommandName>dotnet-uninstall</ToolCommandName>
-    <PackAsToolShimRuntimeIdentifiers>win-x64;win-x86;osx-x64</PackAsToolShimRuntimeIdentifiers>
-    <PackagedShimOutputRootDirectory>$(OutputPath)</PackagedShimOutputRootDirectory>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -28,19 +26,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>LocalizableStrings.resx</DependentUpon>
     </Compile>
-    <Compile Update="Shared\LocalizableStrings.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>LocalizableStrings.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="LocalizableStrings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>LocalizableStrings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Shared\LocalizableStrings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LocalizableStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>

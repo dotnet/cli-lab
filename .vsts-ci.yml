@@ -81,12 +81,13 @@ jobs:
           -configuration $(_BuildConfig)
           -prepareMachine
           $(_BuildArgs)
+          /p:RID=win-x64
         displayName: Build and Publish
       - task: PublishBuildArtifacts@1
         displayName: Upload package artifacts
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
-          pathtoPublish: artifacts/packages/
+          pathtoPublish: artifacts/bin/
           artifactName: artifacts
           artifactType: Container
           parallel: true
@@ -112,4 +113,13 @@ jobs:
       - script: eng/common/cibuild.sh
           --configuration $(_BuildConfig)
           --prepareMachine
+          /p:RID=osx-x64
         displayName: Build
+      - task: PublishBuildArtifacts@1
+        displayName: Upload package artifacts
+        condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+        inputs:
+          pathtoPublish: artifacts/bin/
+          artifactName: artifacts
+          artifactType: Container
+          parallel: true

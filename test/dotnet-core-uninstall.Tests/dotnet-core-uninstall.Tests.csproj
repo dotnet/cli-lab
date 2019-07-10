@@ -8,7 +8,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\dotnet-uninstall\dotnet-uninstall.csproj" />
+    <ProjectReference Include="..\..\src\dotnet-core-uninstall\dotnet-core-uninstall.csproj" />
   </ItemGroup>
 
 </Project>
