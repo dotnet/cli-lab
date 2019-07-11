@@ -5,7 +5,7 @@ using NuGet.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 {
-    internal abstract class BundleVersion : IEquatable<BundleVersion>
+    internal abstract class BundleVersion
     {
         public abstract BundleType Type { get; }
         public abstract BeforePatch BeforePatch { get; }
@@ -70,12 +70,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             return SemVer.ToString();
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as BundleVersion);
-        }
-
-        public bool Equals(BundleVersion other)
+        protected bool Equals(BundleVersion other)
         {
             return other != null &&
                    EqualityComparer<SemanticVersion>.Default.Equals(SemVer, other.SemVer);
