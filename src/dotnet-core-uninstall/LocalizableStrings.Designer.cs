@@ -70,6 +70,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Canceling: waiting for the current uninstall to complete..
+        /// </summary>
+        internal static string CancelingMessage {
+            get {
+                return ResourceManager.GetString("CancelingMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Actually uninstall specified .NET Core SDKs or Runtimes..
         /// </summary>
         internal static string DoItOptionDescription {

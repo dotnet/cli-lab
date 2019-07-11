@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Principal;
+using System.Threading;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
@@ -31,6 +32,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
+            var canceled = false;
+            var cancelMutex = new Mutex();
+
+            var cancelProcessHandler = new ConsoleCancelEventHandler((sender, cancelArgs) =>
+            {
+                cancelMutex.WaitOne();
+
+                try
+                {
+                    if (!canceled)
+                    {
+                        canceled = true;
+                        Console.WriteLine(LocalizableStrings.CancelingMessage);
+                    }
+
+                    cancelArgs.Cancel = true;
+                }
+                finally
+                {
+                    cancelMutex.ReleaseMutex();
+                }
+            });
+
             foreach (var bundle in bundles.ToList().AsReadOnly())
             {
                 verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
@@ -48,6 +72,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     }
                 };
 
+                Console.CancelKeyPress += cancelProcessHandler;
+
                 if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
                 {
                     throw new UninstallationFailedException(bundle.UninstallCommand);
@@ -56,6 +82,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 if (process.ExitCode != 0)
                 {
                     throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
+                }
+
+                Console.CancelKeyPress -= cancelProcessHandler;
+
+                cancelMutex.WaitOne();
+
+                try
+                {
+                    if (canceled)
+                    {
+                        Environment.Exit(1);
+                    }
+                }
+                finally
+                {
+                    cancelMutex.ReleaseMutex();
                 }
             }
         }

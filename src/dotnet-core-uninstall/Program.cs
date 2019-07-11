@@ -11,7 +11,6 @@ namespace Microsoft.DotNet.Tools.Uninstall
     {
         internal static int Main(string[] args)
         {
-            Console.CancelKeyPress += new ConsoleCancelEventHandler((sender, cancelArgs) => cancelArgs.Cancel = true);
             return CommandLineConfigs.UninstallRootCommand.InvokeAsync(args).Result;
         }
     }

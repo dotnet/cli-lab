@@ -246,4 +246,7 @@
   <data name="MacOsBundleDisplayNameFormat" xml:space="preserve">
     <value>Microsoft .NET Core {0} {1} (x64)</value>
   </data>
+  <data name="CancelingMessage" xml:space="preserve">
+    <value>Canceling: waiting for the current uninstall to complete.</value>
+  </data>
 </root>
