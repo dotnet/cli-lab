@@ -23,6 +23,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list --sdk -v q", new string[] { "verbosity", "sdk" })]
         [InlineData("list --runtime --verbosity minimal", new string[] { "verbosity", "runtime" })]
         [InlineData("list --sdk --runtime -v normal", new string[] { "verbosity", "sdk", "runtime" })]
+        [InlineData("list --aspnet-runtime", new string[] { "aspnet-runtime" })]
+        [InlineData("list -v n --aspnet-runtime", new string[] { "verbosity", "aspnet-runtime" })]
+        [InlineData("list --sdk --verbosity diag --aspnet-runtime", new string[] { "verbosity", "sdk", "aspnet-runtime" })]
         internal void TestListCommandAccept(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -110,6 +113,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all -v quiet --sdk", new string[] { "verbosity", "sdk" })]
         [InlineData("--major-minor 2.3 --verbosity m --runtime", new string[] { "verbosity", "runtime" })]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk -v n --runtime", new string[] { "verbosity", "sdk", "runtime" })]
+        [InlineData("--all --sdk --aspnet-runtime", new string[] { "sdk", "aspnet-runtime" })]
         internal void TestOptionsAcceptAux(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -370,6 +374,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--sdk --all-but 2.2.300 2.1.700", BundleType.Sdk)]
         [InlineData("--runtime --all-below 3.0.1-preview-10086", BundleType.Runtime)]
         [InlineData("--sdk --runtime --all-previews", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("--aspnet-runtime", BundleType.AspNetRuntime)]
+        [InlineData("--sdk --aspnet-runtime --all-but 2.2.3", BundleType.Sdk | BundleType.AspNetRuntime)]
+        [InlineData("--sdk --runtime --aspnet-runtime", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
         internal void TestGetTypeSelectionRootCommand(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
