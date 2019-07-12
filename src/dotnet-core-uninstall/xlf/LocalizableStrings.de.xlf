@@ -42,6 +42,11 @@
         <target state="new">*** DRY RUN</target>
         <note />
       </trans-unit>
+      <trans-unit id="HostingBundleOptionDescription">
+        <source>Remove .NET Core Runtime &amp; Hosting Bundles only.</source>
+        <target state="new">Remove .NET Core Runtime &amp; Hosting Bundles only.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
@@ -55,6 +60,11 @@
       <trans-unit id="ListCommandDescription">
         <source>List .NET Core SDKs or Runtimes that can be removed with this tool.</source>
         <target state="new">List .NET Core SDKs or Runtimes that can be removed with this tool.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListCommandHostingBundleHeader">
+        <source>.NET Core Runtime &amp; Hosting Bundles:</source>
+        <target state="new">.NET Core Runtime &amp; Hosting Bundles:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">

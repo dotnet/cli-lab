@@ -255,4 +255,10 @@
   <data name="ListCommandAspNetRuntimeHeader" xml:space="preserve">
     <value>ASP.NET Core Runtimes:</value>
   </data>
+  <data name="HostingBundleOptionDescription" xml:space="preserve">
+    <value>Remove .NET Core Runtime &amp; Hosting Bundles only.</value>
+  </data>
+  <data name="ListCommandHostingBundleHeader" xml:space="preserve">
+    <value>.NET Core Runtime &amp; Hosting Bundles:</value>
+  </data>
 </root>

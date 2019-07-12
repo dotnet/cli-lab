@@ -87,7 +87,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         private static readonly Regex _aspNetRuntimeCachePathRegex = new Regex(
             $@"\\(?<{TypeGroupName}>AspNetCore)\.{_aspNetRuntimeVersionCachePathRegex.ToString()}\.RuntimePackageStore_{_archRegex.ToString()}\.exe|\\(?<{TypeGroupName}>aspnetcore\-runtime)\-{_aspNetRuntimeVersionCachePathRegex.ToString()}\-win\-{_archRegex.ToString()}\.exe");
         private static readonly Regex _hostingBundleCachePathRegex = new Regex(
-            $@"\\DotNetCore\.{_hostingBundleVersionCachePathRegex.ToString()}\-(?<{TypeGroupName}>WindowsHosting)\.exe|\\dotnet\-(?<{TypeGroupName}>hosting)\-{_previewVersionHostingBundleCachePathRegex.ToString()}\-win\.exe");
+            $@"\\DotNetCore\.{_hostingBundleVersionCachePathRegex.ToString()}\-(?<{TypeGroupName}>WindowsHosting)\.exe|\\dotnet\-(?<{TypeGroupName}>hosting)\-{_hostingBundleVersionCachePathRegex.ToString()}\-win\.exe");
 
         public static readonly Regex BundlePublisherRegex = new Regex(
             @"^Microsoft\sCorporation$");

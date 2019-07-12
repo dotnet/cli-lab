@@ -15,7 +15,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader),
                 new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader),
-                new BundleTypePrintInfo<AspNetRuntimeVersion>(LocalizableStrings.ListCommandAspNetRuntimeHeader)
+                new BundleTypePrintInfo<AspNetRuntimeVersion>(LocalizableStrings.ListCommandAspNetRuntimeHeader),
+                new BundleTypePrintInfo<HostingBundleVersion>(LocalizableStrings.ListCommandHostingBundleHeader)
             };
 
         public static GridView GetGridView(IList<Bundle> bundles)

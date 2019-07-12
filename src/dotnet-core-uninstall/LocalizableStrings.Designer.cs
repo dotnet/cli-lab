@@ -133,6 +133,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove .NET Core Runtime &amp; Hosting Bundles only..
+        /// </summary>
+        internal static string HostingBundleOptionDescription {
+            get {
+                return ResourceManager.GetString("HostingBundleOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
@@ -156,6 +165,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandDescription {
             get {
                 return ResourceManager.GetString("ListCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .NET Core Runtime &amp; Hosting Bundles:.
+        /// </summary>
+        internal static string ListCommandHostingBundleHeader {
+            get {
+                return ResourceManager.GetString("ListCommandHostingBundleHeader", resourceCulture);
             }
         }
         
