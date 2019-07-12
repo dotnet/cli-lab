@@ -78,6 +78,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("Microsoft .NET Core Runtime - 2.1.0 Release Candidate 1 (x86)")]
         [InlineData("Microsoft .NET Core Runtime - 3.0.0 Preview 5 (x64)")]
         [InlineData("Microsoft .NET Core 1.1.13 - Runtime (x64)")]
+        [InlineData("Microsoft ASP.NET Core 3.0.0 Preview 6 Build 19307.2 - Shared Framework")]
+        [InlineData("Microsoft ASP.NET Core 2.2.6 - Shared Framework")]
+        [InlineData("Microsoft ASP.NET Core 2.2.0 Preview 3 Build 35497 - Shared Framework")]
+        [InlineData("Microsoft ASP.NET Core 2.1.0 Release Candidate 1 - Shared Framework")]
+        [InlineData("Microsoft ASP.NET Core 2.1.0 Preview 2 - Shared Framework")]
+        [InlineData("Microsoft ASP.NET Core 2.0.9 - Runtime Package Store")]
+        [InlineData("Microsoft ASP.NET Core 3.0.0 Preview Build 18579-0056 - Shared Framework")]
         internal void TestBundleDisplayNameRegexAccept(string input)
         {
             TestRegexAccept(Regexes.BundleDisplayNameRegex, input);
@@ -108,6 +115,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData("Microsoft .NET Core SDK  2.2.202 (x64)")]
         [InlineData("Microsoft .NET Core SDK 2.2.202  (x64)")]
         [InlineData("Microsoft .NET Core SDK 2.2.202 (x64) ")]
+        [InlineData("ASP.NET Core 3.0.0 Preview 6 Build 19307.2 - Shared Framework")]
+        [InlineData("Microsoft ASP.NET Core 3.0.0 Preview 6 Build 19307.2 - Shared Framework (x64)")]
         internal void TestBundleDisplayNameRegexReject(string input)
         {
             TestRegexReject(Regexes.BundleDisplayNameRegex, input);
@@ -123,6 +132,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData(@"\dotnet-runtime-3.0.0-preview5-27626-15-win-x86.exe")]
         [InlineData(@"\dotnet-dev-win-x64.1.1.14.exe")]
         [InlineData(@"\dotnet-win-x64.1.0.11.exe")]
+        [InlineData(@"\AspNetCore.2.0.9.RuntimePackageStore_x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.2.6-win-x86.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.1.0-preview1-final-win-x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.1.0-rc1-final-win-x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.2.0-preview3-35497-win-x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-3.0.0-preview-18579-0056-win-x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-3.0.0-preview6.19307.2-win-x64.exe")]
         internal void TestBundleCachePathRegexAccept(string suffix)
         {
             TestRegexAccept(Regexes.BundleCachePathRegex, $"{TestCachePathPrefex}{suffix}");
@@ -154,6 +170,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Utils
         [InlineData(@"\dotnet-sdk-2.1.4-win-x66.exe")]
         [InlineData(@"\dotnet-sdk-2.1.4-win-x64.exeHelloWorld")]
         [InlineData(@"\dotnet-sdk-2.1.4-win-x64.exe Hello World")]
+        [InlineData(@"\AspNetCore.2.0.9.RuntimePackageStore.exe")]
+        [InlineData(@"\AspNetCore.2.0.9.RuntimePackageStore_x66.exe")]
+        [InlineData(@"\AspNetCore.2.0.9.RuntimePackageStore.x64.exe")]
+        [InlineData(@"\AspNetCore.2.0.9.RuntimePackageStore-x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.2.6-win.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.2.6-win-x66.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.1.0-preview1-win-x64.exe")]
+        [InlineData(@"\aspnetcore-runtime-2.1.0-rc1-win-x64.exe")]
         internal void TestBundleCachePathRegexReject(string suffix)
         {
             TestRegexReject(Regexes.BundleCachePathRegex, $"{TestCachePathPrefex}{suffix}");
