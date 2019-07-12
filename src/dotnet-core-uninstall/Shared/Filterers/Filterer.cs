@@ -14,12 +14,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
         protected void ValidateTypeSelection(BundleType typeSelection)
         {
-            if ((int) typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime))
+            if ((int) typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime))
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime)
+            if (typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime && typeSelection != BundleType.AspNetRuntime)
             {
                 throw new BundleTypeMissingException();
             }

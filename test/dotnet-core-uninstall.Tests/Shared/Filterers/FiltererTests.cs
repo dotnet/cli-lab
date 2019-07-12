@@ -71,9 +71,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         [Theory]
         [InlineData((BundleType)0)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime) + 1)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime) + 2)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime) + 10)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 1)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 2)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 10)]
         internal void TestFiltererArgumentOutOfRangeException(BundleType typeSelection)
         {
             TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultTestArgValue, typeSelection, DefaultTestArchSelection);

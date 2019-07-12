@@ -249,4 +249,10 @@
   <data name="CancelingMessage" xml:space="preserve">
     <value>Canceling: waiting for the current uninstall to complete.</value>
   </data>
+  <data name="AspNetRuntimeOptionDescription" xml:space="preserve">
+    <value>Remove ASP.NET Core Runtimes only.</value>
+  </data>
+  <data name="ListCommandAspNetRuntimeHeader" xml:space="preserve">
+    <value>ASP.NET Core Runtimes:</value>
+  </data>
 </root>

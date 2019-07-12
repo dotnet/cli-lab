@@ -72,6 +72,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--runtime",
             LocalizableStrings.RuntimeOptionDescription);
 
+        public static readonly Option AspNetRuntimeOption = new Option(
+            "--aspnet-runtime",
+            LocalizableStrings.AspNetRuntimeOptionDescription);
+
         public static readonly Option X86Option = new Option(
             "--x86",
             LocalizableStrings.X86OptionDescription);
@@ -105,6 +109,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallVerbosityOption,
             SdkOption,
             RuntimeOption,
+            AspNetRuntimeOption,
             X86Option,
             X64Option
         };
@@ -204,9 +209,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 typeSelection |= BundleType.Runtime;
             }
 
+            if (commandResult.OptionResult(AspNetRuntimeOption.Name) != null)
+            {
+                typeSelection |= BundleType.AspNetRuntime;
+            }
+
             if (typeSelection == 0)
             {
-                typeSelection = BundleType.Sdk | BundleType.Runtime;
+                typeSelection = BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime;
             }
 
             return typeSelection;

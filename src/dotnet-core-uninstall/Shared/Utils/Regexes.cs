@@ -71,7 +71,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         public static readonly Regex BundleMajorMinorRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}$");
         public static readonly Regex BundleDisplayNameRegex = new Regex(
-            $@"^({_sdkDisplayNameRegex.ToString()}|{_runtimeDisplayNameRegex.ToString()}|{_aspNetRuntimeDisplayNameRegex.ToString()})\s\({_archRegex.ToString()}\)$");
+            $@"^(({_sdkDisplayNameRegex.ToString()}|{_runtimeDisplayNameRegex.ToString()})\s\({_archRegex.ToString()}\)|{_aspNetRuntimeDisplayNameRegex.ToString()})$");
         public static readonly Regex BundleCachePathRegex = new Regex(
             $@"(\\dotnet\-((?<{TypeGroupName}>sdk)\-{_sdkVersionCachePathRegex}|(?<{TypeGroupName}>runtime)\-{_runtimeVersionCachePathRegex})\-win\-{_archRegex.ToString()}\.exe$)|(\\dotnet\-dev\-win\-{_archRegex.ToString()}\.{_sdkVersionCachePathRegex.ToString()}\.exe$)|(\\dotnet\-win\-{_archRegex.ToString()}\.{_runtimeVersionCachePathRegex.ToString()}\.exe$)|(\\(?<{TypeGroupName}>AspNetCore)\.{_aspNetRuntimeVersionCachePathRegex.ToString()}\.RuntimePackageStore_{_archRegex.ToString()}\.exe$)|(\\(?<{TypeGroupName}>aspnetcore\-runtime)\-{_aspNetRuntimeVersionCachePathRegex.ToString()}\-win\-{_archRegex.ToString()}\.exe$)");
     }

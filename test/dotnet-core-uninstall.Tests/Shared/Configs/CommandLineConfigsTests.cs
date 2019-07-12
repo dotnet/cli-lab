@@ -358,15 +358,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         }
 
         [Theory]
-        [InlineData("", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
         [InlineData("--sdk", BundleType.Sdk)]
         [InlineData("--runtime", BundleType.Runtime)]
         [InlineData("--sdk --runtime", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("-v q", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("-v q", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
         [InlineData("--sdk --verbosity minimal", BundleType.Sdk)]
         [InlineData("-v normal --runtime", BundleType.Runtime)]
         [InlineData("--sdk --verbosity diag --runtime", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--all", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("--all", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
         [InlineData("--sdk --all-but 2.2.300 2.1.700", BundleType.Sdk)]
         [InlineData("--runtime --all-below 3.0.1-preview-10086", BundleType.Runtime)]
         [InlineData("--sdk --runtime --all-previews", BundleType.Sdk | BundleType.Runtime)]
