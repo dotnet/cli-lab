@@ -1,0 +1,45 @@
+﻿using System;
+
+namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
+{
+    internal class HostingBundleVersion : BundleVersion, IComparable, IComparable<HostingBundleVersion>, IEquatable<HostingBundleVersion>
+    {
+        public override BundleType Type => BundleType.HostingBundle;
+        public override BeforePatch BeforePatch => new MajorMinorVersion(Major, Minor);
+
+        public HostingBundleVersion() { }
+
+        public HostingBundleVersion(string value) : base(value) { }
+
+        public int CompareTo(object obj)
+        {
+            return CompareTo(obj as HostingBundleVersion);
+        }
+
+        public int CompareTo(HostingBundleVersion other)
+        {
+            return other == null ? 1 : SemVer.CompareTo(other.SemVer);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as HostingBundleVersion);
+        }
+
+        public bool Equals(HostingBundleVersion other)
+        {
+            return other != null &&
+                   base.Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode());
+        }
+
+        public override Bundle ToBundle(BundleArch arch, string uninstallCommand, string displayName)
+        {
+            return new Bundle<HostingBundleVersion>(this, arch, uninstallCommand, displayName);
+        }
+    }
+}
