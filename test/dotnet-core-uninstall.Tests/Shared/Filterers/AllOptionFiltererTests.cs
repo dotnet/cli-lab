@@ -33,7 +33,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             yield return new object[]
             {
                 DefaultTestBundles,
-                new List<Bundle<SdkVersion>>
+                new List<Bundle>
                 {
                     Sdk_2_2_202_X64,
                     Sdk_2_1_300_Rc1_X64,
@@ -48,7 +48,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             yield return new object[]
             {
                 DefaultTestBundles,
-                new List<Bundle<RuntimeVersion>>
+                new List<Bundle>
                 {
                     Runtime_2_2_4_X86,
                     Runtime_2_2_5_X86,
@@ -57,6 +57,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 },
                 BundleType.Runtime,
                 BundleArch.X86
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                DefaultTestAspNetRuntimes,
+                BundleType.AspNetRuntime,
+                DefaultTestArchSelection
             };
         }
 
