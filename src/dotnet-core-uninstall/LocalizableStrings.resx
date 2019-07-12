@@ -205,10 +205,10 @@
     <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
   </data>
   <data name="X64OptionDescription" xml:space="preserve">
-    <value>Can be used with --sdk and --runtime to remove x64.</value>
+    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</value>
   </data>
   <data name="X86OptionDescription" xml:space="preserve">
-    <value>Can be used with --sdk and --runtime to remove x86.</value>
+    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
     <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall.</value>

@@ -223,13 +223,13 @@
         <note />
       </trans-unit>
       <trans-unit id="X64OptionDescription">
-        <source>Can be used with --sdk and --runtime to remove x64.</source>
-        <target state="new">Can be used with --sdk and --runtime to remove x64.</target>
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</target>
         <note />
       </trans-unit>
       <trans-unit id="X86OptionDescription">
-        <source>Can be used with --sdk and --runtime to remove x86.</source>
-        <target state="new">Can be used with --sdk and --runtime to remove x86.</target>
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</target>
         <note />
       </trans-unit>
     </body>

@@ -457,7 +457,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove x64..
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x64..
         /// </summary>
         internal static string X64OptionDescription {
             get {
@@ -466,7 +466,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove x86..
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x86..
         /// </summary>
         internal static string X86OptionDescription {
             get {
