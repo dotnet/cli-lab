@@ -61,6 +61,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove ASP.NET Core Runtimes only..
+        /// </summary>
+        internal static string AspNetRuntimeOptionDescription {
+            get {
+                return ResourceManager.GetString("AspNetRuntimeOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must specify either --sdk or --runtime..
         /// </summary>
         internal static string BundleTypeMissingExceptionMessage {
@@ -129,6 +138,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string InvalidInputVersionExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("InvalidInputVersionExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ASP.NET Core Runtimes:.
+        /// </summary>
+        internal static string ListCommandAspNetRuntimeHeader {
+            get {
+                return ResourceManager.GetString("ListCommandAspNetRuntimeHeader", resourceCulture);
             }
         }
         

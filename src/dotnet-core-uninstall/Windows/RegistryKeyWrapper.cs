@@ -23,12 +23,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
-            var archString = match.Groups[Regexes.ArchGroupName].Value;
+            var archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
 
             switch (match.Groups[Regexes.TypeGroupName].Value)
             {
                 case "SDK": version = new SdkVersion(cachePathMatch.Groups[Regexes.VersionGroupName].Value); break;
                 case "Runtime": version = new RuntimeVersion(cachePathMatch.Groups[Regexes.VersionGroupName].Value); break;
+                case "ASP.NET": version = new AspNetRuntimeVersion(cachePathMatch.Groups[Regexes.VersionGroupName].Value); break;
                 default: throw new ArgumentException();
             }
 

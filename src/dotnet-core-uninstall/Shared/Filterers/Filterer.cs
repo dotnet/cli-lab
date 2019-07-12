@@ -14,12 +14,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
         protected void ValidateTypeSelection(BundleType typeSelection)
         {
-            if ((int) typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime))
+            if ((int) typeSelection < 1 || typeSelection > (BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime))
             {
                 throw new ArgumentOutOfRangeException();
             }
 
-            if (typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime)
+            if (typeSelection != BundleType.Sdk && typeSelection != BundleType.Runtime && typeSelection != BundleType.AspNetRuntime)
             {
                 throw new BundleTypeMissingException();
             }
@@ -51,6 +51,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
             var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
+            var aspNetRuntimes = Bundle<AspNetRuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
             var filteredSdks = typeSelection.HasFlag(BundleType.Sdk) ?
                 Filter(argValue, sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
@@ -60,7 +61,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 Filter(argValue, runtimes).OrderBy(runtime => runtime).Select(runtime => runtime as Bundle) :
                 new List<Bundle>();
 
-            return filteredSdks.Concat(filteredRuntimes);
+            var filteredAspNetRuntimes = typeSelection.HasFlag(BundleType.AspNetRuntime) ?
+                Filter(argValue, aspNetRuntimes).OrderBy(aspNetRuntime => aspNetRuntime).Select(aspNetRuntime => aspNetRuntime as Bundle) :
+                new List<Bundle>();
+
+            return filteredSdks.Concat(filteredRuntimes).Concat(filteredAspNetRuntimes);
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(TArg argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
@@ -83,6 +88,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
             var sdks = Bundle<SdkVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
+            var aspNetRuntimes = Bundle<AspNetRuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
             var filteredSdks = typeSelection.HasFlag(BundleType.Sdk) ?
                 Filter(sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
@@ -92,7 +98,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 Filter(runtimes).OrderBy(runtime => runtime).Select(runtime => runtime as Bundle) :
                 new List<Bundle>();
 
-            return filteredSdks.Concat(filteredRuntimes);
+            var filteredAspNetRuntimes = typeSelection.HasFlag(BundleType.AspNetRuntime) ?
+                Filter(aspNetRuntimes).OrderBy(aspNetRuntime => aspNetRuntime).Select(aspNetRuntime => aspNetRuntime as Bundle) :
+                new List<Bundle>();
+
+            return filteredSdks.Concat(filteredRuntimes).Concat(filteredAspNetRuntimes);
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)

@@ -104,6 +104,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.X64
             };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.2",
+                new List<Bundle>
+                {
+                    AspNetRuntime_2_2_6_X64,
+                    AspNetRuntime_2_2_3_X64
+                },
+                BundleType.AspNetRuntime,
+                DefaultTestArchSelection
+            };
         }
 
         [Theory]
@@ -130,6 +143,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Sdk, DefaultTestArchSelection, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, argValue));
             TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.Runtime, DefaultTestArchSelection, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, argValue));
+            TestFiltererException<InvalidInputVersionException>(DefaultTestBundles, argValue, BundleType.AspNetRuntime, DefaultTestArchSelection, string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, argValue));
         }
     }
 }

@@ -253,6 +253,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.X64
             };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.2.7",
+                DefaultTestAspNetRuntimes,
+                BundleType.AspNetRuntime,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.2.6 2.2.3 2.2.6 2.2.3",
+                new List<Bundle>
+                {
+                    AspNetRuntime_3_0_0_P6_X64,
+                    AspNetRuntime_3_0_0_P_X64,
+                    AspNetRuntime_2_1_0_Rc1_X64
+                },
+                BundleType.AspNetRuntime,
+                DefaultTestArchSelection
+            };
         }
 
         [Theory]

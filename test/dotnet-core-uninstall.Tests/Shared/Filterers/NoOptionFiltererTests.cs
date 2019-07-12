@@ -166,6 +166,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.Runtime,
                 BundleArch.X64
             };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.2.6 2.2.3 2.1.0-rc1-final 2.1.0-rc1-final",
+                new List<Bundle>
+                {
+                    AspNetRuntime_2_2_6_X64,
+                    AspNetRuntime_2_2_3_X64,
+                    AspNetRuntime_2_1_0_Rc1_X64
+                },
+                BundleType.AspNetRuntime,
+                DefaultTestArchSelection
+            };
         }
 
         [Theory]
@@ -192,6 +206,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         [InlineData("3.0.100-preview5-011568", BundleType.Sdk, BundleArch.X86 | BundleArch.X86)]
         [InlineData("2.2.4", BundleType.Runtime, BundleArch.X64)]
         [InlineData("2.1.0-rc1", BundleType.Runtime, BundleArch.X86)]
+        [InlineData("3.0.0", BundleType.AspNetRuntime, DefaultTestArchSelection)]
+        [InlineData("2.1.0-rc1", BundleType.AspNetRuntime, DefaultTestArchSelection)]
+        [InlineData("2.2.1 2.2.2 2.2.3 2.2.4 2.2.5", BundleType.AspNetRuntime, DefaultTestArchSelection)]
         internal void TestNoOptionFiltererSpecifiedVersionNotFoundException(string argValue, BundleType typeSelection, BundleArch archSelection)
         {
             TestFiltererException<SpecifiedVersionNotFoundException>(DefaultTestBundles, argValue, typeSelection, archSelection, string.Format(LocalizableStrings.SpecifiedVersionNotFoundExceptionMessageFormat, argValue));

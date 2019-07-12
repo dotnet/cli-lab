@@ -2,6 +2,11 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="pt-BR" original="../LocalizableStrings.resx">
     <body>
+      <trans-unit id="AspNetRuntimeOptionDescription">
+        <source>Remove ASP.NET Core Runtimes only.</source>
+        <target state="new">Remove ASP.NET Core Runtimes only.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="BundleTypeMissingExceptionMessage">
         <source>You must specify either --sdk or --runtime.</source>
         <target state="new">You must specify either --sdk or --runtime.</target>
@@ -40,6 +45,11 @@
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListCommandAspNetRuntimeHeader">
+        <source>ASP.NET Core Runtimes:</source>
+        <target state="new">ASP.NET Core Runtimes:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandDescription">

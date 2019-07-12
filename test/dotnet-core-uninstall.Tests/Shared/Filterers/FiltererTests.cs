@@ -41,6 +41,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         internal static Bundle<RuntimeVersion> Runtime_2_2_2_X64 = GetBundleFromInput<RuntimeVersion>("2.2.2", BundleArch.X64);
         internal static Bundle<RuntimeVersion> Runtime_2_1_0_Rc1_X64 = GetBundleFromInput<RuntimeVersion>("2.1.0-rc1", BundleArch.X64);
 
+        internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_3_0_0_P6_X64 = GetBundleFromInput<AspNetRuntimeVersion>("3.0.0-preview6.19307.2", BundleArch.X64);
+        internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_3_0_0_P_X64 = GetBundleFromInput<AspNetRuntimeVersion>("3.0.0-preview-18579-0056", BundleArch.X64);
+        internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_2_2_6_X64 = GetBundleFromInput<AspNetRuntimeVersion>("2.2.6", BundleArch.X64);
+        internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_2_2_3_X64 = GetBundleFromInput<AspNetRuntimeVersion>("2.2.3", BundleArch.X64);
+        internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_2_1_0_Rc1_X64 = GetBundleFromInput<AspNetRuntimeVersion>("2.1.0-rc1-final", BundleArch.X64);
+
         internal static readonly IEnumerable<Bundle<SdkVersion>> DefaultTestSdks = new List<Bundle<SdkVersion>>
         {
             Sdk_2_2_202_X64,
@@ -65,15 +71,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             Runtime_2_1_0_Rc1_X64
         };
 
+        internal static readonly IEnumerable<Bundle<AspNetRuntimeVersion>> DefaultTestAspNetRuntimes = new List<Bundle<AspNetRuntimeVersion>>
+        {
+            AspNetRuntime_3_0_0_P6_X64,
+            AspNetRuntime_3_0_0_P_X64,
+            AspNetRuntime_2_2_6_X64,
+            AspNetRuntime_2_2_3_X64,
+            AspNetRuntime_2_1_0_Rc1_X64
+        };
+
         internal static readonly IEnumerable<Bundle> DefaultTestBundles = DefaultTestSdks
             .Select(sdk => sdk as Bundle)
-            .Concat(DefaultTestRuntimes.Select(runtime => runtime as Bundle));
+            .Concat(DefaultTestRuntimes.Select(runtime => runtime as Bundle))
+            .Concat(DefaultTestAspNetRuntimes.Select(aspNetRuntime => aspNetRuntime as Bundle));
 
         [Theory]
         [InlineData((BundleType)0)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime) + 1)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime) + 2)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime) + 10)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 1)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 2)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 10)]
         internal void TestFiltererArgumentOutOfRangeException(BundleType typeSelection)
         {
             TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultTestArgValue, typeSelection, DefaultTestArchSelection);
