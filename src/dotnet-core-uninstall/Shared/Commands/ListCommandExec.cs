@@ -21,15 +21,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 Execute(
                     RegistryQuery.GetInstalledBundles(),
-                    Windows.ListCommandExec.SupportedBundleTypes,
-                    bundles => Windows.ListCommandExec.GetGridView(bundles.ToList()));
+                    Windows.ListCommandExec.SupportedBundleTypes);
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
                 Execute(
                     FileSystemExplorer.GetInstalledBundles(),
-                    MacOs.ListCommandExec.SupportedBundleTypes,
-                    bundles => MacOs.ListCommandExec.GetGridView(bundles.ToList()));
+                    MacOs.ListCommandExec.SupportedBundleTypes);
             }
             else
             {
@@ -39,8 +37,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void Execute(
             IEnumerable<Bundle> bundles,
-            IEnumerable<BundleTypePrintInfo> supportedBundleTypes,
-            Func<IEnumerable<Bundle>, GridView> gridViewGetter)
+            IEnumerable<BundleTypePrintInfo> supportedBundleTypes)
         {
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
@@ -60,7 +57,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                         .OrderByDescending(bundle => bundle);
 
                     stackView.Add(new ContentView(bundleType.Header));
-                    stackView.Add(gridViewGetter.Invoke(filteredBundlesByType.ToArray()));
+                    stackView.Add(bundleType.GridViewGenerator.Invoke(filteredBundlesByType.ToArray()));
                     stackView.Add(new ContentView(string.Empty));
                 }
             }

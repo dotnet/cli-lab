@@ -67,7 +67,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         private static readonly Regex _aspNetRuntimeDisplayNameRegex = new Regex(
             $@"Microsoft\s(?<{TypeGroupName}>ASP\.NET)\sCore\s{_aspNetRuntimeVersionDisplayNameRegex.ToString()}\s\-\s(Shared\sFramework|Runtime\sPackage\sStore)");
         private static readonly Regex _hostingBundleDisplayNameRegex = new Regex(
-            $@"Microsoft\s\.NET\sCore\s({_hostingBundleVersionDisplayNameRegex.ToString()})?\s\-\s(?<{TypeGroupName}>Windows\sServer\sHosting)");
+            $@"Microsoft\s\.NET\sCore\s({_hostingBundleVersionDisplayNameRegex.ToString()}|{_previewVersionHostingBundleDisplayNameRegex.ToString()})\s\-\s(?<{TypeGroupName}>Windows\sServer\sHosting)");
         private static readonly Regex _sdkVersionCachePathRegex = new Regex(string.Format(
             _sdkVersionBasicRegexFormat,
             _previewVersionSdkCachePathRegex.ToString()));
