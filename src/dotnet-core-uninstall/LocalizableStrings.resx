@@ -261,4 +261,7 @@
   <data name="ListCommandHostingBundleHeader" xml:space="preserve">
     <value>.NET Core Runtime &amp; Hosting Bundles:</value>
   </data>
+  <data name="HostingBundleFootnoteFormat" xml:space="preserve">
+    <value>"{0}" is treated as a version {1} in this tool.</value>
+  </data>
 </root>

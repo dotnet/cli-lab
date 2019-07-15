@@ -133,6 +133,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; is treated as a version {1} in this tool..
+        /// </summary>
+        internal static string HostingBundleFootnoteFormat {
+            get {
+                return ResourceManager.GetString("HostingBundleFootnoteFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove .NET Core Runtime &amp; Hosting Bundles only..
         /// </summary>
         internal static string HostingBundleOptionDescription {

@@ -9,6 +9,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
     {
         public abstract BundleType Type { get; }
         public abstract BeforePatch BeforePatch { get; }
+        public string Footnote { get; }
+        public bool HasFootnote => Footnote != null;
 
         protected SemanticVersion SemVer { get; private set; }
 
@@ -23,7 +25,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             SemVer = null;
         }
 
-        protected BundleVersion(string value)
+        protected BundleVersion(string value, string footnote = null)
         {
             if (SemanticVersion.TryParse(value, out var semVer))
             {
@@ -33,6 +35,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             {
                 throw new InvalidInputVersionException(value);
             }
+
+            Footnote = footnote;
         }
 
         public static TBundleVersion FromInput<TBundleVersion>(string value)
@@ -67,7 +71,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 
         public override string ToString()
         {
-            return SemVer.ToString();
+            var asterisk = HasFootnote ? " (*)" : "";
+            return $"{SemVer.ToString()}{asterisk}";
         }
 
         protected bool Equals(BundleVersion other)

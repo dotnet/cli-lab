@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 
         public HostingBundleVersion() { }
 
-        public HostingBundleVersion(string value) : base(value) { }
+        public HostingBundleVersion(string value, string footnote = null) : base(value, footnote) { }
 
         public int CompareTo(object obj)
         {

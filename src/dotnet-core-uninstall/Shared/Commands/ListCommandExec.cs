@@ -48,6 +48,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
 
+            var footnotes = new List<string>();
+
             foreach (var bundleType in supportedBundleTypes)
             {
                 if (typeSelection.HasFlag(bundleType.Type))
@@ -59,7 +61,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     stackView.Add(new ContentView(bundleType.Header));
                     stackView.Add(bundleType.GridViewGenerator.Invoke(filteredBundlesByType.ToArray()));
                     stackView.Add(new ContentView(string.Empty));
+
+                    footnotes.AddRange(filteredBundlesByType
+                        .Where(bundle => bundle.Version.HasFootnote)
+                        .Select(bundle => bundle.Version.Footnote));
                 }
+            }
+
+            foreach (var footnote in footnotes)
+            {
+                stackView.Add(new ContentView($"* {footnote}"));
+            }
+
+            if (footnotes.Count > 0)
+            {
+                stackView.Add(new ContentView(string.Empty));
             }
 
             stackView.Render(

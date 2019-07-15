@@ -80,13 +80,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
             var archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value ?? string.Empty;
             var versionString = cachePathMatch.Groups[Regexes.VersionGroupName].Value;
+            var hasAuxVersion = cachePathMatch.Groups[Regexes.AuxVersionGroupName].Success;
+            var footnote = hasAuxVersion ?
+                string.Format(LocalizableStrings.HostingBundleFootnoteFormat, displayName, versionString) :
+                null;
 
             switch (match.Groups[Regexes.TypeGroupName].Value)
             {
                 case "SDK": version = new SdkVersion(versionString); break;
                 case "Runtime": version = new RuntimeVersion(versionString); break;
                 case "ASP.NET": version = new AspNetRuntimeVersion(versionString); break;
-                case "Windows Server Hosting": version = new HostingBundleVersion(versionString); break;
+                case "Windows Server Hosting": version = new HostingBundleVersion(versionString, footnote); break;
                 default: throw new ArgumentException();
             }
 
