@@ -19,8 +19,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
             {
+                var asterisk = bundle.Version.HasFootnote ? " (*)" : "";
+
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
-                gridView.SetChild(new ContentView(bundle.Version.ToString()), 1, index);
+                gridView.SetChild(new ContentView($"{bundle.Version.ToString()}{asterisk}"), 1, index);
                 gridView.SetChild(new ContentView(bundle.Arch.ToString().ToLower()), 2, index);
                 gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 3, index);
             }

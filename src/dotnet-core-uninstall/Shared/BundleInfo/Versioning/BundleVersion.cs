@@ -72,8 +72,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
 
         public override string ToString()
         {
-            var asterisk = HasFootnote ? " (*)" : "";
-            return $"{SemVer.ToString()}{asterisk}";
+            return SemVer.ToString();
         }
 
         protected bool Equals(BundleVersion other)
