@@ -67,7 +67,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             stackView.Render(
                 new ConsoleRenderer(new SystemConsole()),
-                new Region(0, 0, Console.WindowWidth, Console.WindowHeight));
+                new Region(0, 0, Console.WindowWidth, int.MaxValue));
         }
     }
 }
