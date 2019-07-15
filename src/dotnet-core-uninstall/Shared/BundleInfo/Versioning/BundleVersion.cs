@@ -9,7 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
     {
         public abstract BundleType Type { get; }
         public abstract BeforePatch BeforePatch { get; }
-        public string Footnote { get; }
+        public string Footnote { get; private set; }
         public bool HasFootnote => Footnote != null;
 
         protected SemanticVersion SemVer { get; private set; }
@@ -39,14 +39,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             Footnote = footnote;
         }
 
-        public static TBundleVersion FromInput<TBundleVersion>(string value)
+        public static TBundleVersion FromInput<TBundleVersion>(string value, string footnote = null)
             where TBundleVersion : BundleVersion, new()
         {
             if (SemanticVersion.TryParse(value, out var semVer))
             {
                 return new TBundleVersion
                 {
-                    SemVer = semVer
+                    SemVer = semVer,
+                    Footnote = footnote
                 };
             }
 
