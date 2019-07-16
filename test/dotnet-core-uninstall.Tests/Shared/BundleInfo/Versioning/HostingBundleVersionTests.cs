@@ -123,6 +123,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("0.0.a")]
         [InlineData("Hello2.2.5World")]
         [InlineData("Hello 2.2.5 World")]
+        [InlineData("1.1.13(*)")]
+        [InlineData("3.0.0-preview6.19307.2(*)")]
         internal void TestFromInputReject(string input)
         {
             Action action = () => new HostingBundleVersion(input);
