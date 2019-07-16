@@ -405,8 +405,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list -v diag", VerbosityLevel.Diagnostic)]
         [InlineData("list -v diagnostic", VerbosityLevel.Diagnostic)]
         [InlineData("-v q list", VerbosityLevel.Normal)]
-        [InlineData("-v m list -v d", VerbosityLevel.Detailed)]
-        [InlineData("-v unknown list -v d", VerbosityLevel.Detailed)]
+        [InlineData("list -v d", VerbosityLevel.Detailed)]
         internal void TestGetVerbosityLevel(string command, VerbosityLevel expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -426,8 +425,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list -v qu")]
         [InlineData("list --verbosity mini")]
         [InlineData("list -v unknown")]
-        [InlineData("-v q list -v unknown")]
-        [InlineData("-v mini list -v unknown")]
         internal void TestGetVerbosityLevelVerbosityLevelInvalidException(string command)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
