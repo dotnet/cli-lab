@@ -75,6 +75,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             return SemVer.ToString();
         }
 
+        public string ToString(bool withAsterisk)
+        {
+            var asterisk = withAsterisk && HasFootnote ? " (*)" : "";
+            return $"{SemVer.ToString()}{asterisk}";
+        }
+
         protected bool Equals(BundleVersion other)
         {
             return other != null &&
