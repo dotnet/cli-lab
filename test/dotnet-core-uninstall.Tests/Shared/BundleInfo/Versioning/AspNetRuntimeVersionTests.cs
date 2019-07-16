@@ -18,11 +18,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("3.0.0-preview6.19307.2", 3, 0, 0, true)]
         internal void TestConstructor(string input, int major, int minor, int patch, bool isPrerelease)
         {
-            TestProperties(new AspNetRuntimeVersion(input), major, minor, patch, isPrerelease);
-            TestProperties(BundleVersion.FromInput<AspNetRuntimeVersion>(input), major, minor, patch, isPrerelease);
+            TestProperties(new AspNetRuntimeVersion(input), major, minor, patch, isPrerelease, input);
+            TestProperties(BundleVersion.FromInput<AspNetRuntimeVersion>(input), major, minor, patch, isPrerelease, input);
         }
 
-        private static void TestProperties(AspNetRuntimeVersion version, int major, int minor, int patch, bool isPrerelease)
+        private static void TestProperties(AspNetRuntimeVersion version, int major, int minor, int patch, bool isPrerelease, string toStringExpected)
         {
             version.Major.Should().Be(major);
             version.Minor.Should().Be(minor);
@@ -32,6 +32,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
 
             version.Type.Should().Be(BundleType.AspNetRuntime);
             version.BeforePatch.Should().Be(new MajorMinorVersion(major, minor));
+
+            version.ToString().Should().Be(toStringExpected);
+            version.ToString(true).Should().Be(toStringExpected);
+            version.ToString(false).Should().Be(toStringExpected);
         }
 
         [Theory]

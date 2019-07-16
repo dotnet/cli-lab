@@ -19,11 +19,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("2.0.2-rc1-abcdef", 2, 0, 0, 2, true)]
         internal void TestConstructor(string input, int major, int minor, int sdkMinor, int patch, bool isPrerelease)
         {
-            TestProperties(new SdkVersion(input), major, minor, sdkMinor, patch, isPrerelease);
-            TestProperties(BundleVersion.FromInput<SdkVersion>(input), major, minor, sdkMinor, patch, isPrerelease);
+            TestProperties(new SdkVersion(input), major, minor, sdkMinor, patch, isPrerelease, input);
+            TestProperties(BundleVersion.FromInput<SdkVersion>(input), major, minor, sdkMinor, patch, isPrerelease, input);
         }
 
-        private static void TestProperties(SdkVersion version, int major, int minor, int sdkMinor, int patch, bool isPrerelease)
+        private static void TestProperties(SdkVersion version, int major, int minor, int sdkMinor, int patch, bool isPrerelease, string toStringExpected)
         {
             version.Major.Should().Be(major);
             version.Minor.Should().Be(minor);
@@ -34,6 +34,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
 
             version.Type.Should().Be(BundleType.Sdk);
             version.BeforePatch.Should().Be(new MajorMinorSdkMinorVersion(major, minor, sdkMinor));
+
+            version.ToString().Should().Be(toStringExpected);
+            version.ToString(true).Should().Be(toStringExpected);
+            version.ToString(false).Should().Be(toStringExpected);
         }
 
         [Theory]

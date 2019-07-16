@@ -10,19 +10,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
     public class HostingBundleVersionTests
     {
         [Theory]
-        [InlineData("2.2.5", null, 2, 2, 5, false, false)]
-        [InlineData("0.2.5", null, 0, 2, 5, false, false)]
-        [InlineData("2.1.0-rc1-final", null, 2, 1, 0, true, false)]
-        [InlineData("2.1.0-preview2-final", "test footnote", 2, 1, 0, true, true)]
-        [InlineData("3.0.0-preview-18579-0056", "test footnote", 3, 0, 0, true, true)]
-        [InlineData("3.0.0-preview6.19307.2", "test footnote", 3, 0, 0, true, true)]
-        internal void TestConstructor(string input, string footnote, int major, int minor, int patch, bool isPrerelease, bool hasFootnote)
+        [InlineData("2.2.5", "test footnote", 2, 2, 5, false, true, "2.2.5 (*)")]
+        [InlineData("0.2.5", null, 0, 2, 5, false, false, "0.2.5")]
+        [InlineData("2.1.0-rc1-final", null, 2, 1, 0, true, false, "2.1.0-rc1-final")]
+        [InlineData("2.1.0-preview2-final", null, 2, 1, 0, true, false, "2.1.0-preview2-final")]
+        [InlineData("3.0.0-preview-18579-0056", "test footnote", 3, 0, 0, true, true, "3.0.0-preview-18579-0056 (*)")]
+        [InlineData("3.0.0-preview6.19307.2", "test footnote", 3, 0, 0, true, true, "3.0.0-preview6.19307.2 (*)")]
+        internal void TestConstructor(string input, string footnote, int major, int minor, int patch, bool isPrerelease, bool hasFootnote, string toStringWithAsterisk)
         {
-            TestProperties(new HostingBundleVersion(input, footnote), footnote, major, minor, patch, isPrerelease, hasFootnote);
-            TestProperties(BundleVersion.FromInput<HostingBundleVersion>(input, footnote), footnote, major, minor, patch, isPrerelease, hasFootnote);
+            TestProperties(new HostingBundleVersion(input, footnote), footnote, major, minor, patch, isPrerelease, hasFootnote, input, toStringWithAsterisk);
+            TestProperties(BundleVersion.FromInput<HostingBundleVersion>(input, footnote), footnote, major, minor, patch, isPrerelease, hasFootnote, input, toStringWithAsterisk);
         }
 
-        private static void TestProperties(HostingBundleVersion version, string footnote, int major, int minor, int patch, bool isPrerelease, bool hasFootnote)
+        private static void TestProperties(HostingBundleVersion version, string footnote, int major, int minor, int patch, bool isPrerelease, bool hasFootnote, string toStringExpected, string toStringWithAsteriskExpected)
         {
             version.Major.Should().Be(major);
             version.Minor.Should().Be(minor);
@@ -34,6 +34,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
             version.Type.Should().Be(BundleType.HostingBundle);
             version.BeforePatch.Should().Be(new MajorMinorVersion(major, minor));
             version.HasFootnote.Should().Be(hasFootnote);
+
+            version.ToString().Should().Be(toStringExpected);
+            version.ToString(false).Should().Be(toStringExpected);
+            version.ToString(true).Should().Be(toStringWithAsteriskExpected);
         }
 
         [Theory]
