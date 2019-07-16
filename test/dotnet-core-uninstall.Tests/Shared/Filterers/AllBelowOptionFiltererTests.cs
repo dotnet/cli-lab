@@ -322,6 +322,35 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 BundleType.AspNetRuntime,
                 DefaultTestArchSelection
             };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.2.3",
+                new List<Bundle>
+                {
+                    HostingBundle_2_2_0_X86,
+                    HostingBundle_2_2_0_P3_X86,
+                    HostingBundle_2_2_0_P1_X86,
+                    HostingBundle_2_1_0_Rc1_X86,
+                    HostingBundle_1_1_13_X86
+                },
+                BundleType.HostingBundle,
+                DefaultTestArchSelection
+            };
+
+            yield return new object[]
+            {
+                DefaultTestBundles,
+                "2.2",
+                new List<Bundle>
+                {
+                    HostingBundle_2_1_0_Rc1_X86,
+                    HostingBundle_1_1_13_X86
+                },
+                BundleType.HostingBundle,
+                DefaultTestArchSelection
+            };
         }
 
         [Theory]
