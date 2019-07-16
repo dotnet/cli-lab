@@ -20,7 +20,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
             {
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
-                gridView.SetChild(new ContentView(bundle.Version.ToString(true)), 1, index);
+                gridView.SetChild(new ContentView(bundle.Version.ToStringWithAsterisk()), 1, index);
                 gridView.SetChild(new ContentView(bundle.Arch.ToString().ToLower()), 2, index);
                 gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 3, index);
             }
@@ -38,7 +38,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
             {
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
-                gridView.SetChild(new ContentView(bundle.Version.ToString(true)), 1, index);
+                gridView.SetChild(new ContentView(bundle.Version.ToStringWithAsterisk()), 1, index);
                 gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 2, index);
             }
 

@@ -36,8 +36,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
             version.HasFootnote.Should().Be(hasFootnote);
 
             version.ToString().Should().Be(toStringExpected);
-            version.ToString(false).Should().Be(toStringExpected);
-            version.ToString(true).Should().Be(toStringWithAsteriskExpected);
+            version.ToStringWithAsterisk().Should().Be(toStringWithAsteriskExpected);
         }
 
         [Theory]

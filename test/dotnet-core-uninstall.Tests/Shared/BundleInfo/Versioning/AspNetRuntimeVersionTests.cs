@@ -34,8 +34,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
             version.BeforePatch.Should().Be(new MajorMinorVersion(major, minor));
 
             version.ToString().Should().Be(toStringExpected);
-            version.ToString(true).Should().Be(toStringExpected);
-            version.ToString(false).Should().Be(toStringExpected);
+            version.ToStringWithAsterisk().Should().Be(toStringExpected);
         }
 
         [Theory]
