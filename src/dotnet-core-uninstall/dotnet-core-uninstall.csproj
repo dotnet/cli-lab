@@ -2,6 +2,7 @@
   <PropertyGroup>
     <AssemblyName>dotnet-core-uninstall</AssemblyName>
     <OutputType>Exe</OutputType>
+    <PublishSingleFile>true</PublishSingleFile>
     <RuntimeIdentifiers>win-x64;win-x86;osx-x64</RuntimeIdentifiers>
     <SelfContained>true</SelfContained>
     <SignAssembly>true</SignAssembly>
