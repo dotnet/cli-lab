@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
@@ -218,16 +219,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
 
-            (OptionFilterer as ArgFilterer<IEnumerable<string>>)
-                .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection)
-                .Should().BeEquivalentTo(expected);
+            (OptionFilterer as ArgFilterer<IEnumerable<string>>).Filter(
+                parseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                testBundles,
+                typeSelection,
+                archSelection)
+            .Should().BeEquivalentTo(expected);
         }
 
         internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
-            Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
-                .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection);
+            Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>).Filter(
+                parseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                testBundles,
+                typeSelection,
+                archSelection);
 
             action.Should().Throw<TException>();
         }
@@ -235,8 +242,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
-            Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>)
-                .Filter(parseResult.RootCommandResult.Arguments, testBundles, typeSelection, archSelection);
+            Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>).Filter(
+                parseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                testBundles,
+                typeSelection,
+                archSelection);
 
             action.Should().Throw<TException>(errorMessage);
         }
