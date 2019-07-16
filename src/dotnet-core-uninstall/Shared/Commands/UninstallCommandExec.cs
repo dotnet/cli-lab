@@ -69,16 +69,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             if (option == null)
             {
-                if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.Arguments.Count == 0)
+                if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.Tokens.Count == 0)
                 {
                     throw new RequiredArgMissingForUninstallCommandException();
                 }
 
-                return OptionFilterers.UninstallNoOptionFilterer.Filter(CommandLineConfigs.CommandLineParseResult.RootCommandResult.Arguments, bundles, typeSelection, archSelection);
+                return OptionFilterers.UninstallNoOptionFilterer.Filter(
+                    CommandLineConfigs.CommandLineParseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                    bundles,
+                    typeSelection,
+                    archSelection);
             }
             else
             {
-                return OptionFilterers.OptionFiltererDictionary[option].Filter(CommandLineConfigs.CommandLineParseResult, option, bundles, typeSelection, archSelection);
+                return OptionFilterers.OptionFiltererDictionary[option].Filter(
+                    CommandLineConfigs.CommandLineParseResult,
+                    option,
+                    bundles,
+                    typeSelection,
+                    archSelection);
             }
         }
 
