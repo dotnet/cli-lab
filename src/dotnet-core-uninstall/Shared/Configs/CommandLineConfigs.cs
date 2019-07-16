@@ -26,19 +26,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly Option UninstallAllButOption = new Option(
             "--all-but",
-            LocalizableStrings.UninstallAllButOptionDescription,
-            new Argument<IEnumerable<string>>
+            LocalizableStrings.UninstallAllButOptionDescription)
+        {
+            Argument = new Argument<IEnumerable<string>>
             {
                 Name = LocalizableStrings.UninstallAllButOptionArgumentName
-            });
+            }
+        };
 
         public static readonly Option UninstallAllBelowOption = new Option(
             "--all-below",
-            LocalizableStrings.UninstallAllBelowOptionDescription,
-            new Argument<string>
+            LocalizableStrings.UninstallAllBelowOptionDescription)
+        {
+            Argument = new Argument<string>
             {
                 Name = LocalizableStrings.UninstallAllBelowOptionArgumentName
-            });
+            }
+        };
 
         public static readonly Option UninstallAllPreviewsOption = new Option(
             "--all-previews",
@@ -50,19 +54,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly Option UninstallMajorMinorOption = new Option(
             "--major-minor",
-            LocalizableStrings.UninstallMajorMinorOptionDescription,
-            new Argument<string>
+            LocalizableStrings.UninstallMajorMinorOptionDescription)
+        {
+            Argument = new Argument<string>
             {
                 Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName
-            });
+            }
+        };
 
         public static readonly Option UninstallVerbosityOption = new Option(
             new[] { "--verbosity", "-v" },
-            LocalizableStrings.UninstallVerbosityOptionDescription,
-            new Argument<string>
+            LocalizableStrings.UninstallVerbosityOptionDescription)
+        {
+            Argument = new Argument<string>
             {
                 Name = LocalizableStrings.UninstallVerbosityOptionArgumentName
-            });
+            }
+        };
 
         public static readonly Option SdkOption = new Option(
             "--sdk",
@@ -89,8 +97,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.X64OptionDescription);
 
         public static readonly Option VersionOption = new Option(
-            "--version",
-            isHidden: true);
+            "--version");
 
         public static readonly Option DoItOption = new Option(
             "--do-it",
@@ -120,12 +127,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         };
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
-            LocalizableStrings.UninstallNoOptionDescription,
-            argument: new Argument<IEnumerable<string>>
-            {
-                Name = LocalizableStrings.UninstallNoOptionArgumentName,
-                Description = LocalizableStrings.UninstallNoOptionArgumentDescription
-            });
+            LocalizableStrings.UninstallNoOptionDescription);
 
         public static readonly Command ListCommand = new Command(
             "list",
@@ -144,7 +146,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         static CommandLineConfigs()
         {
-            UninstallRootCommand.Add(ListCommand);
+            UninstallRootCommand.AddArgument(new Argument<IEnumerable<string>>
+            {
+                Name = LocalizableStrings.UninstallNoOptionArgumentName,
+                Description = LocalizableStrings.UninstallNoOptionArgumentDescription
+            });
+
+            UninstallRootCommand.AddCommand(ListCommand);
 
             foreach (var option in UninstallMainOptions
                 .Concat(AuxOptions)
@@ -158,7 +166,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             foreach (var option in AuxOptions
                 .OrderBy(option => option.Name))
             {
-                ListCommand.Add(option);
+                ListCommand.AddOption(option);
             }
 
             ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
@@ -179,7 +187,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             var specifiedOption = specified.FirstOrDefault();
 
-            if (specifiedOption != null && commandResult.Arguments.Count > 0)
+            if (specifiedOption != null && commandResult.Tokens.Count > 0)
             {
                 var optionName = $"--{specifiedOption.Name}";
 

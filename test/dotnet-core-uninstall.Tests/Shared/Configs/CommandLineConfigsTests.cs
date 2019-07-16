@@ -32,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
             parseResult.CommandResult.Name.Should().Be("list");
-            parseResult.CommandResult.Arguments.Should().BeEmpty();
+            parseResult.CommandResult.Tokens.Should().BeEmpty();
 
             parseResult.Errors.Should().BeEmpty();
             parseResult.UnparsedTokens.Should().BeEmpty();
@@ -100,7 +100,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             }
             else
             {
-                parseResult.RootCommandResult.Arguments.As<object>().Should().BeEquivalentTo(expected);
+                parseResult.RootCommandResult.Tokens.Select(t => t.Value).As<object>()
+                    .Should().BeEquivalentTo(expected);
             }
 
             parseResult.Errors.Should().BeEmpty();
@@ -412,8 +413,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list -v diag", VerbosityLevel.Diagnostic)]
         [InlineData("list -v diagnostic", VerbosityLevel.Diagnostic)]
         [InlineData("-v q list", VerbosityLevel.Normal)]
-        [InlineData("-v m list -v d", VerbosityLevel.Detailed)]
-        [InlineData("-v unknown list -v d", VerbosityLevel.Detailed)]
+        [InlineData("list -v d", VerbosityLevel.Detailed)]
         internal void TestGetVerbosityLevel(string command, VerbosityLevel expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -433,8 +433,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list -v qu")]
         [InlineData("list --verbosity mini")]
         [InlineData("list -v unknown")]
-        [InlineData("-v q list -v unknown")]
-        [InlineData("-v mini list -v unknown")]
         internal void TestGetVerbosityLevelVerbosityLevelInvalidException(string command)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
