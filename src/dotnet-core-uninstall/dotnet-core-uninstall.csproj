@@ -2,7 +2,7 @@
   <PropertyGroup>
     <AssemblyName>dotnet-core-uninstall</AssemblyName>
     <OutputType>Exe</OutputType>
-    <RuntimeIdentifier>$(RID)</RuntimeIdentifier>
+    <RuntimeIdentifiers>win-x64;win-x86;osx-x64</RuntimeIdentifiers>
     <SelfContained>true</SelfContained>
     <SignAssembly>true</SignAssembly>
     <TargetFramework>netcoreapp3.0</TargetFramework>
