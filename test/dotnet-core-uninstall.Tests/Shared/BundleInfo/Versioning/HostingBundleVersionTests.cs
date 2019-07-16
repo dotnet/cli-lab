@@ -7,34 +7,36 @@ using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
 {
-    public class AspNetRuntimeVersionTests
+    public class HostingBundleVersionTests
     {
         [Theory]
-        [InlineData("2.2.5", 2, 2, 5, false)]
-        [InlineData("0.2.5", 0, 2, 5, false)]
-        [InlineData("2.1.0-rc1-final", 2, 1, 0, true)]
-        [InlineData("2.1.0-preview2-final", 2, 1, 0, true)]
-        [InlineData("3.0.0-preview-18579-0056", 3, 0, 0, true)]
-        [InlineData("3.0.0-preview6.19307.2", 3, 0, 0, true)]
-        internal void TestConstructor(string input, int major, int minor, int patch, bool isPrerelease)
+        [InlineData("2.2.5", "test footnote", 2, 2, 5, false, true, "2.2.5 (*)")]
+        [InlineData("0.2.5", null, 0, 2, 5, false, false, "0.2.5")]
+        [InlineData("2.1.0-rc1-final", null, 2, 1, 0, true, false, "2.1.0-rc1-final")]
+        [InlineData("2.1.0-preview2-final", null, 2, 1, 0, true, false, "2.1.0-preview2-final")]
+        [InlineData("3.0.0-preview-18579-0056", "test footnote", 3, 0, 0, true, true, "3.0.0-preview-18579-0056 (*)")]
+        [InlineData("3.0.0-preview6.19307.2", "test footnote", 3, 0, 0, true, true, "3.0.0-preview6.19307.2 (*)")]
+        internal void TestConstructor(string input, string footnote, int major, int minor, int patch, bool isPrerelease, bool hasFootnote, string toStringWithAsterisk)
         {
-            TestProperties(new AspNetRuntimeVersion(input), major, minor, patch, isPrerelease, input);
-            TestProperties(BundleVersion.FromInput<AspNetRuntimeVersion>(input), major, minor, patch, isPrerelease, input);
+            TestProperties(new HostingBundleVersion(input, footnote), footnote, major, minor, patch, isPrerelease, hasFootnote, input, toStringWithAsterisk);
+            TestProperties(BundleVersion.FromInput<HostingBundleVersion>(input, footnote), footnote, major, minor, patch, isPrerelease, hasFootnote, input, toStringWithAsterisk);
         }
 
-        private static void TestProperties(AspNetRuntimeVersion version, int major, int minor, int patch, bool isPrerelease, string toStringExpected)
+        private static void TestProperties(HostingBundleVersion version, string footnote, int major, int minor, int patch, bool isPrerelease, bool hasFootnote, string toStringExpected, string toStringWithAsteriskExpected)
         {
             version.Major.Should().Be(major);
             version.Minor.Should().Be(minor);
             version.Patch.Should().Be(patch);
             version.IsPrerelease.Should().Be(isPrerelease);
             version.MajorMinor.Should().Be(new MajorMinorVersion(major, minor));
+            version.Footnote.Should().Be(footnote);
 
-            version.Type.Should().Be(BundleType.AspNetRuntime);
+            version.Type.Should().Be(BundleType.HostingBundle);
             version.BeforePatch.Should().Be(new MajorMinorVersion(major, minor));
+            version.HasFootnote.Should().Be(hasFootnote);
 
             version.ToString().Should().Be(toStringExpected);
-            version.ToStringWithAsterisk().Should().Be(toStringExpected);
+            version.ToStringWithAsterisk().Should().Be(toStringWithAsteriskExpected);
         }
 
         [Theory]
@@ -42,10 +44,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("2.1.0-preview2-final", "2.1.0-preview2-final")]
         internal void TestEquality(string input1, string input2)
         {
-            var version1 = new AspNetRuntimeVersion(input1);
-            var version2 = new AspNetRuntimeVersion(input2);
+            var version1 = new HostingBundleVersion(input1);
+            var version2 = new HostingBundleVersion(input2);
 
-            TestUtils.EqualityComparisonTestUtils<AspNetRuntimeVersion>.TestEquality(version1, version2);
+            TestUtils.EqualityComparisonTestUtils<HostingBundleVersion>.TestEquality(version1, version2);
         }
 
         [Theory]
@@ -61,10 +63,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("3.0.0-rc1-final", "3.0.0")]
         internal void TestInequality(string lower, string higher)
         {
-            var lowerVersion = new AspNetRuntimeVersion(lower);
-            var higherVersion = new AspNetRuntimeVersion(higher);
+            var lowerVersion = new HostingBundleVersion(lower);
+            var higherVersion = new HostingBundleVersion(higher);
 
-            TestUtils.EqualityComparisonTestUtils<AspNetRuntimeVersion>.TestInequality(lowerVersion, higherVersion);
+            TestUtils.EqualityComparisonTestUtils<HostingBundleVersion>.TestInequality(lowerVersion, higherVersion);
         }
 
         [Theory]
@@ -72,9 +74,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("3.0.0-preview5-27626-15")]
         internal void TestInequalityNull(string input)
         {
-            var version = new AspNetRuntimeVersion(input);
+            var version = new HostingBundleVersion(input);
 
-            TestUtils.EqualityComparisonTestUtils<AspNetRuntimeVersion>.TestInequalityNull(version);
+            TestUtils.EqualityComparisonTestUtils<HostingBundleVersion>.TestInequalityNull(version);
         }
 
         [Theory]
@@ -98,7 +100,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("3.0.0-preview5.27626.15")]
         internal void TestFromInputAccept(string input)
         {
-            Action action = () => new AspNetRuntimeVersion(input);
+            Action action = () => new HostingBundleVersion(input);
 
             action.Should().NotThrow();
         }
@@ -120,9 +122,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo.Versioning
         [InlineData("0.0.a")]
         [InlineData("Hello2.2.5World")]
         [InlineData("Hello 2.2.5 World")]
+        [InlineData("1.1.13(*)")]
+        [InlineData("3.0.0-preview6.19307.2(*)")]
         internal void TestFromInputReject(string input)
         {
-            Action action = () => new AspNetRuntimeVersion(input);
+            Action action = () => new HostingBundleVersion(input);
 
             action.Should().Throw<InvalidInputVersionException>(string.Format(LocalizableStrings.InvalidInputVersionExceptionMessageFormat, input));
         }

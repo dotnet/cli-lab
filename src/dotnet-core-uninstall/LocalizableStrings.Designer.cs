@@ -133,6 +133,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &quot;{0}&quot; is treated as a version {1} in this tool..
+        /// </summary>
+        internal static string HostingBundleFootnoteFormat {
+            get {
+                return ResourceManager.GetString("HostingBundleFootnoteFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove .NET Core Runtime &amp; Hosting Bundles only..
+        /// </summary>
+        internal static string HostingBundleOptionDescription {
+            get {
+                return ResourceManager.GetString("HostingBundleOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
@@ -156,6 +174,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandDescription {
             get {
                 return ResourceManager.GetString("ListCommandDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .NET Core Runtime &amp; Hosting Bundles:.
+        /// </summary>
+        internal static string ListCommandHostingBundleHeader {
+            get {
+                return ResourceManager.GetString("ListCommandHostingBundleHeader", resourceCulture);
             }
         }
         
@@ -457,7 +484,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove x64..
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x64..
         /// </summary>
         internal static string X64OptionDescription {
             get {
@@ -466,7 +493,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk and --runtime to remove x86..
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x86..
         /// </summary>
         internal static string X86OptionDescription {
             get {

@@ -16,6 +16,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
         private static readonly RuntimeVersion TestRuntimeVersion2 = new RuntimeVersion("3.0.0-preview5-27122-01");
         private static readonly AspNetRuntimeVersion TestAspNetRuntimeVersion1 = new AspNetRuntimeVersion("2.2.6");
         private static readonly AspNetRuntimeVersion TestAspNetRuntimeVersion2 = new AspNetRuntimeVersion("3.0.0-preview6.19307.2");
+        private static readonly HostingBundleVersion TestHostingBundleVersion1 = new HostingBundleVersion("2.1.0-preview2-final");
+        private static readonly HostingBundleVersion TestHostingBundleVersion2 = new HostingBundleVersion("2.2.3", "test footnote");
         private static readonly string TestUninstallCommand1 = "C:\\ProgramData\\Package Cache\\{a05f1bee-210e-401f-9e98-d52a4698bc91}\\dotnet-sdk-2.2.300-win-x64.exe\" /uninstall /quiet";
         private static readonly string TestUninstallCommand2 = "some random uninstall command";
         private static readonly string TestDisplayName1 = "Microsoft .NET Core SDK 2.2.300 (x64)";
@@ -97,6 +99,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 TestUninstallCommand1,
                 TestDisplayName1
             };
+
+            yield return new object[]
+            {
+                TestHostingBundleVersion1,
+                BundleArch.X86,
+                TestUninstallCommand1,
+                TestDisplayName1
+            };
         }
 
         [Theory]
@@ -146,6 +156,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             {
                 new Bundle<AspNetRuntimeVersion>(TestAspNetRuntimeVersion2, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
                 new Bundle<AspNetRuntimeVersion>(TestAspNetRuntimeVersion2, BundleArch.X86, TestUninstallCommand2, TestDisplayName2)
+            };
+
+            yield return new object[]
+            {
+                new Bundle<HostingBundleVersion>(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
+                new Bundle<HostingBundleVersion>(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand2, TestDisplayName1)
             };
         }
 
@@ -211,6 +227,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 Bundle.From(TestAspNetRuntimeVersion1, BundleArch.X86, TestUninstallCommand2, TestDisplayName1),
                 Bundle.From(TestAspNetRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
             };
+
+            yield return new object[]
+            {
+                Bundle.From(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
+                Bundle.From(TestHostingBundleVersion2, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
+            };
+
+            yield return new object[]
+            {
+                Bundle.From(TestHostingBundleVersion1, BundleArch.X86, TestUninstallCommand2, TestDisplayName2),
+                Bundle.From(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
+            };
         }
 
         [Theory]
@@ -236,6 +264,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             yield return new object[]
             {
                 Bundle.From(TestAspNetRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
+            };
+
+            yield return new object[]
+            {
+                Bundle.From(TestHostingBundleVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1)
             };
         }
 
@@ -333,16 +366,42 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                     Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestSdkVersion2, BundleArch.X86, TestUninstallCommand2, TestDisplayName2),
                     Bundle.From(TestAspNetRuntimeVersion1, BundleArch.X64, TestUninstallCommand2, TestDisplayName2),
+                    Bundle.From(TestHostingBundleVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
                     Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X86, TestUninstallCommand1, TestDisplayName2),
+                    Bundle.From(TestHostingBundleVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
                     Bundle.From(TestSdkVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName2),
-                    Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1)
+                    Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
+                    Bundle.From(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
                 },
                 new List<Bundle<AspNetRuntimeVersion>>
                 {
                     Bundle.From(TestAspNetRuntimeVersion1, BundleArch.X64, TestUninstallCommand2, TestDisplayName2) as Bundle<AspNetRuntimeVersion>,
                     Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X86, TestUninstallCommand1, TestDisplayName2) as Bundle<AspNetRuntimeVersion>,
                     Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1) as Bundle<AspNetRuntimeVersion>
+                }
+            };
+
+            yield return new object[]
+            {
+                new List<Bundle>
+                {
+                    Bundle.From(TestRuntimeVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
+                    Bundle.From(TestSdkVersion2, BundleArch.X86, TestUninstallCommand2, TestDisplayName2),
+                    Bundle.From(TestAspNetRuntimeVersion1, BundleArch.X64, TestUninstallCommand2, TestDisplayName2),
+                    Bundle.From(TestHostingBundleVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1),
+                    Bundle.From(TestRuntimeVersion2, BundleArch.X64, TestUninstallCommand1, TestDisplayName1),
+                    Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X86, TestUninstallCommand1, TestDisplayName2),
+                    Bundle.From(TestHostingBundleVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
+                    Bundle.From(TestSdkVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName2),
+                    Bundle.From(TestAspNetRuntimeVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1),
+                    Bundle.From(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1)
+                },
+                new List<Bundle<HostingBundleVersion>>
+                {
+                    Bundle.From(TestHostingBundleVersion1, BundleArch.X86, TestUninstallCommand1, TestDisplayName1) as Bundle<HostingBundleVersion>,
+                    Bundle.From(TestHostingBundleVersion2, BundleArch.X64, TestUninstallCommand2, TestDisplayName1) as Bundle<HostingBundleVersion>,
+                    Bundle.From(TestHostingBundleVersion1, BundleArch.X64, TestUninstallCommand1, TestDisplayName1) as Bundle<HostingBundleVersion>
                 }
             };
         }
