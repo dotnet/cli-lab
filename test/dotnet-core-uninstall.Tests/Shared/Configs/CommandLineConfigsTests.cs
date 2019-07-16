@@ -31,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
             parseResult.CommandResult.Name.Should().Be("list");
-            parseResult.CommandResult.Arguments.Should().BeEmpty();
+            parseResult.CommandResult.Tokens.Should().BeEmpty();
 
             parseResult.Errors.Should().BeEmpty();
             parseResult.UnparsedTokens.Should().BeEmpty();
@@ -97,7 +97,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             }
             else
             {
-                parseResult.RootCommandResult.Arguments.As<object>().Should().BeEquivalentTo(expected);
+                parseResult.RootCommandResult.Tokens.Select(t => t.Value).As<object>()
+                    .Should().BeEquivalentTo(expected);
             }
 
             parseResult.Errors.Should().BeEmpty();
