@@ -84,6 +84,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--aspnet-runtime",
             LocalizableStrings.AspNetRuntimeOptionDescription);
 
+        public static readonly Option HostingBundleOption = new Option(
+            "--hosting-bundle",
+            LocalizableStrings.HostingBundleOptionDescription);
+
         public static readonly Option X86Option = new Option(
             "--x86",
             LocalizableStrings.X86OptionDescription);
@@ -117,6 +121,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             SdkOption,
             RuntimeOption,
             AspNetRuntimeOption,
+            HostingBundleOption,
             X86Option,
             X64Option
         };
@@ -222,9 +227,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 typeSelection |= BundleType.AspNetRuntime;
             }
 
+            if (commandResult.OptionResult(HostingBundleOption.Name) != null)
+            {
+                typeSelection |= BundleType.HostingBundle;
+            }
+
             if (typeSelection == 0)
             {
-                typeSelection = BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime;
+                typeSelection = Enum.GetValues(typeof(BundleType)).OfType<BundleType>().Aggregate((BundleType)0, (orSum, next) => orSum | next);
             }
 
             return typeSelection;
@@ -246,7 +256,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (archSelection == 0)
             {
-                archSelection = BundleArch.X86 | BundleArch.X64;
+                archSelection = Enum.GetValues(typeof(BundleArch)).OfType<BundleArch>().Aggregate((BundleArch)0, (orSum, next) => orSum | next);
             }
 
             return archSelection;

@@ -47,6 +47,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_2_2_3_X64 = GetBundleFromInput<AspNetRuntimeVersion>("2.2.3", BundleArch.X64);
         internal static Bundle<AspNetRuntimeVersion> AspNetRuntime_2_1_0_Rc1_X64 = GetBundleFromInput<AspNetRuntimeVersion>("2.1.0-rc1-final", BundleArch.X64);
 
+        internal static Bundle<HostingBundleVersion> HostingBundle_3_0_0_P6_X86 = GetBundleFromInput<HostingBundleVersion>("3.0.0-preview6.19307.2", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_3_0_0_P4_X86 = GetBundleFromInput<HostingBundleVersion>("3.0.0-preview4-19216-03", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_2_2_6_X86 = GetBundleFromInput<HostingBundleVersion>("2.2.6", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_2_2_0_X86 = GetBundleFromInput<HostingBundleVersion>("2.2.0", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_2_2_0_P3_X86 = GetBundleFromInput<HostingBundleVersion>("2.2.0-preview3-35497", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_2_2_0_P1_X86 = GetBundleFromInput<HostingBundleVersion>("2.2.0-preview1-35029", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_2_1_0_Rc1_X86 = GetBundleFromInput<HostingBundleVersion>("2.1.0-rc1-final", BundleArch.X86);
+        internal static Bundle<HostingBundleVersion> HostingBundle_1_1_13_X86 = GetBundleFromInput<HostingBundleVersion>("1.1.13", BundleArch.X86);
+
         internal static readonly IEnumerable<Bundle<SdkVersion>> DefaultTestSdks = new List<Bundle<SdkVersion>>
         {
             Sdk_2_2_202_X64,
@@ -80,16 +89,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             AspNetRuntime_2_1_0_Rc1_X64
         };
 
+        internal static readonly IEnumerable<Bundle<HostingBundleVersion>> DefaultTestHostingBundles = new List<Bundle<HostingBundleVersion>>
+        {
+            HostingBundle_3_0_0_P6_X86,
+            HostingBundle_3_0_0_P4_X86,
+            HostingBundle_2_2_6_X86,
+            HostingBundle_2_2_0_X86,
+            HostingBundle_2_2_0_P3_X86,
+            HostingBundle_2_2_0_P1_X86,
+            HostingBundle_2_1_0_Rc1_X86,
+            HostingBundle_1_1_13_X86
+        };
+
         internal static readonly IEnumerable<Bundle> DefaultTestBundles = DefaultTestSdks
             .Select(sdk => sdk as Bundle)
             .Concat(DefaultTestRuntimes.Select(runtime => runtime as Bundle))
-            .Concat(DefaultTestAspNetRuntimes.Select(aspNetRuntime => aspNetRuntime as Bundle));
+            .Concat(DefaultTestAspNetRuntimes.Select(aspNetRuntime => aspNetRuntime as Bundle))
+            .Concat(DefaultTestHostingBundles.Select(hostingBundle => hostingBundle as Bundle));
 
         [Theory]
         [InlineData((BundleType)0)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 1)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 2)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime) + 10)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle) + 1)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle) + 2)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle) + 10)]
         internal void TestFiltererArgumentOutOfRangeException(BundleType typeSelection)
         {
             TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultTestArgValue, typeSelection, DefaultTestArchSelection);

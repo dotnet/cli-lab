@@ -10,14 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
     internal static class ListCommandExec
     {
-        public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
-            new BundleTypePrintInfo[]
-            {
-                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader),
-                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader)
-            };
-
-        public static GridView GetGridView(IList<Bundle> bundles)
+        private static readonly Func<IList<Bundle>, GridView> _gridViewGeneratorWithArch = bundles =>
         {
             var gridView = new GridView();
 
@@ -32,6 +25,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             }
 
             return gridView;
-        }
+        };
+
+        public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
+            new BundleTypePrintInfo[]
+            {
+                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader, _gridViewGeneratorWithArch),
+                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader, _gridViewGeneratorWithArch)
+            };
     }
 }

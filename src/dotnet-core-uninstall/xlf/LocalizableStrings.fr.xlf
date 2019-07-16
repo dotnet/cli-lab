@@ -42,6 +42,16 @@
         <target state="new">*** DRY RUN</target>
         <note />
       </trans-unit>
+      <trans-unit id="HostingBundleFootnoteFormat">
+        <source>"{0}" is treated as a version {1} in this tool.</source>
+        <target state="new">"{0}" is treated as a version {1} in this tool.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HostingBundleOptionDescription">
+        <source>Remove .NET Core Runtime &amp; Hosting Bundles only.</source>
+        <target state="new">Remove .NET Core Runtime &amp; Hosting Bundles only.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
@@ -55,6 +65,11 @@
       <trans-unit id="ListCommandDescription">
         <source>List .NET Core SDKs or Runtimes that can be removed with this tool.</source>
         <target state="new">List .NET Core SDKs or Runtimes that can be removed with this tool.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListCommandHostingBundleHeader">
+        <source>.NET Core Runtime &amp; Hosting Bundles:</source>
+        <target state="new">.NET Core Runtime &amp; Hosting Bundles:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">
@@ -223,13 +238,13 @@
         <note />
       </trans-unit>
       <trans-unit id="X64OptionDescription">
-        <source>Can be used with --sdk and --runtime to remove x64.</source>
-        <target state="new">Can be used with --sdk and --runtime to remove x64.</target>
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</target>
         <note />
       </trans-unit>
       <trans-unit id="X86OptionDescription">
-        <source>Can be used with --sdk and --runtime to remove x86.</source>
-        <target state="new">Can be used with --sdk and --runtime to remove x86.</target>
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</target>
         <note />
       </trans-unit>
     </body>
