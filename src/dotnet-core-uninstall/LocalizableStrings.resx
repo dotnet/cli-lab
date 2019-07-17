@@ -190,10 +190,10 @@
     <value>Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</value>
   </data>
   <data name="UninstallNoOptionArgumentDescription" xml:space="preserve">
-    <value>The specified versions to uninstall.</value>
+    <value>The specified version to uninstall.</value>
   </data>
   <data name="UninstallNoOptionArgumentName" xml:space="preserve">
-    <value>VERSIONS</value>
+    <value>VERSION</value>
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
     <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</value>

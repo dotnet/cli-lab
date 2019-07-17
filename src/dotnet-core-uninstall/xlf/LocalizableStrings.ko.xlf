@@ -188,13 +188,13 @@
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentDescription">
-        <source>The specified versions to uninstall.</source>
-        <target state="new">The specified versions to uninstall.</target>
+        <source>The specified version to uninstall.</source>
+        <target state="new">The specified version to uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentName">
-        <source>VERSIONS</source>
-        <target state="new">VERSIONS</target>
+        <source>VERSION</source>
+        <target state="new">VERSION</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescription">

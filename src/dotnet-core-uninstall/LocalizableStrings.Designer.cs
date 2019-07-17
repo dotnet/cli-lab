@@ -412,7 +412,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified versions to uninstall..
+        ///   Looks up a localized string similar to The specified version to uninstall..
         /// </summary>
         internal static string UninstallNoOptionArgumentDescription {
             get {
@@ -421,7 +421,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VERSIONS.
+        ///   Looks up a localized string similar to VERSION.
         /// </summary>
         internal static string UninstallNoOptionArgumentName {
             get {
