@@ -97,7 +97,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             LocalizableStrings.X64OptionDescription);
 
         public static readonly Option VersionOption = new Option(
-            "--version");
+            "--version")
+        {
+            IsHidden = true
+        };
 
         public static readonly Option DoItOption = new Option(
             "--do-it",
