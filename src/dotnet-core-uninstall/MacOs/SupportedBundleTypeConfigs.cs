@@ -30,8 +30,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
             new BundleTypePrintInfo[]
             {
-                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader, _gridViewGeneratorWithArch),
-                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader, _gridViewGeneratorWithArch)
+                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader, _gridViewGeneratorWithArch, "sdk"),
+                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader, _gridViewGeneratorWithArch, "runtime")
             };
     }
 }

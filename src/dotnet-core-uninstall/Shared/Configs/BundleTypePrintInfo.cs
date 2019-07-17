@@ -12,11 +12,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public string Header { get; }
         public Func<IList<Bundle>, GridView> GridViewGenerator { get; }
+        public string OptionName { get; }
 
-        protected BundleTypePrintInfo(string header, Func<IList<Bundle>, GridView> gridViewGenerator)
+        protected BundleTypePrintInfo(string header, Func<IList<Bundle>, GridView> gridViewGenerator, string optionName)
         {
             Header = header ?? throw new ArgumentNullException();
             GridViewGenerator = gridViewGenerator ?? throw new ArgumentNullException();
+            OptionName = optionName ?? throw new ArgumentNullException();
         }
 
         public abstract IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles);
@@ -27,7 +29,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
     {
         public override BundleType Type => new TBundleVersion().Type;
 
-        public BundleTypePrintInfo(string header, Func<IList<Bundle>, GridView> gridViewGenerator) : base(header, gridViewGenerator) { }
+        public BundleTypePrintInfo(string header, Func<IList<Bundle>, GridView> gridViewGenerator, string optionName) :
+            base(header, gridViewGenerator, optionName)
+        { }
 
         public override IEnumerable<Bundle> Filter(IEnumerable<Bundle> bundles)
         {

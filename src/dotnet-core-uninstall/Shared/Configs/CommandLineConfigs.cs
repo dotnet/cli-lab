@@ -7,6 +7,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
@@ -118,13 +119,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallMajorMinorOption,
         };
 
-        public static readonly IEnumerable<Option> AuxOptions = new Option[]
+        public static readonly IEnumerable<Option> BundleTypeOptions = new Option[]
         {
-            UninstallVerbosityOption,
             SdkOption,
             RuntimeOption,
             AspNetRuntimeOption,
-            HostingBundleOption,
+            HostingBundleOption
+        };
+
+        public static readonly IEnumerable<Option> AuxOptions = new Option[]
+        {
+            UninstallVerbosityOption,
             X86Option,
             X64Option
         };
@@ -157,7 +162,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             UninstallRootCommand.AddCommand(ListCommand);
 
+            var supportedBundleTypes = GetSupportedBundleTypes();
+
+            var supportedBundleTypeOptions = BundleTypeOptions
+                .Where(option => supportedBundleTypes.Select(type => type.OptionName).Contains(option.Name));
+
             foreach (var option in UninstallMainOptions
+                .Concat(supportedBundleTypeOptions)
                 .Concat(AuxOptions)
                 .Append(VersionOption)
                 .Append(DoItOption)
@@ -167,6 +178,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
 
             foreach (var option in AuxOptions
+                .Concat(supportedBundleTypeOptions)
                 .OrderBy(option => option.Name))
             {
                 ListCommand.AddOption(option);
@@ -283,6 +295,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             else
             {
                 throw new VerbosityLevelInvalidException();
+            }
+        }
+
+        private static IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
+        {
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                return Windows.SupportedBundleTypeConfigs.SupportedBundleTypes;
+            }
+            else if (RuntimeInfo.RunningOnOSX)
+            {
+                return MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes;
+            }
+            else
+            {
+                throw new OperatingSystemNotSupportedException();
             }
         }
     }
