@@ -1,5 +1,5 @@
 <Project>
   <ItemGroup>
-    <ItemsToSign Include="$(ArtifactsBinDir)**\*.exe" />
+    <ItemsToSign Include="$(ArtifactsBinDir)\dotnet-core-uninstall\$(Configuration)\netcoreapp3.0\$(RuntimeIdentifier)\publish\dotnet-core-uninstall.exe" />
   </ItemGroup>
 </Project>
