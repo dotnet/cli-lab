@@ -4,11 +4,11 @@ using System.CommandLine.Rendering.Views;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal static class ListCommandExec
+    internal static class SupportedBundleTypeConfigs
     {
         private static readonly Func<IList<Bundle>, GridView> _gridViewGeneratorWithArch = bundles =>
         {

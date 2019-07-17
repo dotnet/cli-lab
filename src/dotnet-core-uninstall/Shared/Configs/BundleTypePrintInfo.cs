@@ -4,7 +4,7 @@ using System.CommandLine.Rendering.Views;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 
-namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
+namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
     internal abstract class BundleTypePrintInfo
     {
