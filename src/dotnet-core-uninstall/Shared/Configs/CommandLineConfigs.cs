@@ -152,6 +152,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly ParseResult CommandLineParseResult;
 
+        public static readonly IEnumerable<Option> SupportedBundleTypeOptions;
+
         static CommandLineConfigs()
         {
             UninstallRootCommand.AddArgument(new Argument<IEnumerable<string>>
@@ -164,11 +166,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             var supportedBundleTypes = GetSupportedBundleTypes();
 
-            var supportedBundleTypeOptions = BundleTypeOptions
+            SupportedBundleTypeOptions = BundleTypeOptions
                 .Where(option => supportedBundleTypes.Select(type => type.OptionName).Contains(option.Name));
 
             foreach (var option in UninstallMainOptions
-                .Concat(supportedBundleTypeOptions)
+                .Concat(SupportedBundleTypeOptions)
                 .Concat(AuxOptions)
                 .Append(VersionOption)
                 .Append(DoItOption)
@@ -178,7 +180,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
 
             foreach (var option in AuxOptions
-                .Concat(supportedBundleTypeOptions)
+                .Concat(SupportedBundleTypeOptions)
                 .OrderBy(option => option.Name))
             {
                 ListCommand.AddOption(option);
@@ -225,34 +227,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static BundleType GetTypeSelection(this CommandResult commandResult)
         {
-            var typeSelection = (BundleType)0;
+            var supportedBundleTypes = GetSupportedBundleTypes();
 
-            if (commandResult.OptionResult(SdkOption.Name) != null)
-            {
-                typeSelection |= BundleType.Sdk;
-            }
+            var typeSelection = supportedBundleTypes
+                .Where(type => commandResult.OptionResult(type.OptionName) != null)
+                .Select(type => type.Type)
+                .Aggregate((BundleType)0, (orSum, next) => orSum | next);
 
-            if (commandResult.OptionResult(RuntimeOption.Name) != null)
-            {
-                typeSelection |= BundleType.Runtime;
-            }
-
-            if (commandResult.OptionResult(AspNetRuntimeOption.Name) != null)
-            {
-                typeSelection |= BundleType.AspNetRuntime;
-            }
-
-            if (commandResult.OptionResult(HostingBundleOption.Name) != null)
-            {
-                typeSelection |= BundleType.HostingBundle;
-            }
-
-            if (typeSelection == 0)
-            {
-                typeSelection = Enum.GetValues(typeof(BundleType)).OfType<BundleType>().Aggregate((BundleType)0, (orSum, next) => orSum | next);
-            }
-
-            return typeSelection;
+            return typeSelection == 0 ?
+                supportedBundleTypes.Select(type => type.Type).Aggregate((BundleType)0, (orSum, next) => orSum | next) :
+                typeSelection;
         }
 
         public static BundleArch GetArchSelection(this CommandResult commandResult)

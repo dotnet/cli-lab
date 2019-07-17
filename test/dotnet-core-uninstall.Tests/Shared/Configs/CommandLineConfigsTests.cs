@@ -39,6 +39,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
             CommandLineConfigs.AuxOptions
+                .Concat(CommandLineConfigs.SupportedBundleTypeOptions)
                 .Select(option => option.Name)
                 .Where(option => parseResult.CommandResult.OptionResult(option) != null)
                 .Should().BeEquivalentTo(expectedAuxOptions);
@@ -128,6 +129,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
             CommandLineConfigs.AuxOptions
+                .Concat(CommandLineConfigs.SupportedBundleTypeOptions)
                 .Select(option => option.Name)
                 .Where(option => parseResult.CommandResult.OptionResult(option) != null)
                 .Should().BeEquivalentTo(expectedAuxOptions);
