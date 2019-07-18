@@ -14,7 +14,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 {
     public class CommandLineConfigsTests
     {
-        [WindowsOnlyTheory]
+        [Theory]
         [InlineData("list", new string[] { })]
         [InlineData("list --sdk", new string[] { "sdk" })]
         [InlineData("list --runtime", new string[] { "runtime" })]
@@ -24,11 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list --sdk -v q", new string[] { "verbosity", "sdk" })]
         [InlineData("list --runtime --verbosity minimal", new string[] { "verbosity", "runtime" })]
         [InlineData("list --sdk --runtime -v normal", new string[] { "verbosity", "sdk", "runtime" })]
-        [InlineData("list --aspnet-runtime", new string[] { "aspnet-runtime" })]
-        [InlineData("list -v n --aspnet-runtime", new string[] { "verbosity", "aspnet-runtime" })]
-        [InlineData("list --sdk --verbosity diag --aspnet-runtime", new string[] { "verbosity", "sdk", "aspnet-runtime" })]
-        [InlineData("list --runtime --hosting-bundle", new string[] { "runtime", "hosting-bundle" })]
-        internal void TestListCommandAcceptWindows(string command, string[] expectedAuxOptions)
+        internal void TestListCommandAccept(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
@@ -45,17 +41,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
                 .Should().BeEquivalentTo(expectedAuxOptions);
         }
 
-        [MacOsOnlyTheory]
-        [InlineData("list", new string[] { })]
-        [InlineData("list --sdk", new string[] { "sdk" })]
-        [InlineData("list --runtime", new string[] { "runtime" })]
-        [InlineData("list --sdk --runtime", new string[] { "sdk", "runtime" })]
-        [InlineData("list -v d", new string[] { "verbosity" })]
-        [InlineData("list --verbosity diag", new string[] { "verbosity" })]
-        [InlineData("list --sdk -v q", new string[] { "verbosity", "sdk" })]
-        [InlineData("list --runtime --verbosity minimal", new string[] { "verbosity", "runtime" })]
-        [InlineData("list --sdk --runtime -v normal", new string[] { "verbosity", "sdk", "runtime" })]
-        internal void TestListCommandAcceptMacOs(string command, string[] expectedAuxOptions)
+        [WindowsOnlyTheory]
+        [InlineData("list --aspnet-runtime", new string[] { "aspnet-runtime" })]
+        [InlineData("list -v n --aspnet-runtime", new string[] { "verbosity", "aspnet-runtime" })]
+        [InlineData("list --sdk --verbosity diag --aspnet-runtime", new string[] { "verbosity", "sdk", "aspnet-runtime" })]
+        [InlineData("list --runtime --hosting-bundle", new string[] { "runtime", "hosting-bundle" })]
+        internal void TestListCommandAcceptWindows(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
@@ -137,7 +128,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnmatchedTokens.Should().BeEmpty();
         }
 
-        [WindowsOnlyTheory]
+        [Theory]
         [InlineData("--all --sdk", new string[] { "sdk" })]
         [InlineData("--all-below 2.2.300 --runtime", new string[] { "runtime" })]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk --runtime", new string[] { "sdk", "runtime" })]
@@ -145,9 +136,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all -v quiet --sdk", new string[] { "verbosity", "sdk" })]
         [InlineData("--major-minor 2.3 --verbosity m --runtime", new string[] { "verbosity", "runtime" })]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk -v n --runtime", new string[] { "verbosity", "sdk", "runtime" })]
-        [InlineData("--all --sdk --aspnet-runtime", new string[] { "sdk", "aspnet-runtime" })]
-        [InlineData("--major-minor 1.1 --hosting-bundle -v q", new string[] { "hosting-bundle", "verbosity" })]
-        internal void TestOptionsAcceptAuxWindows(string command, string[] expectedAuxOptions)
+        internal void TestOptionsAcceptAux(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
@@ -161,15 +150,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
                 .Should().BeEquivalentTo(expectedAuxOptions);
         }
 
-        [MacOsOnlyTheory]
-        [InlineData("--all --sdk", new string[] { "sdk" })]
-        [InlineData("--all-below 2.2.300 --runtime", new string[] { "runtime" })]
-        [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk --runtime", new string[] { "sdk", "runtime" })]
-        [InlineData("2.1.300 3.0.100-preview-276262-01 --verbosity diagnostic", new string[] { "verbosity" })]
-        [InlineData("--all -v quiet --sdk", new string[] { "verbosity", "sdk" })]
-        [InlineData("--major-minor 2.3 --verbosity m --runtime", new string[] { "verbosity", "runtime" })]
-        [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk -v n --runtime", new string[] { "verbosity", "sdk", "runtime" })]
-        internal void TestOptionsAcceptAuxMacOs(string command, string[] expectedAuxOptions)
+        [WindowsOnlyTheory]
+        [InlineData("--all --sdk --aspnet-runtime", new string[] { "sdk", "aspnet-runtime" })]
+        [InlineData("--major-minor 1.1 --hosting-bundle -v q", new string[] { "hosting-bundle", "verbosity" })]
+        internal void TestOptionsAcceptAuxWindows(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
 
@@ -197,6 +181,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--major-minor 3.0 --verbosity")]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0 --sdk --verbosity")]
         internal void TestOptionsReject(string command)
+        {
+            CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
+                .Should().NotBeEmpty();
+        }
+
+        [MacOsOnlyTheory]
+        [InlineData("--all --aspnet-runtime")]
+        [InlineData("--major-minor 1.1 --hosting-bundle")]
+        [InlineData("--all-but 2.2.300 --sdk --aspnet-runtime -v q")]
+        [InlineData("--all-below 2.2 --verbosity normal --sdk --hosting-bundle")]
+        internal void TestOptionsRejectMacOs(string command)
         {
             CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
                 .Should().NotBeEmpty();
@@ -416,19 +411,32 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             action.Should().Throw<VersionBeforeOptionException>(string.Format(LocalizableStrings.VersionBeforeOptionExceptionMessageFormat, option));
         }
 
-        [WindowsOnlyTheory]
-        [InlineData("", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [Theory]
         [InlineData("--sdk", BundleType.Sdk)]
         [InlineData("--runtime", BundleType.Runtime)]
         [InlineData("--sdk --runtime", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("-v q", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
         [InlineData("--sdk --verbosity minimal", BundleType.Sdk)]
         [InlineData("-v normal --runtime", BundleType.Runtime)]
         [InlineData("--sdk --verbosity diag --runtime", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--all", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
         [InlineData("--sdk --all-but 2.2.300 2.1.700", BundleType.Sdk)]
         [InlineData("--runtime --all-below 3.0.1-preview-10086", BundleType.Runtime)]
         [InlineData("--sdk --runtime --all-previews", BundleType.Sdk | BundleType.Runtime)]
+        internal void TestGetTypeSelectionRootCommand(string command, BundleType expected)
+        {
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
+
+            parseResult.Errors.Should().BeEmpty();
+            parseResult.UnparsedTokens.Should().BeEmpty();
+            parseResult.UnmatchedTokens.Should().BeEmpty();
+
+            parseResult.RootCommandResult.GetTypeSelection()
+                .Should().Be(expected);
+        }
+
+        [WindowsOnlyTheory]
+        [InlineData("", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [InlineData("-v q", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [InlineData("--all", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
         [InlineData("--aspnet-runtime", BundleType.AspNetRuntime)]
         [InlineData("--sdk --aspnet-runtime --all-but 2.2.3", BundleType.Sdk | BundleType.AspNetRuntime)]
         [InlineData("--sdk --runtime --aspnet-runtime", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
@@ -448,17 +456,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
         [MacOsOnlyTheory]
         [InlineData("", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--sdk", BundleType.Sdk)]
-        [InlineData("--runtime", BundleType.Runtime)]
-        [InlineData("--sdk --runtime", BundleType.Sdk | BundleType.Runtime)]
         [InlineData("-v q", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--sdk --verbosity minimal", BundleType.Sdk)]
-        [InlineData("-v normal --runtime", BundleType.Runtime)]
-        [InlineData("--sdk --verbosity diag --runtime", BundleType.Sdk | BundleType.Runtime)]
         [InlineData("--all", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--sdk --all-but 2.2.300 2.1.700", BundleType.Sdk)]
-        [InlineData("--runtime --all-below 3.0.1-preview-10086", BundleType.Runtime)]
-        [InlineData("--sdk --runtime --all-previews", BundleType.Sdk | BundleType.Runtime)]
         internal void TestGetTypeSelectionRootCommandMacOs(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
