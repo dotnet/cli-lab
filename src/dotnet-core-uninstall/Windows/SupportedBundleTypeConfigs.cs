@@ -48,10 +48,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
             new BundleTypePrintInfo[]
             {
-                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader, _gridViewGeneratorWithArch, "sdk"),
-                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader, _gridViewGeneratorWithArch, "runtime"),
-                new BundleTypePrintInfo<AspNetRuntimeVersion>(LocalizableStrings.ListCommandAspNetRuntimeHeader, _gridViewGeneratorWithArch, "aspnet-runtime"),
-                new BundleTypePrintInfo<HostingBundleVersion>(LocalizableStrings.ListCommandHostingBundleHeader, _gridViewGeneratorWithoutArch, "hosting-bundle")
+                new BundleTypePrintInfo<SdkVersion>(
+                    LocalizableStrings.ListCommandSdkHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.SdkOptionName),
+
+                new BundleTypePrintInfo<RuntimeVersion>(
+                    LocalizableStrings.ListCommandRuntimeHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.RuntimeOptionName),
+
+                new BundleTypePrintInfo<AspNetRuntimeVersion>(
+                    LocalizableStrings.ListCommandAspNetRuntimeHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.AspNetRuntimeOptionName),
+
+                new BundleTypePrintInfo<HostingBundleVersion>(
+                    LocalizableStrings.ListCommandHostingBundleHeader,
+                    _gridViewGeneratorWithoutArch,
+                    CommandLineConfigs.HostingBundleOptionName)
             };
     }
 }

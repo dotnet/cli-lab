@@ -39,8 +39,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            CommandLineConfigs.AuxOptions
-                .Concat(CommandLineConfigs.SupportedBundleTypeOptions)
+            CommandLineConfigs.ListAuxOptions
                 .Select(option => option.Name)
                 .Where(option => parseResult.CommandResult.OptionResult(option) != null)
                 .Should().BeEquivalentTo(expectedAuxOptions);
@@ -67,8 +66,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            CommandLineConfigs.AuxOptions
-                .Concat(CommandLineConfigs.SupportedBundleTypeOptions)
+            CommandLineConfigs.ListAuxOptions
                 .Select(option => option.Name)
                 .Where(option => parseResult.CommandResult.OptionResult(option) != null)
                 .Should().BeEquivalentTo(expectedAuxOptions);
@@ -157,8 +155,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            CommandLineConfigs.AuxOptions
-                .Concat(CommandLineConfigs.SupportedBundleTypeOptions)
+            CommandLineConfigs.UninstallAuxOptions
                 .Select(option => option.Name)
                 .Where(option => parseResult.CommandResult.OptionResult(option) != null)
                 .Should().BeEquivalentTo(expectedAuxOptions);
@@ -180,8 +177,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            CommandLineConfigs.AuxOptions
-                .Concat(CommandLineConfigs.SupportedBundleTypeOptions)
+            CommandLineConfigs.UninstallAuxOptions
                 .Select(option => option.Name)
                 .Where(option => parseResult.CommandResult.OptionResult(option) != null)
                 .Should().BeEquivalentTo(expectedAuxOptions);

@@ -61,15 +61,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove ASP.NET Core Runtimes only..
-        /// </summary>
-        internal static string AspNetRuntimeOptionDescription {
-            get {
-                return ResourceManager.GetString("AspNetRuntimeOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You must specify either --sdk or --runtime..
         /// </summary>
         internal static string BundleTypeMissingExceptionMessage {
@@ -142,20 +133,20 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core Runtime &amp; Hosting Bundles only..
-        /// </summary>
-        internal static string HostingBundleOptionDescription {
-            get {
-                return ResourceManager.GetString("HostingBundleOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The specified version is not valid: &quot;{0}&quot;..
         /// </summary>
         internal static string InvalidInputVersionExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("InvalidInputVersionExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List ASP.NET Core Runtimes..
+        /// </summary>
+        internal static string ListAspNetRuntimeOptionDescription {
+            get {
+                return ResourceManager.GetString("ListAspNetRuntimeOptionDescription", resourceCulture);
             }
         }
         
@@ -201,6 +192,51 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandSdkHeader {
             get {
                 return ResourceManager.GetString("ListCommandSdkHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List .NET Core Runtime &amp; Hosting Bundles..
+        /// </summary>
+        internal static string ListHostingBundleOptionDescription {
+            get {
+                return ResourceManager.GetString("ListHostingBundleOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List .NET Core Runtimes..
+        /// </summary>
+        internal static string ListRuntimeOptionDescription {
+            get {
+                return ResourceManager.GetString("ListRuntimeOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List .NET Core SDKs..
+        /// </summary>
+        internal static string ListSdkOptionDescription {
+            get {
+                return ResourceManager.GetString("ListSdkOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List x64 .NET Core SDKs or Runtimes..
+        /// </summary>
+        internal static string ListX64OptionDescription {
+            get {
+                return ResourceManager.GetString("ListX64OptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List x86 .NET Core SDKs or Runtimes..
+        /// </summary>
+        internal static string ListX86OptionDescription {
+            get {
+                return ResourceManager.GetString("ListX86OptionDescription", resourceCulture);
             }
         }
         
@@ -264,24 +300,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string RequiredArgMissingForUninstallCommandExceptionMessage {
             get {
                 return ResourceManager.GetString("RequiredArgMissingForUninstallCommandExceptionMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core Runtimes only..
-        /// </summary>
-        internal static string RuntimeOptionDescription {
-            get {
-                return ResourceManager.GetString("RuntimeOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs only..
-        /// </summary>
-        internal static string SdkOptionDescription {
-            get {
-                return ResourceManager.GetString("SdkOptionDescription", resourceCulture);
             }
         }
         
@@ -376,6 +394,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Remove ASP.NET Core Runtimes only..
+        /// </summary>
+        internal static string UninstallAspNetRuntimeOptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallAspNetRuntimeOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Timeout during uninstall: {0}..
         /// </summary>
         internal static string UninstallationFailedExceptionMessageFormat {
@@ -390,6 +417,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallationFailedExceptionWithExitCodeMessageFormat {
             get {
                 return ResourceManager.GetString("UninstallationFailedExceptionWithExitCodeMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove .NET Core Runtime &amp; Hosting Bundles only..
+        /// </summary>
+        internal static string UninstallHostingBundleOptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallHostingBundleOptionDescription", resourceCulture);
             }
         }
         
@@ -448,20 +484,38 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to LEVEL.
+        ///   Looks up a localized string similar to Remove .NET Core Runtimes only..
         /// </summary>
-        internal static string UninstallVerbosityOptionArgumentName {
+        internal static string UninstallRuntimeOptionDescription {
             get {
-                return ResourceManager.GetString("UninstallVerbosityOptionArgumentName", resourceCulture);
+                return ResourceManager.GetString("UninstallRuntimeOptionDescription", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs only..
         /// </summary>
-        internal static string UninstallVerbosityOptionDescription {
+        internal static string UninstallSdkOptionDescription {
             get {
-                return ResourceManager.GetString("UninstallVerbosityOptionDescription", resourceCulture);
+                return ResourceManager.GetString("UninstallSdkOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x64..
+        /// </summary>
+        internal static string UninstallX64OptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallX64OptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x86..
+        /// </summary>
+        internal static string UninstallX86OptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallX86OptionDescription", resourceCulture);
             }
         }
         
@@ -475,29 +529,29 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to LEVEL.
+        /// </summary>
+        internal static string VerbosityOptionArgumentName {
+            get {
+                return ResourceManager.GetString("VerbosityOptionArgumentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]..
+        /// </summary>
+        internal static string VerbosityOptionDescription {
+            get {
+                return ResourceManager.GetString("VerbosityOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Do not use a version before an option: {0}..
         /// </summary>
         internal static string VersionBeforeOptionExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("VersionBeforeOptionExceptionMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x64..
-        /// </summary>
-        internal static string X64OptionDescription {
-            get {
-                return ResourceManager.GetString("X64OptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x86..
-        /// </summary>
-        internal static string X86OptionDescription {
-            get {
-                return ResourceManager.GetString("X86OptionDescription", resourceCulture);
             }
         }
     }
