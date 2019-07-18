@@ -126,7 +126,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestArgValue,
                 BundleType.Sdk | BundleType.Runtime,
                 DefaultTestArchSelection,
-                "You must specify exactly one of: --sdk, --runtime, --aspnet-runtime, --hosting-bundle.");
+                string.Format(LocalizableStrings.BundleTypeMissingExceptionMessage, "--aspnet-runtime, --hosting-bundle, --runtime, --sdk"));
         }
 
         [MacOsOnlyFact]
@@ -137,7 +137,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestArgValue,
                 BundleType.Sdk | BundleType.Runtime,
                 DefaultTestArchSelection,
-                "You must specify exactly one of: --sdk, --runtime.");
+                string.Format(LocalizableStrings.BundleTypeMissingExceptionMessage, "--runtime, --sdk"));
         }
 
         internal virtual void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)

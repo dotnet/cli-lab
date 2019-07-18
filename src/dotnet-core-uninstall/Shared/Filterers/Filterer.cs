@@ -26,6 +26,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             {
                 throw new BundleTypeMissingException(SupportedBundleTypeConfigs
                     .GetSupportedBundleTypes()
+                    .OrderBy(type => type.OptionName)
                     .Select(type => $"--{type.OptionName}"));
             }
         }
