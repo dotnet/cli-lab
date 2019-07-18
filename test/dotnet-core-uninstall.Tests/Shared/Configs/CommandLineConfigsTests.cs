@@ -182,8 +182,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0 --sdk --verbosity")]
         internal void TestOptionsReject(string command)
         {
-            CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
-                .Should().NotBeEmpty();
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
+
+            (parseResult.Errors.Count != 0 ||
+                parseResult.UnparsedTokens.Count != 0 ||
+                parseResult.UnmatchedTokens.Count != 0 ||
+                parseResult.RootCommandResult.Tokens.Count != 0)
+            .Should().BeTrue();
         }
 
         [MacOsOnlyTheory]
@@ -193,8 +198,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below 2.2 --verbosity normal --sdk --hosting-bundle")]
         internal void TestOptionsRejectMacOs(string command)
         {
-            CommandLineConfigs.UninstallRootCommand.Parse(command).Errors
-                .Should().NotBeEmpty();
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
+
+            (parseResult.Errors.Count != 0 ||
+                parseResult.UnparsedTokens.Count != 0 ||
+                parseResult.UnmatchedTokens.Count != 0 ||
+                parseResult.RootCommandResult.Tokens.Count != 0)
+            .Should().BeTrue();
         }
 
         [Theory]
