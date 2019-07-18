@@ -10,11 +10,20 @@ using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using System.Linq;
 using System.Diagnostics;
 using System.IO;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
+using System.Threading;
+using System.Security.Principal;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class UninstallCommandExec
     {
+        private const int UNINSTALL_TIMEOUT = 10 * 60 * 1000;
+
+        [DllImport("libc")]
+        private static extern uint getuid();
+
         private static readonly Lazy<string> _assemblyVersion =
             new Lazy<string>(() => {
                 var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
@@ -93,18 +102,119 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void DoIt(IEnumerable<Bundle> bundles)
         {
-            if (RuntimeInfo.RunningOnWindows)
+            if (!IsAdmin())
             {
-                Windows.UninstallCommandExec.ExecuteUninstallCommand(bundles);
+                throw new NotAdminException();
             }
-            else if (RuntimeInfo.RunningOnOSX)
+
+            var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
+            var verbosityLogger = new VerbosityLogger(verbosityLevel);
+
+            var canceled = false;
+            var cancelMutex = new Mutex();
+
+            var cancelProcessHandler = new ConsoleCancelEventHandler((sender, cancelArgs) =>
             {
-                throw new NotImplementedException();
-            }
-            else
+                cancelMutex.WaitOne();
+
+                try
+                {
+                    if (!canceled)
+                    {
+                        canceled = true;
+                        Console.WriteLine(LocalizableStrings.CancelingMessage);
+                    }
+
+                    cancelArgs.Cancel = true;
+                }
+                finally
+                {
+                    cancelMutex.ReleaseMutex();
+                }
+            });
+
+            foreach (var bundle in bundles.ToList().AsReadOnly())
             {
-                throw new OperatingSystemNotSupportedException();
+                verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
+
+                var args = ParseCommandToArgs(bundle.UninstallCommand);
+
+                var process = new Process
+                {
+                    StartInfo = GetProcessStartInfo(args)
+                };
+
+                Console.CancelKeyPress += cancelProcessHandler;
+
+                if (!process.Start() || !process.WaitForExit(UNINSTALL_TIMEOUT))
+                {
+                    throw new UninstallationFailedException(bundle.UninstallCommand);
+                }
+
+                if (process.ExitCode != 0)
+                {
+                    throw new UninstallationFailedException(bundle.UninstallCommand, process.ExitCode);
+                }
+
+                Console.CancelKeyPress -= cancelProcessHandler;
+
+                cancelMutex.WaitOne();
+
+                try
+                {
+                    if (canceled)
+                    {
+                        Environment.Exit(1);
+                    }
+                }
+                finally
+                {
+                    cancelMutex.ReleaseMutex();
+                }
             }
+        }
+
+        private static bool IsAdmin()
+        {
+            try
+            {
+                if (RuntimeInfo.RunningOnWindows)
+                {
+                    var identity = WindowsIdentity.GetCurrent();
+                    var principal = new WindowsPrincipal(identity);
+                    return principal.IsInRole(WindowsBuiltInRole.Administrator);
+                }
+                else if (RuntimeInfo.RunningOnOSX)
+                {
+                    return getuid() == 0;
+                }
+                else
+                {
+                    throw new OperatingSystemNotSupportedException();
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static ProcessStartInfo GetProcessStartInfo(IEnumerable<string> args)
+        {
+            return new ProcessStartInfo
+            {
+                FileName = args.First(),
+                Arguments = string.Join(" ", args.Skip(1)),
+                UseShellExecute = true,
+                Verb = RuntimeInfo.RunningOnWindows ? "runas" : null
+            };
+        }
+
+        private static IEnumerable<string> ParseCommandToArgs(string command)
+        {
+            return command
+                .Split(' ')
+                .Where(s => !string.IsNullOrWhiteSpace(s));
         }
 
         private static void TryIt(IEnumerable<Bundle> bundles)
