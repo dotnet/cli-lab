@@ -65,7 +65,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 
         private static string GetUninstallCommand(IEnumerable<string> paths)
         {
-            return $"rm -rf {string.Join(" ", paths)}";
+            return string.Join(" ", paths);
         }
     }
 }

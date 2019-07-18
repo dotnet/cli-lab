@@ -14,6 +14,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using System.Threading;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
+using System.ComponentModel;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -23,6 +24,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         [DllImport("libc")]
         private static extern uint getuid();
+
+        [DllImport("shell32.dll", SetLastError = true)]
+        private static extern IntPtr CommandLineToArgvW(
+            [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
+            out int pNumArgs);
 
         private static readonly Lazy<string> _assemblyVersion =
             new Lazy<string>(() => {
@@ -137,11 +143,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
 
-                var args = ParseCommandToArgs(bundle.UninstallCommand);
-
                 var process = new Process
                 {
-                    StartInfo = GetProcessStartInfo(args)
+                    StartInfo = GetProcessStartInfo(bundle.UninstallCommand)
                 };
 
                 Console.CancelKeyPress += cancelProcessHandler;
@@ -199,22 +203,61 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static ProcessStartInfo GetProcessStartInfo(IEnumerable<string> args)
+        private static ProcessStartInfo GetProcessStartInfo(string command)
         {
-            return new ProcessStartInfo
+            if (RuntimeInfo.RunningOnWindows)
             {
-                FileName = args.First(),
-                Arguments = string.Join(" ", args.Skip(1)),
-                UseShellExecute = true,
-                Verb = RuntimeInfo.RunningOnWindows ? "runas" : null
-            };
+                var args = ParseCommandToArgs(command);
+
+                return new ProcessStartInfo
+                {
+                    FileName = args.First(),
+                    Arguments = string.Join(" ", args.Skip(1)),
+                    UseShellExecute = true,
+                    Verb = "runas"
+                };
+            }
+            else if (RuntimeInfo.RunningOnOSX)
+            {
+                return new ProcessStartInfo
+                {
+                    FileName = "rm",
+                    Arguments = $"-rf {command}",
+                    UseShellExecute = true
+                };
+            }
+            else
+            {
+                throw new OperatingSystemNotSupportedException();
+            }
         }
 
         private static IEnumerable<string> ParseCommandToArgs(string command)
         {
-            return command
-                .Split(' ')
-                .Where(s => !string.IsNullOrWhiteSpace(s));
+            var argv = CommandLineToArgvW(command, out var argc);
+
+            if (argv == IntPtr.Zero)
+            {
+                throw new Win32Exception();
+            }
+
+            string[] args;
+            try
+            {
+                args = new string[argc];
+
+                for (var i = 0; i < argc; i++)
+                {
+                    var p = Marshal.ReadIntPtr(argv, i * IntPtr.Size);
+                    args[i] = Marshal.PtrToStringUni(p);
+                }
+            }
+            finally
+            {
+                Marshal.FreeHGlobal(argv);
+            }
+
+            return args;
         }
 
         private static void TryIt(IEnumerable<Bundle> bundles)
