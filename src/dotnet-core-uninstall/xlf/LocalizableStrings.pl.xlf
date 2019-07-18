@@ -2,11 +2,6 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="pl" original="../LocalizableStrings.resx">
     <body>
-      <trans-unit id="AspNetRuntimeOptionDescription">
-        <source>Remove ASP.NET Core Runtimes only.</source>
-        <target state="new">Remove ASP.NET Core Runtimes only.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="BundleTypeMissingExceptionMessage">
         <source>You must specify either --sdk or --runtime.</source>
         <target state="new">You must specify either --sdk or --runtime.</target>
@@ -47,14 +42,14 @@
         <target state="new">"{0}" is treated as a version {1} in this tool.</target>
         <note />
       </trans-unit>
-      <trans-unit id="HostingBundleOptionDescription">
-        <source>Remove .NET Core Runtime &amp; Hosting Bundles only.</source>
-        <target state="new">Remove .NET Core Runtime &amp; Hosting Bundles only.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListAspNetRuntimeOptionDescription">
+        <source>List ASP.NET Core Runtimes.</source>
+        <target state="new">List ASP.NET Core Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandAspNetRuntimeHeader">
@@ -80,6 +75,31 @@
       <trans-unit id="ListCommandSdkHeader">
         <source>.NET Core SDKs:</source>
         <target state="new">.NET Core SDKs:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListHostingBundleOptionDescription">
+        <source>List .NET Core Runtime &amp; Hosting Bundles.</source>
+        <target state="new">List .NET Core Runtime &amp; Hosting Bundles.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListRuntimeOptionDescription">
+        <source>List .NET Core Runtimes.</source>
+        <target state="new">List .NET Core Runtimes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListSdkOptionDescription">
+        <source>List .NET Core SDKs.</source>
+        <target state="new">List .NET Core SDKs.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListX64OptionDescription">
+        <source>List x64 .NET Core SDKs or Runtimes.</source>
+        <target state="new">List x64 .NET Core SDKs or Runtimes.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListX86OptionDescription">
+        <source>List x86 .NET Core SDKs or Runtimes.</source>
+        <target state="new">List x86 .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="MacOsBundleDisplayNameFormat">
@@ -115,16 +135,6 @@
       <trans-unit id="RequiredArgMissingForUninstallCommandExceptionMessage">
         <source>Required argument missing for the uninstall command.</source>
         <target state="new">Required argument missing for the uninstall command.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RuntimeOptionDescription">
-        <source>Remove .NET Core Runtimes only.</source>
-        <target state="new">Remove .NET Core Runtimes only.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="SdkOptionDescription">
-        <source>Remove .NET Core SDKs only.</source>
-        <target state="new">Remove .NET Core SDKs only.</target>
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
@@ -177,6 +187,16 @@
         <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UninstallAspNetRuntimeOptionDescription">
+        <source>Remove ASP.NET Core Runtimes only.</source>
+        <target state="new">Remove ASP.NET Core Runtimes only.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallHostingBundleOptionDescription">
+        <source>Remove .NET Core Runtime &amp; Hosting Bundles only.</source>
+        <target state="new">Remove .NET Core Runtime &amp; Hosting Bundles only.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UninstallMajorMinorOptionArgumentName">
         <source>MAJOR_MINOR</source>
         <target state="new">MAJOR_MINOR</target>
@@ -188,13 +208,13 @@
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentDescription">
-        <source>The specified versions to uninstall.</source>
-        <target state="new">The specified versions to uninstall.</target>
+        <source>The specified version to uninstall.</source>
+        <target state="new">The specified version to uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentName">
-        <source>VERSIONS</source>
-        <target state="new">VERSIONS</target>
+        <source>VERSION</source>
+        <target state="new">VERSION</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescription">
@@ -207,14 +227,24 @@
         <target state="new">Uninstalling: {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallVerbosityOptionArgumentName">
-        <source>LEVEL</source>
-        <target state="new">LEVEL</target>
+      <trans-unit id="UninstallRuntimeOptionDescription">
+        <source>Remove .NET Core Runtimes only.</source>
+        <target state="new">Remove .NET Core Runtimes only.</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallVerbosityOptionDescription">
-        <source>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
-        <target state="new">Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
+      <trans-unit id="UninstallSdkOptionDescription">
+        <source>Remove .NET Core SDKs only.</source>
+        <target state="new">Remove .NET Core SDKs only.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallX64OptionDescription">
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallX86OptionDescription">
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallationFailedExceptionMessageFormat">
@@ -232,19 +262,19 @@
         <target state="new">Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
         <note />
       </trans-unit>
+      <trans-unit id="VerbosityOptionArgumentName">
+        <source>LEVEL</source>
+        <target state="new">LEVEL</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VerbosityOptionDescription">
+        <source>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
+        <target state="new">Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
+        <note />
+      </trans-unit>
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
         <source>Do not use a version before an option: {0}.</source>
         <target state="new">Do not use a version before an option: {0}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="X64OptionDescription">
-        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</source>
-        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="X86OptionDescription">
-        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</source>
-        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</target>
         <note />
       </trans-unit>
     </body>

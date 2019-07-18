@@ -4,11 +4,11 @@ using System.CommandLine.Rendering.Views;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
-    internal static class ListCommandExec
+    internal static class SupportedBundleTypeConfigs
     {
         private static readonly Func<IList<Bundle>, GridView> _gridViewGeneratorWithArch = bundles =>
         {
@@ -30,8 +30,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
             new BundleTypePrintInfo[]
             {
-                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader, _gridViewGeneratorWithArch),
-                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader, _gridViewGeneratorWithArch)
+                new BundleTypePrintInfo<SdkVersion>(
+                    LocalizableStrings.ListCommandSdkHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.SdkOptionName),
+
+                new BundleTypePrintInfo<RuntimeVersion>(
+                    LocalizableStrings.ListCommandRuntimeHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.RuntimeOptionName)
             };
     }
 }

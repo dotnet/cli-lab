@@ -21,13 +21,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 Execute(
                     RegistryQuery.GetInstalledBundles(),
-                    Windows.ListCommandExec.SupportedBundleTypes);
+                    Windows.SupportedBundleTypeConfigs.SupportedBundleTypes);
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
                 Execute(
                     FileSystemExplorer.GetInstalledBundles(),
-                    MacOs.ListCommandExec.SupportedBundleTypes);
+                    MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes);
             }
             else
             {

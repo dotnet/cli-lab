@@ -7,11 +7,20 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
     internal static class CommandLineConfigs
     {
+        public static readonly string SdkOptionName = "sdk";
+        public static readonly string RuntimeOptionName = "runtime";
+        public static readonly string AspNetRuntimeOptionName = "aspnet-runtime";
+        public static readonly string HostingBundleOptionName = "hosting-bundle";
+        public static readonly string X64OptionName = "x64";
+        public static readonly string X86OptionName = "x86";
+        public static readonly string ListCommandName = "list";
+
         public static readonly Option UninstallAllOption = new Option(
             "--all",
             LocalizableStrings.UninstallAllOptionDescription);
@@ -62,42 +71,69 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
         };
 
-        public static readonly Option UninstallVerbosityOption = new Option(
+        public static readonly Option VerbosityOption = new Option(
             new[] { "--verbosity", "-v" },
-            LocalizableStrings.UninstallVerbosityOptionDescription)
+            LocalizableStrings.VerbosityOptionDescription)
         {
             Argument = new Argument<string>
             {
-                Name = LocalizableStrings.UninstallVerbosityOptionArgumentName
+                Name = LocalizableStrings.VerbosityOptionArgumentName
             }
         };
 
-        public static readonly Option SdkOption = new Option(
-            "--sdk",
-            LocalizableStrings.SdkOptionDescription);
+        public static readonly Option UninstallSdkOption = new Option(
+            $"--{SdkOptionName}",
+            LocalizableStrings.UninstallSdkOptionDescription);
 
-        public static readonly Option RuntimeOption = new Option(
-            "--runtime",
-            LocalizableStrings.RuntimeOptionDescription);
+        public static readonly Option UninstallRuntimeOption = new Option(
+            $"--{RuntimeOptionName}",
+            LocalizableStrings.UninstallRuntimeOptionDescription);
 
-        public static readonly Option AspNetRuntimeOption = new Option(
-            "--aspnet-runtime",
-            LocalizableStrings.AspNetRuntimeOptionDescription);
+        public static readonly Option UninstallAspNetRuntimeOption = new Option(
+            $"--{AspNetRuntimeOptionName}",
+            LocalizableStrings.UninstallAspNetRuntimeOptionDescription);
 
-        public static readonly Option HostingBundleOption = new Option(
-            "--hosting-bundle",
-            LocalizableStrings.HostingBundleOptionDescription);
+        public static readonly Option UninstallHostingBundleOption = new Option(
+            $"--{HostingBundleOptionName}",
+            LocalizableStrings.UninstallHostingBundleOptionDescription);
 
-        public static readonly Option X86Option = new Option(
-            "--x86",
-            LocalizableStrings.X86OptionDescription);
+        public static readonly Option ListSdkOption = new Option(
+            $"--{SdkOptionName}",
+            LocalizableStrings.ListSdkOptionDescription);
 
-        public static readonly Option X64Option = new Option(
-            "--x64",
-            LocalizableStrings.X64OptionDescription);
+        public static readonly Option ListRuntimeOption = new Option(
+            $"--{RuntimeOptionName}",
+            LocalizableStrings.ListRuntimeOptionDescription);
+
+        public static readonly Option ListAspNetRuntimeOption = new Option(
+            $"--{AspNetRuntimeOptionName}",
+            LocalizableStrings.ListAspNetRuntimeOptionDescription);
+
+        public static readonly Option ListHostingBundleOption = new Option(
+            $"--{HostingBundleOptionName}",
+            LocalizableStrings.ListHostingBundleOptionDescription);
+
+        public static readonly Option UninstallX64Option = new Option(
+            $"--{X64OptionName}",
+            LocalizableStrings.UninstallX64OptionDescription);
+
+        public static readonly Option UninstallX86Option = new Option(
+            $"--{X86OptionName}",
+            LocalizableStrings.UninstallX86OptionDescription);
+
+        public static readonly Option ListX64Option = new Option(
+            $"--{X64OptionName}",
+            LocalizableStrings.ListX64OptionDescription);
+
+        public static readonly Option ListX86Option = new Option(
+            $"--{X86OptionName}",
+            LocalizableStrings.ListX86OptionDescription);
 
         public static readonly Option VersionOption = new Option(
-            "--version");
+            "--version")
+        {
+            IsHidden = true
+        };
 
         public static readonly Option DoItOption = new Option(
             "--do-it",
@@ -115,22 +151,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallMajorMinorOption,
         };
 
-        public static readonly IEnumerable<Option> AuxOptions = new Option[]
-        {
-            UninstallVerbosityOption,
-            SdkOption,
-            RuntimeOption,
-            AspNetRuntimeOption,
-            HostingBundleOption,
-            X86Option,
-            X64Option
-        };
-
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
             LocalizableStrings.UninstallNoOptionDescription);
 
         public static readonly Command ListCommand = new Command(
-            "list",
+            ListCommandName,
             LocalizableStrings.ListCommandDescription);
 
         public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel>
@@ -143,6 +168,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         };
 
         public static readonly ParseResult CommandLineParseResult;
+        public static readonly IEnumerable<Option> UninstallAuxOptions;
+        public static readonly IEnumerable<Option> ListAuxOptions;
 
         static CommandLineConfigs()
         {
@@ -154,16 +181,46 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             UninstallRootCommand.AddCommand(ListCommand);
 
-            foreach (var option in UninstallMainOptions
-                .Concat(AuxOptions)
+            var supportedBundleTypeNames = GetSupportedBundleTypes().Select(type => type.OptionName);
+
+            var supportedUninstallBundleTypeOptions = new Option[]
+            {
+                UninstallSdkOption,
+                UninstallRuntimeOption,
+                UninstallAspNetRuntimeOption,
+                UninstallHostingBundleOption
+            }
+            .Where(option => supportedBundleTypeNames.Contains(option.Name));
+
+            var supportedListBundleTypeOptions = new Option[]
+            {
+                ListSdkOption,
+                ListRuntimeOption,
+                ListAspNetRuntimeOption,
+                ListHostingBundleOption
+            }
+            .Where(option => supportedBundleTypeNames.Contains(option.Name));
+
+            UninstallAuxOptions = supportedUninstallBundleTypeOptions
+                .Append(VerbosityOption)
+                .Append(UninstallX64Option)
+                .Append(UninstallX86Option)
                 .Append(VersionOption)
-                .Append(DoItOption)
+                .Append(DoItOption);
+
+            ListAuxOptions = supportedListBundleTypeOptions
+                .Append(VerbosityOption)
+                .Append(ListX64Option)
+                .Append(ListX86Option);
+
+            foreach (var option in UninstallMainOptions
+                .Concat(UninstallAuxOptions)
                 .OrderBy(option => option.Name))
             {
                 UninstallRootCommand.AddOption(option);
             }
 
-            foreach (var option in AuxOptions
+            foreach (var option in ListAuxOptions
                 .OrderBy(option => option.Name))
             {
                 ListCommand.AddOption(option);
@@ -210,61 +267,37 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static BundleType GetTypeSelection(this CommandResult commandResult)
         {
-            var typeSelection = (BundleType)0;
+            var supportedBundleTypes = GetSupportedBundleTypes();
 
-            if (commandResult.OptionResult(SdkOption.Name) != null)
-            {
-                typeSelection |= BundleType.Sdk;
-            }
+            var typeSelection = supportedBundleTypes
+                .Where(type => commandResult.OptionResult(type.OptionName) != null)
+                .Select(type => type.Type)
+                .Aggregate((BundleType)0, (orSum, next) => orSum | next);
 
-            if (commandResult.OptionResult(RuntimeOption.Name) != null)
-            {
-                typeSelection |= BundleType.Runtime;
-            }
-
-            if (commandResult.OptionResult(AspNetRuntimeOption.Name) != null)
-            {
-                typeSelection |= BundleType.AspNetRuntime;
-            }
-
-            if (commandResult.OptionResult(HostingBundleOption.Name) != null)
-            {
-                typeSelection |= BundleType.HostingBundle;
-            }
-
-            if (typeSelection == 0)
-            {
-                typeSelection = Enum.GetValues(typeof(BundleType)).OfType<BundleType>().Aggregate((BundleType)0, (orSum, next) => orSum | next);
-            }
-
-            return typeSelection;
+            return typeSelection == 0 ?
+                supportedBundleTypes.Select(type => type.Type).Aggregate((BundleType)0, (orSum, next) => orSum | next) :
+                typeSelection;
         }
 
         public static BundleArch GetArchSelection(this CommandResult commandResult)
         {
-            var archSelection = (BundleArch)0;
-
-            if (commandResult.OptionResult(X86Option.Name) != null)
+            var archSelection = new[]
             {
-                archSelection |= BundleArch.X86;
+                (OptionName: X64OptionName, Arch: BundleArch.X64),
+                (OptionName: X86OptionName, Arch: BundleArch.X86)
             }
+            .Where(tuple => commandResult.OptionResult(tuple.OptionName) != null)
+            .Select(tuple => tuple.Arch)
+            .Aggregate((BundleArch)0, (orSum, next) => orSum | next);
 
-            if (commandResult.OptionResult(X64Option.Name) != null)
-            {
-                archSelection |= BundleArch.X64;
-            }
-
-            if (archSelection == 0)
-            {
-                archSelection = Enum.GetValues(typeof(BundleArch)).OfType<BundleArch>().Aggregate((BundleArch)0, (orSum, next) => orSum | next);
-            }
-
-            return archSelection;
+            return archSelection == 0 ?
+                archSelection = Enum.GetValues(typeof(BundleArch)).OfType<BundleArch>().Aggregate((BundleArch)0, (orSum, next) => orSum | next) :
+                archSelection;
         }
 
         public static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
         {
-            var optionResult = commandResult.OptionResult(UninstallVerbosityOption.Name);
+            var optionResult = commandResult.OptionResult(VerbosityOption.Name);
 
             if (optionResult == null)
             {
@@ -280,6 +313,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             else
             {
                 throw new VerbosityLevelInvalidException();
+            }
+        }
+
+        private static IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
+        {
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                return Windows.SupportedBundleTypeConfigs.SupportedBundleTypes;
+            }
+            else if (RuntimeInfo.RunningOnOSX)
+            {
+                return MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes;
+            }
+            else
+            {
+                throw new OperatingSystemNotSupportedException();
             }
         }
     }

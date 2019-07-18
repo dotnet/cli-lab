@@ -141,10 +141,10 @@
   <data name="RequiredArgMissingForUninstallCommandExceptionMessage" xml:space="preserve">
     <value>Required argument missing for the uninstall command.</value>
   </data>
-  <data name="RuntimeOptionDescription" xml:space="preserve">
+  <data name="UninstallRuntimeOptionDescription" xml:space="preserve">
     <value>Remove .NET Core Runtimes only.</value>
   </data>
-  <data name="SdkOptionDescription" xml:space="preserve">
+  <data name="UninstallSdkOptionDescription" xml:space="preserve">
     <value>Remove .NET Core SDKs only.</value>
   </data>
   <data name="SpecifiedVersionNotFoundExceptionMessageFormat" xml:space="preserve">
@@ -190,24 +190,24 @@
     <value>Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</value>
   </data>
   <data name="UninstallNoOptionArgumentDescription" xml:space="preserve">
-    <value>The specified versions to uninstall.</value>
+    <value>The specified version to uninstall.</value>
   </data>
   <data name="UninstallNoOptionArgumentName" xml:space="preserve">
-    <value>VERSIONS</value>
+    <value>VERSION</value>
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
     <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</value>
   </data>
-  <data name="UninstallVerbosityOptionArgumentName" xml:space="preserve">
+  <data name="VerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>
   </data>
-  <data name="UninstallVerbosityOptionDescription" xml:space="preserve">
+  <data name="VerbosityOptionDescription" xml:space="preserve">
     <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
   </data>
-  <data name="X64OptionDescription" xml:space="preserve">
+  <data name="UninstallX64OptionDescription" xml:space="preserve">
     <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</value>
   </data>
-  <data name="X86OptionDescription" xml:space="preserve">
+  <data name="UninstallX86OptionDescription" xml:space="preserve">
     <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
@@ -249,13 +249,13 @@
   <data name="CancelingMessage" xml:space="preserve">
     <value>Canceling: waiting for the current uninstall to complete.</value>
   </data>
-  <data name="AspNetRuntimeOptionDescription" xml:space="preserve">
+  <data name="UninstallAspNetRuntimeOptionDescription" xml:space="preserve">
     <value>Remove ASP.NET Core Runtimes only.</value>
   </data>
   <data name="ListCommandAspNetRuntimeHeader" xml:space="preserve">
     <value>ASP.NET Core Runtimes:</value>
   </data>
-  <data name="HostingBundleOptionDescription" xml:space="preserve">
+  <data name="UninstallHostingBundleOptionDescription" xml:space="preserve">
     <value>Remove .NET Core Runtime &amp; Hosting Bundles only.</value>
   </data>
   <data name="ListCommandHostingBundleHeader" xml:space="preserve">
@@ -263,5 +263,23 @@
   </data>
   <data name="HostingBundleFootnoteFormat" xml:space="preserve">
     <value>"{0}" is treated as a version {1} in this tool.</value>
+  </data>
+  <data name="ListAspNetRuntimeOptionDescription" xml:space="preserve">
+    <value>List ASP.NET Core Runtimes.</value>
+  </data>
+  <data name="ListHostingBundleOptionDescription" xml:space="preserve">
+    <value>List .NET Core Runtime &amp; Hosting Bundles.</value>
+  </data>
+  <data name="ListRuntimeOptionDescription" xml:space="preserve">
+    <value>List .NET Core Runtimes.</value>
+  </data>
+  <data name="ListSdkOptionDescription" xml:space="preserve">
+    <value>List .NET Core SDKs.</value>
+  </data>
+  <data name="ListX64OptionDescription" xml:space="preserve">
+    <value>List x64 .NET Core SDKs or Runtimes.</value>
+  </data>
+  <data name="ListX86OptionDescription" xml:space="preserve">
+    <value>List x86 .NET Core SDKs or Runtimes.</value>
   </data>
 </root>

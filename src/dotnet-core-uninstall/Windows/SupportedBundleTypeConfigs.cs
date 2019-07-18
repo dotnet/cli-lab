@@ -4,11 +4,11 @@ using System.CommandLine.Rendering.Views;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal static class ListCommandExec
+    internal static class SupportedBundleTypeConfigs
     {
         private static readonly Func<IList<Bundle>, GridView> _gridViewGeneratorWithArch = bundles =>
         {
@@ -48,10 +48,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public static readonly IEnumerable<BundleTypePrintInfo> SupportedBundleTypes =
             new BundleTypePrintInfo[]
             {
-                new BundleTypePrintInfo<SdkVersion>(LocalizableStrings.ListCommandSdkHeader, _gridViewGeneratorWithArch),
-                new BundleTypePrintInfo<RuntimeVersion>(LocalizableStrings.ListCommandRuntimeHeader, _gridViewGeneratorWithArch),
-                new BundleTypePrintInfo<AspNetRuntimeVersion>(LocalizableStrings.ListCommandAspNetRuntimeHeader, _gridViewGeneratorWithArch),
-                new BundleTypePrintInfo<HostingBundleVersion>(LocalizableStrings.ListCommandHostingBundleHeader, _gridViewGeneratorWithoutArch)
+                new BundleTypePrintInfo<SdkVersion>(
+                    LocalizableStrings.ListCommandSdkHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.SdkOptionName),
+
+                new BundleTypePrintInfo<RuntimeVersion>(
+                    LocalizableStrings.ListCommandRuntimeHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.RuntimeOptionName),
+
+                new BundleTypePrintInfo<AspNetRuntimeVersion>(
+                    LocalizableStrings.ListCommandAspNetRuntimeHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.AspNetRuntimeOptionName),
+
+                new BundleTypePrintInfo<HostingBundleVersion>(
+                    LocalizableStrings.ListCommandHostingBundleHeader,
+                    _gridViewGeneratorWithoutArch,
+                    CommandLineConfigs.HostingBundleOptionName)
             };
     }
 }
