@@ -3,8 +3,8 @@
   <file datatype="xml" source-language="en" target-language="zh-Hans" original="../LocalizableStrings.resx">
     <body>
       <trans-unit id="BundleTypeMissingExceptionMessage">
-        <source>You must specify either --sdk or --runtime.</source>
-        <target state="new">You must specify either --sdk or --runtime.</target>
+        <source>You must specify exactly one of: {0}.</source>
+        <target state="new">You must specify exactly one of: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelingMessage">

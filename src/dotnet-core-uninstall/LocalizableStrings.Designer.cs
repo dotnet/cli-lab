@@ -61,7 +61,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You must specify either --sdk or --runtime..
+        ///   Looks up a localized string similar to You must specify exactly one of: {0}..
         /// </summary>
         internal static string BundleTypeMissingExceptionMessage {
             get {
@@ -302,7 +302,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
                 return ResourceManager.GetString("RequiredArgMissingForUninstallCommandExceptionMessage", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to The specified version is not found: &quot;{0}&quot;..
         /// </summary>

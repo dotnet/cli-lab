@@ -4,6 +4,7 @@ using System.CommandLine;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
@@ -23,7 +24,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
             if (!bundleTypes.Contains(typeSelection))
             {
-                throw new BundleTypeMissingException();
+                throw new BundleTypeMissingException(SupportedBundleTypeConfigs
+                    .GetSupportedBundleTypes()
+                    .Select(type => $"--{type.OptionName}"));
             }
         }
 
