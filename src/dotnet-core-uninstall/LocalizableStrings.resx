@@ -148,7 +148,7 @@
     <value>Remove .NET Core SDKs only.</value>
   </data>
   <data name="SpecifiedVersionNotFoundExceptionMessageFormat" xml:space="preserve">
-    <value>The specified version is not found: {0}.</value>
+    <value>The specified version is not found: "{0}".</value>
   </data>
   <data name="UninstallAllBelowOptionArgumentName" xml:space="preserve">
     <value>VERSION</value>
@@ -181,7 +181,7 @@
     <value>Timeout during uninstall: {0}.</value>
   </data>
   <data name="UninstallationFailedExceptionWithExitCodeMessageFormat" xml:space="preserve">
-    <value>The uninstallation operation failed. Exit code was {1} for {0}.</value>
+    <value>The uninstallation operation failed. Exit code was {1} for "{0}".</value>
   </data>
   <data name="UninstallMajorMinorOptionArgumentName" xml:space="preserve">
     <value>MAJOR_MINOR</value>

@@ -286,7 +286,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified version is not found: {0}..
+        ///   Looks up a localized string similar to The specified version is not found: &quot;{0}&quot;..
         /// </summary>
         internal static string SpecifiedVersionNotFoundExceptionMessageFormat {
             get {
@@ -385,7 +385,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The uninstallation operation failed. Exit code was {1} for {0}..
+        ///   Looks up a localized string similar to The uninstallation operation failed. Exit code was {1} for &quot;{0}&quot;..
         /// </summary>
         internal static string UninstallationFailedExceptionWithExitCodeMessageFormat {
             get {

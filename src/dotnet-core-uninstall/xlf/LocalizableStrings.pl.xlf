@@ -128,8 +128,8 @@
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
-        <source>The specified version is not found: {0}.</source>
-        <target state="new">The specified version is not found: {0}.</target>
+        <source>The specified version is not found: "{0}".</source>
+        <target state="new">The specified version is not found: "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllBelowOptionArgumentName">
@@ -223,8 +223,8 @@
         <note />
       </trans-unit>
       <trans-unit id="UninstallationFailedExceptionWithExitCodeMessageFormat">
-        <source>The uninstallation operation failed. Exit code was {1} for {0}.</source>
-        <target state="new">The uninstallation operation failed. Exit code was {1} for {0}.</target>
+        <source>The uninstallation operation failed. Exit code was {1} for "{0}".</source>
+        <target state="new">The uninstallation operation failed. Exit code was {1} for "{0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="VerbosityLevelInvalidExceptionMessage">
