@@ -181,7 +181,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             UninstallRootCommand.AddCommand(ListCommand);
 
-            var supportedBundleTypeNames = GetSupportedBundleTypes().Select(type => type.OptionName);
+            var supportedBundleTypeNames = SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => type.OptionName);
 
             var supportedUninstallBundleTypeOptions = new Option[]
             {
@@ -267,7 +267,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static BundleType GetTypeSelection(this CommandResult commandResult)
         {
-            var supportedBundleTypes = GetSupportedBundleTypes();
+            var supportedBundleTypes = SupportedBundleTypeConfigs.GetSupportedBundleTypes();
 
             var typeSelection = supportedBundleTypes
                 .Where(type => commandResult.OptionResult(type.OptionName) != null)
@@ -313,22 +313,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             else
             {
                 throw new VerbosityLevelInvalidException();
-            }
-        }
-
-        private static IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
-        {
-            if (RuntimeInfo.RunningOnWindows)
-            {
-                return Windows.SupportedBundleTypeConfigs.SupportedBundleTypes;
-            }
-            else if (RuntimeInfo.RunningOnOSX)
-            {
-                return MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes;
-            }
-            else
-            {
-                throw new OperatingSystemNotSupportedException();
             }
         }
     }

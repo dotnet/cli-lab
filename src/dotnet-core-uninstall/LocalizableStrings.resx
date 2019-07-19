@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BundleTypeMissingExceptionMessage" xml:space="preserve">
-    <value>You must specify either --sdk or --runtime.</value>
+    <value>You must specify exactly one of: {0}.</value>
   </data>
   <data name="InvalidInputVersionExceptionMessageFormat" xml:space="preserve">
     <value>The specified version is not valid: "{0}".</value>

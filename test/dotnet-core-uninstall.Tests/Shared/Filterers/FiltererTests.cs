@@ -8,6 +8,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Filterers;
+using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
@@ -117,10 +118,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
             TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultTestArgValue, typeSelection, DefaultTestArchSelection);
         }
 
-        [Fact]
-        internal void TestFiltererBundleTypeNotSpecifiedException()
+        [WindowsOnlyFact]
+        internal void TestFiltererBundleTypeNotSpecifiedExceptionWindows()
         {
-            TestFiltererException<BundleTypeMissingException>(DefaultTestBundles, DefaultTestArgValue, BundleType.Sdk | BundleType.Runtime, DefaultTestArchSelection, LocalizableStrings.BundleTypeMissingExceptionMessage);
+            TestFiltererException<BundleTypeMissingException>(
+                DefaultTestBundles,
+                DefaultTestArgValue,
+                BundleType.Sdk | BundleType.Runtime,
+                DefaultTestArchSelection,
+                string.Format(LocalizableStrings.BundleTypeMissingExceptionMessage, "--aspnet-runtime, --hosting-bundle, --runtime, --sdk"));
+        }
+
+        [MacOsOnlyFact]
+        internal void TestFiltererBundleTypeNotSpecifiedExceptionMacOs()
+        {
+            TestFiltererException<BundleTypeMissingException>(
+                DefaultTestBundles,
+                DefaultTestArgValue,
+                BundleType.Sdk | BundleType.Runtime,
+                DefaultTestArchSelection,
+                string.Format(LocalizableStrings.BundleTypeMissingExceptionMessage, "--runtime, --sdk"));
         }
 
         internal virtual void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
