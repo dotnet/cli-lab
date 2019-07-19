@@ -41,15 +41,11 @@ jobs:
         value: win-x64
       # Only enable publishing in official builds.
       - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-        # DotNet-Blob-Feed provides: dotnetfeed-storage-access-key-1
         # Publish-Build-Assets provides: MaestroAccessToken, BotAccount-dotnet-maestro-bot-PAT
-        - group: DotNet-Blob-Feed
         - group: Publish-Build-Assets
         - name: _OfficialBuildArgs
           value: /p:DotNetSignType=$(_SignType)
                  /p:TeamName=$(_TeamName)
-                 /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
-                 /p:DotNetPublishBlobFeedUrl=https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
                  /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
                  /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
       # else
@@ -74,7 +70,7 @@ jobs:
               _BuildArgs:
             ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
               _SignType: real
-              _DotNetPublishToBlobFeed: true
+              _DotNetPublishToBlobFeed: false
               _BuildArgs: $(_OfficialBuildArgs)
       steps:
       - checkout: self
