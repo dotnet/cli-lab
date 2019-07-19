@@ -90,6 +90,7 @@ jobs:
         inputs:
           sourceFolder: 'artifacts/bin/dotnet-core-uninstall/$(_BuildConfig)/netcoreapp3.0/$(_RID)/publish/'
           contents: dotnet-core-uninstall.exe
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
       - task: PublishBuildArtifacts@1
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
@@ -129,6 +130,7 @@ jobs:
         inputs:
           sourceFolder: 'artifacts/bin/dotnet-core-uninstall/$(_BuildConfig)/netcoreapp3.0/$(_RID)/publish/'
           contents: dotnet-core-uninstall
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
       - task: PublishBuildArtifacts@1
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
