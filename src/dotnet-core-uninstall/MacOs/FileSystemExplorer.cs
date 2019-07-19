@@ -45,11 +45,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 .Select(group => Bundle.From(
                     group.First().Version,
                     BundleArch.X64,
-                    CombineUninstallCommands(group.Select(tuple => tuple.UninstallCommand)),
+                    GetUninstallCommand(group.Select(tuple => tuple.Path)),
                     string.Format(LocalizableStrings.MacOsBundleDisplayNameFormat, bundleTypeString, group.First().Version.ToString())));
         }
 
-        private static IEnumerable<(TBundleVersion Version, string UninstallCommand)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
+        private static IEnumerable<(TBundleVersion Version, string Path)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
             return new DirectoryInfo(path)
@@ -57,20 +57,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 .Select(dirInfo =>
                 {
                     var success = BundleVersion.TryFromInput<TBundleVersion>(dirInfo.Name, out var version);
-                    return (Success: success, Version: version, UninstallCommand: GetUninstallCommand(dirInfo.FullName));
+                    return (Success: success, Version: version, Path: dirInfo.FullName);
                 })
                 .Where(tuple => tuple.Success)
-                .Select(tuple => (tuple.Version, tuple.UninstallCommand));
+                .Select(tuple => (tuple.Version, tuple.Path));
         }
 
-        private static string GetUninstallCommand(string path)
+        private static string GetUninstallCommand(IEnumerable<string> paths)
         {
-            return $"sudo rm -rf {path}";
-        }
-
-        private static string CombineUninstallCommands(IEnumerable<string> commands)
-        {
-            return string.Join(" && ", commands);
+            return string.Join(" ", paths);
         }
     }
 }
