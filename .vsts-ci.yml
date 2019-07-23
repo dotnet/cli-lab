@@ -21,7 +21,6 @@ jobs:
     enableMicrobuild: true
     enablePublishBuildArtifacts: true
     enablePublishTestResults: true
-    enablePublishBuildAssets: true
     enableTelemetry: true
     helixRepo: dotnet/cli-lab
     timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
@@ -41,15 +40,11 @@ jobs:
         value: win-x64
       # Only enable publishing in official builds.
       - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-        # DotNet-Blob-Feed provides: dotnetfeed-storage-access-key-1
         # Publish-Build-Assets provides: MaestroAccessToken, BotAccount-dotnet-maestro-bot-PAT
-        - group: DotNet-Blob-Feed
         - group: Publish-Build-Assets
         - name: _OfficialBuildArgs
           value: /p:DotNetSignType=$(_SignType)
                  /p:TeamName=$(_TeamName)
-                 /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
-                 /p:DotNetPublishBlobFeedUrl=https://dotnetfeed.blob.core.windows.net/dotnet-core/index.json
                  /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
                  /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
       # else
@@ -74,7 +69,7 @@ jobs:
               _BuildArgs:
             ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
               _SignType: real
-              _DotNetPublishToBlobFeed: true
+              _DotNetPublishToBlobFeed: false
               _BuildArgs: $(_OfficialBuildArgs)
       steps:
       - checkout: self
@@ -85,17 +80,18 @@ jobs:
           $(_BuildArgs)
           /p:RuntimeIdentifier=$(_RID)
         displayName: Build and Publish
-      - task: CopyFiles@1
+      - task: CopyFiles@2
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
           sourceFolder: 'artifacts/bin/dotnet-core-uninstall/$(_BuildConfig)/netcoreapp3.0/$(_RID)/publish/'
-          contents: dotnet-core-uninstall.exe
+          contents: 'dotnet-core-uninstall.exe'
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
       - task: PublishBuildArtifacts@1
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          artifactName: drop
-          artifactType: single
+          artifactName: 'drop-windows'
+          publishLocation: 'Container'
           parallel: true
 
     - job: OSX_10_13
@@ -124,15 +120,16 @@ jobs:
           --prepareMachine
           /p:RuntimeIdentifier=$(_RID)
         displayName: Build
-      - task: CopyFiles@1
+      - task: CopyFiles@2
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
           sourceFolder: 'artifacts/bin/dotnet-core-uninstall/$(_BuildConfig)/netcoreapp3.0/$(_RID)/publish/'
-          contents: dotnet-core-uninstall
+          contents: 'dotnet-core-uninstall'
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
       - task: PublishBuildArtifacts@1
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-          artifactName: drop
-          artifactType: single
+          artifactName: 'drop-osx'
+          publishLocation: 'Container'
           parallel: true
