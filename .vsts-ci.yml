@@ -92,6 +92,7 @@ jobs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
           artifactName: 'drop-windows'
           publishLocation: 'Container'
+          parallel: true
 
     - job: OSX_10_13
       displayName: 'OSX'
@@ -131,3 +132,4 @@ jobs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
           artifactName: 'drop-osx'
           publishLocation: 'Container'
+          parallel: true
