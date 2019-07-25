@@ -52,15 +52,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         private static IEnumerable<(TBundleVersion Version, string Path)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
-            return new DirectoryInfo(path)
-                .EnumerateDirectories()
-                .Select(dirInfo =>
-                {
-                    var success = BundleVersion.TryFromInput<TBundleVersion>(dirInfo.Name, out var version);
-                    return (Success: success, Version: version, Path: dirInfo.FullName);
-                })
-                .Where(tuple => tuple.Success)
-                .Select(tuple => (tuple.Version, tuple.Path));
+            return Directory.Exists(path) ?
+                new DirectoryInfo(path)
+                    .EnumerateDirectories()
+                    .Select(dirInfo =>
+                    {
+                        var success = BundleVersion.TryFromInput<TBundleVersion>(dirInfo.Name, out var version);
+                        return (Success: success, Version: version, Path: dirInfo.FullName);
+                    })
+                    .Where(tuple => tuple.Success)
+                    .Select(tuple => (tuple.Version, tuple.Path)) :
+                new List<(TBundleVersion Version, string Path)>();
         }
 
         private static string GetUninstallCommand(IEnumerable<string> paths)
