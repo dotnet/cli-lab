@@ -39,7 +39,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             var parent = GetParentNode(args);
             var projectId = args.BuildEventContext.ProjectContextId;
             var projectFile = args.ProjectFile;
-            var project = new ProjectNode(projectId, projectFile, parent);
+            var project = new ProjectNode(projectId, projectFile, args.TargetNames, parent);
 
             CopyItems(project, args.Items);
             CopyProperties(project, args.Properties);
@@ -52,7 +52,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private ProjectNode GetParentNode(ProjectStartedEventArgs args)
         {
-            var parentId = args?.ParentProjectBuildEventContext.ProjectContextId ?? default;
+            var parentId = args.ParentProjectBuildEventContext.ProjectContextId;
             return Projects.TryGetValue(parentId, out var parent) ? parent : null;
         }
 
