@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-core-uninstall", "sr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-core-uninstall.Tests", "test\dotnet-core-uninstall.Tests\dotnet-core-uninstall.Tests.csproj", "{5F533EB4-7C04-4243-914F-7C9092F6FB8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildBinLogQuery", "src\MSBuildBinLogQuery\MSBuildBinLogQuery.csproj", "{A7FF737E-4ADE-4B5A-BA1C-3F4B7129590F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuildBinLogQuery", "src\MSBuildBinLogQuery\MSBuildBinLogQuery.csproj", "{A7FF737E-4ADE-4B5A-BA1C-3F4B7129590F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildBinLogQuery.CommandLine", "test\MSBuildBinLogQuery.CommandLine\MSBuildBinLogQuery.CommandLine.csproj", "{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,6 +57,18 @@ Global
 		{A7FF737E-4ADE-4B5A-BA1C-3F4B7129590F}.Release|x64.Build.0 = Release|Any CPU
 		{A7FF737E-4ADE-4B5A-BA1C-3F4B7129590F}.Release|x86.ActiveCfg = Release|Any CPU
 		{A7FF737E-4ADE-4B5A-BA1C-3F4B7129590F}.Release|x86.Build.0 = Release|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Debug|x64.Build.0 = Debug|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Debug|x86.Build.0 = Debug|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Release|x64.ActiveCfg = Release|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Release|x64.Build.0 = Release|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Release|x86.ActiveCfg = Release|Any CPU
+		{FA6C040A-0EE8-4206-A676-EFAE43DFD5CC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
