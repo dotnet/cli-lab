@@ -7,16 +7,16 @@ namespace Microsoft.Build.Logging.Query.Graph
         public string Name { get; }
         public ProjectNode Parent { get; }
         public HashSet<TaskNode> Tasks { get; }
-        public HashSet<TargetNode> TargetsBeforeThis { get; }
-        public HashSet<TargetNode> TargetsAfterThis { get; }
+        public HashSet<TargetNode> TargetsDirectlyBeforeThis { get; }
+        public HashSet<TargetNode> TargetsDirectlyAfterThis { get; }
 
         public TargetNode(string name, ProjectNode parent) : base()
         {
             Name = name;
             Parent = parent;
             Tasks = new HashSet<TaskNode>();
-            TargetsBeforeThis = new HashSet<TargetNode>();
-            TargetsAfterThis = new HashSet<TargetNode>();
+            TargetsDirectlyBeforeThis = new HashSet<TargetNode>();
+            TargetsDirectlyAfterThis = new HashSet<TargetNode>();
         }
     }
 }

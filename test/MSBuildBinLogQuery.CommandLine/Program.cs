@@ -40,8 +40,8 @@ namespace Microsoft.Build.Logging.Query.Commandline
                 foreach (var target in project.Targets.Values)
                 {
                     Console.WriteLine($"    target {target.Name}");
-                    Console.WriteLine($"      before this: {string.Join(";", target.TargetsBeforeThis.Select(beforeThis => beforeThis.Name))}");
-                    Console.WriteLine($"      after this: {string.Join(";", target.TargetsAfterThis.Select(afterThis => afterThis.Name))}");
+                    Console.WriteLine($"      directly before this: {string.Join(";", target.TargetsDirectlyBeforeThis.Select(beforeThis => beforeThis.Name))}");
+                    Console.WriteLine($"      directly after this: {string.Join(";", target.TargetsDirectlyAfterThis.Select(afterThis => afterThis.Name))}");
                 }
             }
 
@@ -49,7 +49,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             foreach (var project in projects)
             {
-                foreach (var beforeProject in project.ProjectsBeforeThis)
+                foreach (var beforeProject in project.ProjectsDirectlyBeforeThis)
                 {
                     Console.WriteLine($"#{project.Id} -> #{beforeProject.Id}");
                 }

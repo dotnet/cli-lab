@@ -55,7 +55,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
             if (parent != null)
             {
-                parent.ProjectsBeforeThis.Add(Projects[id]);
+                parent.ProjectsDirectlyBeforeThis.Add(Projects[id]);
             }
 
             _mutex.ReleaseMutex();
@@ -75,16 +75,16 @@ namespace Microsoft.Build.Logging.Query.Construction
 
                 if (args.BuildReason == TargetBuiltReason.DependsOn)
                 {
-                    target.TargetsBeforeThis.Add(parent);
+                    target.TargetsDirectlyBeforeThis.Add(parent);
                 }
                 else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
                 {
-                    parent.TargetsBeforeThis.Add(target);
+                    parent.TargetsDirectlyBeforeThis.Add(target);
                 }
                 else if (args.BuildReason == TargetBuiltReason.AfterTargets)
                 {
                     // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
-                    parent.TargetsAfterThis.Add(target);
+                    parent.TargetsDirectlyAfterThis.Add(target);
                 }
             }
 
