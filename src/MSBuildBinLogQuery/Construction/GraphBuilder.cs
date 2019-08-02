@@ -36,23 +36,32 @@ namespace Microsoft.Build.Logging.Query.Construction
         {
             _mutex.WaitOne();
 
+            var id = args.BuildEventContext.ProjectInstanceId;
+
+            if (!Projects.ContainsKey(id))
+            {
+                var project = new ProjectNode(id, args.ProjectFile);
+
+                CopyItems(project, args.Items);
+                CopyProperties(project, args.Properties);
+                CopyGlobalProperties(project, args.GlobalProperties);
+
+                Projects[id] = project;
+            }
+
             var parent = GetParentNode(args);
-            var projectId = args.BuildEventContext.ProjectContextId;
-            var projectFile = args.ProjectFile;
-            var project = new ProjectNode(projectId, projectFile, args.TargetNames, parent);
 
-            CopyItems(project, args.Items);
-            CopyProperties(project, args.Properties);
-            CopyGlobalProperties(project, args.GlobalProperties);
-
-            Projects[projectId] = project;
+            if (parent != null)
+            {
+                parent.ProjectsBeforeThis.Add(Projects[id]);
+            }
 
             _mutex.ReleaseMutex();
         }
 
         private ProjectNode GetParentNode(ProjectStartedEventArgs args)
         {
-            var parentId = args.ParentProjectBuildEventContext.ProjectContextId;
+            var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
             return Projects.TryGetValue(parentId, out var parent) ? parent : null;
         }
 

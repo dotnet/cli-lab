@@ -6,33 +6,24 @@ namespace Microsoft.Build.Logging.Query.Graph
     public class ProjectNode : IQueryableGraphNode
     {
         public int Id { get; }
-        public string TargetNames { get; }
         public string ProjectFile { get; }
-        public ProjectNode Parent { get; }
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
         public List<TargetNode> ExecutedTargets { get; }
         public List<TargetNode> EntryPointTargets { get; }
-        public List<ProjectNode> ProjectsBeforeThis { get; }
+        public HashSet<ProjectNode> ProjectsBeforeThis { get; }
 
-        public ProjectNode(int id, string projectFile, string targetNames, ProjectNode parent = null) : base()
+        public ProjectNode(int id, string projectFile) : base()
         {
             Id = id;
             ProjectFile = projectFile;
-            TargetNames = targetNames;
-            Parent = parent;
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
             ExecutedTargets = new List<TargetNode>();
             EntryPointTargets = new List<TargetNode>();
-            ProjectsBeforeThis = new List<ProjectNode>();
-
-            if (parent != null)
-            {
-                parent.ProjectsBeforeThis.Add(this);
-            }
+            ProjectsBeforeThis = new HashSet<ProjectNode>();
         }
     }
 }

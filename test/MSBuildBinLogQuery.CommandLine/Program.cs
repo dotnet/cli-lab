@@ -35,7 +35,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             foreach (var project in projects)
             {
-                Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");   
+                Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
             }
 
             Console.WriteLine();
