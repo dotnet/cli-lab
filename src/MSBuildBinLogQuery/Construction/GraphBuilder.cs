@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -22,6 +23,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             _mutex = new Mutex();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
+            _eventArgsDispatcher.TargetStarted += TargetStarted;
         }
 
         public void HandleEvents(params BuildEventArgs[] buildEvents)
@@ -40,7 +42,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
             if (!Projects.ContainsKey(id))
             {
-                var project = new ProjectNode(id, args.ProjectFile);
+                var project = new ProjectNode(id, args.ProjectFile, args.TargetNames);
 
                 CopyItems(project, args.Items);
                 CopyProperties(project, args.Properties);
@@ -54,6 +56,36 @@ namespace Microsoft.Build.Logging.Query.Construction
             if (parent != null)
             {
                 parent.ProjectsBeforeThis.Add(Projects[id]);
+            }
+
+            _mutex.ReleaseMutex();
+        }
+
+        private void TargetStarted(object sender, TargetStartedEventArgs args)
+        {
+            _mutex.WaitOne();
+
+            var project = Projects[args.BuildEventContext.ProjectInstanceId];
+            var target = project.AddOrGetTarget(args.TargetName);
+
+            if (!string.IsNullOrWhiteSpace(args.ParentTarget))
+            {
+                Console.WriteLine("!!!");
+                var parent = project.AddOrGetTarget(args.ParentTarget);
+
+                if (args.BuildReason == TargetBuiltReason.DependsOn)
+                {
+                    target.TargetsBeforeThis.Add(parent);
+                }
+                else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
+                {
+                    parent.TargetsBeforeThis.Add(target);
+                }
+                else if (args.BuildReason == TargetBuiltReason.AfterTargets)
+                {
+                    // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
+                    parent.TargetsAfterThis.Add(target);
+                }
             }
 
             _mutex.ReleaseMutex();

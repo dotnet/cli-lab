@@ -5,12 +5,18 @@ namespace Microsoft.Build.Logging.Query.Graph
     public class TargetNode : IQueryableGraphNode
     {
         public string Name { get; }
-        public List<TaskNode> Tasks { get; }
+        public ProjectNode Parent { get; }
+        public HashSet<TaskNode> Tasks { get; }
+        public HashSet<TargetNode> TargetsBeforeThis { get; }
+        public HashSet<TargetNode> TargetsAfterThis { get; }
 
-        public TargetNode(string name) : base()
+        public TargetNode(string name, ProjectNode parent) : base()
         {
             Name = name;
-            Tasks = new List<TaskNode>();
+            Parent = parent;
+            Tasks = new HashSet<TaskNode>();
+            TargetsBeforeThis = new HashSet<TargetNode>();
+            TargetsAfterThis = new HashSet<TargetNode>();
         }
     }
 }
