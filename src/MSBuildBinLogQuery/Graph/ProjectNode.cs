@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
@@ -16,7 +17,7 @@ namespace Microsoft.Build.Logging.Query.Graph
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
         public ConcurrentDictionary<string, TargetNode> Targets { get; }
-        public HashSet<TargetNode> EntryPointTargets { get; }
+        public ImmutableHashSet<TargetNode> EntryPointTargets { get; }
         public ConcurrentHashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
 
         public ProjectNode(int id, ProjectStartedEventArgs args) : base()
@@ -27,11 +28,12 @@ namespace Microsoft.Build.Logging.Query.Graph
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
             Targets = new ConcurrentDictionary<string, TargetNode>();
-            EntryPointTargets = new HashSet<TargetNode>(
+            EntryPointTargets = ImmutableHashSet.Create(
                 args.TargetNames
                 .Split(';')
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
-                .Select(name => AddOrGetTarget(name.Trim()))); ;
+                .Select(name => AddOrGetTarget(name.Trim()))
+                .ToArray()); ;
             ProjectsDirectlyBeforeThis = new ConcurrentHashSet<ProjectNode>();
 
             CopyItems(args.Items);
