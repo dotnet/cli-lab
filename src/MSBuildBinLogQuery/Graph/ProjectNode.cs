@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
@@ -16,7 +17,7 @@ namespace Microsoft.Build.Logging.Query.Graph
         public PropertyManager GlobalProperties { get; }
         public ConcurrentDictionary<string, TargetNode> Targets { get; }
         public HashSet<TargetNode> EntryPointTargets { get; }
-        public HashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
+        public ConcurrentHashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
 
         public ProjectNode(int id, ProjectStartedEventArgs args) : base()
         {
@@ -31,7 +32,7 @@ namespace Microsoft.Build.Logging.Query.Graph
                 .Split(';')
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
                 .Select(name => AddOrGetTarget(name.Trim()))); ;
-            ProjectsDirectlyBeforeThis = new HashSet<ProjectNode>();
+            ProjectsDirectlyBeforeThis = new ConcurrentHashSet<ProjectNode>();
 
             CopyItems(args.Items);
             CopyProperties(args.Properties);
