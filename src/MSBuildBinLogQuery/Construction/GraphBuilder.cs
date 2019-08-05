@@ -32,11 +32,7 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-
-            if (!Projects.ContainsKey(id))
-            {
-                Projects[id] = new ProjectNode(id, args);
-            }
+            Projects.GetOrAdd(id, new ProjectNode(id, args));
 
             var parent = GetParentNode(args);
 
