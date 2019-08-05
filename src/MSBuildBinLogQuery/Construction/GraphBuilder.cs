@@ -1,7 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
 
@@ -9,17 +9,14 @@ namespace Microsoft.Build.Logging.Query.Construction
 {
     public class GraphBuilder
     {
-        public Dictionary<int, ProjectNode> Projects { get; }
+        public ConcurrentDictionary<int, ProjectNode> Projects { get; }
 
         private readonly EventArgsDispatcher _eventArgsDispatcher;
-        private readonly Mutex _mutex;
 
         public GraphBuilder()
         {
-            Projects = new Dictionary<int, ProjectNode>();
-
+            Projects = new ConcurrentDictionary<int, ProjectNode>();
             _eventArgsDispatcher = new EventArgsDispatcher();
-            _mutex = new Mutex();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
         }
@@ -34,8 +31,6 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
-            _mutex.WaitOne();
-
             var id = args.BuildEventContext.ProjectInstanceId;
 
             if (!Projects.ContainsKey(id))
@@ -55,8 +50,6 @@ namespace Microsoft.Build.Logging.Query.Construction
             {
                 parent.ProjectsBeforeThis.Add(Projects[id]);
             }
-
-            _mutex.ReleaseMutex();
         }
 
         private ProjectNode GetParentNode(ProjectStartedEventArgs args)
