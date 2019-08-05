@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Build.Framework;
@@ -13,7 +14,7 @@ namespace Microsoft.Build.Logging.Query.Graph
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
-        public Dictionary<string, TargetNode> Targets { get; }
+        public ConcurrentDictionary<string, TargetNode> Targets { get; }
         public HashSet<TargetNode> EntryPointTargets { get; }
         public HashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
 
@@ -24,7 +25,7 @@ namespace Microsoft.Build.Logging.Query.Graph
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
-            Targets = new Dictionary<string, TargetNode>();
+            Targets = new ConcurrentDictionary<string, TargetNode>();
             EntryPointTargets = new HashSet<TargetNode>(
                 args.TargetNames
                 .Split(';')
@@ -39,15 +40,7 @@ namespace Microsoft.Build.Logging.Query.Graph
 
         public TargetNode AddOrGetTarget(string name)
         {
-            if (Targets.ContainsKey(name))
-            {
-                return Targets[name];
-            }
-
-            var target = new TargetNode(name, this);
-            Targets[name] = target;
-
-            return target;
+            return Targets.GetOrAdd(name, new TargetNode(name, this));
         }
 
         private void CopyItems(IEnumerable items)
