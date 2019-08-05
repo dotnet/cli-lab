@@ -1,28 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Concurrent;
 using Microsoft.Build.Framework;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
     public class ItemManager
     {
-        private readonly Dictionary<string, List<ITaskItem>> _items;
+        private readonly ConcurrentDictionary<string, ConcurrentBag<ITaskItem>> _items;
 
         public ItemManager()
         {
-            _items = new Dictionary<string, List<ITaskItem>>();
+            _items = new ConcurrentDictionary<string, ConcurrentBag<ITaskItem>>();
         }
 
         public void Add(string name, ITaskItem taskItem)
         {
-            if (!_items.ContainsKey(name))
-            {
-                _items[name] = new List<ITaskItem>();
-            }
-
-            _items[name].Add(taskItem);
+            var item = _items.GetOrAdd(name, new ConcurrentBag<ITaskItem>());
+            item.Add(taskItem);
         }
 
-        public bool TryGet(string name, out List<ITaskItem> elements)
+        public bool TryGet(string name, out ConcurrentBag<ITaskItem> elements)
         {
             return _items.TryGetValue(name, out elements);
         }
