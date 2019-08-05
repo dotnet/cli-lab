@@ -35,13 +35,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
             if (!Projects.ContainsKey(id))
             {
-                var project = new ProjectNode(id, args.ProjectFile);
-
-                CopyItems(project, args.Items);
-                CopyProperties(project, args.Properties);
-                CopyGlobalProperties(project, args.GlobalProperties);
-
-                Projects[id] = project;
+                Projects[id] = new ProjectNode(id, args);
             }
 
             var parent = GetParentNode(args);
@@ -56,45 +50,6 @@ namespace Microsoft.Build.Logging.Query.Construction
         {
             var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
             return Projects.TryGetValue(parentId, out var parent) ? parent : null;
-        }
-
-        private void CopyItems(ProjectNode project, IEnumerable items)
-        {
-            if (items == null)
-            {
-                return;
-            }
-
-            foreach (var item in items.Cast<DictionaryEntry>())
-            {
-                project.Items.Add(item.Key as string, item.Value as ITaskItem);
-            }
-        }
-
-        private void CopyProperties(ProjectNode project, IEnumerable properties)
-        {
-            if (properties == null)
-            {
-                return;
-            }
-
-            foreach (var property in properties.Cast<DictionaryEntry>())
-            {
-                project.Properties.Set(property.Key as string, property.Value as string);
-            }
-        }
-
-        private void CopyGlobalProperties(ProjectNode project, IDictionary<string, string> globalProperties)
-        {
-            if (globalProperties == null)
-            {
-                return;
-            }
-
-            foreach (var globalProperty in globalProperties)
-            {
-                project.GlobalProperties.Set(globalProperty.Key, globalProperty.Value);
-            }
         }
     }
 }
