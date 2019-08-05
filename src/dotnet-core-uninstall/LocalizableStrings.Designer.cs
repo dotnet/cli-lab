@@ -554,5 +554,23 @@ namespace Microsoft.DotNet.Tools.Uninstall {
                 return ResourceManager.GetString("VersionBeforeOptionExceptionMessageFormat", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///    Looks up a localized string similar to Display .NET Core SDKs and Runtimes that will be removed..
+        /// </summary>
+        internal static string DryRunOptionDescription {
+            get {
+                return ResourceManager.GetString("DryRunOptionDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to Execute the command without requiring Y/n confirmation..
+        /// </summary>
+        internal static string YesOptionDescription {
+            get {
+                return ResourceManager.GetString("YesOptionDescription", resourceCulture);
+            }
+        }
     }
 }

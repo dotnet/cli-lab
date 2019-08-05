@@ -50,13 +50,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var filtered = GetFilteredBundles(GetAllBundles());
 
-            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DoItOption.Name) != null)
+            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DryRunOption.Name) != null)
+            {
+                TryIt(filtered);
+            }
+            else if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {
                 DoIt(filtered);
             }
             else
             {
-                TryIt(filtered);
+                // TODO: implement confirmation prompt
+                DoIt(filtered);
             }
         }
 
@@ -117,7 +122,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
             var canceled = false;
-            var cancelMutex = new Mutex();
+            using var cancelMutex = new Mutex();
 
             var cancelProcessHandler = new ConsoleCancelEventHandler((sender, cancelArgs) =>
             {
@@ -143,7 +148,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
 
-                var process = new Process
+                using var process = new Process
                 {
                     StartInfo = GetProcessStartInfo(bundle.UninstallCommand)
                 };

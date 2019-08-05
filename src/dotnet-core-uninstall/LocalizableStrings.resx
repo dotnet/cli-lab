@@ -282,4 +282,10 @@
   <data name="ListX86OptionDescription" xml:space="preserve">
     <value>List x86 .NET Core SDKs or Runtimes.</value>
   </data>
+  <data name="DryRunOptionDescription" xml:space="preserve">
+    <value>Display .NET Core SDKs and Runtimes that will be removed.</value>
+  </data>
+  <data name="YesOptionDescription" xml:space="preserve">
+    <value>Execute the command without requiring Y/n confirmation.</value>
+  </data>
 </root>

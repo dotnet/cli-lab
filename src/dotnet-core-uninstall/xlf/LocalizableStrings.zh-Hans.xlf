@@ -32,6 +32,11 @@
         <target state="new">To actually uninstall, add --do-it: {0} --do-it.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DryRunOptionDescription">
+        <source>Display .NET Core SDKs and Runtimes that will be removed.</source>
+        <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DryRunStartMessage">
         <source>*** DRY RUN</source>
         <target state="new">*** DRY RUN</target>
@@ -275,6 +280,11 @@
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
         <source>Do not use a version before an option: {0}.</source>
         <target state="new">Do not use a version before an option: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="YesOptionDescription">
+        <source>Execute the command without requiring Y/n confirmation.</source>
+        <target state="new">Execute the command without requiring Y/n confirmation.</target>
         <note />
       </trans-unit>
     </body>
