@@ -79,15 +79,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actually uninstall specified .NET Core SDKs or Runtimes..
-        /// </summary>
-        internal static string DoItOptionDescription {
-            get {
-                return ResourceManager.GetString("DoItOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Would uninstall: {0}..
         /// </summary>
         internal static string DryRunBundleFormat {

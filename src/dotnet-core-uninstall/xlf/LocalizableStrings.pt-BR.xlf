@@ -12,11 +12,6 @@
         <target state="new">Canceling: waiting for the current uninstall to complete.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DoItOptionDescription">
-        <source>Actually uninstall specified .NET Core SDKs or Runtimes.</source>
-        <target state="new">Actually uninstall specified .NET Core SDKs or Runtimes.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DryRunBundleFormat">
         <source>Would uninstall: {0}.</source>
         <target state="new">Would uninstall: {0}.</target>

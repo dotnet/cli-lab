@@ -228,9 +228,6 @@
   <data name="UninstallNormalVerbosityFormat" xml:space="preserve">
     <value>Uninstalling: {0}.</value>
   </data>
-  <data name="DoItOptionDescription" xml:space="preserve">
-    <value>Actually uninstall specified .NET Core SDKs or Runtimes.</value>
-  </data>
   <data name="DryRunBundleFormat" xml:space="preserve">
     <value>Would uninstall: {0}.</value>
   </data>
