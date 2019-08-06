@@ -563,5 +563,21 @@ namespace Microsoft.DotNet.Tools.Uninstall {
                 return ResourceManager.GetString("YesOptionDescription", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///    Looks up a localized string similar to *** DRY RUN OUTPUT
+        /// Specified versions:
+        /// {0}
+        /// *** END DRY RUN OUTPUT
+        ///
+        /// To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+        ///
+        /// Run this command as administrator, and take out the -—dry-run option to remove these items..
+        /// </summary>
+        internal static string DryRunOutputFormat {
+            get {
+                return ResourceManager.GetString("DryRunOutputFormat", resourceCulture);
+            }
+        }
     }
 }

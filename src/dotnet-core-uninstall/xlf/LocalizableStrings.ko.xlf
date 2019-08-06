@@ -32,6 +32,25 @@
         <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DryRunOutputFormat">
+        <source>*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Run this command as administrator, and take out the -—dry-run option to remove these items.</source>
+        <target state="new">*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Run this command as administrator, and take out the -—dry-run option to remove these items.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DryRunStartMessage">
         <source>*** DRY RUN</source>
         <target state="new">*** DRY RUN</target>

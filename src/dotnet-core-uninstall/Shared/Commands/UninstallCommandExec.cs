@@ -15,6 +15,8 @@ using System.Threading;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using System.CommandLine.Rendering.Views;
+using System.CommandLine.Rendering;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -31,7 +33,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             out int pNumArgs);
 
         private static readonly Lazy<string> _assemblyVersion =
-            new Lazy<string>(() => {
+            new Lazy<string>(() =>
+            {
                 var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
                 var assemblyVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
                 if (assemblyVersionAttribute == null)
@@ -267,18 +270,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void TryIt(IEnumerable<Bundle> bundles)
         {
-            Console.WriteLine(LocalizableStrings.DryRunStartMessage);
+            var displayNames = bundles.Count() > 0 ?
+                string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}")) :
+                string.Empty;
 
-            foreach (var bundle in bundles)
-            {
-                Console.WriteLine(string.Format(LocalizableStrings.DryRunBundleFormat, bundle.DisplayName));
-            }
-
-            Console.WriteLine(LocalizableStrings.DryRunEndMessage);
-            Console.WriteLine();
-            Console.WriteLine(string.Format(
-                LocalizableStrings.DryRunHowToDoItMessageFormat,
-                $"{Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName)} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}"));
+            Console.WriteLine(string.Format(LocalizableStrings.DryRunOutputFormat, displayNames));
         }
 
         private static void HandleVersionOption()
