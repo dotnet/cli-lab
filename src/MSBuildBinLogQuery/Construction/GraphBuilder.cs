@@ -36,7 +36,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
             if (parent != null)
             {
-                parent.ProjectsDirectlyBeforeThis.Add(Projects[id]);
+                parent.Node_BeforeThis.AdjacentNodes.Add(Projects[id].Node_BeforeThis);
             }
         }
 
@@ -51,16 +51,16 @@ namespace Microsoft.Build.Logging.Query.Construction
 
                 if (args.BuildReason == TargetBuiltReason.DependsOn)
                 {
-                    target.TargetsDirectlyBeforeThis.Add(parent);
+                    target.Node_BeforeThis.AdjacentNodes.Add(parent);
                 }
                 else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
                 {
-                    parent.TargetsDirectlyBeforeThis.Add(target);
+                    parent.Node_BeforeThis.AdjacentNodes.Add(target);
                 }
                 else if (args.BuildReason == TargetBuiltReason.AfterTargets)
                 {
                     // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
-                    parent.TargetsDirectlyAfterThis.Add(target);
+                    parent.Node_AfterThis.AdjacentNodes.Add(target);
                 }
             }
         }

@@ -5,7 +5,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
-using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
@@ -18,7 +17,7 @@ namespace Microsoft.Build.Logging.Query.Graph
         public PropertyManager GlobalProperties { get; }
         public ConcurrentDictionary<string, TargetNode> Targets { get; }
         public ImmutableHashSet<TargetNode> EntryPointTargets { get; }
-        public ConcurrentHashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
+        public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
         public ProjectNode(int id, ProjectStartedEventArgs args) : base()
         {
@@ -34,7 +33,7 @@ namespace Microsoft.Build.Logging.Query.Graph
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
                 .Select(name => AddOrGetTarget(name.Trim()))
                 .ToArray()); ;
-            ProjectsDirectlyBeforeThis = new ConcurrentHashSet<ProjectNode>();
+            Node_BeforeThis = new ProjectNode_BeforeThis(this);
 
             CopyItems(args.Items);
             CopyProperties(args.Properties);
