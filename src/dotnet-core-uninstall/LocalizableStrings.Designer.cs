@@ -536,5 +536,23 @@ namespace Microsoft.DotNet.Tools.Uninstall {
                 return ResourceManager.GetString("DryRunOutputFormat", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///    Looks up a localized string similar to The following items will be removed:&#13;{0}&#13;&#13;To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.&#13;&#13;Do you want to continue? [Y/n] .
+        /// </summary>
+        internal static string ConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("ConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to Allowed values are &quot;Y&quot; and &quot;n&quot;..
+        /// </summary>
+        internal static string ConfirmationPromptInvalidExceptionMessage {
+            get {
+                return ResourceManager.GetString("ConfirmationPromptInvalidExceptionMessage", resourceCulture);
+            }
+        }
     }
 }

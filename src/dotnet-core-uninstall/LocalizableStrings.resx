@@ -283,4 +283,15 @@ To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-unins
 
 Run this command as administrator, and take out the -—dry-run option to remove these items.</value>
   </data>
+  <data name="ConfirmationPromptOutputFormat" xml:space="preserve">
+    <value>The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </value>
+  </data>
+  <data name="ConfirmationPromptInvalidExceptionMessage" xml:space="preserve">
+    <value>Allowed values are "Y" and "n".</value>
+  </data>
 </root>

@@ -9,14 +9,11 @@ using System.Reflection;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using System.Linq;
 using System.Diagnostics;
-using System.IO;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using System.Threading;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-using System.CommandLine.Rendering.Views;
-using System.CommandLine.Rendering;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -63,8 +60,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
             else
             {
-                // TODO: implement confirmation prompt
-                DoIt(filtered);
+                AskIt(filtered);
             }
         }
 
@@ -270,11 +266,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void TryIt(IEnumerable<Bundle> bundles)
         {
-            var displayNames = bundles.Count() > 0 ?
-                string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}")) :
-                string.Empty;
-
+            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
             Console.WriteLine(string.Format(LocalizableStrings.DryRunOutputFormat, displayNames));
+        }
+
+        private static void AskIt(IEnumerable<Bundle> bundles)
+        {
+            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
+            Console.Write(string.Format(LocalizableStrings.ConfirmationPromptOutputFormat, displayNames));
+
+            var response = Console.ReadLine().Trim().ToUpper();
+
+            if (response.Equals("Y"))
+            {
+                DoIt(bundles);
+            }
+            else if (response.Equals("N"))
+            {
+                return;
+            }
+            else
+            {
+                throw new ConfirmationPromptInvalidException();
+            }
         }
 
         private static void HandleVersionOption()
