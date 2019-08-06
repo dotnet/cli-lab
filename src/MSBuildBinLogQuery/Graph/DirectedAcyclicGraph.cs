@@ -79,9 +79,14 @@ namespace Microsoft.Build.Logging.Query.Graph
                 {
                     var adjacentNode = reversedGraph.Nodes[wrappedAdjacentNode];
 
-                    node.ReachableFromThis.UnionWith(adjacentNode.ReachableFromThis);
-                    node.ReachableFromThis.Add(adjacentNode);
+                    adjacentNode.ReachableFromThis.UnionWith(node.ReachableFromThis);
+                    adjacentNode.ReachableFromThis.Add(node);
                 }
+            }
+
+            foreach (var pair in Nodes)
+            {
+                pair.Value.ReachableFromThis = reversedGraph.Nodes[pair.Key].ReachableFromThis;
             }
 
             return true;

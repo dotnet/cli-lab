@@ -74,14 +74,27 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine();
 
-            projectGraph.CalculateReachableNodes();
-
-            Console.WriteLine("reachable from each project:");
+            var reachableCalculationResult = projectGraph.CalculateReachableNodes() ? "Success" : "Failed";
+            Console.WriteLine($"reachable from each project: {reachableCalculationResult}");
 
             foreach (var node in projectGraph.Nodes.Values)
             {
                 var reachableNodes = string.Join(", ", node.ReachableFromThis.Select(node => $"#{node.WrappedNode.ProjectInfo.Id}"));
                 Console.WriteLine($"  #{node.WrappedNode.ProjectInfo.Id}: {reachableNodes}");
+            }
+
+            Console.WriteLine();
+
+            var reversedGraph = projectGraph.Reverse();
+
+            Console.WriteLine("reversed project graph:");
+
+            foreach (var node in reversedGraph.Nodes.Keys)
+            {
+                foreach (var adjacentNode in node.AdjacentNodes)
+                {
+                    Console.WriteLine($"  #{node.ProjectInfo.Id} -> #{adjacentNode.ProjectInfo.Id}");
+                }
             }
         }
 

@@ -6,7 +6,7 @@ namespace Microsoft.Build.Logging.Query.Graph
     {
         public T WrappedNode { get; }
         public int InDegree { get; set; }
-        public HashSet<DirectedAcyclicGraphNode<T>> ReachableFromThis { get; }
+        public HashSet<DirectedAcyclicGraphNode<T>> ReachableFromThis { get; internal set; }
 
         public DirectedAcyclicGraphNode(T wrappedNode)
         {
