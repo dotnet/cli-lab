@@ -9,7 +9,6 @@ using System.Reflection;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using System.Linq;
 using System.Diagnostics;
-using System.IO;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using System.Threading;
 using System.Security.Principal;
@@ -31,7 +30,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             out int pNumArgs);
 
         private static readonly Lazy<string> _assemblyVersion =
-            new Lazy<string>(() => {
+            new Lazy<string>(() =>
+            {
                 var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
                 var assemblyVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
                 if (assemblyVersionAttribute == null)
@@ -50,13 +50,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var filtered = GetFilteredBundles(GetAllBundles());
 
-            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DoItOption.Name) != null)
+            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DryRunOption.Name) != null)
+            {
+                TryIt(filtered);
+            }
+            else if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {
                 DoIt(filtered);
             }
             else
             {
-                TryIt(filtered);
+                AskIt(filtered);
             }
         }
 
@@ -117,7 +121,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
             var canceled = false;
-            var cancelMutex = new Mutex();
+            using var cancelMutex = new Mutex();
 
             var cancelProcessHandler = new ConsoleCancelEventHandler((sender, cancelArgs) =>
             {
@@ -143,7 +147,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 verbosityLogger.Log(VerbosityLevel.Normal, string.Format(LocalizableStrings.UninstallNormalVerbosityFormat, bundle.DisplayName));
 
-                var process = new Process
+                using var process = new Process
                 {
                     StartInfo = GetProcessStartInfo(bundle.UninstallCommand)
                 };
@@ -262,18 +266,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void TryIt(IEnumerable<Bundle> bundles)
         {
-            Console.WriteLine(LocalizableStrings.DryRunStartMessage);
+            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
+            Console.WriteLine(string.Format(LocalizableStrings.DryRunOutputFormat, displayNames));
+        }
 
-            foreach (var bundle in bundles)
+        private static void AskIt(IEnumerable<Bundle> bundles)
+        {
+            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
+            Console.Write(string.Format(LocalizableStrings.ConfirmationPromptOutputFormat, displayNames));
+
+            var response = Console.ReadLine().Trim().ToUpper();
+
+            if (response.Equals("Y"))
             {
-                Console.WriteLine(string.Format(LocalizableStrings.DryRunBundleFormat, bundle.DisplayName));
+                DoIt(bundles);
             }
-
-            Console.WriteLine(LocalizableStrings.DryRunEndMessage);
-            Console.WriteLine();
-            Console.WriteLine(string.Format(
-                LocalizableStrings.DryRunHowToDoItMessageFormat,
-                $"{Path.GetFileName(Process.GetCurrentProcess().MainModule.FileName)} {string.Join(" ", Environment.GetCommandLineArgs().Skip(1))}"));
+            else if (response.Equals("N"))
+            {
+                return;
+            }
+            else
+            {
+                throw new ConfirmationPromptInvalidException();
+            }
         }
 
         private static void HandleVersionOption()
