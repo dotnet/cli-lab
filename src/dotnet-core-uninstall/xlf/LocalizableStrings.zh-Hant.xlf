@@ -12,21 +12,6 @@
         <target state="new">Canceling: waiting for the current uninstall to complete.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DryRunBundleFormat">
-        <source>Would uninstall: {0}.</source>
-        <target state="new">Would uninstall: {0}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DryRunEndMessage">
-        <source>*** END DRY RUN</source>
-        <target state="new">*** END DRY RUN</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DryRunHowToDoItMessageFormat">
-        <source>To actually uninstall, add --do-it: {0} --do-it.</source>
-        <target state="new">To actually uninstall, add --do-it: {0} --do-it.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="DryRunOptionDescription">
         <source>Display .NET Core SDKs and Runtimes that will be removed.</source>
         <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
@@ -49,11 +34,6 @@ Specified versions:
 To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
 
 Run this command as administrator, and take out the -—dry-run option to remove these items.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DryRunStartMessage">
-        <source>*** DRY RUN</source>
-        <target state="new">*** DRY RUN</target>
         <note />
       </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">

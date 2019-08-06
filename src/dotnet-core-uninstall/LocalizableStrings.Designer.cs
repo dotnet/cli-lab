@@ -79,42 +79,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Would uninstall: {0}..
-        /// </summary>
-        internal static string DryRunBundleFormat {
-            get {
-                return ResourceManager.GetString("DryRunBundleFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to *** END DRY RUN.
-        /// </summary>
-        internal static string DryRunEndMessage {
-            get {
-                return ResourceManager.GetString("DryRunEndMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To actually uninstall, add --do-it: {0} --do-it..
-        /// </summary>
-        internal static string DryRunHowToDoItMessageFormat {
-            get {
-                return ResourceManager.GetString("DryRunHowToDoItMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to *** DRY RUN.
-        /// </summary>
-        internal static string DryRunStartMessage {
-            get {
-                return ResourceManager.GetString("DryRunStartMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is treated as a version {1} in this tool..
         /// </summary>
         internal static string HostingBundleFootnoteFormat {
@@ -565,14 +529,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
 
         /// <summary>
-        ///    Looks up a localized string similar to *** DRY RUN OUTPUT
-        /// Specified versions:
-        /// {0}
-        /// *** END DRY RUN OUTPUT
-        ///
-        /// To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
-        ///
-        /// Run this command as administrator, and take out the -—dry-run option to remove these items..
+        ///    Looks up a localized string similar to *** DRY RUN OUTPUT&#13;Specified versions:&#13;{0}&#13;*** END DRY RUN OUTPUT&#13;&#13;To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.&#13;&#13;Run this command as administrator, and take out the -—dry-run option to remove these items..
         /// </summary>
         internal static string DryRunOutputFormat {
             get {
