@@ -2,7 +2,7 @@
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
-    public class TargetNode : IQueryableGraphNode
+    public class TargetNode
     {
         public string Name { get; }
         public ProjectNode Parent { get; }

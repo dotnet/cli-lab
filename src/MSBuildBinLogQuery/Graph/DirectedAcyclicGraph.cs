@@ -3,9 +3,11 @@ using System.Linq;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
-    public class DirectedAcyclicGraph<T> where T : IQueryableGraphNode<T>
+    public class DirectedAcyclicGraph<T> where T : IQueryableGraphNode<T>, IShallowCopyableGraphNode<T>
     {
         public Dictionary<T, DirectedAcyclicGraphNode<T>> Nodes { get; }
+
+        private readonly IEqualityComparer<T> _equalityComparer;
 
         public DirectedAcyclicGraph(IEnumerable<T> nodes, IEqualityComparer<T> equalityComparer)
         {
@@ -13,6 +15,7 @@ namespace Microsoft.Build.Logging.Query.Graph
                 node => node,
                 node => new DirectedAcyclicGraphNode<T>(node),
                 equalityComparer);
+            _equalityComparer = equalityComparer;
         }
 
         public bool TopologicalSort(out List<DirectedAcyclicGraphNode<T>> topologicalOrdering)
@@ -59,6 +62,47 @@ namespace Microsoft.Build.Logging.Query.Graph
             }
             
             return Nodes.Values.All(node => node.InDegree == 0);
+        }
+
+        public bool CalculateReachableNodes()
+        {
+            var reversedGraph = Reverse();
+
+            if (!reversedGraph.TopologicalSort(out var topologicalOrdering))
+            {
+                return false;
+            }
+
+            foreach (var node in topologicalOrdering)
+            {
+                foreach (var wrappedAdjacentNode in node.WrappedNode.AdjacentNodes)
+                {
+                    var adjacentNode = reversedGraph.Nodes[wrappedAdjacentNode];
+
+                    node.ReachableFromThis.UnionWith(adjacentNode.ReachableFromThis);
+                    node.ReachableFromThis.Add(adjacentNode);
+                }
+            }
+
+            return true;
+        }
+
+        public DirectedAcyclicGraph<T> Reverse()
+        {
+            var reservedNodes = Nodes.Keys.ToDictionary(
+                node => node,
+                node => node.ShallowCopyAndClearEdges(),
+                _equalityComparer);
+
+            foreach (var node in Nodes.Keys)
+            {
+                foreach (var adjacentNode in node.AdjacentNodes)
+                {
+                    reservedNodes[adjacentNode].AdjacentNodes.Add(node);
+                }
+            }
+
+            return new DirectedAcyclicGraph<T>(reservedNodes.Values, _equalityComparer);
         }
     }
 }

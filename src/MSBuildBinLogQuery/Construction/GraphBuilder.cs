@@ -51,16 +51,16 @@ namespace Microsoft.Build.Logging.Query.Construction
 
                 if (args.BuildReason == TargetBuiltReason.DependsOn)
                 {
-                    target.Node_BeforeThis.AdjacentNodes.Add(parent);
+                    target.Node_BeforeThis.AdjacentNodes.Add(parent.Node_BeforeThis);
                 }
                 else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
                 {
-                    parent.Node_BeforeThis.AdjacentNodes.Add(target);
+                    parent.Node_BeforeThis.AdjacentNodes.Add(target.Node_BeforeThis);
                 }
                 else if (args.BuildReason == TargetBuiltReason.AfterTargets)
                 {
                     // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
-                    parent.Node_AfterThis.AdjacentNodes.Add(target);
+                    parent.Node_AfterThis.AdjacentNodes.Add(target.Node_AfterThis);
                 }
             }
         }

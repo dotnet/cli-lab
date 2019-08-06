@@ -8,7 +8,7 @@ using Microsoft.Build.Logging.Query.Component;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
-    public class ProjectNode : IQueryableGraphNode
+    public class ProjectNode
     {
         public int Id { get; }
         public string ProjectFile { get; }

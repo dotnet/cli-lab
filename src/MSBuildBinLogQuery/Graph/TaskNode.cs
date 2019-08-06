@@ -2,7 +2,7 @@
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
-    public class TaskNode : IQueryableGraphNode
+    public class TaskNode
     {
         public string Name { get; }
         public string Assembly { get; }

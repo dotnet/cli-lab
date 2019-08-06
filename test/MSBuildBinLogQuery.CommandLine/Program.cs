@@ -48,11 +48,13 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine();
 
+            Console.WriteLine("project graph edges:");
+
             foreach (var project in projects)
             {
                 foreach (var beforeProject in project.Node_BeforeThis.AdjacentNodes)
                 {
-                    Console.WriteLine($"#{project.Id} -> #{beforeProject.ProjectInfo.Id}");
+                    Console.WriteLine($"  #{project.Id} -> #{beforeProject.ProjectInfo.Id}");
                 }
             }
 
@@ -68,6 +70,18 @@ namespace Microsoft.Build.Logging.Query.Commandline
             foreach (var project in topologicalOrdering)
             {
                 Console.WriteLine($"  #{project.WrappedNode.ProjectInfo.Id}");
+            }
+
+            Console.WriteLine();
+
+            projectGraph.CalculateReachableNodes();
+
+            Console.WriteLine("reachable from each project:");
+
+            foreach (var node in projectGraph.Nodes.Values)
+            {
+                var reachableNodes = string.Join(", ", node.ReachableFromThis.Select(node => $"#{node.WrappedNode.ProjectInfo.Id}"));
+                Console.WriteLine($"  #{node.WrappedNode.ProjectInfo.Id}: {reachableNodes}");
             }
         }
 
