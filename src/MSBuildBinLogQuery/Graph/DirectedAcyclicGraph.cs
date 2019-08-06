@@ -15,8 +15,13 @@ namespace Microsoft.Build.Logging.Query.Graph
                 equalityComparer);
         }
 
-        public bool TopologicalSort(out IEnumerable<DirectedAcyclicGraphNode<T>> topologicalOrdering)
+        public bool TopologicalSort(out List<DirectedAcyclicGraphNode<T>> topologicalOrdering)
         {
+            foreach (var node in Nodes.Values)
+            {
+                node.InDegree = 0;
+            }
+
             foreach (var node in Nodes.Values)
             {
                 foreach (var wrappedAdjacentNode in node.WrappedNode.AdjacentNodes)
@@ -31,7 +36,7 @@ namespace Microsoft.Build.Logging.Query.Graph
             {
                 if (node.InDegree == 0)
                 {
-                    queue.Append(node);
+                    queue.Enqueue(node);
                 }
             }
 
@@ -39,7 +44,7 @@ namespace Microsoft.Build.Logging.Query.Graph
 
             while (queue.TryDequeue(out var first))
             {
-                topologicalOrdering.Append(first);
+                topologicalOrdering.Add(first);
 
                 foreach (var wrappedAdjacentNode in first.WrappedNode.AdjacentNodes)
                 {
@@ -48,7 +53,7 @@ namespace Microsoft.Build.Logging.Query.Graph
 
                     if (adjacentNode.InDegree == 0)
                     {
-                        queue.Append(adjacentNode);
+                        queue.Enqueue(adjacentNode);
                     }
                 }
             }

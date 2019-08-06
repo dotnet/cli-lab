@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Graph
