@@ -5,13 +5,13 @@ namespace Microsoft.Build.Logging.Query.Construction
 {
     public class GraphBuilder
     {
-        public Component.Build Build { get; }
+        public BuildResult Build { get; }
 
         private readonly EventArgsDispatcher _eventArgsDispatcher;
 
         public GraphBuilder()
         {
-            Build = new Component.Build();
+            Build = new BuildResult();
             _eventArgsDispatcher = new EventArgsDispatcher();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
@@ -90,7 +90,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             return Build.Projects.TryGetValue(parentId, out var parent) ? parent : null;
         }
 
-        private ILoggable GetContainingComponent(int projectInstanceId, int targetId, int taskId)
+        private BuildComponent GetContainingComponent(int projectInstanceId, int targetId, int taskId)
         {
             if (projectInstanceId == BuildEventContext.InvalidProjectInstanceId || projectInstanceId == 0)
             {

@@ -8,7 +8,7 @@ using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Project : ILoggable
+    public class Project : Component
     {
         public int Id { get; }
         public string ProjectFile { get; }
@@ -19,9 +19,8 @@ namespace Microsoft.Build.Logging.Query.Component
         public ConcurrentDictionary<int, Target> TargetsById { get; }
         public ImmutableHashSet<Target> EntryPointTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
-        public IList<Message> Messages { get; }
 
-        public Project(int id, ProjectStartedEventArgs args)
+        public Project(int id, ProjectStartedEventArgs args) : base()
         {
             Id = id;
             ProjectFile = args.ProjectFile;
@@ -37,7 +36,6 @@ namespace Microsoft.Build.Logging.Query.Component
                 .Select(name => AddOrGetTarget(name.Trim()))
                 .ToArray()); ;
             Node_BeforeThis = new ProjectNode_BeforeThis(this);
-            Messages = new List<Message>();
 
             CopyItems(args.Items);
             CopyProperties(args.Properties);

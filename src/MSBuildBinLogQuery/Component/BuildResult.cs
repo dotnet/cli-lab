@@ -3,15 +3,13 @@ using System.Collections.Generic;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Build : ILoggable
+    public class BuildResult : BuildComponent
     {
         public ConcurrentDictionary<int, Project> Projects { get; }
-        public IList<Message> Messages { get; }
 
-        public Build()
+        public BuildResult() : base()
         {
             Projects = new ConcurrentDictionary<int, Project>();
-            Messages = new List<Message>();
         }
     }
 }
