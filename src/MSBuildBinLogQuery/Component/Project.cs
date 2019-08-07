@@ -15,18 +15,20 @@ namespace Microsoft.Build.Logging.Query.Component
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
-        public ConcurrentDictionary<string, Target> Targets { get; }
+        public ConcurrentDictionary<string, Target> TargetsByName { get; }
+        public ConcurrentDictionary<int, Target> TargetsById { get; }
         public ImmutableHashSet<Target> EntryPointTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public Project(int id, ProjectStartedEventArgs args) : base()
+        public Project(int id, ProjectStartedEventArgs args)
         {
             Id = id;
             ProjectFile = args.ProjectFile;
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
-            Targets = new ConcurrentDictionary<string, Target>();
+            TargetsByName = new ConcurrentDictionary<string, Target>();
+            TargetsById = new ConcurrentDictionary<int, Target>();
             EntryPointTargets = ImmutableHashSet.Create(
                 args.TargetNames
                 .Split(';')
@@ -40,9 +42,17 @@ namespace Microsoft.Build.Logging.Query.Component
             CopyGlobalProperties(args.GlobalProperties);
         }
 
-        public Target AddOrGetTarget(string name)
+        public Target AddOrGetTarget(string name, int? id = null)
         {
-            return Targets.GetOrAdd(name, new Target(name, this));
+            var target = TargetsByName.GetOrAdd(name, new Target(name, id, this));
+
+            if (id.HasValue)
+            {
+                target.Id = id;
+                TargetsById[id.Value] = target;
+            }
+
+            return target;
         }
 
         private void CopyItems(IEnumerable items)

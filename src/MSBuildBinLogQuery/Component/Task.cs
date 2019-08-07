@@ -2,14 +2,16 @@
 {
     public class Task
     {
+        public int Id { get; }
         public string Name { get; }
-        public string Assembly { get; }
+        public string TaskFile { get; }
         public PropertyManager Parameters { get; }
 
-        public Task(string name, string assembly) : base()
+        public Task(int id, string name, string taskFile)
         {
+            Id = id;
             Name = name;
-            Assembly = assembly;
+            TaskFile = taskFile;
             Parameters = new PropertyManager();
         }
     }
