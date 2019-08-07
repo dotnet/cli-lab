@@ -31,13 +31,12 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            Projects.TryAdd(id, new Project(id, args));
-
+            var project = Projects.GetOrAdd(id, new Project(id, args));
             var parent = GetParentNode(args);
 
             if (parent != null)
             {
-                parent.Node_BeforeThis.AdjacentNodes.Add(Projects[id].Node_BeforeThis);
+                parent.Node_BeforeThis.AdjacentNodes.Add(project.Node_BeforeThis);
             }
         }
 

@@ -45,6 +45,16 @@ namespace Microsoft.Build.Logging.Query.Commandline
                 //     Console.WriteLine($"      directly before this: {string.Join(";", target.Node_BeforeThis.AdjacentNodes.Select(beforeThis => beforeThis.Name))}");
                 //     Console.WriteLine($"      directly after this: {string.Join(";", target.Node_AfterThis.AdjacentNodes.Select(afterThis => afterThis.Name))}");
                 // }
+
+                foreach (var target in project.TargetsByName.Values)
+                {
+                    Console.WriteLine($"    target {target.Name}");
+
+                    foreach (var task in target.Tasks.Values)
+                    {
+                        Console.WriteLine($"      task #{task.Id} {task.Name}");
+                    }
+                }
             }
 
             Console.WriteLine();
