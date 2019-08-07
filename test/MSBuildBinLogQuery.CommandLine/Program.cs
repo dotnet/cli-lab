@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 
@@ -30,7 +31,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             PrintProjectNodes(graphBuilder.Projects.Values.ToList());
         }
 
-        private static void PrintProjectNodes(IEnumerable<ProjectNode> projects)
+        private static void PrintProjectNodes(IEnumerable<Project> projects)
         {
             Console.WriteLine("projects:");
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Microsoft.Build.Logging.Query.Component;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
@@ -6,10 +7,10 @@ namespace Microsoft.Build.Logging.Query.Graph
         IQueryableGraphNode<TargetNode_BeforeThis>,
         IShallowCopyableGraphNode<TargetNode_BeforeThis>
     {
-        public TargetNode TargetInfo { get; }
+        public Target TargetInfo { get; }
         public ISet<TargetNode_BeforeThis> AdjacentNodes { get; private set; }
 
-        public TargetNode_BeforeThis(TargetNode targetInfo)
+        public TargetNode_BeforeThis(Target targetInfo)
         {
             TargetInfo = targetInfo;
             AdjacentNodes = new HashSet<TargetNode_BeforeThis>();

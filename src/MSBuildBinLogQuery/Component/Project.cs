@@ -4,29 +4,29 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Graph;
 
-namespace Microsoft.Build.Logging.Query.Graph
+namespace Microsoft.Build.Logging.Query.Component
 {
-    public class ProjectNode
+    public class Project
     {
         public int Id { get; }
         public string ProjectFile { get; }
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
-        public ConcurrentDictionary<string, TargetNode> Targets { get; }
-        public ImmutableHashSet<TargetNode> EntryPointTargets { get; }
+        public ConcurrentDictionary<string, Target> Targets { get; }
+        public ImmutableHashSet<Target> EntryPointTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public ProjectNode(int id, ProjectStartedEventArgs args) : base()
+        public Project(int id, ProjectStartedEventArgs args) : base()
         {
             Id = id;
             ProjectFile = args.ProjectFile;
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
-            Targets = new ConcurrentDictionary<string, TargetNode>();
+            Targets = new ConcurrentDictionary<string, Target>();
             EntryPointTargets = ImmutableHashSet.Create(
                 args.TargetNames
                 .Split(';')
@@ -40,9 +40,9 @@ namespace Microsoft.Build.Logging.Query.Graph
             CopyGlobalProperties(args.GlobalProperties);
         }
 
-        public TargetNode AddOrGetTarget(string name)
+        public Target AddOrGetTarget(string name)
         {
-            return Targets.GetOrAdd(name, new TargetNode(name, this));
+            return Targets.GetOrAdd(name, new Target(name, this));
         }
 
         private void CopyItems(IEnumerable items)

@@ -1,14 +1,12 @@
-﻿using Microsoft.Build.Logging.Query.Component;
-
-namespace Microsoft.Build.Logging.Query.Graph
+﻿namespace Microsoft.Build.Logging.Query.Component
 {
-    public class TaskNode
+    public class Task
     {
         public string Name { get; }
         public string Assembly { get; }
         public PropertyManager Parameters { get; }
 
-        public TaskNode(string name, string assembly) : base()
+        public Task(string name, string assembly) : base()
         {
             Name = name;
             Assembly = assembly;
