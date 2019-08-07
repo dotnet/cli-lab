@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Task : Component
+    public class Task : BuildComponent
     {
         public int Id { get; }
         public string Name { get; }

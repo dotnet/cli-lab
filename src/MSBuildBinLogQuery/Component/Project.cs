@@ -5,10 +5,11 @@ using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
+using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Project : Component
+    public class Project : BuildComponent
     {
         public int Id { get; }
         public string ProjectFile { get; }

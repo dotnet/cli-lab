@@ -30,7 +30,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             PrintProjectNodes(graphBuilder.Build);
         }
 
-        private static void PrintProjectNodes(Component.Build build)
+        private static void PrintProjectNodes(Component.BuildResult build)
         {
             Console.WriteLine("build:");
 

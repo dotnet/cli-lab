@@ -1,5 +1,6 @@
 ﻿using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Messaging;
 
 namespace Microsoft.Build.Logging.Query.Construction
 {
@@ -18,6 +19,8 @@ namespace Microsoft.Build.Logging.Query.Construction
             _eventArgsDispatcher.TargetStarted += TargetStarted;
             _eventArgsDispatcher.TaskStarted += TaskStarted;
             _eventArgsDispatcher.MessageRaised += MessageRaised;
+            _eventArgsDispatcher.WarningRaised += WarningRaised;
+            _eventArgsDispatcher.ErrorRaised += ErrorRaised;
         }
 
         public void HandleEvents(params BuildEventArgs[] buildEvents)
@@ -82,6 +85,28 @@ namespace Microsoft.Build.Logging.Query.Construction
                 args.BuildEventContext.TaskId);
 
             containingComponent.Messages.Add(message);
+        }
+
+        private void WarningRaised(object sender, BuildWarningEventArgs args)
+        {
+            var warning = new Warning(args.Message);
+            var containingComponent = GetContainingComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId);
+
+            containingComponent.Warnings.Add(warning);
+        }
+
+        private void ErrorRaised(object sender, BuildErrorEventArgs args)
+        {
+            var error = new Error(args.Message);
+            var containingComponent = GetContainingComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId);
+
+            containingComponent.Errors.Add(error);
         }
 
         private Project GetParentProject(ProjectStartedEventArgs args)

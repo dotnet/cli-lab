@@ -4,7 +4,7 @@ using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Target : Component
+    public class Target : BuildComponent
     {
         public string Name { get; }
         public int? Id { get; internal set; }
