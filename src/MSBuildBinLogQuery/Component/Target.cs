@@ -4,7 +4,7 @@ using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Target : IHasMessages
+    public class Target : ILoggable
     {
         public string Name { get; }
         public int? Id { get; internal set; }

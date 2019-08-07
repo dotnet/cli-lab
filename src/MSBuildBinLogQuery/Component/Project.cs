@@ -8,7 +8,7 @@ using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Project : IHasMessages
+    public class Project : ILoggable
     {
         public int Id { get; }
         public string ProjectFile { get; }

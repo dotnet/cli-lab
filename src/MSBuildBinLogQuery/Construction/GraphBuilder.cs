@@ -5,7 +5,7 @@ using Microsoft.Build.Logging.Query.Component;
 
 namespace Microsoft.Build.Logging.Query.Construction
 {
-    public class GraphBuilder : IHasMessages
+    public class GraphBuilder : ILoggable
     {
         public ConcurrentDictionary<int, Project> Projects { get; }
         public IList<Message> Messages { get; }
@@ -36,7 +36,7 @@ namespace Microsoft.Build.Logging.Query.Construction
         {
             var id = args.BuildEventContext.ProjectInstanceId;
             var project = Projects.GetOrAdd(id, new Project(id, args));
-            var parent = GetParentNode(args);
+            var parent = GetParentProject(args);
 
             if (parent != null)
             {
@@ -80,38 +80,42 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void MessageRaised(object sender, BuildMessageEventArgs args)
         {
             var message = new Message(args.Message, args.Importance);
+            var containingComponent = GetContainingComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId);
 
-            if (args.BuildEventContext.ProjectInstanceId == BuildEventContext.InvalidProjectInstanceId ||
-                args.BuildEventContext.ProjectInstanceId == 0)
-            {
-                Messages.Add(message);
-                return;
-            }
-
-            var project = Projects[args.BuildEventContext.ProjectInstanceId];
-
-            if (args.BuildEventContext.TargetId == BuildEventContext.InvalidTargetId)
-            {
-                project.Messages.Add(message);
-                return;
-            }
-
-            var target = project.TargetsById[args.BuildEventContext.TargetId];
-
-            if (args.BuildEventContext.TaskId == BuildEventContext.InvalidTaskId)
-            {
-                target.Messages.Add(message);
-                return;
-            }
-
-            var task = target.Tasks[args.BuildEventContext.TaskId];
-            task.Messages.Add(message);
+            containingComponent.Messages.Add(message);
         }
 
-        private Project GetParentNode(ProjectStartedEventArgs args)
+        private Project GetParentProject(ProjectStartedEventArgs args)
         {
             var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
             return Projects.TryGetValue(parentId, out var parent) ? parent : null;
+        }
+
+        private ILoggable GetContainingComponent(int projectInstanceId, int targetId, int taskId)
+        {
+            if (projectInstanceId == BuildEventContext.InvalidProjectInstanceId || projectInstanceId == 0)
+            {
+                return this;
+            }
+
+            var project = Projects[projectInstanceId];
+
+            if (targetId == BuildEventContext.InvalidTargetId)
+            {
+                return project;
+            }
+
+            var target = project.TargetsById[targetId];
+
+            if (taskId == BuildEventContext.InvalidTaskId)
+            {
+                return target;
+            }
+
+            return target.Tasks[taskId];
         }
     }
 }

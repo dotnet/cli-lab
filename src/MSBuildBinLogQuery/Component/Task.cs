@@ -2,7 +2,7 @@
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Task : IHasMessages
+    public class Task : ILoggable
     {
         public int Id { get; }
         public string Name { get; }
