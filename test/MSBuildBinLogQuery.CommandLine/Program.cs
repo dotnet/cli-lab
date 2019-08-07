@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 
@@ -28,14 +27,14 @@ namespace Microsoft.Build.Logging.Query.Commandline
             var graphBuilder = new GraphBuilder();
             graphBuilder.HandleEvents(events.ToArray());
 
-            PrintProjectNodes(graphBuilder.Projects.Values.ToList());
+            PrintProjectNodes(graphBuilder.Build);
         }
 
-        private static void PrintProjectNodes(IEnumerable<Project> projects)
+        private static void PrintProjectNodes(Component.Build build)
         {
-            Console.WriteLine("projects:");
+            Console.WriteLine("build:");
 
-            foreach (var project in projects)
+            foreach (var project in build.Projects.Values)
             {
                 Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
 
@@ -72,11 +71,16 @@ namespace Microsoft.Build.Logging.Query.Commandline
                 }
             }
 
+            foreach (var message in build.Messages)
+            {
+                Console.WriteLine($"message: {message.Text}");
+            }
+
             Console.WriteLine();
 
             Console.WriteLine("project graph edges:");
 
-            foreach (var project in projects)
+            foreach (var project in build.Projects.Values)
             {
                 foreach (var beforeProject in project.Node_BeforeThis.AdjacentNodes)
                 {
@@ -87,7 +91,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             Console.WriteLine();
 
             var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(
-                projects.Select(project => project.Node_BeforeThis),
+                build.Projects.Values.Select(project => project.Node_BeforeThis),
                 new ProjectNode_BeforeThis_EqualityComparer());
 
             var topologicalSortResult = projectGraph.TopologicalSort(out var topologicalOrdering) ? "Success" : "Failed";

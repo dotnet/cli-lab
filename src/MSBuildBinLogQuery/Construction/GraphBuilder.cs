@@ -1,21 +1,17 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
-using Microsoft.Build.Framework;
+﻿using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
 
 namespace Microsoft.Build.Logging.Query.Construction
 {
-    public class GraphBuilder : ILoggable
+    public class GraphBuilder
     {
-        public ConcurrentDictionary<int, Project> Projects { get; }
-        public IList<Message> Messages { get; }
+        public Component.Build Build { get; }
 
         private readonly EventArgsDispatcher _eventArgsDispatcher;
 
         public GraphBuilder()
         {
-            Projects = new ConcurrentDictionary<int, Project>();
-            Messages = new List<Message>();
+            Build = new Component.Build();
             _eventArgsDispatcher = new EventArgsDispatcher();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
@@ -35,7 +31,7 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            var project = Projects.GetOrAdd(id, new Project(id, args));
+            var project = Build.Projects.GetOrAdd(id, new Project(id, args));
             var parent = GetParentProject(args);
 
             if (parent != null)
@@ -46,7 +42,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private void TargetStarted(object sender, TargetStartedEventArgs args)
         {
-            var project = Projects[args.BuildEventContext.ProjectInstanceId];
+            var project = Build.Projects[args.BuildEventContext.ProjectInstanceId];
             var target = project.AddOrGetTarget(args.TargetName, args.BuildEventContext.TargetId);
 
             if (!string.IsNullOrWhiteSpace(args.ParentTarget))
@@ -71,7 +67,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private void TaskStarted(object sender, TaskStartedEventArgs args)
         {
-            var project = Projects[args.BuildEventContext.ProjectInstanceId];
+            var project = Build.Projects[args.BuildEventContext.ProjectInstanceId];
             var target = project.TargetsById[args.BuildEventContext.TargetId];
 
             target.AddOrGetTask(args.BuildEventContext.TaskId, args.TaskName, args.TaskFile);
@@ -91,17 +87,17 @@ namespace Microsoft.Build.Logging.Query.Construction
         private Project GetParentProject(ProjectStartedEventArgs args)
         {
             var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
-            return Projects.TryGetValue(parentId, out var parent) ? parent : null;
+            return Build.Projects.TryGetValue(parentId, out var parent) ? parent : null;
         }
 
         private ILoggable GetContainingComponent(int projectInstanceId, int targetId, int taskId)
         {
             if (projectInstanceId == BuildEventContext.InvalidProjectInstanceId || projectInstanceId == 0)
             {
-                return this;
+                return Build;
             }
 
-            var project = Projects[projectInstanceId];
+            var project = Build.Projects[projectInstanceId];
 
             if (targetId == BuildEventContext.InvalidTargetId)
             {
