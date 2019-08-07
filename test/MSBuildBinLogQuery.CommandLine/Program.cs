@@ -53,7 +53,22 @@ namespace Microsoft.Build.Logging.Query.Commandline
                     foreach (var task in target.Tasks.Values)
                     {
                         Console.WriteLine($"      task #{task.Id} {task.Name}");
+
+                        foreach (var message in task.Messages)
+                        {
+                            Console.WriteLine($"        message: {message.Text}");
+                        }
                     }
+
+                    foreach (var message in target.Messages)
+                    {
+                        Console.WriteLine($"      message: {message.Text}");
+                    }
+                }
+
+                foreach (var message in project.Messages)
+                {
+                    Console.WriteLine($"    message: {message.Text}");
                 }
             }
 
