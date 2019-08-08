@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Concurrent;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
 
@@ -19,6 +16,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             _eventArgsDispatcher = new EventArgsDispatcher();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
+            _eventArgsDispatcher.TargetStarted += TargetStarted;
         }
 
         public void HandleEvents(params BuildEventArgs[] buildEvents)
@@ -32,13 +30,38 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            Projects.GetOrAdd(id, new ProjectNode(id, args));
+            Projects.TryAdd(id, new ProjectNode(id, args));
 
             var parent = GetParentNode(args);
 
             if (parent != null)
             {
-                parent.ProjectsBeforeThis.Add(Projects[id]);
+                parent.ProjectsDirectlyBeforeThis.Add(Projects[id]);
+            }
+        }
+
+        private void TargetStarted(object sender, TargetStartedEventArgs args)
+        {
+            var project = Projects[args.BuildEventContext.ProjectInstanceId];
+            var target = project.AddOrGetOrderedTarget(args.TargetName);
+
+            if (!string.IsNullOrWhiteSpace(args.ParentTarget))
+            {
+                var parent = project.AddOrGetOrderedTarget(args.ParentTarget);
+
+                if (args.BuildReason == TargetBuiltReason.DependsOn)
+                {
+                    target.TargetsDirectlyBeforeThis.Add(parent);
+                }
+                else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
+                {
+                    parent.TargetsDirectlyBeforeThis.Add(target);
+                }
+                else if (args.BuildReason == TargetBuiltReason.AfterTargets)
+                {
+                    // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
+                    parent.TargetsDirectlyAfterThis.Add(target);
+                }
             }
         }
 

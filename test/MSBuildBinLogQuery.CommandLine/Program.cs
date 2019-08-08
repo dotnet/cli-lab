@@ -36,13 +36,20 @@ namespace Microsoft.Build.Logging.Query.Commandline
             foreach (var project in projects)
             {
                 Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
+
+                foreach (var target in project.Targets.Values)
+                {
+                    Console.WriteLine($"    target {target.Name}");
+                    Console.WriteLine($"      directly before this: {string.Join(";", target.TargetsDirectlyBeforeThis.Select(beforeThis => beforeThis.Name))}");
+                    Console.WriteLine($"      directly after this: {string.Join(";", target.TargetsDirectlyAfterThis.Select(afterThis => afterThis.Name))}");
+                }
             }
 
             Console.WriteLine();
 
             foreach (var project in projects)
             {
-                foreach (var beforeProject in project.ProjectsBeforeThis)
+                foreach (var beforeProject in project.ProjectsDirectlyBeforeThis)
                 {
                     Console.WriteLine($"#{project.Id} -> #{beforeProject.Id}");
                 }

@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
@@ -13,9 +15,13 @@ namespace Microsoft.Build.Logging.Query.Graph
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
-        public List<TargetNode> ExecutedTargets { get; }
-        public List<TargetNode> EntryPointTargets { get; }
-        public HashSet<ProjectNode> ProjectsBeforeThis { get; }
+        public ConcurrentDictionary<string, TargetNode> Targets { get; }
+        // TODO: A single project instance can be built concurrently with
+        //       distinct EntryPointTargets. Those should be tracked as part of
+        //       the overall Project.
+        public IReadOnlyList<TargetNode> EntryPointTargets { get; }
+        public List<TargetNode> OrderedTargets { get; }
+        public ConcurrentHashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
 
         public ProjectNode(int id, ProjectStartedEventArgs args) : base()
         {
@@ -24,13 +30,32 @@ namespace Microsoft.Build.Logging.Query.Graph
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
-            ExecutedTargets = new List<TargetNode>();
-            EntryPointTargets = new List<TargetNode>();
-            ProjectsBeforeThis = new HashSet<ProjectNode>();
+            Targets = new ConcurrentDictionary<string, TargetNode>();
+            EntryPointTargets = new List<TargetNode>(
+                args.TargetNames
+                .Split(';')
+                .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
+                .Select(name => AddOrGetTarget(name.Trim()))
+                .ToArray());
+            OrderedTargets = new List<TargetNode>();
+            ProjectsDirectlyBeforeThis = new ConcurrentHashSet<ProjectNode>();
 
             CopyItems(args.Items);
             CopyProperties(args.Properties);
             CopyGlobalProperties(args.GlobalProperties);
+        }
+
+        public TargetNode AddOrGetOrderedTarget(string name)
+        {
+            var target = AddOrGetTarget(name);
+            OrderedTargets.Add(target);
+
+            return target;
+        }
+
+        private TargetNode AddOrGetTarget(string name)
+        {
+            return Targets.GetOrAdd(name, new TargetNode(name, this));
         }
 
         private void CopyItems(IEnumerable items)
