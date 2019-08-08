@@ -21,6 +21,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public ConcurrentDictionary<int, Target> TargetsById { get; }
         public ImmutableHashSet<Target> EntryPointTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
+        public override BuildComponent Parent => ParentBuild;
 
         public Project(int id, ProjectStartedEventArgs args, BuildResult parentBuild) : base()
         {

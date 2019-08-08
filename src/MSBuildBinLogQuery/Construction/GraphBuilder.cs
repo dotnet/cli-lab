@@ -84,7 +84,7 @@ namespace Microsoft.Build.Logging.Query.Construction
                 args.BuildEventContext.TaskId);
             var message = new Message(args.Message, containingComponent, args.Importance);
 
-            containingComponent.Messages.Add(message);
+            containingComponent.AddMessage(message);
         }
 
         private void WarningRaised(object sender, BuildWarningEventArgs args)
@@ -95,7 +95,7 @@ namespace Microsoft.Build.Logging.Query.Construction
                 args.BuildEventContext.TaskId);
             var warning = new Warning(args.Message, containingComponent);
 
-            containingComponent.Warnings.Add(warning);
+            containingComponent.AddWarning(warning);
         }
 
         private void ErrorRaised(object sender, BuildErrorEventArgs args)
@@ -106,7 +106,7 @@ namespace Microsoft.Build.Logging.Query.Construction
                 args.BuildEventContext.TaskId);
             var error = new Error(args.Message, containingComponent);
 
-            containingComponent.Errors.Add(error);
+            containingComponent.AddError(error);
         }
 
         private Project GetParentProject(ProjectStartedEventArgs args)

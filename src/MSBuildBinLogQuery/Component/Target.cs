@@ -11,6 +11,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public ConcurrentDictionary<int, Task> Tasks { get; }
         public TargetNode_BeforeThis Node_BeforeThis { get; }
         public TargetNode_AfterThis Node_AfterThis { get; }
+        public override BuildComponent Parent => ParentProject;
 
         public Target(string name, int? id, Project parentProject) : base()
         {
