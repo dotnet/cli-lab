@@ -228,21 +228,6 @@
   <data name="UninstallNormalVerbosityFormat" xml:space="preserve">
     <value>Uninstalling: {0}.</value>
   </data>
-  <data name="DoItOptionDescription" xml:space="preserve">
-    <value>Actually uninstall specified .NET Core SDKs or Runtimes.</value>
-  </data>
-  <data name="DryRunBundleFormat" xml:space="preserve">
-    <value>Would uninstall: {0}.</value>
-  </data>
-  <data name="DryRunEndMessage" xml:space="preserve">
-    <value>*** END DRY RUN</value>
-  </data>
-  <data name="DryRunHowToDoItMessageFormat" xml:space="preserve">
-    <value>To actually uninstall, add --do-it: {0} --do-it.</value>
-  </data>
-  <data name="DryRunStartMessage" xml:space="preserve">
-    <value>*** DRY RUN</value>
-  </data>
   <data name="MacOsBundleDisplayNameFormat" xml:space="preserve">
     <value>Microsoft .NET Core {0} {1} (x64)</value>
   </data>
@@ -281,5 +266,32 @@
   </data>
   <data name="ListX86OptionDescription" xml:space="preserve">
     <value>List x86 .NET Core SDKs or Runtimes.</value>
+  </data>
+  <data name="DryRunOptionDescription" xml:space="preserve">
+    <value>Display .NET Core SDKs and Runtimes that will be removed.</value>
+  </data>
+  <data name="YesOptionDescription" xml:space="preserve">
+    <value>Execute the command without requiring Y/n confirmation.</value>
+  </data>
+  <data name="DryRunOutputFormat" xml:space="preserve">
+    <value>*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Run this command as administrator, and take out the -—dry-run option to remove these items.</value>
+  </data>
+  <data name="ConfirmationPromptOutputFormat" xml:space="preserve">
+    <value>The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </value>
+  </data>
+  <data name="ConfirmationPromptInvalidExceptionMessage" xml:space="preserve">
+    <value>Allowed values are "Y" and "n".</value>
   </data>
 </root>

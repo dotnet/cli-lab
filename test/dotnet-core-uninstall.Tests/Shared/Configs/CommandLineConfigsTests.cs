@@ -136,6 +136,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all -v quiet --sdk", new string[] { "verbosity", "sdk" })]
         [InlineData("--major-minor 2.3 --verbosity m --runtime", new string[] { "verbosity", "runtime" })]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk -v n --runtime", new string[] { "verbosity", "sdk", "runtime" })]
+        [InlineData("--all --sdk --dry-run", new string[] { "sdk", "dry-run" })]
+        [InlineData("--all-below 2.2.300 --runtime --yes", new string[] { "runtime", "yes" })]
+        [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk -y --runtime", new string[] { "sdk", "runtime", "yes" })]
+        [InlineData("2.1.300 3.0.100-preview-276262-01 --dry-run --verbosity diagnostic", new string[] { "verbosity", "dry-run" })]
         internal void TestOptionsAcceptAux(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -180,6 +184,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-below 1.23.456 -v")]
         [InlineData("--major-minor 3.0 --verbosity")]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0 --sdk --verbosity")]
+        [InlineData("--dry-run --all-but")]
+        [InlineData("--yes --verbosity")]
+        [InlineData("--major-minor -y")]
         internal void TestOptionsReject(string command)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -196,6 +203,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--major-minor 1.1 --hosting-bundle")]
         [InlineData("--all-but 2.2.300 --sdk --aspnet-runtime -v q")]
         [InlineData("--all-below 2.2 --verbosity normal --sdk --hosting-bundle")]
+        [InlineData("--major-minor 1.1 --hosting-bundle --dry-run")]
+        [InlineData("--all-but 2.2.300 --sdk --aspnet-runtime --yes -v q")]
+        [InlineData("--all-below 2.2 --verbosity normal -y --sdk --hosting-bundle")]
         internal void TestOptionsRejectMacOs(string command)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -431,6 +441,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--sdk --all-but 2.2.300 2.1.700", BundleType.Sdk)]
         [InlineData("--runtime --all-below 3.0.1-preview-10086", BundleType.Runtime)]
         [InlineData("--sdk --runtime --all-previews", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("--runtime --all --dry-run", BundleType.Runtime)]
+        [InlineData("--yes --sdk --all-below 2.0", BundleType.Sdk)]
+        [InlineData("--sdk --runtime -y", BundleType.Sdk | BundleType.Runtime)]
         internal void TestGetTypeSelectionRootCommand(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -452,6 +465,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--sdk --runtime --aspnet-runtime", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
         [InlineData("--hosting-bundle --aspnet-runtime", BundleType.AspNetRuntime | BundleType.HostingBundle)]
         [InlineData("--hosting-bundle --sdk --all", BundleType.Sdk | BundleType.HostingBundle)]
+        [InlineData("--dry-run", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [InlineData("--yes", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [InlineData("-y", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
         internal void TestGetTypeSelectionRootCommandWindows(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -468,6 +484,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("", BundleType.Sdk | BundleType.Runtime)]
         [InlineData("-v q", BundleType.Sdk | BundleType.Runtime)]
         [InlineData("--all", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("--dry-run", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("--yes", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("-y", BundleType.Sdk | BundleType.Runtime)]
         internal void TestGetTypeSelectionRootCommandMacOs(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -498,6 +517,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list -v diagnostic", VerbosityLevel.Diagnostic)]
         [InlineData("-v q list", VerbosityLevel.Normal)]
         [InlineData("list -v d", VerbosityLevel.Detailed)]
+        [InlineData("--sdk --all --dry-run", VerbosityLevel.Normal)]
+        [InlineData("--runtime --all-below 2.0 --yes -v q", VerbosityLevel.Quiet)]
+        [InlineData("--runtime --all-previews --y -v diag", VerbosityLevel.Diagnostic)]
         internal void TestGetVerbosityLevel(string command, VerbosityLevel expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
@@ -532,6 +554,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--version 2.2.300 --runtime")]
         [InlineData("--version --major-minor 2.1")]
         [InlineData("--version --all-but 2.2.300 2.1.700")]
+        [InlineData("--all --sdk --version --dry-run")]
+        [InlineData("2.2.5 --runtime -y --version")]
+        [InlineData("--version --sdk 2.2.300 2.1.700 --yes")]
         internal void TestVersionOption(string command)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);

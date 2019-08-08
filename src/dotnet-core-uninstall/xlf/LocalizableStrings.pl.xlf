@@ -12,29 +12,48 @@
         <target state="new">Canceling: waiting for the current uninstall to complete.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DoItOptionDescription">
-        <source>Actually uninstall specified .NET Core SDKs or Runtimes.</source>
-        <target state="new">Actually uninstall specified .NET Core SDKs or Runtimes.</target>
+      <trans-unit id="ConfirmationPromptInvalidExceptionMessage">
+        <source>Allowed values are "Y" and "n".</source>
+        <target state="new">Allowed values are "Y" and "n".</target>
         <note />
       </trans-unit>
-      <trans-unit id="DryRunBundleFormat">
-        <source>Would uninstall: {0}.</source>
-        <target state="new">Would uninstall: {0}.</target>
+      <trans-unit id="ConfirmationPromptOutputFormat">
+        <source>The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </source>
+        <target state="new">The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </target>
         <note />
       </trans-unit>
-      <trans-unit id="DryRunEndMessage">
-        <source>*** END DRY RUN</source>
-        <target state="new">*** END DRY RUN</target>
+      <trans-unit id="DryRunOptionDescription">
+        <source>Display .NET Core SDKs and Runtimes that will be removed.</source>
+        <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
         <note />
       </trans-unit>
-      <trans-unit id="DryRunHowToDoItMessageFormat">
-        <source>To actually uninstall, add --do-it: {0} --do-it.</source>
-        <target state="new">To actually uninstall, add --do-it: {0} --do-it.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DryRunStartMessage">
-        <source>*** DRY RUN</source>
-        <target state="new">*** DRY RUN</target>
+      <trans-unit id="DryRunOutputFormat">
+        <source>*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Run this command as administrator, and take out the -—dry-run option to remove these items.</source>
+        <target state="new">*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+
+Run this command as administrator, and take out the -—dry-run option to remove these items.</target>
         <note />
       </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
@@ -275,6 +294,11 @@
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
         <source>Do not use a version before an option: {0}.</source>
         <target state="new">Do not use a version before an option: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="YesOptionDescription">
+        <source>Execute the command without requiring Y/n confirmation.</source>
+        <target state="new">Execute the command without requiring Y/n confirmation.</target>
         <note />
       </trans-unit>
     </body>

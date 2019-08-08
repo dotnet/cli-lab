@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
@@ -16,7 +15,11 @@ namespace Microsoft.Build.Logging.Query.Component
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
         public ConcurrentDictionary<string, Target> Targets { get; }
-        public ImmutableHashSet<Target> EntryPointTargets { get; }
+        // TODO: A single project instance can be built concurrently with
+        //       distinct EntryPointTargets. Those should be tracked as part of
+        //       the overall Project.
+        public IReadOnlyList<Target> EntryPointTargets { get; }
+        public List<Target> OrderedTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
         public Project(int id, ProjectStartedEventArgs args) : base()
@@ -27,12 +30,12 @@ namespace Microsoft.Build.Logging.Query.Component
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
             Targets = new ConcurrentDictionary<string, Target>();
-            EntryPointTargets = ImmutableHashSet.Create(
+            EntryPointTargets = new List<Target>(
                 args.TargetNames
                 .Split(';')
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
-                .Select(name => AddOrGetTarget(name.Trim()))
-                .ToArray()); ;
+                .Select(name => AddOrGetTarget(name.Trim())));
+            OrderedTargets = new List<Target>();
             Node_BeforeThis = new ProjectNode_BeforeThis(this);
 
             CopyItems(args.Items);
@@ -40,7 +43,15 @@ namespace Microsoft.Build.Logging.Query.Component
             CopyGlobalProperties(args.GlobalProperties);
         }
 
-        public Target AddOrGetTarget(string name)
+        public Target AddOrGetOrderedTarget(string name)
+        {
+            var target = AddOrGetTarget(name);
+            OrderedTargets.Add(target);
+
+            return target;
+        }
+
+        private Target AddOrGetTarget(string name)
         {
             return Targets.GetOrAdd(name, new Target(name, this));
         }

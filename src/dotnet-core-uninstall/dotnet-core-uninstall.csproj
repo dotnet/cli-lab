@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <RootNamespace>Microsoft.DotNet.Tools.Uninstall</RootNamespace>
   </PropertyGroup>
 

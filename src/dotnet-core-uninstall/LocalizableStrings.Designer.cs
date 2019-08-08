@@ -79,51 +79,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Actually uninstall specified .NET Core SDKs or Runtimes..
-        /// </summary>
-        internal static string DoItOptionDescription {
-            get {
-                return ResourceManager.GetString("DoItOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Would uninstall: {0}..
-        /// </summary>
-        internal static string DryRunBundleFormat {
-            get {
-                return ResourceManager.GetString("DryRunBundleFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to *** END DRY RUN.
-        /// </summary>
-        internal static string DryRunEndMessage {
-            get {
-                return ResourceManager.GetString("DryRunEndMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To actually uninstall, add --do-it: {0} --do-it..
-        /// </summary>
-        internal static string DryRunHowToDoItMessageFormat {
-            get {
-                return ResourceManager.GetString("DryRunHowToDoItMessageFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to *** DRY RUN.
-        /// </summary>
-        internal static string DryRunStartMessage {
-            get {
-                return ResourceManager.GetString("DryRunStartMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is treated as a version {1} in this tool..
         /// </summary>
         internal static string HostingBundleFootnoteFormat {
@@ -552,6 +507,51 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string VersionBeforeOptionExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("VersionBeforeOptionExceptionMessageFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to Display .NET Core SDKs and Runtimes that will be removed..
+        /// </summary>
+        internal static string DryRunOptionDescription {
+            get {
+                return ResourceManager.GetString("DryRunOptionDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to Execute the command without requiring Y/n confirmation..
+        /// </summary>
+        internal static string YesOptionDescription {
+            get {
+                return ResourceManager.GetString("YesOptionDescription", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to *** DRY RUN OUTPUT&#13;Specified versions:&#13;{0}&#13;*** END DRY RUN OUTPUT&#13;&#13;To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.&#13;&#13;Run this command as administrator, and take out the -—dry-run option to remove these items..
+        /// </summary>
+        internal static string DryRunOutputFormat {
+            get {
+                return ResourceManager.GetString("DryRunOutputFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to The following items will be removed:&#13;{0}&#13;&#13;To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.&#13;&#13;Do you want to continue? [Y/n] .
+        /// </summary>
+        internal static string ConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("ConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///    Looks up a localized string similar to Allowed values are &quot;Y&quot; and &quot;n&quot;..
+        /// </summary>
+        internal static string ConfirmationPromptInvalidExceptionMessage {
+            get {
+                return ResourceManager.GetString("ConfirmationPromptInvalidExceptionMessage", resourceCulture);
             }
         }
     }

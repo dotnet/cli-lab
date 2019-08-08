@@ -7,7 +7,6 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
@@ -135,9 +134,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             IsHidden = true
         };
 
-        public static readonly Option DoItOption = new Option(
-            "--do-it",
-            LocalizableStrings.DoItOptionDescription);
+        public static readonly Option DryRunOption = new Option(
+            "--dry-run",
+            LocalizableStrings.DryRunOptionDescription);
+
+        public static readonly Option YesOption = new Option(
+            new[] { "--yes", "-y" },
+            LocalizableStrings.YesOptionDescription);
 
         public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
         {
@@ -206,7 +209,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 .Append(UninstallX64Option)
                 .Append(UninstallX86Option)
                 .Append(VersionOption)
-                .Append(DoItOption);
+                .Append(DryRunOption)
+                .Append(YesOption);
 
             ListAuxOptions = supportedListBundleTypeOptions
                 .Append(VerbosityOption)
