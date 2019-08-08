@@ -34,7 +34,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
         private static void PrintProjectNodes(BuildResult build)
         {
-            PrintBuild(build);
+            PrintBuild(build, printErrors: true);
 
             var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(
                 build.Projects.Values.Select(project => project.Node_BeforeThis),

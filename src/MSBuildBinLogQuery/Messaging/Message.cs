@@ -1,4 +1,5 @@
 using Microsoft.Build.Framework;
+using Microsoft.Build.Logging.Query.Component;
 
 namespace Microsoft.Build.Logging.Query.Messaging
 {
@@ -6,7 +7,7 @@ namespace Microsoft.Build.Logging.Query.Messaging
     {
         public MessageImportance Importance { get; }
 
-        public Message(string text, MessageImportance importance) : base(text)
+        public Message(string text, BuildComponent parent, MessageImportance importance) : base(text, parent)
         {
             Importance = importance;
         }

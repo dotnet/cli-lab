@@ -78,33 +78,33 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private void MessageRaised(object sender, BuildMessageEventArgs args)
         {
-            var message = new Message(args.Message, args.Importance);
             var containingComponent = GetContainingComponent(
                 args.BuildEventContext.ProjectInstanceId,
                 args.BuildEventContext.TargetId,
                 args.BuildEventContext.TaskId);
+            var message = new Message(args.Message, containingComponent, args.Importance);
 
             containingComponent.Messages.Add(message);
         }
 
         private void WarningRaised(object sender, BuildWarningEventArgs args)
         {
-            var warning = new Warning(args.Message);
             var containingComponent = GetContainingComponent(
                 args.BuildEventContext.ProjectInstanceId,
                 args.BuildEventContext.TargetId,
                 args.BuildEventContext.TaskId);
+            var warning = new Warning(args.Message, containingComponent);
 
             containingComponent.Warnings.Add(warning);
         }
 
         private void ErrorRaised(object sender, BuildErrorEventArgs args)
         {
-            var error = new Error(args.Message);
             var containingComponent = GetContainingComponent(
                 args.BuildEventContext.ProjectInstanceId,
                 args.BuildEventContext.TargetId,
                 args.BuildEventContext.TaskId);
+            var error = new Error(args.Message, containingComponent);
 
             containingComponent.Errors.Add(error);
         }
