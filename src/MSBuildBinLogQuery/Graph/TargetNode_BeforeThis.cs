@@ -4,7 +4,7 @@ using Microsoft.Build.Logging.Query.Component;
 namespace Microsoft.Build.Logging.Query.Graph
 {
     public class TargetNode_BeforeThis :
-        IQueryableGraphNode<TargetNode_BeforeThis>,
+        IDirectedAcyclicGraphNode<TargetNode_BeforeThis>,
         IShallowCopyableGraphNode<TargetNode_BeforeThis>
     {
         public Target TargetInfo { get; }
