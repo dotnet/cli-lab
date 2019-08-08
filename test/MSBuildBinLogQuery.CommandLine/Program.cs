@@ -61,27 +61,25 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine();
 
-            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(
-                projects.Select(project => project.Node_BeforeThis),
-                new ProjectNode_BeforeThis_EqualityComparer());
+            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(projects.Select(project => project.Node_BeforeThis));
 
             var topologicalSortResult = projectGraph.TopologicalSort(out var topologicalOrdering) ? "Success" : "Failed";
             Console.WriteLine($"project topological ordering: {topologicalSortResult}");
 
             foreach (var project in topologicalOrdering)
             {
-                Console.WriteLine($"  #{project.WrappedNode.ProjectInfo.Id}");
+                Console.WriteLine($"  #{project.ProjectInfo.Id}");
             }
 
             Console.WriteLine();
 
-            var reachableCalculationResult = projectGraph.CalculateReachableNodes() ? "Success" : "Failed";
+            var reachableCalculationResult = projectGraph.GetReachableNodes(out var reachables) ? "Success" : "Failed";
             Console.WriteLine($"reachable from each project: {reachableCalculationResult}");
 
-            foreach (var node in projectGraph.Nodes.Values)
+            foreach (var pair in reachables)
             {
-                var reachableNodes = string.Join(", ", node.ReachableFromThis.Select(node => $"#{node.WrappedNode.ProjectInfo.Id}"));
-                Console.WriteLine($"  #{node.WrappedNode.ProjectInfo.Id}: {reachableNodes}");
+                var reachableNodes = string.Join(", ", pair.Value.Select(node => $"#{node.ProjectInfo.Id}"));
+                Console.WriteLine($"  #{pair.Key.ProjectInfo.Id}: {reachableNodes}");
             }
 
             Console.WriteLine();
@@ -90,7 +88,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine("reversed project graph:");
 
-            foreach (var node in reversedGraph.Nodes.Keys)
+            foreach (var node in reversedGraph.Nodes)
             {
                 foreach (var adjacentNode in node.AdjacentNodes)
                 {
@@ -105,19 +103,6 @@ namespace Microsoft.Build.Logging.Query.Commandline
             Console.WriteLine(message);
             Console.ResetColor();
             Environment.Exit(1);
-        }
-
-        private class ProjectNode_BeforeThis_EqualityComparer : IEqualityComparer<ProjectNode_BeforeThis>
-        {
-            public bool Equals(ProjectNode_BeforeThis x, ProjectNode_BeforeThis y)
-            {
-                return x.ProjectInfo.Id == y.ProjectInfo.Id;
-            }
-
-            public int GetHashCode(ProjectNode_BeforeThis obj)
-            {
-                return obj.ProjectInfo.Id;
-            }
         }
     }
 }
