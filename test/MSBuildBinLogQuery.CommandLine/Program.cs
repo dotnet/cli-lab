@@ -51,11 +51,13 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine("project graph edges:");
 
+            Console.WriteLine("  graph TD");
+
             foreach (var project in projects)
             {
                 foreach (var beforeProject in project.Node_BeforeThis.AdjacentNodes)
                 {
-                    Console.WriteLine($"  #{project.Id} -> #{beforeProject.ProjectInfo.Id}");
+                    Console.WriteLine($"  P{project.Id} --> P{beforeProject.ProjectInfo.Id}");
                 }
             }
 
@@ -88,11 +90,13 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine("reversed project graph:");
 
+            Console.WriteLine("  graph TD");
+
             foreach (var node in reversedGraph.Nodes)
             {
                 foreach (var adjacentNode in node.AdjacentNodes)
                 {
-                    Console.WriteLine($"  #{node.ProjectInfo.Id} -> #{adjacentNode.ProjectInfo.Id}");
+                    Console.WriteLine($"  P{node.ProjectInfo.Id} --> P{adjacentNode.ProjectInfo.Id}");
                 }
             }
         }
