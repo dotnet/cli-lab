@@ -28,7 +28,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             var graphBuilder = new GraphBuilder();
             graphBuilder.HandleEvents(events.ToArray());
 
-            PrintProjectNodes(graphBuilder.Projects.Values.ToList());
+            PrintProjectNodes(graphBuilder.Projects.Values);
         }
 
         private static void PrintProjectNodes(IEnumerable<Project> projects)
