@@ -43,11 +43,11 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void TargetStarted(object sender, TargetStartedEventArgs args)
         {
             var project = Projects[args.BuildEventContext.ProjectInstanceId];
-            var target = project.AddOrGetTarget(args.TargetName);
+            var target = project.AddOrGetOrderedTarget(args.TargetName);
 
             if (!string.IsNullOrWhiteSpace(args.ParentTarget))
             {
-                var parent = project.AddOrGetTarget(args.ParentTarget);
+                var parent = project.AddOrGetOrderedTarget(args.ParentTarget);
 
                 if (args.BuildReason == TargetBuiltReason.DependsOn)
                 {

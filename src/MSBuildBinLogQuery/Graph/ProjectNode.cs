@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
@@ -17,7 +16,11 @@ namespace Microsoft.Build.Logging.Query.Graph
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
         public ConcurrentDictionary<string, TargetNode> Targets { get; }
-        public ImmutableHashSet<TargetNode> EntryPointTargets { get; }
+        // TODO: A single project instance can be built concurrently with
+        //       distinct EntryPointTargets. Those should be tracked as part of
+        //       the overall Project.
+        public IReadOnlyList<TargetNode> EntryPointTargets { get; }
+        public List<TargetNode> OrderedTargets { get; }
         public ConcurrentHashSet<ProjectNode> ProjectsDirectlyBeforeThis { get; }
 
         public ProjectNode(int id, ProjectStartedEventArgs args) : base()
@@ -28,12 +31,13 @@ namespace Microsoft.Build.Logging.Query.Graph
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
             Targets = new ConcurrentDictionary<string, TargetNode>();
-            EntryPointTargets = ImmutableHashSet.Create(
+            EntryPointTargets = new List<TargetNode>(
                 args.TargetNames
                 .Split(';')
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
                 .Select(name => AddOrGetTarget(name.Trim()))
-                .ToArray()); ;
+                .ToArray());
+            OrderedTargets = new List<TargetNode>();
             ProjectsDirectlyBeforeThis = new ConcurrentHashSet<ProjectNode>();
 
             CopyItems(args.Items);
@@ -41,7 +45,15 @@ namespace Microsoft.Build.Logging.Query.Graph
             CopyGlobalProperties(args.GlobalProperties);
         }
 
-        public TargetNode AddOrGetTarget(string name)
+        public TargetNode AddOrGetOrderedTarget(string name)
+        {
+            var target = AddOrGetTarget(name);
+            OrderedTargets.Add(target);
+
+            return target;
+        }
+
+        private TargetNode AddOrGetTarget(string name)
         {
             return Targets.GetOrAdd(name, new TargetNode(name, this));
         }
