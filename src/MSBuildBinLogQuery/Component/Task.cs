@@ -2,7 +2,7 @@
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Task
+    public class Task : Component
     {
         public int Id { get; }
         public string Name { get; }
@@ -10,7 +10,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public Target ParentTarget { get; }
         public PropertyManager Parameters { get; }
 
-        public Task(int id, string name, string taskFile, Target parentTarget)
+        public Task(int id, string name, string taskFile, Target parentTarget) : base()
         {
             Id = id;
             Name = name;

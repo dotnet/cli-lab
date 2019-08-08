@@ -3,7 +3,7 @@ using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Target
+    public class Target : Component
     {
         public string Name { get; }
         public int? Id { get; internal set; }
@@ -13,7 +13,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public TargetNode_BeforeThis Node_BeforeThis { get; }
         public TargetNode_AfterThis Node_AfterThis { get; }
 
-        public Target(string name, int? id, Project parentProject)
+        public Target(string name, int? id, Project parentProject) : base()
         {
             Name = name;
             Id = id;

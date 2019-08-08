@@ -8,7 +8,7 @@ using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Project
+    public class Project : Component
     {
         public int Id { get; }
         public string ProjectFile { get; }
@@ -25,7 +25,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public ConcurrentBag<Target> OrderedTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public Project(int id, ProjectStartedEventArgs args, Build parentBuild)
+        public Project(int id, ProjectStartedEventArgs args, Build parentBuild) : base()
         {
             Id = id;
             ProjectFile = args.ProjectFile;

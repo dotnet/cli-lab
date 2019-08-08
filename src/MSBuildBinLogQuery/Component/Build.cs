@@ -3,12 +3,12 @@ using Microsoft.Build.Framework;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Build
+    public class Build : Component
     {
         public ConcurrentDictionary<int, Project> Projects { get; }
         public ConcurrentBag<Project> OrderedProjects { get; }
 
-        public Build()
+        public Build() : base()
         {
             Projects = new ConcurrentDictionary<int, Project>();
             OrderedProjects = new ConcurrentBag<Project>();
