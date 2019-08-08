@@ -31,72 +31,14 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
         private static void PrintProjectNodes(Component.Build build)
         {
-            Console.WriteLine("projects:");
+            PrintBuild(build);
 
-            foreach (var project in build.OrderedProjects)
-            {
-                Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
+            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.Projects.Values.Select(project => project.Node_BeforeThis));
 
-                // foreach (var target in project.Targets.Values)
-                // {
-                //     Console.WriteLine($"    target {target.Name}");
-                //     Console.WriteLine($"      directly before this: {string.Join(";", target.Node_BeforeThis.AdjacentNodes.Select(beforeThis => beforeThis.Name))}");
-                //     Console.WriteLine($"      directly after this: {string.Join(";", target.Node_AfterThis.AdjacentNodes.Select(afterThis => afterThis.Name))}");
-                // }
-            }
-
-            Console.WriteLine();
-
-            Console.WriteLine("project graph edges:");
-
-            Console.WriteLine("  graph TD");
-
-            foreach (var project in build.OrderedProjects)
-            {
-                foreach (var beforeProject in project.Node_BeforeThis.AdjacentNodes)
-                {
-                    Console.WriteLine($"  P{project.Id} --> P{beforeProject.ProjectInfo.Id}");
-                }
-            }
-
-            Console.WriteLine();
-
-            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.OrderedProjects.Select(project => project.Node_BeforeThis));
-
-            var topologicalSortResult = projectGraph.TopologicalSort(out var topologicalOrdering) ? "Success" : "Failed";
-            Console.WriteLine($"project topological ordering: {topologicalSortResult}");
-
-            foreach (var project in topologicalOrdering)
-            {
-                Console.WriteLine($"  #{project.ProjectInfo.Id}");
-            }
-
-            Console.WriteLine();
-
-            var reachableCalculationResult = projectGraph.GetReachableNodes(out var reachables) ? "Success" : "Failed";
-            Console.WriteLine($"reachable from each project: {reachableCalculationResult}");
-
-            foreach (var pair in reachables)
-            {
-                var reachableNodes = string.Join(", ", pair.Value.Select(node => $"#{node.ProjectInfo.Id}"));
-                Console.WriteLine($"  #{pair.Key.ProjectInfo.Id}: {reachableNodes}");
-            }
-
-            Console.WriteLine();
-
-            var reversedGraph = projectGraph.Reverse();
-
-            Console.WriteLine("reversed project graph:");
-
-            Console.WriteLine("  graph TD");
-
-            foreach (var node in reversedGraph.Nodes)
-            {
-                foreach (var adjacentNode in node.AdjacentNodes)
-                {
-                    Console.WriteLine($"  P{node.ProjectInfo.Id} --> P{adjacentNode.ProjectInfo.Id}");
-                }
-            }
+            PrintProjectGraph(projectGraph);
+            PrintProjectTopologicalOrdering(projectGraph);
+            PrintReachableProjects(projectGraph);
+            PrintReversedProjectGraph(projectGraph);
         }
 
         private static void PrintErrorMessage(string message)
@@ -105,6 +47,83 @@ namespace Microsoft.Build.Logging.Query.Commandline
             Console.WriteLine(message);
             Console.ResetColor();
             Environment.Exit(1);
+        }
+
+        private static void PrintProjectGraph(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "project graph:")
+        {
+            Console.WriteLine(header);
+
+            Console.WriteLine("  graph TD");
+
+            foreach (var node in graph.Nodes)
+            {
+                foreach (var adjacentNode in node.AdjacentNodes)
+                {
+                    Console.WriteLine($"  {node.ProjectInfo.Id} --> {adjacentNode.ProjectInfo.Id}");
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintReversedProjectGraph(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "reversed project graph:")
+        {
+            PrintProjectGraph(graph.Reverse(), header);
+        }
+
+        private static void PrintProjectTopologicalOrdering(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "project topological ordering:")
+        {
+            var topologicalSortResult = graph.TopologicalSort(out var topologicalOrdering) ? "Success" : "Failed";
+            Console.WriteLine($"{header}: {topologicalSortResult}");
+
+            foreach (var project in topologicalOrdering)
+            {
+                Console.WriteLine($"  #{project.ProjectInfo.Id}");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintReachableProjects(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "reachable projects:")
+        {
+            var reachableCalculationResult = graph.GetReachableNodes(out var reachables) ? "Success" : "Failed";
+            Console.WriteLine($"{header}: {reachableCalculationResult}");
+
+            foreach (var pair in reachables)
+            {
+                var reachableNodes = string.Join(", ", pair.Value.Select(node => $"#{node.ProjectInfo.Id}"));
+                Console.WriteLine($"  #{pair.Key.ProjectInfo.Id}: {reachableNodes}");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintBuild(Component.Build build, string header = "build:", bool printTargetGraph = false)
+        {
+            Console.WriteLine(header);
+
+            foreach (var project in build.Projects.Values)
+            {
+                Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
+
+                foreach (var target in project.TargetsByName.Values)
+                {
+                    Console.WriteLine($"    target #{target.Id} {target.Name}");
+
+                    if (printTargetGraph)
+                    {
+                        Console.WriteLine($"      directly before this: {string.Join(";", target.Node_BeforeThis.AdjacentNodes.Select(beforeThis => beforeThis.TargetInfo.Name))}");
+                        Console.WriteLine($"      directly after this: {string.Join(";", target.Node_AfterThis.AdjacentNodes.Select(afterThis => afterThis.TargetInfo.Name))}");
+                    }
+
+                    foreach (var task in target.Tasks.Values)
+                    {
+                        Console.WriteLine($"      task #{task.Id} {task.Name}");
+                    }
+                }
+            }
+
+            Console.WriteLine();
         }
     }
 }
