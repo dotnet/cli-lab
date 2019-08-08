@@ -34,7 +34,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
         private static void PrintProjectNodes(BuildResult build)
         {
-            PrintBuild(build, printErrors: true);
+            PrintBuild(build, printWarnings: true, printErrors: true);
 
             var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(
                 build.Projects.Values.Select(project => project.Node_BeforeThis),
@@ -44,6 +44,10 @@ namespace Microsoft.Build.Logging.Query.Commandline
             PrintProjectTopologicalOrdering(projectGraph);
             PrintReachableProjects(projectGraph);
             PrintReversedProjectGraph(projectGraph);
+
+            // PrintAllMessages(build);
+            PrintAllWarnings(build);
+            PrintAllErrors(build);
         }
 
         private static void PrintErrorMessage(string message)
@@ -138,6 +142,42 @@ namespace Microsoft.Build.Logging.Query.Commandline
             }
 
             PrintComponentLogs(build, printMessages, printWarnings, printErrors, "  ");
+
+            Console.WriteLine();
+        }
+
+        private static void PrintAllMessages(BuildResult build, string header = "messages:")
+        {
+            Console.WriteLine(header);
+
+            foreach (var message in build.AllMessages)
+            {
+                Console.WriteLine($"  importance {message.Importance}: {message.Text}");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintAllWarnings(BuildResult build, string header = "warnings:")
+        {
+            Console.WriteLine(header);
+
+            foreach (var warning in build.AllWarnings)
+            {
+                Console.WriteLine($"  {warning.Text}");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintAllErrors(BuildResult build, string header = "errors:")
+        {
+            Console.WriteLine(header);
+
+            foreach (var error in build.AllErrors)
+            {
+                Console.WriteLine($"  {error.Text}");
+            }
 
             Console.WriteLine();
         }
