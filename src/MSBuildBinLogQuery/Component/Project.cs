@@ -16,18 +16,20 @@ namespace Microsoft.Build.Logging.Query.Component
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
+        public BuildResult ParentBuild { get; }
         public ConcurrentDictionary<string, Target> TargetsByName { get; }
         public ConcurrentDictionary<int, Target> TargetsById { get; }
         public ImmutableHashSet<Target> EntryPointTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public Project(int id, ProjectStartedEventArgs args) : base()
+        public Project(int id, ProjectStartedEventArgs args, BuildResult parentBuild) : base()
         {
             Id = id;
             ProjectFile = args.ProjectFile;
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
+            ParentBuild = parentBuild;
             TargetsByName = new ConcurrentDictionary<string, Target>();
             TargetsById = new ConcurrentDictionary<int, Target>();
             EntryPointTargets = ImmutableHashSet.Create(

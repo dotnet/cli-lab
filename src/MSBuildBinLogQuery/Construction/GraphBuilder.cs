@@ -34,7 +34,7 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            var project = Build.Projects.GetOrAdd(id, new Project(id, args));
+            var project = Build.Projects.GetOrAdd(id, new Project(id, args, Build));
             var parent = GetParentProject(args);
 
             if (parent != null)
