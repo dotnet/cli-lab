@@ -14,7 +14,8 @@ namespace Microsoft.Build.Logging.Query.Component
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
-        public ConcurrentDictionary<string, Target> Targets { get; }
+        public ConcurrentDictionary<string, Target> TargetsByName { get; }
+        public ConcurrentDictionary<int, Target> TargetsById { get; }
         // TODO: A single project instance can be built concurrently with
         //       distinct EntryPointTargets. Those should be tracked as part of
         //       the overall Project.
@@ -22,14 +23,15 @@ namespace Microsoft.Build.Logging.Query.Component
         public List<Target> OrderedTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public Project(int id, ProjectStartedEventArgs args) : base()
+        public Project(int id, ProjectStartedEventArgs args)
         {
             Id = id;
             ProjectFile = args.ProjectFile;
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
-            Targets = new ConcurrentDictionary<string, Target>();
+            TargetsByName = new ConcurrentDictionary<string, Target>();
+            TargetsById = new ConcurrentDictionary<int, Target>();
             EntryPointTargets = new List<Target>(
                 args.TargetNames
                 .Split(';')
@@ -43,17 +45,19 @@ namespace Microsoft.Build.Logging.Query.Component
             CopyGlobalProperties(args.GlobalProperties);
         }
 
-        public Target AddOrGetOrderedTarget(string name)
+        public Target AddOrGetOrderedTarget(string name, int id)
         {
             var target = AddOrGetTarget(name);
             OrderedTargets.Add(target);
+            target.Id = id;
+            TargetsById[id] = target;
 
             return target;
         }
 
         private Target AddOrGetTarget(string name)
         {
-            return Targets.GetOrAdd(name, new Target(name, this));
+            return TargetsByName.GetOrAdd(name, new Target(name, null, this));
         }
 
         private void CopyItems(IEnumerable items)

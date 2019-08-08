@@ -17,6 +17,7 @@ namespace Microsoft.Build.Logging.Query.Construction
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
             _eventArgsDispatcher.TargetStarted += TargetStarted;
+            _eventArgsDispatcher.TaskStarted += TaskStarted;
         }
 
         public void HandleEvents(params BuildEventArgs[] buildEvents)
@@ -30,24 +31,23 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            Projects.TryAdd(id, new Project(id, args));
-
+            var project = Projects.GetOrAdd(id, new Project(id, args));
             var parent = GetParentNode(args);
 
             if (parent != null)
             {
-                parent.Node_BeforeThis.AdjacentNodes.Add(Projects[id].Node_BeforeThis);
+                parent.Node_BeforeThis.AdjacentNodes.Add(project.Node_BeforeThis);
             }
         }
 
         private void TargetStarted(object sender, TargetStartedEventArgs args)
         {
             var project = Projects[args.BuildEventContext.ProjectInstanceId];
-            var target = project.AddOrGetOrderedTarget(args.TargetName);
+            var target = project.AddOrGetOrderedTarget(args.TargetName, args.BuildEventContext.TargetId);
 
             if (!string.IsNullOrWhiteSpace(args.ParentTarget))
             {
-                var parent = project.AddOrGetOrderedTarget(args.ParentTarget);
+                var parent = project.AddOrGetOrderedTarget(args.ParentTarget, args.BuildEventContext.TargetId);
 
                 if (args.BuildReason == TargetBuiltReason.DependsOn)
                 {
@@ -63,6 +63,14 @@ namespace Microsoft.Build.Logging.Query.Construction
                     parent.Node_AfterThis.AdjacentNodes.Add(target.Node_AfterThis);
                 }
             }
+        }
+
+        private void TaskStarted(object sender, TaskStartedEventArgs args)
+        {
+            var project = Projects[args.BuildEventContext.ProjectInstanceId];
+            var target = project.TargetsById[args.BuildEventContext.TargetId];
+
+            target.AddOrGetTask(args.BuildEventContext.TaskId, args.TaskName, args.TaskFile);
         }
 
         private Project GetParentNode(ProjectStartedEventArgs args)
