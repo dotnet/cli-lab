@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {
     public class DirectedAcyclicGraph<T>
-        where T : IDirectedAcyclicGraphNode<T>, IShallowCopyableGraphNode<T>
+        where T : IDirectedAcyclicGraphNode<T>,
+                  IShallowCopyableGraphNode<T>,
+                  IEquatable<T>
     {
         public IEnumerable<T> Nodes { get; }
 

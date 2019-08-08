@@ -1,9 +1,12 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Target : Component
+    public class Target : Component, IEquatable<Target>
     {
         public string Name { get; }
         public int? Id { get; internal set; }
@@ -36,6 +39,18 @@ namespace Microsoft.Build.Logging.Query.Component
             }
 
             return Tasks[id];
+        }
+
+        public bool Equals([AllowNull] Target other)
+        {
+            return other != null &&
+                   Name == other.Name &&
+                   EqualityComparer<Project>.Default.Equals(ParentProject, other.ParentProject);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Name, ParentProject);
         }
     }
 }

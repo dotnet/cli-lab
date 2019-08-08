@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
@@ -8,7 +10,7 @@ using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Project : Component
+    public class Project : Component, IEquatable<Project>
     {
         public int Id { get; }
         public string ProjectFile { get; }
@@ -111,6 +113,17 @@ namespace Microsoft.Build.Logging.Query.Component
             {
                 GlobalProperties.Set(globalProperty.Key, globalProperty.Value);
             }
+        }
+
+        public bool Equals([AllowNull] Project other)
+        {
+            return other != null &&
+                   Id == other.Id;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Id);
         }
     }
 }
