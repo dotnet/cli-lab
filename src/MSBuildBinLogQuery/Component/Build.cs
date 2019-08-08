@@ -16,7 +16,14 @@ namespace Microsoft.Build.Logging.Query.Component
 
         public Project GetOrAddProject(int id, ProjectStartedEventArgs args)
         {
-            var project = new Project(id, args, this);
+            var project = new Project(
+                id,
+                args.ProjectFile,
+                args.TargetNames,
+                args.Items,
+                args.Properties,
+                args.GlobalProperties,
+                this);
 
             if (Projects.TryAdd(id, project))
             {

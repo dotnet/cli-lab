@@ -25,10 +25,17 @@ namespace Microsoft.Build.Logging.Query.Component
         public ConcurrentBag<Target> OrderedTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public Project(int id, ProjectStartedEventArgs args, Build parentBuild) : base()
+        public Project(
+            int id,
+            string projectFile,
+            string targetNames,
+            IEnumerable items,
+            IEnumerable properties,
+            IDictionary<string, string> globalProperties,
+            Build parentBuild) : base()
         {
             Id = id;
-            ProjectFile = args.ProjectFile;
+            ProjectFile = projectFile;
             ParentBuild = parentBuild;
             Items = new ItemManager();
             Properties = new PropertyManager();
@@ -36,16 +43,16 @@ namespace Microsoft.Build.Logging.Query.Component
             TargetsByName = new ConcurrentDictionary<string, Target>();
             TargetsById = new ConcurrentDictionary<int, Target>();
             EntryPointTargets = new List<Target>(
-                args.TargetNames
+                targetNames
                 .Split(';')
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
                 .Select(name => GetOrAddTargetWithName(name.Trim())));
             OrderedTargets = new ConcurrentBag<Target>();
             Node_BeforeThis = new ProjectNode_BeforeThis(this);
 
-            CopyItems(args.Items);
-            CopyProperties(args.Properties);
-            CopyGlobalProperties(args.GlobalProperties);
+            CopyItems(items);
+            CopyProperties(properties);
+            CopyGlobalProperties(globalProperties);
         }
 
         public Target GetOrAddTarget(string name, int id)
