@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
+using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
@@ -11,6 +12,7 @@ namespace Microsoft.Build.Logging.Query.Component
     {
         public int Id { get; }
         public string ProjectFile { get; }
+        public Build ParentBuild { get; }
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
@@ -20,13 +22,14 @@ namespace Microsoft.Build.Logging.Query.Component
         //       distinct EntryPointTargets. Those should be tracked as part of
         //       the overall Project.
         public IReadOnlyList<Target> EntryPointTargets { get; }
-        public List<Target> OrderedTargets { get; }
+        public ConcurrentBag<Target> OrderedTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
 
-        public Project(int id, ProjectStartedEventArgs args)
+        public Project(int id, ProjectStartedEventArgs args, Build parentBuild)
         {
             Id = id;
             ProjectFile = args.ProjectFile;
+            ParentBuild = parentBuild;
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
@@ -36,8 +39,8 @@ namespace Microsoft.Build.Logging.Query.Component
                 args.TargetNames
                 .Split(';')
                 .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
-                .Select(name => AddOrGetTarget(name.Trim())));
-            OrderedTargets = new List<Target>();
+                .Select(name => GetOrAddTargetWithName(name.Trim())));
+            OrderedTargets = new ConcurrentBag<Target>();
             Node_BeforeThis = new ProjectNode_BeforeThis(this);
 
             CopyItems(args.Items);
@@ -45,17 +48,21 @@ namespace Microsoft.Build.Logging.Query.Component
             CopyGlobalProperties(args.GlobalProperties);
         }
 
-        public Target AddOrGetOrderedTarget(string name, int id)
+        public Target GetOrAddTarget(string name, int id)
         {
-            var target = AddOrGetTarget(name);
-            OrderedTargets.Add(target);
-            target.Id = id;
+            var target = new Target(name, id, this);
             TargetsById[id] = target;
 
-            return target;
+            if (TargetsByName.TryAdd(name, target))
+            {
+                OrderedTargets.Add(target);
+                return target;
+            }
+
+            return TargetsByName[name];
         }
 
-        private Target AddOrGetTarget(string name)
+        private Target GetOrAddTargetWithName(string name)
         {
             return TargetsByName.GetOrAdd(name, new Target(name, null, this));
         }

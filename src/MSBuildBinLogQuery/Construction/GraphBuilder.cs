@@ -6,13 +6,13 @@ namespace Microsoft.Build.Logging.Query.Construction
 {
     public class GraphBuilder
     {
-        public ConcurrentDictionary<int, Project> Projects { get; }
+        public Component.Build Build { get; }
 
         private readonly EventArgsDispatcher _eventArgsDispatcher;
 
         public GraphBuilder()
         {
-            Projects = new ConcurrentDictionary<int, Project>();
+            Build = new Component.Build();
             _eventArgsDispatcher = new EventArgsDispatcher();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
@@ -31,7 +31,7 @@ namespace Microsoft.Build.Logging.Query.Construction
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            var project = Projects.GetOrAdd(id, new Project(id, args));
+            var project = Build.GetOrAddProject(id, args);
             var parent = GetParentNode(args);
 
             if (parent != null)
@@ -42,12 +42,12 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private void TargetStarted(object sender, TargetStartedEventArgs args)
         {
-            var project = Projects[args.BuildEventContext.ProjectInstanceId];
-            var target = project.AddOrGetOrderedTarget(args.TargetName, args.BuildEventContext.TargetId);
+            var project = Build.Projects[args.BuildEventContext.ProjectInstanceId];
+            var target = project.GetOrAddTarget(args.TargetName, args.BuildEventContext.TargetId);
 
             if (!string.IsNullOrWhiteSpace(args.ParentTarget))
             {
-                var parent = project.AddOrGetOrderedTarget(args.ParentTarget, args.BuildEventContext.TargetId);
+                var parent = project.GetOrAddTarget(args.ParentTarget, args.BuildEventContext.TargetId);
 
                 if (args.BuildReason == TargetBuiltReason.DependsOn)
                 {
@@ -67,16 +67,16 @@ namespace Microsoft.Build.Logging.Query.Construction
 
         private void TaskStarted(object sender, TaskStartedEventArgs args)
         {
-            var project = Projects[args.BuildEventContext.ProjectInstanceId];
+            var project = Build.Projects[args.BuildEventContext.ProjectInstanceId];
             var target = project.TargetsById[args.BuildEventContext.TargetId];
 
-            target.AddOrGetTask(args.BuildEventContext.TaskId, args.TaskName, args.TaskFile);
+            target.GetOrAddTask(args.BuildEventContext.TaskId, args.TaskName, args.TaskFile);
         }
 
         private Project GetParentNode(ProjectStartedEventArgs args)
         {
             var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
-            return Projects.TryGetValue(parentId, out var parent) ? parent : null;
+            return Build.Projects.TryGetValue(parentId, out var parent) ? parent : null;
         }
     }
 }

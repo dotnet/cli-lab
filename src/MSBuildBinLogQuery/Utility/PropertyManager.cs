@@ -1,6 +1,6 @@
 ﻿using System.Collections.Concurrent;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Utility
 {
     public class PropertyManager
     {

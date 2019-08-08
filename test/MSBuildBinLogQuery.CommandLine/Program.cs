@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 
@@ -28,14 +26,14 @@ namespace Microsoft.Build.Logging.Query.Commandline
             var graphBuilder = new GraphBuilder();
             graphBuilder.HandleEvents(events.ToArray());
 
-            PrintProjectNodes(graphBuilder.Projects.Values);
+            PrintProjectNodes(graphBuilder.Build);
         }
 
-        private static void PrintProjectNodes(IEnumerable<Project> projects)
+        private static void PrintProjectNodes(Component.Build build)
         {
             Console.WriteLine("projects:");
 
-            foreach (var project in projects)
+            foreach (var project in build.OrderedProjects)
             {
                 Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
 
@@ -53,7 +51,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine("  graph TD");
 
-            foreach (var project in projects)
+            foreach (var project in build.OrderedProjects)
             {
                 foreach (var beforeProject in project.Node_BeforeThis.AdjacentNodes)
                 {
@@ -63,7 +61,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             Console.WriteLine();
 
-            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(projects.Select(project => project.Node_BeforeThis));
+            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.OrderedProjects.Select(project => project.Node_BeforeThis));
 
             var topologicalSortResult = projectGraph.TopologicalSort(out var topologicalOrdering) ? "Success" : "Failed";
             Console.WriteLine($"project topological ordering: {topologicalSortResult}");
