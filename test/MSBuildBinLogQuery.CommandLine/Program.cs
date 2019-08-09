@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
+using Microsoft.Build.Logging.Query.Messaging;
 
 namespace Microsoft.Build.Logging.Query.Commandline
 {
@@ -31,7 +33,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
         private static void PrintProjectNodes(Component.Build build)
         {
-            PrintBuild(build);
+            PrintBuild(build, printErrors: true);
 
             var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.ProjectsById.Values.Select(project => project.Node_BeforeThis));
 
@@ -98,7 +100,13 @@ namespace Microsoft.Build.Logging.Query.Commandline
             Console.WriteLine();
         }
 
-        private static void PrintBuild(Component.Build build, string header = "build:", bool printTargetGraph = false)
+        private static void PrintBuild(
+            Component.Build build,
+            string header = "build:",
+            bool printTargetGraph = false,
+            bool printMessages = false,
+            bool printWarnings = false,
+            bool printErrors = false)
         {
             Console.WriteLine(header);
 
@@ -106,7 +114,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             {
                 Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
 
-                foreach (var target in project.TargetsByName.Values)
+                foreach (var target in project.OrderedTargets)
                 {
                     Console.WriteLine($"    target #{target.Id} {target.Name}");
 
@@ -116,14 +124,46 @@ namespace Microsoft.Build.Logging.Query.Commandline
                         Console.WriteLine($"      directly after this: {string.Join(";", target.Node_AfterThis.AdjacentNodes.Select(afterThis => afterThis.TargetInfo.Name))}");
                     }
 
-                    foreach (var task in target.TasksById.Values)
+                    foreach (var task in target.OrderedTasks)
                     {
                         Console.WriteLine($"      task #{task.Id} {task.Name}");
+                        PrintComponentLogs(task, printMessages, printWarnings, printErrors, "        ");
                     }
+
+                    PrintComponentLogs(target, printMessages, printWarnings, printErrors, "      ");
                 }
+
+                PrintComponentLogs(project, printMessages, printWarnings, printErrors, "    ");
             }
 
+            PrintComponentLogs(build, printMessages, printWarnings, printErrors, "  ");
+
             Console.WriteLine();
+        }
+
+        private static void PrintComponentLogs(
+            Component.Component component,
+            bool printMessages,
+            bool printWarnings,
+            bool printErrors,
+            string indent)
+        {
+            PrintLogs(component.Messages, printMessages, indent);
+            PrintLogs(component.Warnings, printWarnings, indent);
+            PrintLogs(component.Errors, printErrors, indent);
+        }
+
+        private static void PrintLogs(IReadOnlyList<Log> logs, bool flag, string indent)
+        {
+            if (!flag)
+            {
+                return;
+            }
+
+            foreach (var log in logs.ToList())
+            {
+                Console.WriteLine($"{indent}{log.GetType().Name}: {log.Text}");
+            }
         }
     }
 }
