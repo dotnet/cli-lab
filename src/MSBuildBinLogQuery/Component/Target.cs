@@ -30,7 +30,6 @@ namespace Microsoft.Build.Logging.Query.Component
         public Task GetOrAddTask(int id, string name, string taskFile)
         {
             var task = new Task(id, name, taskFile, this);
-            Tasks[id] = task;
 
             if (Tasks.TryAdd(id, task))
             {
