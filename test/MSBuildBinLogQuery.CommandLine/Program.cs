@@ -33,7 +33,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
         private static void PrintProjectNodes(Component.Build build)
         {
-            PrintBuild(build, printErrors: true);
+            PrintBuild(build, printErrors: true, printWarnings: true);
 
             var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.ProjectsById.Values.Select(project => project.Node_BeforeThis));
 
@@ -41,6 +41,10 @@ namespace Microsoft.Build.Logging.Query.Commandline
             PrintProjectTopologicalOrdering(projectGraph);
             PrintReachableProjects(projectGraph);
             PrintReversedProjectGraph(projectGraph);
+
+            // PrintAllLogs(build.AllMessages, "all messages:");
+            PrintAllLogs(build.AllWarnings, "all warnings:");
+            PrintAllLogs(build.AllErrors, "all errors:");
         }
 
         private static void PrintErrorMessage(string message)
@@ -137,6 +141,18 @@ namespace Microsoft.Build.Logging.Query.Commandline
             }
 
             PrintComponentLogs(build, printMessages, printWarnings, printErrors, "  ");
+
+            Console.WriteLine();
+        }
+
+        private static void PrintAllLogs<T>(IReadOnlyList<T> logs, string header) where T : Log
+        {
+            Console.WriteLine(header);
+
+            foreach (var log in logs)
+            {
+                Console.WriteLine($"  {log.Text}");
+            }
 
             Console.WriteLine();
         }
