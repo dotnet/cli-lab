@@ -1,6 +1,6 @@
-﻿using System.Collections.Concurrent;
-using Microsoft.Build.Framework;
+﻿using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Messaging;
 
 namespace Microsoft.Build.Logging.Query.Construction
 {
@@ -18,6 +18,9 @@ namespace Microsoft.Build.Logging.Query.Construction
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
             _eventArgsDispatcher.TargetStarted += TargetStarted;
             _eventArgsDispatcher.TaskStarted += TaskStarted;
+            _eventArgsDispatcher.MessageRaised += MessageRaised;
+            _eventArgsDispatcher.WarningRaised += WarningRaised;
+            _eventArgsDispatcher.ErrorRaised += ErrorRaised;
         }
 
         public void HandleEvents(params BuildEventArgs[] buildEvents)
@@ -32,7 +35,7 @@ namespace Microsoft.Build.Logging.Query.Construction
         {
             var id = args.BuildEventContext.ProjectInstanceId;
             var project = Build.GetOrAddProject(id, args);
-            var parent = GetParentNode(args);
+            var parent = GetParentProject(args);
 
             if (parent != null)
             {
@@ -73,10 +76,70 @@ namespace Microsoft.Build.Logging.Query.Construction
             target.GetOrAddTask(args.BuildEventContext.TaskId, args.TaskName, args.TaskFile);
         }
 
-        private Project GetParentNode(ProjectStartedEventArgs args)
+        private void MessageRaised(object sender, BuildMessageEventArgs args)
+        {
+            var parent = GetParentComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId);
+
+            var message = new Message(args.Message, parent, args.Importance);
+
+            parent.AddMessage(message);
+        }
+
+        private void WarningRaised(object sender, BuildWarningEventArgs args)
+        {
+            var parent = GetParentComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId);
+
+            var warning = new Warning(args.Message, parent);
+
+            parent.AddWarning(warning);
+        }
+
+        private void ErrorRaised(object sender, BuildErrorEventArgs args)
+        {
+            var parent = GetParentComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId);
+
+            var error = new Error(args.Message, parent);
+
+            parent.AddError(error);
+        }
+
+        private Project GetParentProject(ProjectStartedEventArgs args)
         {
             var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
             return Build.Projects.TryGetValue(parentId, out var parent) ? parent : null;
+        }
+
+        private Component.Component GetParentComponent(int projectInstanceId, int targetId, int taskId)
+        {
+            if (projectInstanceId == BuildEventContext.InvalidProjectInstanceId || projectInstanceId == 0)
+            {
+                return Build;
+            }
+
+            var project = Build.Projects[projectInstanceId];
+
+            if (targetId == BuildEventContext.InvalidTargetId)
+            {
+                return project;
+            }
+
+            var target = project.TargetsById[targetId];
+
+            if (taskId == BuildEventContext.InvalidTaskId)
+            {
+                return target;
+            }
+
+            return target.Tasks[taskId];
         }
     }
 }

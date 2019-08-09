@@ -7,6 +7,7 @@ namespace Microsoft.Build.Logging.Query.Component
     {
         public ConcurrentDictionary<int, Project> Projects { get; }
         public ConcurrentBag<Project> OrderedProjects { get; }
+        public override Component Parent => null;
 
         public Build() : base()
         {

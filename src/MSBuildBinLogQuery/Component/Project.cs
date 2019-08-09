@@ -26,6 +26,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public IReadOnlyList<Target> EntryPointTargets { get; }
         public ConcurrentBag<Target> OrderedTargets { get; }
         public ProjectNode_BeforeThis Node_BeforeThis { get; }
+        public override Component Parent => ParentBuild;
 
         public Project(
             int id,

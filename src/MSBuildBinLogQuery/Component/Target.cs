@@ -15,6 +15,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public ConcurrentBag<Task> OrderedTasks { get; }
         public TargetNode_BeforeThis Node_BeforeThis { get; }
         public TargetNode_AfterThis Node_AfterThis { get; }
+        public override Component Parent => ParentProject;
 
         public Target(string name, int? id, Project parentProject) : base()
         {

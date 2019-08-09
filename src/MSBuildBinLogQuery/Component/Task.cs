@@ -12,6 +12,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public string TaskFile { get; }
         public Target ParentTarget { get; }
         public PropertyManager Parameters { get; }
+        public override Component Parent => ParentTarget;
 
         public Task(int id, string name, string taskFile, Target parentTarget) : base()
         {
