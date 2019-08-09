@@ -24,16 +24,16 @@ namespace Microsoft.Build.Logging.Query.Commandline
             var events = binaryLogReader.ReadEvents();
 
             var graphBuilder = new GraphBuilder();
-            graphBuilder.HandleEvents(events.ToArray());
+            var build = graphBuilder.HandleEvents(events.ToArray());
 
-            PrintProjectNodes(graphBuilder.Build);
+            PrintProjectNodes(build);
         }
 
         private static void PrintProjectNodes(Component.Build build)
         {
             PrintBuild(build);
 
-            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.Projects.Values.Select(project => project.Node_BeforeThis));
+            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.ProjectsById.Values.Select(project => project.Node_BeforeThis));
 
             PrintProjectGraph(projectGraph);
             PrintProjectTopologicalOrdering(projectGraph);
@@ -102,7 +102,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
         {
             Console.WriteLine(header);
 
-            foreach (var project in build.Projects.Values)
+            foreach (var project in build.ProjectsById.Values)
             {
                 Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
 
@@ -116,7 +116,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
                         Console.WriteLine($"      directly after this: {string.Join(";", target.Node_AfterThis.AdjacentNodes.Select(afterThis => afterThis.TargetInfo.Name))}");
                     }
 
-                    foreach (var task in target.Tasks.Values)
+                    foreach (var task in target.TasksById.Values)
                     {
                         Console.WriteLine($"      task #{task.Id} {task.Name}");
                     }

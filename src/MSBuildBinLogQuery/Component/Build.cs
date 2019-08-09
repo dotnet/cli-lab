@@ -1,27 +1,41 @@
-using System.Collections.Concurrent;
+using System.Collections;
+using System.Collections.Generic;
 using Microsoft.Build.Framework;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
     public class Build : Component
     {
-        public ConcurrentDictionary<int, Project> Projects { get; }
+        public IReadOnlyDictionary<int, Project> ProjectsById => _projectsById;
+
+        private readonly Dictionary<int, Project> _projectsById;
 
         public Build() : base()
         {
-            Projects = new ConcurrentDictionary<int, Project>();
+            _projectsById = new Dictionary<int, Project>();
         }
 
-        public Project GetOrAddProject(int id, ProjectStartedEventArgs args)
+        public Project AddProject(
+            int id,
+            string projectFile,
+            IEnumerable items,
+            IEnumerable properties,
+            IDictionary<string, string> globalProperties)
         {
-            return Projects.GetOrAdd(id, new Project(
+            var project = new Project(
                 id,
-                args.ProjectFile,
-                args.TargetNames,
-                args.Items,
-                args.Properties,
-                args.GlobalProperties,
-                this));
+                projectFile,
+                items,
+                properties,
+                globalProperties,
+                this);
+
+            if (id != BuildEventContext.InvalidProjectInstanceId)
+            {
+                _projectsById[id] = project;
+            }
+
+            return project;
         }
     }
 }
