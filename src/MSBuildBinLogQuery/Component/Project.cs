@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -18,20 +17,25 @@ namespace Microsoft.Build.Logging.Query.Component
         public ItemManager Items { get; }
         public PropertyManager Properties { get; }
         public PropertyManager GlobalProperties { get; }
-        public ConcurrentDictionary<string, Target> TargetsByName { get; }
-        public ConcurrentDictionary<int, Target> TargetsById { get; }
+        public ProjectNode_BeforeThis Node_BeforeThis { get; }
+
+        public IReadOnlyDictionary<int, Target> TargetsById => _targetsById;
+        public IReadOnlyDictionary<string, Target> TargetsByName => _targetsByName;
+        public IReadOnlyList<Target> OrderedTargets => _orderedTargets;
         // TODO: A single project instance can be built concurrently with
         //       distinct EntryPointTargets. Those should be tracked as part of
         //       the overall Project.
-        public IReadOnlyList<Target> EntryPointTargets { get; }
-        public ConcurrentBag<Target> OrderedTargets { get; }
-        public ProjectNode_BeforeThis Node_BeforeThis { get; }
+        public IReadOnlyList<Target> EntryPointTargets => _entryPointTargets;
         public override Component Parent => ParentBuild;
+
+        private readonly Dictionary<int, Target> _targetsById;
+        private readonly Dictionary<string, Target> _targetsByName;
+        private readonly List<Target> _orderedTargets;
+        private readonly List<Target> _entryPointTargets;
 
         public Project(
             int id,
             string projectFile,
-            string targetNames,
             IEnumerable items,
             IEnumerable properties,
             IDictionary<string, string> globalProperties,
@@ -43,38 +47,36 @@ namespace Microsoft.Build.Logging.Query.Component
             Items = new ItemManager();
             Properties = new PropertyManager();
             GlobalProperties = new PropertyManager();
-            TargetsByName = new ConcurrentDictionary<string, Target>();
-            TargetsById = new ConcurrentDictionary<int, Target>();
-            EntryPointTargets = new List<Target>(
-                targetNames
-                .Split(';')
-                .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
-                .Select(name => GetOrAddTargetWithName(name.Trim())));
-            OrderedTargets = new ConcurrentBag<Target>();
             Node_BeforeThis = new ProjectNode_BeforeThis(this);
+
+            _targetsById = new Dictionary<int, Target>();
+            _targetsByName = new Dictionary<string, Target>();
+            _orderedTargets = new List<Target>();
+            _entryPointTargets = new List<Target>();
 
             CopyItems(items);
             CopyProperties(properties);
             CopyGlobalProperties(globalProperties);
         }
 
-        public Target GetOrAddTarget(string name, int id)
+        public Target AddTarget(int id, string name, bool isEntryPointTarget)
         {
-            var target = new Target(name, id, this);
-            TargetsById[id] = target;
+            var target = new Target(id, name, this);
 
-            if (TargetsByName.TryAdd(name, target))
+            _targetsByName[name] = target;
+            _orderedTargets.Add(target);
+
+            if (id != BuildEventContext.InvalidTargetId)
             {
-                OrderedTargets.Add(target);
-                return target;
+                _targetsById[id] = target;
             }
 
-            return TargetsByName[name];
-        }
+            if (isEntryPointTarget)
+            {
+                _entryPointTargets.Add(target);
+            }
 
-        private Target GetOrAddTargetWithName(string name)
-        {
-            return TargetsByName.GetOrAdd(name, new Target(name, null, this));
+            return target;
         }
 
         private void CopyItems(IEnumerable items)

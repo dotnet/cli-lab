@@ -1,4 +1,6 @@
-﻿using Microsoft.Build.Framework;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Messaging;
 
@@ -6,14 +8,25 @@ namespace Microsoft.Build.Logging.Query.Construction
 {
     public class GraphBuilder
     {
-        public Component.Build Build { get; }
-
         private readonly EventArgsDispatcher _eventArgsDispatcher;
+        private readonly List<ProjectStartedEventArgs> _projectArgs;
+        private readonly Dictionary<int, List<TargetStartedEventArgs>> _targetArgs;
+        private readonly Dictionary<(int projectId, int targetId), List<TaskStartedEventArgs>> _taskArgs;
+        private readonly Dictionary<int, Dictionary<string, Target>> _targetsByName;
+        private readonly List<BuildMessageEventArgs> _messageArgs;
+        private readonly List<BuildWarningEventArgs> _warningArgs;
+        private readonly List<BuildErrorEventArgs> _errorArgs;
 
         public GraphBuilder()
         {
-            Build = new Component.Build();
             _eventArgsDispatcher = new EventArgsDispatcher();
+            _projectArgs = new List<ProjectStartedEventArgs>();
+            _targetArgs = new Dictionary<int, List<TargetStartedEventArgs>>();
+            _targetsByName = new Dictionary<int, Dictionary<string, Target>>();
+            _taskArgs = new Dictionary<(int projectId, int targetId), List<TaskStartedEventArgs>>();
+            _messageArgs = new List<BuildMessageEventArgs>();
+            _warningArgs = new List<BuildWarningEventArgs>();
+            _errorArgs = new List<BuildErrorEventArgs>();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
             _eventArgsDispatcher.TargetStarted += TargetStarted;
@@ -23,109 +36,209 @@ namespace Microsoft.Build.Logging.Query.Construction
             _eventArgsDispatcher.ErrorRaised += ErrorRaised;
         }
 
-        public void HandleEvents(params BuildEventArgs[] buildEvents)
+        public Component.Build HandleEvents(params BuildEventArgs[] buildEvents)
         {
             foreach (var buildEvent in buildEvents)
             {
                 _eventArgsDispatcher.Dispatch(buildEvent);
             }
+
+            var build = new Component.Build();
+
+            AddProjects(build);
+            AddLogs(build);
+
+            return build;
         }
 
         private void ProjectStarted(object sender, ProjectStartedEventArgs args)
         {
             var id = args.BuildEventContext.ProjectInstanceId;
-            var project = Build.GetOrAddProject(id, args);
-            var parent = GetParentProject(args);
 
-            if (parent != null)
+            _projectArgs.Add(args);
+
+            if (!_targetArgs.ContainsKey(id))
             {
-                parent.Node_BeforeThis.AdjacentNodes.Add(project.Node_BeforeThis);
+                _targetArgs[id] = new List<TargetStartedEventArgs>();
+            }
+
+            if (!_targetsByName.ContainsKey(id))
+            {
+                _targetsByName[id] = new Dictionary<string, Target>();
             }
         }
 
         private void TargetStarted(object sender, TargetStartedEventArgs args)
         {
-            var project = Build.Projects[args.BuildEventContext.ProjectInstanceId];
-            var target = project.GetOrAddTarget(args.TargetName, args.BuildEventContext.TargetId);
+            var id = args.BuildEventContext.TargetId;
+            var projectId = args.BuildEventContext.ProjectInstanceId;
 
-            if (!string.IsNullOrWhiteSpace(args.ParentTarget))
-            {
-                var parent = project.GetOrAddTarget(args.ParentTarget, args.BuildEventContext.TargetId);
-
-                if (args.BuildReason == TargetBuiltReason.DependsOn)
-                {
-                    target.Node_BeforeThis.AdjacentNodes.Add(parent.Node_BeforeThis);
-                }
-                else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
-                {
-                    parent.Node_BeforeThis.AdjacentNodes.Add(target.Node_BeforeThis);
-                }
-                else if (args.BuildReason == TargetBuiltReason.AfterTargets)
-                {
-                    // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
-                    parent.Node_AfterThis.AdjacentNodes.Add(target.Node_AfterThis);
-                }
-            }
+            _targetArgs[projectId].Add(args);
+            _taskArgs[(projectId, targetId: id)] = new List<TaskStartedEventArgs>();
         }
 
         private void TaskStarted(object sender, TaskStartedEventArgs args)
         {
-            var project = Build.Projects[args.BuildEventContext.ProjectInstanceId];
-            var target = project.TargetsById[args.BuildEventContext.TargetId];
+            var projectId = args.BuildEventContext.ProjectInstanceId;
+            var targetId = args.BuildEventContext.TargetId;
 
-            target.GetOrAddTask(args.BuildEventContext.TaskId, args.TaskName, args.TaskFile);
+            _taskArgs[(projectId, targetId)].Add(args);
         }
 
         private void MessageRaised(object sender, BuildMessageEventArgs args)
         {
-            var parent = GetParentComponent(
-                args.BuildEventContext.ProjectInstanceId,
-                args.BuildEventContext.TargetId,
-                args.BuildEventContext.TaskId);
-
-            var message = new Message(args.Message, parent, args.Importance);
-
-            parent.AddMessage(message);
+            _messageArgs.Add(args);
         }
 
         private void WarningRaised(object sender, BuildWarningEventArgs args)
         {
-            var parent = GetParentComponent(
-                args.BuildEventContext.ProjectInstanceId,
-                args.BuildEventContext.TargetId,
-                args.BuildEventContext.TaskId);
-
-            var warning = new Warning(args.Message, parent);
-
-            parent.AddWarning(warning);
+            _warningArgs.Add(args);
         }
 
         private void ErrorRaised(object sender, BuildErrorEventArgs args)
         {
-            var parent = GetParentComponent(
-                args.BuildEventContext.ProjectInstanceId,
-                args.BuildEventContext.TargetId,
-                args.BuildEventContext.TaskId);
-
-            var error = new Error(args.Message, parent);
-
-            parent.AddError(error);
+            _errorArgs.Add(args);
         }
 
-        private Project GetParentProject(ProjectStartedEventArgs args)
+        private void AddProjects(Component.Build build)
         {
-            var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
-            return Build.Projects.TryGetValue(parentId, out var parent) ? parent : null;
-        }
+            var projectArgsById = new Dictionary<int, ProjectStartedEventArgs>();
 
-        private Component.Component GetParentComponent(int projectInstanceId, int targetId, int taskId)
-        {
-            if (projectInstanceId == BuildEventContext.InvalidProjectInstanceId || projectInstanceId == 0)
+            foreach (var args in _projectArgs)
             {
-                return Build;
+                var id = args.BuildEventContext.ProjectInstanceId;
+                var targetsByName = _targetsByName[id];
+
+                projectArgsById[id] = args;
+
+                var project = build.AddProject(
+                    id,
+                    args.ProjectFile,
+                    args.Items,
+                    args.Properties,
+                    args.GlobalProperties);
+
+                var entryPointTargetNames = args.TargetNames
+                    .Split(';')
+                    .Where(name => !string.IsNullOrWhiteSpace(name.Trim()))
+                    .ToHashSet();
+                
+                AddTargets(project, id, entryPointTargetNames);
             }
 
-            var project = Build.Projects[projectInstanceId];
+            foreach (var pair in build.ProjectsById)
+            {
+                var id = pair.Key;
+                var project = pair.Value;
+                var args = projectArgsById[id];
+                var parentId = args.ParentProjectBuildEventContext.ProjectInstanceId;
+
+                if (build.ProjectsById.TryGetValue(parentId, out var parent))
+                {
+                    parent.Node_BeforeThis.AdjacentNodes.Add(project.Node_BeforeThis);
+                }
+            }
+        }
+
+        private void AddTargets(Project project, int projectId, HashSet<string> entryPointTargetNames)
+        {
+            var targetArgs = _targetArgs[projectId];
+            var targetArgsById = new Dictionary<int, TargetStartedEventArgs>();
+
+            foreach (var args in targetArgs)
+            {
+                var targetId = args.BuildEventContext.TargetId;
+                var name = args.TargetName;
+
+                var target = project.AddTarget(targetId, name, entryPointTargetNames.Contains(name));
+
+                targetArgsById[targetId] = args;
+
+                AddTasks(target, projectId, targetId);
+            }
+
+            foreach (var pair in project.TargetsById)
+            {
+                var id = pair.Key;
+                var target = pair.Value;
+                var args = targetArgsById[id];
+
+                if (!string.IsNullOrWhiteSpace(args.ParentTarget))
+                {
+                    var parent =
+                        project.TargetsByName.ContainsKey(args.ParentTarget) ?
+                        project.TargetsByName[args.ParentTarget] :
+                        project.AddTarget(BuildEventContext.InvalidTargetId, args.ParentTarget, entryPointTargetNames.Contains(args.ParentTarget));
+
+                    if (args.BuildReason == TargetBuiltReason.DependsOn)
+                    {
+                        target.Node_BeforeThis.AdjacentNodes.Add(parent.Node_BeforeThis);
+                    }
+                    else if (args.BuildReason == TargetBuiltReason.BeforeTargets)
+                    {
+                        parent.Node_BeforeThis.AdjacentNodes.Add(target.Node_BeforeThis);
+                    }
+                    else if (args.BuildReason == TargetBuiltReason.AfterTargets)
+                    {
+                        // TODO: args.ParentTarget is empty when args.BuildReason is AfterTargets
+                        parent.Node_AfterThis.AdjacentNodes.Add(target.Node_AfterThis);
+                    }
+                }
+            }
+        }
+
+        private void AddTasks(Target target, int projectId, int targetId)
+        {
+            var taskArgs = _taskArgs[(projectId, targetId)];
+
+            foreach (var args in taskArgs)
+            {
+                var taskId = args.BuildEventContext.TaskId;
+                target.AddTask(taskId, args.TaskName, args.TaskFile);
+            }
+        }
+
+        private void AddLogs(Component.Build build)
+        {
+            foreach (var args in _messageArgs)
+            {
+                var parent = GetParentComponent(args, build);
+                var message = new Message(args.Message, parent, args.Importance);
+                parent.AddMessage(message);
+            }
+
+            foreach (var args in _warningArgs)
+            {
+                var parent = GetParentComponent(args, build);
+                var warning = new Warning(args.Message, parent);
+                parent.AddWarning(warning);
+            }
+
+            foreach (var args in _errorArgs)
+            {
+                var parent = GetParentComponent(args, build);
+                var error = new Error(args.Message, parent);
+                parent.AddError(error);
+            }
+        }
+
+        private Component.Component GetParentComponent(BuildEventArgs args, Component.Build build)
+        {
+            return GetParentComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId,
+                build);
+        }
+
+        private Component.Component GetParentComponent(int projectId, int targetId, int taskId, Component.Build build)
+        {
+            if (projectId == BuildEventContext.InvalidProjectInstanceId || projectId == 0)
+            {
+                return build;
+            }
+
+            var project = build.ProjectsById[projectId];
 
             if (targetId == BuildEventContext.InvalidTargetId)
             {
@@ -139,7 +252,7 @@ namespace Microsoft.Build.Logging.Query.Construction
                 return target;
             }
 
-            return target.Tasks[taskId];
+            return target.TasksById[taskId];
         }
     }
 }
