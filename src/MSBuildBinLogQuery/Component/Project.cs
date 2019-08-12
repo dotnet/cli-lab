@@ -26,6 +26,7 @@ namespace Microsoft.Build.Logging.Query.Component
         //       distinct EntryPointTargets. Those should be tracked as part of
         //       the overall Project.
         public IReadOnlyList<Target> EntryPointTargets => _entryPointTargets;
+        public override Component Parent => ParentBuild;
 
         private readonly Dictionary<int, Target> _targetsById;
         private readonly Dictionary<string, Target> _targetsByName;

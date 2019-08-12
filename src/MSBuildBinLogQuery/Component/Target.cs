@@ -13,6 +13,7 @@ namespace Microsoft.Build.Logging.Query.Component
         public Project ParentProject { get; }
         public TargetNode_BeforeThis Node_BeforeThis { get; }
         public TargetNode_AfterThis Node_AfterThis { get; }
+        public override Component Parent => ParentProject;
 
         public IReadOnlyDictionary<int, Task> TasksById => _tasksById;
         public IReadOnlyList<Task> OrderedTasks => _orderedTasks;

@@ -7,6 +7,7 @@ namespace Microsoft.Build.Logging.Query.Component
     public class Build : Component
     {
         public IReadOnlyDictionary<int, Project> ProjectsById => _projectsById;
+        public override Component Parent => null;
 
         private readonly Dictionary<int, Project> _projectsById;
 

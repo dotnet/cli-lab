@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Messaging;
 
 namespace Microsoft.Build.Logging.Query.Construction
 {
@@ -12,6 +13,9 @@ namespace Microsoft.Build.Logging.Query.Construction
         private readonly Dictionary<int, List<TargetStartedEventArgs>> _targetArgs;
         private readonly Dictionary<(int projectId, int targetId), List<TaskStartedEventArgs>> _taskArgs;
         private readonly Dictionary<int, Dictionary<string, Target>> _targetsByName;
+        private readonly List<BuildMessageEventArgs> _messageArgs;
+        private readonly List<BuildWarningEventArgs> _warningArgs;
+        private readonly List<BuildErrorEventArgs> _errorArgs;
 
         public GraphBuilder()
         {
@@ -20,10 +24,16 @@ namespace Microsoft.Build.Logging.Query.Construction
             _targetArgs = new Dictionary<int, List<TargetStartedEventArgs>>();
             _targetsByName = new Dictionary<int, Dictionary<string, Target>>();
             _taskArgs = new Dictionary<(int projectId, int targetId), List<TaskStartedEventArgs>>();
+            _messageArgs = new List<BuildMessageEventArgs>();
+            _warningArgs = new List<BuildWarningEventArgs>();
+            _errorArgs = new List<BuildErrorEventArgs>();
 
             _eventArgsDispatcher.ProjectStarted += ProjectStarted;
             _eventArgsDispatcher.TargetStarted += TargetStarted;
             _eventArgsDispatcher.TaskStarted += TaskStarted;
+            _eventArgsDispatcher.MessageRaised += MessageRaised;
+            _eventArgsDispatcher.WarningRaised += WarningRaised;
+            _eventArgsDispatcher.ErrorRaised += ErrorRaised;
         }
 
         public Component.Build HandleEvents(params BuildEventArgs[] buildEvents)
@@ -34,7 +44,10 @@ namespace Microsoft.Build.Logging.Query.Construction
             }
 
             var build = new Component.Build();
+
             AddProjects(build);
+            AddLogs(build);
+
             return build;
         }
 
@@ -43,8 +56,16 @@ namespace Microsoft.Build.Logging.Query.Construction
             var id = args.BuildEventContext.ProjectInstanceId;
 
             _projectArgs.Add(args);
-            _targetArgs[id] = new List<TargetStartedEventArgs>();
-            _targetsByName[id] = new Dictionary<string, Target>();
+
+            if (!_targetArgs.ContainsKey(id))
+            {
+                _targetArgs[id] = new List<TargetStartedEventArgs>();
+            }
+
+            if (!_targetsByName.ContainsKey(id))
+            {
+                _targetsByName[id] = new Dictionary<string, Target>();
+            }
         }
 
         private void TargetStarted(object sender, TargetStartedEventArgs args)
@@ -62,6 +83,21 @@ namespace Microsoft.Build.Logging.Query.Construction
             var targetId = args.BuildEventContext.TargetId;
 
             _taskArgs[(projectId, targetId)].Add(args);
+        }
+
+        private void MessageRaised(object sender, BuildMessageEventArgs args)
+        {
+            _messageArgs.Add(args);
+        }
+
+        private void WarningRaised(object sender, BuildWarningEventArgs args)
+        {
+            _warningArgs.Add(args);
+        }
+
+        private void ErrorRaised(object sender, BuildErrorEventArgs args)
+        {
+            _errorArgs.Add(args);
         }
 
         private void AddProjects(Component.Build build)
@@ -113,6 +149,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             {
                 var targetId = args.BuildEventContext.TargetId;
                 var name = args.TargetName;
+
                 var target = project.AddTarget(targetId, name, entryPointTargetNames.Contains(name));
 
                 targetArgsById[targetId] = args;
@@ -159,6 +196,63 @@ namespace Microsoft.Build.Logging.Query.Construction
                 var taskId = args.BuildEventContext.TaskId;
                 target.AddTask(taskId, args.TaskName, args.TaskFile);
             }
+        }
+
+        private void AddLogs(Component.Build build)
+        {
+            foreach (var args in _messageArgs)
+            {
+                var parent = GetParentComponent(args, build);
+                var message = new Message(args.Message, parent, args.Importance);
+                parent.AddMessage(message);
+            }
+
+            foreach (var args in _warningArgs)
+            {
+                var parent = GetParentComponent(args, build);
+                var warning = new Warning(args.Message, parent);
+                parent.AddWarning(warning);
+            }
+
+            foreach (var args in _errorArgs)
+            {
+                var parent = GetParentComponent(args, build);
+                var error = new Error(args.Message, parent);
+                parent.AddError(error);
+            }
+        }
+
+        private Component.Component GetParentComponent(BuildEventArgs args, Component.Build build)
+        {
+            return GetParentComponent(
+                args.BuildEventContext.ProjectInstanceId,
+                args.BuildEventContext.TargetId,
+                args.BuildEventContext.TaskId,
+                build);
+        }
+
+        private Component.Component GetParentComponent(int projectId, int targetId, int taskId, Component.Build build)
+        {
+            if (projectId == BuildEventContext.InvalidProjectInstanceId || projectId == 0)
+            {
+                return build;
+            }
+
+            var project = build.ProjectsById[projectId];
+
+            if (targetId == BuildEventContext.InvalidTargetId)
+            {
+                return project;
+            }
+
+            var target = project.TargetsById[targetId];
+
+            if (taskId == BuildEventContext.InvalidTaskId)
+            {
+                return target;
+            }
+
+            return target.TasksById[taskId];
         }
     }
 }
