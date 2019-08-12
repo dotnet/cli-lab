@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Logging.Query.Construction;
@@ -21,39 +20,25 @@ namespace Microsoft.Build.Logging.Query.Commandline
                 PrintErrorMessage($"File not found: {args[0]}");
             }
 
-            var events = new BinaryLogReader(args[0]).ReadEvents();
+            using var binaryLogReader = new BinaryLogReader(args[0]);
+            var events = binaryLogReader.ReadEvents();
 
             var graphBuilder = new GraphBuilder();
-            graphBuilder.HandleEvents(events.ToArray());
+            var build = graphBuilder.HandleEvents(events.ToArray());
 
-            PrintProjectNodes(graphBuilder.Projects.Values);
+            PrintProjectNodes(build);
         }
 
-        private static void PrintProjectNodes(IEnumerable<ProjectNode> projects)
+        private static void PrintProjectNodes(Component.Build build)
         {
-            Console.WriteLine("projects:");
+            PrintBuild(build);
 
-            foreach (var project in projects)
-            {
-                Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
+            var projectGraph = new DirectedAcyclicGraph<ProjectNode_BeforeThis>(build.ProjectsById.Values.Select(project => project.Node_BeforeThis));
 
-                foreach (var target in project.Targets.Values)
-                {
-                    Console.WriteLine($"    target {target.Name}");
-                    Console.WriteLine($"      directly before this: {string.Join(";", target.TargetsDirectlyBeforeThis.Select(beforeThis => beforeThis.Name))}");
-                    Console.WriteLine($"      directly after this: {string.Join(";", target.TargetsDirectlyAfterThis.Select(afterThis => afterThis.Name))}");
-                }
-            }
-
-            Console.WriteLine();
-
-            foreach (var project in projects)
-            {
-                foreach (var beforeProject in project.ProjectsDirectlyBeforeThis)
-                {
-                    Console.WriteLine($"#{project.Id} -> #{beforeProject.Id}");
-                }
-            }
+            PrintProjectGraph(projectGraph);
+            PrintProjectTopologicalOrdering(projectGraph);
+            PrintReachableProjects(projectGraph);
+            PrintReversedProjectGraph(projectGraph);
         }
 
         private static void PrintErrorMessage(string message)
@@ -62,6 +47,83 @@ namespace Microsoft.Build.Logging.Query.Commandline
             Console.WriteLine(message);
             Console.ResetColor();
             Environment.Exit(1);
+        }
+
+        private static void PrintProjectGraph(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "project graph:")
+        {
+            Console.WriteLine(header);
+
+            Console.WriteLine("  graph TD");
+
+            foreach (var node in graph.Nodes)
+            {
+                foreach (var adjacentNode in node.AdjacentNodes)
+                {
+                    Console.WriteLine($"  {node.ProjectInfo.Id} --> {adjacentNode.ProjectInfo.Id}");
+                }
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintReversedProjectGraph(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "reversed project graph:")
+        {
+            PrintProjectGraph(graph.Reverse(), header);
+        }
+
+        private static void PrintProjectTopologicalOrdering(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "project topological ordering:")
+        {
+            var topologicalSortResult = graph.TopologicalSort(out var topologicalOrdering) ? "Success" : "Failed";
+            Console.WriteLine($"{header}: {topologicalSortResult}");
+
+            foreach (var project in topologicalOrdering)
+            {
+                Console.WriteLine($"  #{project.ProjectInfo.Id}");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintReachableProjects(DirectedAcyclicGraph<ProjectNode_BeforeThis> graph, string header = "reachable projects:")
+        {
+            var reachableCalculationResult = graph.GetReachableNodes(out var reachables) ? "Success" : "Failed";
+            Console.WriteLine($"{header}: {reachableCalculationResult}");
+
+            foreach (var pair in reachables)
+            {
+                var reachableNodes = string.Join(", ", pair.Value.Select(node => $"#{node.ProjectInfo.Id}"));
+                Console.WriteLine($"  #{pair.Key.ProjectInfo.Id}: {reachableNodes}");
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintBuild(Component.Build build, string header = "build:", bool printTargetGraph = false)
+        {
+            Console.WriteLine(header);
+
+            foreach (var project in build.ProjectsById.Values)
+            {
+                Console.WriteLine($"  project #{project.Id}: {project.ProjectFile}");
+
+                foreach (var target in project.TargetsByName.Values)
+                {
+                    Console.WriteLine($"    target #{target.Id} {target.Name}");
+
+                    if (printTargetGraph)
+                    {
+                        Console.WriteLine($"      directly before this: {string.Join(";", target.Node_BeforeThis.AdjacentNodes.Select(beforeThis => beforeThis.TargetInfo.Name))}");
+                        Console.WriteLine($"      directly after this: {string.Join(";", target.Node_AfterThis.AdjacentNodes.Select(afterThis => afterThis.TargetInfo.Name))}");
+                    }
+
+                    foreach (var task in target.TasksById.Values)
+                    {
+                        Console.WriteLine($"      task #{task.Id} {task.Name}");
+                    }
+                }
+            }
+
+            Console.WriteLine();
         }
     }
 }
