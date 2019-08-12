@@ -56,10 +56,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
             else if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {
+                if (!IsAdmin())
+                {
+                    throw new NotAdminException();
+                }
+
                 DoIt(filtered);
             }
             else
             {
+                if (!IsAdmin())
+                {
+                    throw new NotAdminException();
+                }
+
                 AskIt(filtered);
             }
         }
@@ -112,11 +122,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         private static void DoIt(IEnumerable<Bundle> bundles)
         {
-            if (!IsAdmin())
-            {
-                throw new NotAdminException();
-            }
-
             var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
