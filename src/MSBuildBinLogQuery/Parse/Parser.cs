@@ -16,7 +16,14 @@ namespace Microsoft.Build.Logging.Query.Parse
         public static QueryNode Parse(Scanner scanner)
         {
             var parser = new Parser(scanner);
-            return parser.ParseQueryNode();
+            var queryNode = parser.ParseQueryNode();
+
+            if (parser._scanner.Token is EofToken)
+            {
+                return queryNode;
+            }
+
+            throw new ParseException(parser._scanner.Expression);
         }
 
         public static QueryNode Parse(string expression)
@@ -84,13 +91,9 @@ namespace Microsoft.Build.Logging.Query.Parse
                 var next = ParseMessageNode();
                 return new TaskNode(next);
             }
-            else if (_scanner.Token is EofToken)
-            {
-                return new TaskNode(null);
-            }
             else
             {
-                throw new ParseException(_scanner.Expression);
+                return new TaskNode(null);
             }
         }
 
@@ -113,13 +116,9 @@ namespace Microsoft.Build.Logging.Query.Parse
                     return new TargetNode(next);
                 }
             }
-            else if (_scanner.Token is EofToken)
-            {
-                return new TargetNode(null);
-            }
             else
             {
-                throw new ParseException(_scanner.Expression);
+                return new TargetNode(null);
             }
         }
 
@@ -147,13 +146,9 @@ namespace Microsoft.Build.Logging.Query.Parse
                     return new ProjectNode(next);
                 }
             }
-            else if (_scanner.Token is EofToken)
-            {
-                return new ProjectNode(null);
-            }
             else
             {
-                throw new ParseException(_scanner.Expression);
+                return new ProjectNode(null);
             }
         }
 
