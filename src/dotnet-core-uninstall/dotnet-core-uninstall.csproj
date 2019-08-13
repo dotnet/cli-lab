@@ -37,11 +37,7 @@
   </ItemGroup>
 
   <Target Name="PublishSingleFile" AfterTargets="Build">
-    <MSBuild
-      BuildInParallel="False"
-      Projects="$(MSBuildThisFileDirectory)\dotnet-core-uninstall.csproj"
-      Properties="NoBuild=true"
-      Targets="Publish">
+    <MSBuild BuildInParallel="False" Projects="$(MSBuildThisFileDirectory)\dotnet-core-uninstall.csproj" Properties="NoBuild=true" Targets="Publish">
     </MSBuild>
   </Target>
 

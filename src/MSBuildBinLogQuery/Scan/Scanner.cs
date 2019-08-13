@@ -6,6 +6,8 @@ namespace Microsoft.Build.Logging.Query.Scan
 {
     public class Scanner
     {
+        public Token.Token Token { get; private set; }
+
         private readonly string _expression;
         private int _index;
         private char _char;
@@ -14,12 +16,12 @@ namespace Microsoft.Build.Logging.Query.Scan
         {
             _expression = expression ?? throw new ArgumentNullException();
             _index = 0;
-            _char = '\0';
 
             ReadNextCharacter();
+            ReadNextToken();
         }
 
-        public Token.Token ReadNextToken()
+        public void ReadNextToken()
         {
             SkipWhiteSpace();
 
@@ -27,56 +29,74 @@ namespace Microsoft.Build.Logging.Query.Scan
             {
                 case '\0':
                     ReadNextCharacter();
-                    return new EofToken();
+                    Token = new EofToken();
+                    break;
                 case '/':
                     ReadNextCharacter();
-                    return new SlashToken();
+                    Token = new SlashToken();
+                    break;
                 case '[':
                     ReadNextCharacter();
-                    return new LeftBracketToken();
+                    Token = new LeftBracketToken();
+                    break;
                 case ']':
                     ReadNextCharacter();
-                    return new RightBracketToken();
+                    Token = new RightBracketToken();
+                    break;
                 case '=':
                     ReadNextCharacter();
-                    return new EqualToken();
+                    Token = new EqualToken();
+                    break;
                 case ',':
                     ReadNextCharacter();
-                    return new CommaToken();
+                    Token = new CommaToken();
+                    break;
                 case '\"':
                     ReadNextCharacter();
-                    return new StringToken(ReadNextString());
-                default:
-                    if (IsAlpha(_char))
-                    {
-                        var identifier = ReadNextIdentifier();
+                    Token = new StringToken(ReadNextString());
+                    break;
+                case 'M':
+                case 'm':
+                    ReadNextKeyword("MESSAGE", () => new MessageToken());
+                    break;
+                case 'W':
+                case 'w':
+                    ReadNextKeyword("WARNING", () => new WarningToken());
+                    break;
+                case 'E':
+                case 'e':
+                    ReadNextKeyword("ERROR", () => new ErrorToken());
+                    break;
+                case 'P':
+                case 'p':
+                    ReadNextKeyword("PROJECT", () => new ProjectToken());
+                    break;
+                case 'T':
+                case 't':
+                    ReadNextCharacter();
 
-                        if (identifier.ToUpper().Equals("MESSAGE"))
-                        {
-                            return new MessageToken();
-                        }
-                        else if (identifier.ToUpper().Equals("WARNING"))
-                        {
-                            return new WarningToken();
-                        }
-                        else if (identifier.ToUpper().Equals("ERROR"))
-                        {
-                            return new ErrorToken();
-                        }
-                        else if (identifier.ToUpper().Equals("PROJECT"))
-                        {
-                            return new ProjectToken();
-                        }
-                        else if (identifier.ToUpper().Equals("TARGET"))
-                        {
-                            return new TargetToken();
-                        }
-                        else if (identifier.ToUpper().Equals("TASK"))
-                        {
-                            return new TaskToken();
-                        }
+                    if (char.ToUpper(_char) != 'A')
+                    {
+                        throw new ScanException(_expression);
                     }
 
+                    ReadNextCharacter();
+
+                    if (char.ToUpper(_char) == 'R')
+                    {
+                        ReadNextKeyword("RGET", () => new TargetToken());
+                        break;
+                    }
+                    else if (char.ToUpper(_char) == 'S')
+                    {
+                        ReadNextKeyword("SK", () => new TaskToken());
+                        break;
+                    }
+                    else
+                    {
+                        throw new ScanException(_expression);
+                    }
+                default:
                     throw new ScanException(_expression);
             }
         }
@@ -95,17 +115,23 @@ namespace Microsoft.Build.Logging.Query.Scan
             return stringBuilder.ToString();
         }
 
-        private string ReadNextIdentifier()
+        private void ReadNextKeyword(string keyword, Func<Token.Token> thunk)
         {
             var stringBuilder = new StringBuilder();
 
-            while (IsAlpha(_char))
+            for (var i = 0; i < keyword.Length; i++)
             {
+                if (char.ToUpper(_char) != char.ToUpper(keyword[i]))
+                {
+                    throw new ScanException(_expression);
+                }
+
                 stringBuilder.Append(_char);
+
                 ReadNextCharacter();
             }
 
-            return stringBuilder.ToString();
+            Token = thunk.Invoke();
         }
 
         private bool ReadNextCharacter()
@@ -128,11 +154,6 @@ namespace Microsoft.Build.Logging.Query.Scan
         private static bool IsWhiteSpace(char c)
         {
             return c == ' ' || c == '\t' || c == '\n' || c == '\r';
-        }
-
-        private static bool IsAlpha(char c)
-        {
-            return c == '_' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
         }
     }
 }

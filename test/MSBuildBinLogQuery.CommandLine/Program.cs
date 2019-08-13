@@ -34,9 +34,9 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             var scanner = new Scanner(args[1]);
 
-            for (var token = scanner.ReadNextToken(); !(token is EofToken); token = scanner.ReadNextToken())
+            for (; !(scanner.Token is EofToken); scanner.ReadNextToken())
             {
-                Console.WriteLine(token + (token is StringToken ? $" {(token as StringToken).Value}" : ""));
+                Console.WriteLine(scanner.Token + (scanner.Token is StringToken ? $" {(scanner.Token as StringToken).Value}" : ""));
             }
         }
 
