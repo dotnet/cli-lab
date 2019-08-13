@@ -7,14 +7,14 @@ namespace Microsoft.Build.Logging.Query.Scan
     public class Scanner
     {
         public Token.Token Token { get; private set; }
+        public string Expression { get; }
 
-        private readonly string _expression;
         private int _index;
         private char _char;
 
         public Scanner(string expression)
         {
-            _expression = expression ?? throw new ArgumentNullException();
+            Expression = expression ?? throw new ArgumentNullException();
             _index = 0;
 
             ReadNextCharacter();
@@ -77,7 +77,7 @@ namespace Microsoft.Build.Logging.Query.Scan
 
                     if (char.ToUpper(_char) != 'A')
                     {
-                        throw new ScanException(_expression);
+                        throw new ScanException(Expression);
                     }
 
                     ReadNextCharacter();
@@ -94,10 +94,10 @@ namespace Microsoft.Build.Logging.Query.Scan
                     }
                     else
                     {
-                        throw new ScanException(_expression);
+                        throw new ScanException(Expression);
                     }
                 default:
-                    throw new ScanException(_expression);
+                    throw new ScanException(Expression);
             }
         }
 
@@ -123,7 +123,7 @@ namespace Microsoft.Build.Logging.Query.Scan
             {
                 if (char.ToUpper(_char) != char.ToUpper(keyword[i]))
                 {
-                    throw new ScanException(_expression);
+                    throw new ScanException(Expression);
                 }
 
                 stringBuilder.Append(_char);
@@ -136,9 +136,9 @@ namespace Microsoft.Build.Logging.Query.Scan
 
         private bool ReadNextCharacter()
         {
-            if (_index < _expression.Length)
+            if (_index < Expression.Length)
             {
-                _char = _expression[_index++];
+                _char = Expression[_index++];
                 return true;
             }
 
