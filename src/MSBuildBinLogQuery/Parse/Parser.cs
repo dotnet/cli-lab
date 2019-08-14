@@ -88,7 +88,7 @@ namespace Microsoft.Build.Logging.Query.Parse
             {
                 Consume<SlashToken>();
 
-                var next = ParseMessageNode();
+                var next = ParseLogNode();
                 return new TaskNode(next);
             }
             else
