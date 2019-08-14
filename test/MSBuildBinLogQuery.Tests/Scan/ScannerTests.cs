@@ -184,6 +184,15 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
 
             yield return new object[]
             {
+                "//",
+                new Token.Token[]
+                {
+                    new DoubleSlashToken()
+                }
+            };
+
+            yield return new object[]
+            {
                 "[",
                 new Token.Token[]
                 {
@@ -296,24 +305,18 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
 
             yield return new object[]
             {
-                "///message///warning///error///",
+                "///message////warning/error//",
                 new Token.Token[]
                 {
-                    new SlashToken(),
-                    new SlashToken(),
+                    new DoubleSlashToken(),
                     new SlashToken(),
                     new MessageToken(),
-                    new SlashToken(),
-                    new SlashToken(),
-                    new SlashToken(),
+                    new DoubleSlashToken(),
+                    new DoubleSlashToken(),
                     new WarningToken(),
                     new SlashToken(),
-                    new SlashToken(),
-                    new SlashToken(),
                     new ErrorToken(),
-                    new SlashToken(),
-                    new SlashToken(),
-                    new SlashToken(),
+                    new DoubleSlashToken()
                 }
             };
 
@@ -333,6 +336,35 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 new Token.Token[]
                 {
                     new MessageToken(),
+                    new MessageToken()
+                }
+            };
+
+            yield return new object[]
+            {
+                "///////",
+                new Token.Token[]
+                {
+                    new DoubleSlashToken(),
+                    new DoubleSlashToken(),
+                    new DoubleSlashToken(),
+                    new SlashToken()
+                }
+            };
+
+            yield return new object[]
+            {
+                "/project[task]  // target /message",
+                new Token.Token[]
+                {
+                    new SlashToken(),
+                    new ProjectToken(),
+                    new LeftBracketToken(),
+                    new TaskToken(),
+                    new RightBracketToken(),
+                    new DoubleSlashToken(),
+                    new TargetToken(),
+                    new SlashToken(),
                     new MessageToken()
                 }
             };
