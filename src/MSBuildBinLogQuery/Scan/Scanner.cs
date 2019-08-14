@@ -33,7 +33,17 @@ namespace Microsoft.Build.Logging.Query.Scan
                     break;
                 case '/':
                     ReadNextCharacter();
-                    Token = new SlashToken();
+
+                    if (_char == '/')
+                    {
+                        ReadNextCharacter();
+                        Token = new DoubleSlashToken();
+                    }
+                    else
+                    {
+                        Token = new SlashToken();
+                    }
+
                     break;
                 case '[':
                     ReadNextCharacter();
