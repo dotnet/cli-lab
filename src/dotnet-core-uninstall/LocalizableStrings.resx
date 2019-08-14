@@ -190,13 +190,13 @@
     <value>Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</value>
   </data>
   <data name="UninstallNoOptionArgumentDescription" xml:space="preserve">
-    <value>The specified version to uninstall.</value>
+    <value>The specified version to uninstall. You may list several versions, and response files are supported.</value>
   </data>
   <data name="UninstallNoOptionArgumentName" xml:space="preserve">
     <value>VERSION</value>
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</value>
   </data>
   <data name="VerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>
@@ -279,7 +279,7 @@ Specified versions:
 {0}
 *** END DRY RUN OUTPUT
 
-To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
 Run this command as administrator, and take out the -—dry-run option to remove these items.</value>
   </data>
@@ -287,7 +287,7 @@ Run this command as administrator, and take out the -—dry-run option to remove
     <value>The following items will be removed:
 {0}
 
-To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
 Do you want to continue? [Y/n] </value>
   </data>
