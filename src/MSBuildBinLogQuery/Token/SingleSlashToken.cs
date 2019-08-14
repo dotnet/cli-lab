@@ -3,18 +3,18 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class SlashToken : Token, IEquatable<SlashToken>
+    public class SingleSlashToken : Token, IEquatable<SingleSlashToken>
     {
-        public SlashToken() : base()
+        public SingleSlashToken() : base()
         {
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as SlashToken);
+            return Equals(obj as SingleSlashToken);
         }
 
-        public bool Equals([AllowNull] SlashToken other)
+        public bool Equals([AllowNull] SingleSlashToken other)
         {
             return other != null;
         }
