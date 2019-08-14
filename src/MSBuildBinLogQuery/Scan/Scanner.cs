@@ -41,7 +41,7 @@ namespace Microsoft.Build.Logging.Query.Scan
                     }
                     else
                     {
-                        Token = new SlashToken();
+                        Token = new SingleSlashToken();
                     }
 
                     break;
