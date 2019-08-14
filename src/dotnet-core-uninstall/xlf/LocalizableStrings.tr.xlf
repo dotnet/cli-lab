@@ -21,13 +21,13 @@
         <source>The following items will be removed:
 {0}
 
-To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
 Do you want to continue? [Y/n] </source>
         <target state="new">The following items will be removed:
 {0}
 
-To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
 Do you want to continue? [Y/n] </target>
         <note />
@@ -43,7 +43,7 @@ Specified versions:
 {0}
 *** END DRY RUN OUTPUT
 
-To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
 Run this command as administrator, and take out the -—dry-run option to remove these items.</source>
         <target state="new">*** DRY RUN OUTPUT
@@ -51,7 +51,7 @@ Specified versions:
 {0}
 *** END DRY RUN OUTPUT
 
-To avoid breaking Visual Studio or other problems, read aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
 Run this command as administrator, and take out the -—dry-run option to remove these items.</target>
         <note />
@@ -227,8 +227,8 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentDescription">
-        <source>The specified version to uninstall.</source>
-        <target state="new">The specified version to uninstall.</target>
+        <source>The specified version to uninstall. You may list several versions, and response files are supported.</source>
+        <target state="new">The specified version to uninstall. You may list several versions, and response files are supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentName">
