@@ -196,7 +196,7 @@
     <value>VERSION</value>
   </data>
   <data name="UninstallNoOptionDescription" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</value>
   </data>
   <data name="VerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>

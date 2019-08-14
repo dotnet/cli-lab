@@ -237,8 +237,8 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescription">
-        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</source>
-        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers.</target>
+        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNormalVerbosityFormat">
