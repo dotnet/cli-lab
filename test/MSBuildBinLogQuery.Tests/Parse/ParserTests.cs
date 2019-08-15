@@ -88,6 +88,24 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "//message",
                 new MessageNode(LogNodeType.All)
             };
+
+            yield return new object[]
+            {
+                "/project//warning",
+                new ProjectNode(new MessageNode(LogNodeType.All))
+            };
+
+            yield return new object[]
+            {
+                "/target/task//error",
+                new TargetNode(new TaskNode(new MessageNode(LogNodeType.All)))
+            };
+
+            yield return new object[]
+            {
+                "/project/task//message",
+                new ProjectNode(new TaskNode(new MessageNode(LogNodeType.All)))
+            };
         }
 
         [Theory]
@@ -101,6 +119,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [Theory]
         [InlineData("")]
         [InlineData("/")]
+        [InlineData("//")]
         [InlineData("message")]
         [InlineData("project/message")]
         [InlineData("/warning/")]
@@ -108,6 +127,12 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("/task/task")]
         [InlineData("/project/target/target/task/error")]
         [InlineData("/project//target")]
+        [InlineData("//message/target")]
+        [InlineData("/project/target/task//warning/task")]
+        [InlineData("/message/message")]
+        [InlineData("/warning//error")]
+        [InlineData("//error/message")]
+        [InlineData("//warning//message")]
         public void TestParsedAstException(string expression)
         {
             Action action = () =>
