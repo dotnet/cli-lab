@@ -9,6 +9,10 @@ namespace Microsoft.Build.Logging.Query.Ast
         {
         }
 
+        public ProjectNode(TaskNode next) : base(new TargetNode(next))
+        {
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as ProjectNode);

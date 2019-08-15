@@ -169,7 +169,7 @@ namespace Microsoft.Build.Logging.Query.Parse
                 Consume<ProjectToken>();
 
                 var next = ParseTargetNodeOrTaskNodeOrLogNodeOrNull();
-                return new ProjectNode(next);
+                return new ProjectNode(next is TaskNode ? next as TaskNode : next);
             }
             else if (_scanner.Token is TargetToken)
             {

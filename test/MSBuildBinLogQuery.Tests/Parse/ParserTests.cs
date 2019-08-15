@@ -44,7 +44,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
             yield return new object[]
             {
                 "/project",
-                new ProjectNode(null)
+                new ProjectNode((AstNode)null)
             };
 
             yield return new object[]
