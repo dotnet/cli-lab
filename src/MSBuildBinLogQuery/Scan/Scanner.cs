@@ -28,7 +28,6 @@ namespace Microsoft.Build.Logging.Query.Scan
             switch (_char)
             {
                 case '\0':
-                    ReadNextCharacter();
                     Token = new EofToken();
                     break;
                 case '/':
