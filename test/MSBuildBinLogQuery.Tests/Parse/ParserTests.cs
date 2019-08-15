@@ -14,19 +14,19 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
             yield return new object[]
             {
                 "/message",
-                new MessageNode(null)
+                new MessageNode(LogNodeType.Direct)
             };
 
             yield return new object[]
             {
                 "/warning",
-                new WarningNode(null)
+                new WarningNode(LogNodeType.Direct)
             };
 
             yield return new object[]
             {
                 "/error",
-                new ErrorNode(null)
+                new ErrorNode(LogNodeType.Direct)
             };
 
             yield return new object[]
@@ -50,43 +50,49 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
             yield return new object[]
             {
                 "/task/message",
-                new TaskNode(new MessageNode(null))
+                new TaskNode(new MessageNode(LogNodeType.Direct))
             };
 
             yield return new object[]
             {
                 "/target/warning",
-                new TargetNode(new WarningNode(null))
+                new TargetNode(new WarningNode(LogNodeType.Direct))
             };
 
             yield return new object[]
             {
                 "/project/error",
-                new ProjectNode(new ErrorNode(null))
+                new ProjectNode(new ErrorNode(LogNodeType.Direct))
             };
 
             yield return new object[]
             {
                 "/target/task/message",
-                new TargetNode(new TaskNode(new MessageNode(null)))
+                new TargetNode(new TaskNode(new MessageNode(LogNodeType.Direct)))
             };
 
             yield return new object[]
             {
                 "/project/task/warning",
-                new ProjectNode(new TaskNode(new WarningNode(null)))
+                new ProjectNode(new TaskNode(new WarningNode(LogNodeType.Direct)))
             };
 
             yield return new object[]
             {
                 "/project/target/task/error",
-                new ProjectNode(new TargetNode(new TaskNode(new ErrorNode(null))))
+                new ProjectNode(new TargetNode(new TaskNode(new ErrorNode(LogNodeType.Direct))))
+            };
+
+            yield return new object[]
+            {
+                "//message",
+                new MessageNode(LogNodeType.All)
             };
         }
 
         [Theory]
         [MemberData(nameof(GenerateDataForTestParsedAst))]
-        public void TestParsedAst(string expression, QueryNode expectedAst)
+        public void TestParsedAst(string expression, AstNode expectedAst)
         {
             var actualAst = Parser.Parse(expression);
             actualAst.Should().Be(expectedAst);
@@ -102,7 +108,6 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("/task/task")]
         [InlineData("/project/target/target/task/error")]
         [InlineData("/project//target")]
-        [InlineData("//message")]
         public void TestParsedAstException(string expression)
         {
             Action action = () =>

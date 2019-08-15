@@ -13,10 +13,10 @@ namespace Microsoft.Build.Logging.Query.Parse
             _scanner = scanner;
         }
 
-        public static QueryNode Parse(Scanner scanner)
+        public static AstNode Parse(Scanner scanner)
         {
             var parser = new Parser(scanner);
-            var queryNode = parser.ParseQueryNode();
+            var queryNode = parser.ParseQuery();
 
             if (parser._scanner.Token is EofToken)
             {
@@ -26,7 +26,7 @@ namespace Microsoft.Build.Logging.Query.Parse
             throw new ParseException(parser._scanner.Expression);
         }
 
-        public static QueryNode Parse(string expression)
+        public static AstNode Parse(string expression)
         {
             var scanner = new Scanner(expression);
             return Parse(scanner);
@@ -44,134 +44,165 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private MessageNode ParseMessageNode()
+        private LogNodeType ParseSlash()
         {
-            Consume<MessageToken>();
-            return new MessageNode(null);
-        }
-
-        private WarningNode ParseWarningNode()
-        {
-            Consume<WarningToken>();
-            return new WarningNode(null);
-        }
-
-        private ErrorNode ParseErrorNode()
-        {
-            Consume<ErrorToken>();
-            return new ErrorNode(null);
-        }
-
-        private QueryNode ParseLogNode()
-        {
-            if (_scanner.Token is MessageToken)
+            if (_scanner.Token is SingleSlashToken)
             {
-                return ParseMessageNode();
+                Consume<SingleSlashToken>();
+                return LogNodeType.Direct;
             }
-            else if (_scanner.Token is WarningToken)
+            else if (_scanner.Token is DoubleSlashToken)
             {
-                return ParseWarningNode();
+                Consume<DoubleSlashToken>();
+                return LogNodeType.All;
             }
-            else if (_scanner.Token is ErrorToken)
-            {
-                return ParseErrorNode();
-            }
-            
+
             throw new ParseException(_scanner.Expression);
         }
 
-        private QueryNode ParseTaskNode()
+        private LogNode ParseLogNodeWithType(LogNodeType type)
         {
-            Consume<TaskToken>();
-
-            if (_scanner.Token is SingleSlashToken)
+            if (_scanner.Token is MessageToken)
             {
-                Consume<SingleSlashToken>();
-
-                var next = ParseLogNode();
-                return new TaskNode(next);
+                Consume<MessageToken>();
+                return new MessageNode(type);
             }
-            else
+            else if (_scanner.Token is WarningToken)
             {
-                return new TaskNode(null);
+                Consume<WarningToken>();
+                return new WarningNode(type);
             }
+            else if (_scanner.Token is ErrorToken)
+            {
+                Consume<ErrorToken>();
+                return new ErrorNode(type);
+            }
+
+            throw new ParseException(_scanner.Expression);
         }
 
-        private QueryNode ParseTargetNode()
+        private LogNode ParseLogNode()
         {
-            Consume<TargetToken>();
-
-            if (_scanner.Token is SingleSlashToken)
-            {
-                Consume<SingleSlashToken>();
-
-                if (_scanner.Token is TaskToken)
-                {
-                    var next = ParseTaskNode();
-                    return new TargetNode(next);
-                }
-                else
-                {
-                    var next = ParseLogNode();
-                    return new TargetNode(next);
-                }
-            }
-            else
-            {
-                return new TargetNode(null);
-            }
+            var type = ParseSlash();
+            return ParseLogNodeWithType(type);
         }
 
-        private QueryNode ParseProjectNode()
+        private LogNode ParseLogNodeOrNull()
         {
-            Consume<ProjectToken>();
-
-            if (_scanner.Token is SingleSlashToken)
-            {
-                Consume<SingleSlashToken>();
-
-                if (_scanner.Token is TargetToken)
-                {
-                    var next = ParseTargetNode();
-                    return new ProjectNode(next);
-                }
-                else if (_scanner.Token is TaskToken)
-                {
-                    var next = ParseTaskNode();
-                    return new ProjectNode(next);
-                }
-                else
-                {
-                    var next = ParseLogNode();
-                    return new ProjectNode(next);
-                }
-            }
-            else
-            {
-                return new ProjectNode(null);
-            }
-        }
-
-        private QueryNode ParseQueryNode()
-        {
-            Consume<SingleSlashToken>();
-
-            if (_scanner.Token is ProjectToken)
-            {
-                return ParseProjectNode();
-            }
-            else if (_scanner.Token is TargetToken)
-            {
-                return ParseTargetNode();
-            }
-            else if (_scanner.Token is TaskToken)
-            {
-                return ParseTaskNode();
-            }
-            else
+            if (_scanner.Token is SingleSlashToken || _scanner.Token is DoubleSlashToken)
             {
                 return ParseLogNode();
             }
+
+            return null;
+        }
+
+        private AstNode ParseTaskNodeOrSingleSlashLogNode()
+        {
+            if (_scanner.Token is TaskToken)
+            {
+                Consume<TaskToken>();
+
+                var next = ParseLogNodeOrNull();
+                return new TaskNode(next);
+            }
+
+            return ParseLogNodeWithType(LogNodeType.Direct);
+        }
+
+        private AstNode ParseTaskNodeOrLogNodeOrNull()
+        {
+            if (_scanner.Token is SingleSlashToken)
+            {
+                Consume<SingleSlashToken>();
+                return ParseTaskNodeOrSingleSlashLogNode();
+            }
+            else if (_scanner.Token is DoubleSlashToken)
+            {
+                Consume<DoubleSlashToken>();
+                return ParseLogNodeWithType(LogNodeType.All);
+            }
+
+            return null;
+        }
+
+        private AstNode ParseTargetNodeOrTaskNodeOrSingleSlashLogNode()
+        {
+            if (_scanner.Token is TargetToken)
+            {
+                Consume<TargetToken>();
+
+                var next = ParseTaskNodeOrLogNodeOrNull();
+                return new TargetNode(next);
+            }
+            else if (_scanner.Token is TaskToken)
+            {
+                Consume<TaskToken>();
+
+                var next = ParseLogNodeOrNull();
+                return new TaskNode(next);
+            }
+
+            return ParseLogNodeWithType(LogNodeType.Direct);
+        }
+
+        private AstNode ParseTargetNodeOrTaskNodeOrLogNodeOrNull()
+        {
+            if (_scanner.Token is SingleSlashToken)
+            {
+                Consume<SingleSlashToken>();
+                return ParseTargetNodeOrTaskNodeOrSingleSlashLogNode();
+            }
+            else if (_scanner.Token is DoubleSlashToken)
+            {
+                Consume<DoubleSlashToken>();
+                return ParseLogNodeWithType(LogNodeType.All);
+            }
+
+            return null;
+        }
+
+        private AstNode ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode()
+        {
+            if (_scanner.Token is ProjectToken)
+            {
+                Consume<ProjectToken>();
+
+                var next = ParseTargetNodeOrTaskNodeOrLogNodeOrNull();
+                return new ProjectNode(next);
+            }
+            else if (_scanner.Token is TargetToken)
+            {
+                Consume<TargetToken>();
+
+                var next = ParseTaskNodeOrLogNodeOrNull();
+                return new TargetNode(next);
+            }
+            else if (_scanner.Token is TaskToken)
+            {
+                Consume<TaskToken>();
+
+                var next = ParseLogNodeOrNull();
+                return new TaskNode(next);
+            }
+
+            return ParseLogNodeWithType(LogNodeType.Direct);
+        }
+
+        private AstNode ParseQuery()
+        {
+            if (_scanner.Token is SingleSlashToken)
+            {
+                Consume<SingleSlashToken>();
+                return ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode();
+            }
+            else if (_scanner.Token is DoubleSlashToken)
+            {
+                Consume<DoubleSlashToken>();
+                return ParseLogNodeWithType(LogNodeType.All);
+            }
+
+            throw new ParseException(_scanner.Expression);
         }
     }
 }

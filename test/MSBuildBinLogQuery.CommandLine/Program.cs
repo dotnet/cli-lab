@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Logging.Query.Ast;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Messaging;
@@ -212,7 +213,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             var queryNode = Parser.Parse(expression);
 
-            for (; queryNode != null; queryNode = queryNode.Next)
+            for (; queryNode != null; queryNode = (queryNode as ComponentNode)?.Next)
             {
                 Console.WriteLine(queryNode);
             }

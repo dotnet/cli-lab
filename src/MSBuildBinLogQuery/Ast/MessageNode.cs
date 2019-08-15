@@ -3,9 +3,9 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class MessageNode : QueryNode, IEquatable<MessageNode>
+    public class MessageNode : LogNode, IEquatable<MessageNode>
     {
-        public MessageNode(QueryNode next) : base(next)
+        public MessageNode(LogNodeType type) : base(type)
         {
         }
 
