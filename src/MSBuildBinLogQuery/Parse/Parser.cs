@@ -84,9 +84,9 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<TaskToken>();
 
-            if (_scanner.Token is SlashToken)
+            if (_scanner.Token is SingleSlashToken)
             {
-                Consume<SlashToken>();
+                Consume<SingleSlashToken>();
 
                 var next = ParseLogNode();
                 return new TaskNode(next);
@@ -101,9 +101,9 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<TargetToken>();
 
-            if (_scanner.Token is SlashToken)
+            if (_scanner.Token is SingleSlashToken)
             {
-                Consume<SlashToken>();
+                Consume<SingleSlashToken>();
 
                 if (_scanner.Token is TaskToken)
                 {
@@ -126,9 +126,9 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<ProjectToken>();
 
-            if (_scanner.Token is SlashToken)
+            if (_scanner.Token is SingleSlashToken)
             {
-                Consume<SlashToken>();
+                Consume<SingleSlashToken>();
 
                 if (_scanner.Token is TargetToken)
                 {
@@ -154,7 +154,7 @@ namespace Microsoft.Build.Logging.Query.Parse
 
         private QueryNode ParseQueryNode()
         {
-            Consume<SlashToken>();
+            Consume<SingleSlashToken>();
 
             if (_scanner.Token is ProjectToken)
             {
