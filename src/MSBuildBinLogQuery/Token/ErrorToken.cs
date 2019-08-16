@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class ErrorToken : Token, IEquatable<ErrorToken>
+    public sealed class ErrorToken : Token, IEquatable<ErrorToken>
     {
         public ErrorToken() : base()
         {

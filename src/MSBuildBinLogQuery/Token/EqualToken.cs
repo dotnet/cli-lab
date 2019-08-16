@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class EqualToken : Token, IEquatable<EqualToken>
+    public sealed class EqualToken : Token, IEquatable<EqualToken>
     {
         public EqualToken() : base()
         {

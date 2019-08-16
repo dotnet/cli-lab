@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class WarningToken : Token, IEquatable<WarningToken>
+    public sealed class WarningToken : Token, IEquatable<WarningToken>
     {
         public WarningToken() : base()
         {

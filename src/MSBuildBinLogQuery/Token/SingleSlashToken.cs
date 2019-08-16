@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class SingleSlashToken : Token, IEquatable<SingleSlashToken>
+    public sealed class SingleSlashToken : Token, IEquatable<SingleSlashToken>
     {
         public SingleSlashToken() : base()
         {

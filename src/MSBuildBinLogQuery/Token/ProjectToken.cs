@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class ProjectToken : Token, IEquatable<ProjectToken>
+    public sealed class ProjectToken : Token, IEquatable<ProjectToken>
     {
         public ProjectToken() : base()
         {

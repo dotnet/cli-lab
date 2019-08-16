@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class CommaToken : Token, IEquatable<CommaToken>
+    public sealed class CommaToken : Token, IEquatable<CommaToken>
     {
         public CommaToken() : base()
         {

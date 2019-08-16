@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class RightBracketToken : Token, IEquatable<RightBracketToken>
+    public sealed class RightBracketToken : Token, IEquatable<RightBracketToken>
     {
         public RightBracketToken() : base()
         {
