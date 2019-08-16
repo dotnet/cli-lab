@@ -28,7 +28,7 @@ namespace Microsoft.Build.Logging.Query.Scan
             switch (_char)
             {
                 case '\0':
-                    Token = new EofToken();
+                    Token = EofToken.Instance;
                     break;
                 case '/':
                     ReadNextCharacter();
@@ -36,29 +36,29 @@ namespace Microsoft.Build.Logging.Query.Scan
                     if (_char == '/')
                     {
                         ReadNextCharacter();
-                        Token = new DoubleSlashToken();
+                        Token = DoubleSlashToken.Instance;
                     }
                     else
                     {
-                        Token = new SingleSlashToken();
+                        Token = SingleSlashToken.Instance;
                     }
 
                     break;
                 case '[':
                     ReadNextCharacter();
-                    Token = new LeftBracketToken();
+                    Token = LeftBracketToken.Instance;
                     break;
                 case ']':
                     ReadNextCharacter();
-                    Token = new RightBracketToken();
+                    Token = RightBracketToken.Instance;
                     break;
                 case '=':
                     ReadNextCharacter();
-                    Token = new EqualToken();
+                    Token = EqualToken.Instance;
                     break;
                 case ',':
                     ReadNextCharacter();
-                    Token = new CommaToken();
+                    Token = CommaToken.Instance;
                     break;
                 case '\"':
                     ReadNextCharacter();
@@ -66,19 +66,19 @@ namespace Microsoft.Build.Logging.Query.Scan
                     break;
                 case 'M':
                 case 'm':
-                    ReadNextKeyword("MESSAGE", () => new MessageToken());
+                    ReadNextKeyword("MESSAGE", () => MessageToken.Instance);
                     break;
                 case 'W':
                 case 'w':
-                    ReadNextKeyword("WARNING", () => new WarningToken());
+                    ReadNextKeyword("WARNING", () => WarningToken.Instance);
                     break;
                 case 'E':
                 case 'e':
-                    ReadNextKeyword("ERROR", () => new ErrorToken());
+                    ReadNextKeyword("ERROR", () => ErrorToken.Instance);
                     break;
                 case 'P':
                 case 'p':
-                    ReadNextKeyword("PROJECT", () => new ProjectToken());
+                    ReadNextKeyword("PROJECT", () => ProjectToken.Instance);
                     break;
                 case 'T':
                 case 't':
@@ -93,12 +93,12 @@ namespace Microsoft.Build.Logging.Query.Scan
 
                     if (char.ToUpper(_char) == 'R')
                     {
-                        ReadNextKeyword("RGET", () => new TargetToken());
+                        ReadNextKeyword("RGET", () => TargetToken.Instance);
                         break;
                     }
                     else if (char.ToUpper(_char) == 'S')
                     {
-                        ReadNextKeyword("SK", () => new TaskToken());
+                        ReadNextKeyword("SK", () => TaskToken.Instance);
                         break;
                     }
                     else
@@ -157,7 +157,7 @@ namespace Microsoft.Build.Logging.Query.Scan
 
         private void SkipWhiteSpace()
         {
-            while (IsWhiteSpace(_char) && ReadNextCharacter());
+            while (IsWhiteSpace(_char) && ReadNextCharacter()) { }
         }
 
         private static bool IsWhiteSpace(char c)
