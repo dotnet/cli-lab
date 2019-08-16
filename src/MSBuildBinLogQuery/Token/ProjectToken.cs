@@ -21,7 +21,7 @@ namespace Microsoft.Build.Logging.Query.Token
 
         public override int GetHashCode()
         {
-            return 1;
+            return nameof(ProjectToken).GetHashCode();
         }
     }
 }
