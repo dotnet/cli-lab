@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class PathToken : Token, IEquatable<PathToken>
+    public class PathToken : Token
     {
-        public PathToken() : base()
+        public static PathToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new PathToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as PathToken);
-        }
+        private static PathToken _instance;
 
-        public bool Equals([AllowNull] PathToken other)
+        private PathToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(PathToken).GetHashCode();
         }
     }
 }

@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class IdToken : Token, IEquatable<IdToken>
+    public class IdToken : Token
     {
-        public IdToken() : base()
+        public static IdToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new IdToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as IdToken);
-        }
+        private static IdToken _instance;
 
-        public bool Equals([AllowNull] IdToken other)
+        private IdToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(IdToken).GetHashCode();
         }
     }
 }

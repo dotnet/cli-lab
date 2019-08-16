@@ -19,7 +19,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
         {
             if (args.Length != 2)
             {
-                PrintErrorMessage("Exactly one argument is required");
+                PrintErrorMessage("Exactly two argument is required");
             }
 
             if (!File.Exists(args[0]))

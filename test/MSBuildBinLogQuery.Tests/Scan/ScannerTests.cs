@@ -16,7 +16,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "message",
                 new Token.Token[]
                 {
-                    new MessageToken()
+                    MessageToken.Instance
                 }
             };
 
@@ -25,7 +25,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "Message",
                 new Token.Token[]
                 {
-                    new MessageToken()
+                    MessageToken.Instance
                 }
             };
 
@@ -34,7 +34,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "MESSAGE",
                 new Token.Token[]
                 {
-                    new MessageToken()
+                    MessageToken.Instance
                 }
             };
 
@@ -43,7 +43,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "warning",
                 new Token.Token[]
                 {
-                    new WarningToken()
+                    WarningToken.Instance
                 }
             };
 
@@ -52,7 +52,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "Warning",
                 new Token.Token[]
                 {
-                    new WarningToken()
+                    WarningToken.Instance
                 }
             };
 
@@ -61,7 +61,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "WARNING",
                 new Token.Token[]
                 {
-                    new WarningToken()
+                    WarningToken.Instance
                 }
             };
 
@@ -70,7 +70,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "error",
                 new Token.Token[]
                 {
-                    new ErrorToken()
+                    ErrorToken.Instance
                 }
             };
 
@@ -79,7 +79,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "Error",
                 new Token.Token[]
                 {
-                    new ErrorToken()
+                    ErrorToken.Instance
                 }
             };
 
@@ -88,7 +88,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "ERROR",
                 new Token.Token[]
                 {
-                    new ErrorToken()
+                    ErrorToken.Instance
                 }
             };
 
@@ -97,7 +97,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "project",
                 new Token.Token[]
                 {
-                    new ProjectToken()
+                    ProjectToken.Instance
                 }
             };
 
@@ -106,7 +106,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "Project",
                 new Token.Token[]
                 {
-                    new ProjectToken()
+                    ProjectToken.Instance
                 }
             };
 
@@ -115,7 +115,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "PROJECT",
                 new Token.Token[]
                 {
-                    new ProjectToken()
+                    ProjectToken.Instance
                 }
             };
 
@@ -124,7 +124,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "target",
                 new Token.Token[]
                 {
-                    new TargetToken()
+                    TargetToken.Instance
                 }
             };
 
@@ -133,7 +133,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "Target",
                 new Token.Token[]
                 {
-                    new TargetToken()
+                    TargetToken.Instance
                 }
             };
 
@@ -142,7 +142,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "TARGET",
                 new Token.Token[]
                 {
-                    new TargetToken()
+                    TargetToken.Instance
                 }
             };
 
@@ -151,7 +151,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "task",
                 new Token.Token[]
                 {
-                    new TaskToken()
+                    TaskToken.Instance
                 }
             };
 
@@ -160,7 +160,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "Task",
                 new Token.Token[]
                 {
-                    new TaskToken()
+                    TaskToken.Instance
                 }
             };
 
@@ -169,7 +169,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "TASK",
                 new Token.Token[]
                 {
-                    new TaskToken()
+                    TaskToken.Instance
                 }
             };
 
@@ -178,7 +178,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "/",
                 new Token.Token[]
                 {
-                    new SingleSlashToken()
+                    SingleSlashToken.Instance
                 }
             };
 
@@ -187,7 +187,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "//",
                 new Token.Token[]
                 {
-                    new DoubleSlashToken()
+                    DoubleSlashToken.Instance
                 }
             };
 
@@ -196,7 +196,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "[",
                 new Token.Token[]
                 {
-                    new LeftBracketToken()
+                    LeftBracketToken.Instance
                 }
             };
 
@@ -205,7 +205,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "]",
                 new Token.Token[]
                 {
-                    new RightBracketToken()
+                    RightBracketToken.Instance
                 }
             };
 
@@ -214,7 +214,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "=",
                 new Token.Token[]
                 {
-                    new EqualToken()
+                    EqualToken.Instance
                 }
             };
 
@@ -223,7 +223,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 ",",
                 new Token.Token[]
                 {
-                    new CommaToken()
+                    CommaToken.Instance
                 }
             };
 
@@ -268,8 +268,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "/message",
                 new Token.Token[]
                 {
-                    new SingleSlashToken(),
-                    new MessageToken()
+                    SingleSlashToken.Instance,
+                    MessageToken.Instance
                 }
             };
 
@@ -278,14 +278,14 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "/project[]/target/error",
                 new Token.Token[]
                 {
-                    new SingleSlashToken(),
-                    new ProjectToken(),
-                    new LeftBracketToken(),
-                    new RightBracketToken(),
-                    new SingleSlashToken(),
-                    new TargetToken(),
-                    new SingleSlashToken(),
-                    new ErrorToken()
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    TargetToken.Instance,
+                    SingleSlashToken.Instance,
+                    ErrorToken.Instance
                 }
             };
 
@@ -294,12 +294,12 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "   /   target[ ] / warning",
                 new Token.Token[]
                 {
-                    new SingleSlashToken(),
-                    new TargetToken(),
-                    new LeftBracketToken(),
-                    new RightBracketToken(),
-                    new SingleSlashToken(),
-                    new WarningToken()
+                    SingleSlashToken.Instance,
+                    TargetToken.Instance,
+                    LeftBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    WarningToken.Instance
                 }
             };
 
@@ -308,15 +308,15 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "///message////warning/error//",
                 new Token.Token[]
                 {
-                    new DoubleSlashToken(),
-                    new SingleSlashToken(),
-                    new MessageToken(),
-                    new DoubleSlashToken(),
-                    new DoubleSlashToken(),
-                    new WarningToken(),
-                    new SingleSlashToken(),
-                    new ErrorToken(),
-                    new DoubleSlashToken()
+                    DoubleSlashToken.Instance,
+                    SingleSlashToken.Instance,
+                    MessageToken.Instance,
+                    DoubleSlashToken.Instance,
+                    DoubleSlashToken.Instance,
+                    WarningToken.Instance,
+                    SingleSlashToken.Instance,
+                    ErrorToken.Instance,
+                    DoubleSlashToken.Instance
                 }
             };
 
@@ -325,8 +325,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "message message",
                 new Token.Token[]
                 {
-                    new MessageToken(),
-                    new MessageToken()
+                    MessageToken.Instance,
+                    MessageToken.Instance
                 }
             };
 
@@ -335,8 +335,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "messagemessage",
                 new Token.Token[]
                 {
-                    new MessageToken(),
-                    new MessageToken()
+                    MessageToken.Instance,
+                    MessageToken.Instance
                 }
             };
 
@@ -345,10 +345,10 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "///////",
                 new Token.Token[]
                 {
-                    new DoubleSlashToken(),
-                    new DoubleSlashToken(),
-                    new DoubleSlashToken(),
-                    new SingleSlashToken()
+                    DoubleSlashToken.Instance,
+                    DoubleSlashToken.Instance,
+                    DoubleSlashToken.Instance,
+                    SingleSlashToken.Instance
                 }
             };
 
@@ -357,15 +357,15 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "/project[task]  // target /message",
                 new Token.Token[]
                 {
-                    new SingleSlashToken(),
-                    new ProjectToken(),
-                    new LeftBracketToken(),
-                    new TaskToken(),
-                    new RightBracketToken(),
-                    new DoubleSlashToken(),
-                    new TargetToken(),
-                    new SingleSlashToken(),
-                    new MessageToken()
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    TaskToken.Instance,
+                    RightBracketToken.Instance,
+                    DoubleSlashToken.Instance,
+                    TargetToken.Instance,
+                    SingleSlashToken.Instance,
+                    MessageToken.Instance
                 }
             };
 
@@ -374,22 +374,22 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                 "/Project[Path=\"./project.csproj\"]/Target[Name=\"CoreCompile\"]//Error",
                 new Token.Token[]
                 {
-                    new SingleSlashToken(),
-                    new ProjectToken(),
-                    new LeftBracketToken(),
-                    new PathToken(),
-                    new EqualToken(),
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    PathToken.Instance,
+                    EqualToken.Instance,
                     new StringToken("./project.csproj"),
-                    new RightBracketToken(),
-                    new SingleSlashToken(),
-                    new TargetToken(),
-                    new LeftBracketToken(),
-                    new NameToken(),
-                    new EqualToken(),
+                    RightBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    TargetToken.Instance,
+                    LeftBracketToken.Instance,
+                    NameToken.Instance,
+                    EqualToken.Instance,
                     new StringToken("CoreCompile"),
-                    new RightBracketToken(),
-                    new DoubleSlashToken(),
-                    new ErrorToken()
+                    RightBracketToken.Instance,
+                    DoubleSlashToken.Instance,
+                    ErrorToken.Instance
                 }
             };
         }

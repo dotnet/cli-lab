@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class SingleSlashToken : Token, IEquatable<SingleSlashToken>
+    public class SingleSlashToken : Token
     {
-        public SingleSlashToken() : base()
+        public static SingleSlashToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new SingleSlashToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as SingleSlashToken);
-        }
+        private static SingleSlashToken _instance;
 
-        public bool Equals([AllowNull] SingleSlashToken other)
+        private SingleSlashToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return 1;
         }
     }
 }

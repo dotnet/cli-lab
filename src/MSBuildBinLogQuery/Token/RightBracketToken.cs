@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class RightBracketToken : Token, IEquatable<RightBracketToken>
+    public class RightBracketToken : Token
     {
-        public RightBracketToken() : base()
+        public static RightBracketToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new RightBracketToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as RightBracketToken);
-        }
+        private static RightBracketToken _instance;
 
-        public bool Equals([AllowNull] RightBracketToken other)
+        private RightBracketToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return 1;
         }
     }
 }

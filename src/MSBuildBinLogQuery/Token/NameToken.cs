@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class NameToken : Token, IEquatable<NameToken>
+    public class NameToken : Token
     {
-        public NameToken() : base()
+        public static NameToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new NameToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as NameToken);
-        }
+        private static NameToken _instance;
 
-        public bool Equals([AllowNull] NameToken other)
+        private NameToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(NameToken).GetHashCode();
         }
     }
 }
