@@ -78,7 +78,21 @@ namespace Microsoft.Build.Logging.Query.Scan
                     break;
                 case 'P':
                 case 'p':
-                    ReadNextKeyword("PROJECT", () => new ProjectToken());
+                    ReadNextCharacter();
+
+                    if (char.ToUpper(_char) == 'R')
+                    {
+                        ReadNextKeyword("ROJECT", () => new ProjectToken());
+                    }
+                    else if (char.ToUpper(_char) == 'A')
+                    {
+                        ReadNextKeyword("ATH", () => new ProjectToken());
+                    }
+                    else
+                    {
+                        throw new ScanException(Expression);
+                    }
+                    
                     break;
                 case 'T':
                 case 't':
@@ -94,17 +108,25 @@ namespace Microsoft.Build.Logging.Query.Scan
                     if (char.ToUpper(_char) == 'R')
                     {
                         ReadNextKeyword("RGET", () => new TargetToken());
-                        break;
                     }
                     else if (char.ToUpper(_char) == 'S')
                     {
                         ReadNextKeyword("SK", () => new TaskToken());
-                        break;
                     }
                     else
                     {
                         throw new ScanException(Expression);
                     }
+
+                    break;
+                case 'I':
+                case 'i':
+                    ReadNextKeyword("ID", () => new IdToken());
+                    break;
+                case 'N':
+                case 'n':
+                    ReadNextKeyword("NAME", () => new NameToken());
+                    break;
                 default:
                     throw new ScanException(Expression);
             }
