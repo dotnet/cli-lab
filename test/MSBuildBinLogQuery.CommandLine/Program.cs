@@ -5,6 +5,8 @@ using System.Linq;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Messaging;
+using Microsoft.Build.Logging.Query.Scan;
+using Microsoft.Build.Logging.Query.Token;
 
 namespace Microsoft.Build.Logging.Query.Commandline
 {
@@ -12,9 +14,9 @@ namespace Microsoft.Build.Logging.Query.Commandline
     {
         public static void Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length != 2)
             {
-                PrintErrorMessage("Exactly one argument is required");
+                PrintErrorMessage("Exactly two argument is required");
             }
 
             if (!File.Exists(args[0]))
@@ -29,6 +31,13 @@ namespace Microsoft.Build.Logging.Query.Commandline
             var build = graphBuilder.HandleEvents(events.ToArray());
 
             PrintProjectNodes(build);
+
+            var scanner = new Scanner(args[1]);
+
+            for (; !(scanner.Token is EofToken); scanner.ReadNextToken())
+            {
+                Console.WriteLine(scanner.Token + $" {(scanner.Token as StringToken)?.Value ?? string.Empty}");
+            }
         }
 
         private static void PrintProjectNodes(Component.Build build)
