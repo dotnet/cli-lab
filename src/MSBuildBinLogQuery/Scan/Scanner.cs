@@ -128,6 +128,11 @@ namespace Microsoft.Build.Logging.Query.Scan
                     ReadNextKeyword("NAME", () => NameToken.Instance);
                     break;
                 default:
+                    if (char.IsDigit(_char))
+                    {
+                        Token = new IntegerToken(ReadNextInteger());
+                    }
+
                     throw new ScanException(Expression);
             }
         }
@@ -163,6 +168,24 @@ namespace Microsoft.Build.Logging.Query.Scan
             }
 
             Token = thunk.Invoke();
+        }
+
+        private int ReadNextInteger()
+        {
+            var stringBuilder = new StringBuilder();
+
+            while (char.IsDigit(_char))
+            {
+                stringBuilder.Append(_char);
+                ReadNextCharacter();
+            }
+
+            if (int.TryParse(stringBuilder.ToString(), out var value))
+            {
+                return value;
+            }
+
+            throw new ScanException(Expression);
         }
 
         private bool ReadNextCharacter()
