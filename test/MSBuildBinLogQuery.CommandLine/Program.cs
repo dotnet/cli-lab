@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Logging.Query.Ast;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Messaging;
+using Microsoft.Build.Logging.Query.Parse;
 using Microsoft.Build.Logging.Query.Scan;
 using Microsoft.Build.Logging.Query.Token;
 
@@ -31,13 +33,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             var build = graphBuilder.HandleEvents(events.ToArray());
 
             PrintProjectNodes(build);
-
-            var scanner = new Scanner(args[1]);
-
-            for (; !(scanner.Token is EofToken); scanner.ReadNextToken())
-            {
-                Console.WriteLine(scanner.Token + $" {(scanner.Token as StringToken)?.Value ?? string.Empty}");
-            }
+            PrintScanAndParseResults(args[1]);
         }
 
         private static void PrintProjectNodes(Component.Build build)
@@ -54,6 +50,12 @@ namespace Microsoft.Build.Logging.Query.Commandline
             // PrintAllLogs(build.AllMessages, "all messages:");
             PrintAllLogs(build.AllWarnings, "all warnings:");
             PrintAllLogs(build.AllErrors, "all errors:");
+        }
+
+        private static void PrintScanAndParseResults(string expression)
+        {
+            PrintTokens(expression);
+            PrintAst(expression);
         }
 
         private static void PrintErrorMessage(string message)
@@ -189,6 +191,34 @@ namespace Microsoft.Build.Logging.Query.Commandline
             {
                 Console.WriteLine($"{indent}{log.GetType().Name}: {log.Text}");
             }
+        }
+
+        private static void PrintTokens(string expression, string header = "tokens:")
+        {
+            Console.WriteLine(header);
+
+            var scanner = new Scanner(expression);
+
+            for (; !(scanner.Token is EofToken); scanner.ReadNextToken())
+            {
+                Console.WriteLine(scanner.Token + (scanner.Token is StringToken ? $" {(scanner.Token as StringToken).Value}" : ""));
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintAst(string expression, string header = "AST:")
+        {
+            Console.WriteLine(header);
+
+            var queryNode = Parser.Parse(expression);
+
+            for (; queryNode != null; queryNode = (queryNode as ComponentNode)?.Next)
+            {
+                Console.WriteLine(queryNode);
+            }
+
+            Console.WriteLine();
         }
     }
 }
