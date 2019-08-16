@@ -131,6 +131,7 @@ namespace Microsoft.Build.Logging.Query.Scan
                     if (char.IsDigit(_char))
                     {
                         Token = new IntegerToken(ReadNextInteger());
+                        break;
                     }
 
                     throw new ScanException(Expression);

@@ -265,6 +265,33 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
 
             yield return new object[]
             {
+                "9",
+                new Token.Token[]
+                {
+                    new IntegerToken(9)
+                }
+            };
+
+            yield return new object[]
+            {
+                "19980321",
+                new Token.Token[]
+                {
+                    new IntegerToken(19980321)
+                }
+            };
+
+            yield return new object[]
+            {
+                "0321",
+                new Token.Token[]
+                {
+                    new IntegerToken(321)
+                }
+            };
+
+            yield return new object[]
+            {
                 "/message",
                 new Token.Token[]
                 {
@@ -392,6 +419,58 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                     ErrorToken.Instance
                 }
             };
+
+            yield return new object[]
+            {
+                "/Target[Name=\"Optimize\"]/Task[Id=81]//Warning",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    TargetToken.Instance,
+                    LeftBracketToken.Instance,
+                    NameToken.Instance,
+                    EqualToken.Instance,
+                    new StringToken("Optimize"),
+                    RightBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    TaskToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(81),
+                    RightBracketToken.Instance,
+                    DoubleSlashToken.Instance,
+                    WarningToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[Id=7]/Target[Id=42, Name=\"Link\"]//Message",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(7),
+                    RightBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    TargetToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(42),
+                    CommaToken.Instance,
+                    NameToken.Instance,
+                    EqualToken.Instance,
+                    new StringToken("Link"),
+                    RightBracketToken.Instance,
+                    DoubleSlashToken.Instance,
+                    MessageToken.Instance
+                }
+            };
         }
 
         [Theory]
@@ -421,7 +500,10 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("<>")]
         [InlineData("hello")]
         [InlineData("messages")]
-        [InlineData("0123456789")]
+        [InlineData("-123456")]
+        [InlineData("123.456")]
+        [InlineData("0x123def")]
+        [InlineData("9876543210")]
         [InlineData("/project[]/message?")]
         [InlineData("\\project[]\\message")]
         public void TestScannedTokensException(string expression)
