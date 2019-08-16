@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class DoubleSlashToken : Token, IEquatable<DoubleSlashToken>
+    public class DoubleSlashToken : Token
     {
-        public DoubleSlashToken() : base()
+        public static DoubleSlashToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new DoubleSlashToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as DoubleSlashToken);
-        }
+        private static DoubleSlashToken _instance;
 
-        public bool Equals([AllowNull] DoubleSlashToken other)
+        private DoubleSlashToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return 1;
         }
     }
 }

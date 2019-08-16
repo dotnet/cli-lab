@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public class CommaToken : Token, IEquatable<CommaToken>
+    public class CommaToken : Token
     {
-        public CommaToken() : base()
+        public static CommaToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new CommaToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as CommaToken);
-        }
+        private static CommaToken _instance;
 
-        public bool Equals([AllowNull] CommaToken other)
+        private CommaToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return 1;
         }
     }
 }
