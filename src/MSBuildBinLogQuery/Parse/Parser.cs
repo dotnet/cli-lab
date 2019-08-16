@@ -46,39 +46,35 @@ namespace Microsoft.Build.Logging.Query.Parse
 
         private LogNodeType ParseSlash()
         {
-            if (_scanner.Token is SingleSlashToken)
+            switch (_scanner.Token)
             {
-                Consume<SingleSlashToken>();
-                return LogNodeType.Direct;
+                case SingleSlashToken _:
+                    Consume<SingleSlashToken>();
+                    return LogNodeType.Direct;
+                case DoubleSlashToken _:
+                    Consume<DoubleSlashToken>();
+                    return LogNodeType.All;
+                default:
+                    throw new ParseException(_scanner.Expression);
             }
-            else if (_scanner.Token is DoubleSlashToken)
-            {
-                Consume<DoubleSlashToken>();
-                return LogNodeType.All;
-            }
-
-            throw new ParseException(_scanner.Expression);
         }
 
         private LogNode ParseLogNodeWithType(LogNodeType type)
         {
-            if (_scanner.Token is MessageToken)
+            switch (_scanner.Token)
             {
-                Consume<MessageToken>();
-                return new MessageNode(type);
+                case MessageToken _:
+                    Consume<MessageToken>();
+                    return new MessageNode(type);
+                case WarningToken _:
+                    Consume<WarningToken>();
+                    return new WarningNode(type);
+                case ErrorToken _:
+                    Consume<ErrorToken>();
+                    return new ErrorNode(type);
+                default:
+                    throw new ParseException(_scanner.Expression);
             }
-            else if (_scanner.Token is WarningToken)
-            {
-                Consume<WarningToken>();
-                return new WarningNode(type);
-            }
-            else if (_scanner.Token is ErrorToken)
-            {
-                Consume<ErrorToken>();
-                return new ErrorNode(type);
-            }
-
-            throw new ParseException(_scanner.Expression);
         }
 
         private LogNode ParseLogNode()
@@ -89,120 +85,117 @@ namespace Microsoft.Build.Logging.Query.Parse
 
         private LogNode ParseLogNodeOrNull()
         {
-            if (_scanner.Token is SingleSlashToken || _scanner.Token is DoubleSlashToken)
+            switch (_scanner.Token)
             {
-                return ParseLogNode();
+                case SingleSlashToken _:
+                case DoubleSlashToken _:
+                    return ParseLogNode();
+                default:
+                    return null;
             }
-
-            return null;
         }
 
         private AstNode ParseTaskNodeOrSingleSlashLogNode()
         {
-            if (_scanner.Token is TaskToken)
+            switch (_scanner.Token)
             {
-                Consume<TaskToken>();
+                case TaskToken _:
+                    Consume<TaskToken>();
 
-                var next = ParseLogNodeOrNull();
-                return new TaskNode(next);
+                    var next = ParseLogNodeOrNull();
+                    return new TaskNode(next);
+                default:
+                    return ParseLogNodeWithType(LogNodeType.Direct);
             }
-
-            return ParseLogNodeWithType(LogNodeType.Direct);
         }
 
         private AstNode ParseTaskNodeOrLogNodeOrNull()
         {
-            if (_scanner.Token is SingleSlashToken)
+            switch (_scanner.Token)
             {
-                Consume<SingleSlashToken>();
-                return ParseTaskNodeOrSingleSlashLogNode();
+                case SingleSlashToken _:
+                    Consume<SingleSlashToken>();
+                    return ParseTaskNodeOrSingleSlashLogNode();
+                case DoubleSlashToken _:
+                    Consume<DoubleSlashToken>();
+                    return ParseLogNodeWithType(LogNodeType.All);
+                default:
+                    return null;
             }
-            else if (_scanner.Token is DoubleSlashToken)
-            {
-                Consume<DoubleSlashToken>();
-                return ParseLogNodeWithType(LogNodeType.All);
-            }
-
-            return null;
         }
 
         private AstNode ParseTargetNodeOrTaskNodeOrSingleSlashLogNode()
         {
-            if (_scanner.Token is TargetToken)
+            switch (_scanner.Token)
             {
-                Consume<TargetToken>();
+                case TargetToken _:
+                    Consume<TargetToken>();
 
-                var next = ParseTaskNodeOrLogNodeOrNull();
-                return new TargetNode(next);
+                    var next = ParseTaskNodeOrLogNodeOrNull();
+                    return new TargetNode(next);
+                case TaskToken _:
+                    Consume<TaskToken>();
+
+                    next = ParseLogNodeOrNull();
+                    return new TaskNode(next);
+                default:
+                    return ParseLogNodeWithType(LogNodeType.Direct);
             }
-            else if (_scanner.Token is TaskToken)
-            {
-                Consume<TaskToken>();
-
-                var next = ParseLogNodeOrNull();
-                return new TaskNode(next);
-            }
-
-            return ParseLogNodeWithType(LogNodeType.Direct);
         }
 
         private AstNode ParseTargetNodeOrTaskNodeOrLogNodeOrNull()
         {
-            if (_scanner.Token is SingleSlashToken)
+            switch (_scanner.Token)
             {
-                Consume<SingleSlashToken>();
-                return ParseTargetNodeOrTaskNodeOrSingleSlashLogNode();
+                case SingleSlashToken _:
+                    Consume<SingleSlashToken>();
+                    return ParseTargetNodeOrTaskNodeOrSingleSlashLogNode();
+                case DoubleSlashToken _:
+                    Consume<DoubleSlashToken>();
+                    return ParseLogNodeWithType(LogNodeType.All);
+                default:
+                    return null;
             }
-            else if (_scanner.Token is DoubleSlashToken)
-            {
-                Consume<DoubleSlashToken>();
-                return ParseLogNodeWithType(LogNodeType.All);
-            }
-
-            return null;
         }
 
         private AstNode ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode()
         {
-            if (_scanner.Token is ProjectToken)
+            switch (_scanner.Token)
             {
-                Consume<ProjectToken>();
+                case ProjectToken _:
+                    Consume<ProjectToken>();
 
-                var next = ParseTargetNodeOrTaskNodeOrLogNodeOrNull();
-                return new ProjectNode(next is TaskNode ? next as TaskNode : next);
+                    var next = ParseTargetNodeOrTaskNodeOrLogNodeOrNull();
+                    return new ProjectNode(next is TaskNode ? next as TaskNode : next);
+                case TargetToken _:
+                    Consume<TargetToken>();
+
+                    next = ParseTaskNodeOrLogNodeOrNull();
+                    return new TargetNode(next);
+                case TaskToken _:
+                    Consume<TaskToken>();
+
+                    next = ParseLogNodeOrNull();
+                    return new TaskNode(next);
+                default:
+                    return ParseLogNodeWithType(LogNodeType.Direct);
             }
-            else if (_scanner.Token is TargetToken)
-            {
-                Consume<TargetToken>();
-
-                var next = ParseTaskNodeOrLogNodeOrNull();
-                return new TargetNode(next);
-            }
-            else if (_scanner.Token is TaskToken)
-            {
-                Consume<TaskToken>();
-
-                var next = ParseLogNodeOrNull();
-                return new TaskNode(next);
-            }
-
-            return ParseLogNodeWithType(LogNodeType.Direct);
         }
 
         private AstNode ParseQuery()
         {
-            if (_scanner.Token is SingleSlashToken)
+            switch (_scanner.Token)
             {
-                Consume<SingleSlashToken>();
-                return ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode();
-            }
-            else if (_scanner.Token is DoubleSlashToken)
-            {
-                Consume<DoubleSlashToken>();
-                return ParseLogNodeWithType(LogNodeType.All);
-            }
+                case SingleSlashToken _:
+                    Consume<SingleSlashToken>();
+                    return ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode();
+                case DoubleSlashToken _:
+                    Consume<DoubleSlashToken>();
+                    return ParseLogNodeWithType(LogNodeType.All);
+                default:
+                    throw new ParseException(_scanner.Expression);
 
-            throw new ParseException(_scanner.Expression);
+            }
         }
     }
 }
