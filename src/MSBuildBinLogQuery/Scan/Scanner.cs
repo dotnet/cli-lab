@@ -86,7 +86,7 @@ namespace Microsoft.Build.Logging.Query.Scan
                     }
                     else if (char.ToUpper(_char) == 'A')
                     {
-                        ReadNextKeyword("ATH", () => new ProjectToken());
+                        ReadNextKeyword("ATH", () => new PathToken());
                     }
                     else
                     {

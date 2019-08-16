@@ -368,6 +368,30 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                     new MessageToken()
                 }
             };
+
+            yield return new object[]
+            {
+                "/Project[Path=\"./project.csproj\"]/Target[Name=\"CoreCompile\"]//Error",
+                new Token.Token[]
+                {
+                    new SingleSlashToken(),
+                    new ProjectToken(),
+                    new LeftBracketToken(),
+                    new PathToken(),
+                    new EqualToken(),
+                    new StringToken("./project.csproj"),
+                    new RightBracketToken(),
+                    new SingleSlashToken(),
+                    new TargetToken(),
+                    new LeftBracketToken(),
+                    new NameToken(),
+                    new EqualToken(),
+                    new StringToken("CoreCompile"),
+                    new RightBracketToken(),
+                    new DoubleSlashToken(),
+                    new ErrorToken()
+                }
+            };
         }
 
         [Theory]
