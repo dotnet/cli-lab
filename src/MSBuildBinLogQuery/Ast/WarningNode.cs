@@ -29,16 +29,12 @@ namespace Microsoft.Build.Logging.Query.Ast
 
         public override IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components)
         {
-            if (Type == LogNodeType.All)
+            return Type switch
             {
-                return components.SelectMany(component => component.AllWarnings);
-            }
-            else if (Type == LogNodeType.Direct)
-            {
-                return components.SelectMany(Component => Component.Warnings);
-            }
-
-            throw new ArgumentOutOfRangeException();
+                LogNodeType.All => components.SelectMany(component => component.AllWarnings),
+                LogNodeType.Direct => components.SelectMany(Component => Component.Warnings),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
     }
 }
