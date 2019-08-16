@@ -83,7 +83,7 @@ namespace Microsoft.Build.Logging.Query.Parse
             return ParseLogNodeWithType(type);
         }
 
-        private LogNode ParseLogNodeOrNull()
+        private LogNode ParseNullableLogNode()
         {
             switch (_scanner.Token)
             {
@@ -95,27 +95,27 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private AstNode ParseTaskNodeOrSingleSlashLogNode()
+        private AstNode ParseSingleSlashNodeUnderTarget()
         {
             switch (_scanner.Token)
             {
                 case TaskToken _:
                     Consume<TaskToken>();
 
-                    var next = ParseLogNodeOrNull();
+                    var next = ParseNullableLogNode();
                     return new TaskNode(next);
                 default:
                     return ParseLogNodeWithType(LogNodeType.Direct);
             }
         }
 
-        private AstNode ParseTaskNodeOrLogNodeOrNull()
+        private AstNode ParseNullableNodeUnderTarget()
         {
             switch (_scanner.Token)
             {
                 case SingleSlashToken _:
                     Consume<SingleSlashToken>();
-                    return ParseTaskNodeOrSingleSlashLogNode();
+                    return ParseSingleSlashNodeUnderTarget();
                 case DoubleSlashToken _:
                     Consume<DoubleSlashToken>();
                     return ParseLogNodeWithType(LogNodeType.All);
@@ -124,32 +124,32 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private AstNode ParseTargetNodeOrTaskNodeOrSingleSlashLogNode()
+        private AstNode ParseSingleSlashNodeUnderProject()
         {
             switch (_scanner.Token)
             {
                 case TargetToken _:
                     Consume<TargetToken>();
 
-                    var next = ParseTaskNodeOrLogNodeOrNull();
+                    var next = ParseNullableNodeUnderTarget();
                     return new TargetNode(next);
                 case TaskToken _:
                     Consume<TaskToken>();
 
-                    next = ParseLogNodeOrNull();
+                    next = ParseNullableLogNode();
                     return new TaskNode(next);
                 default:
                     return ParseLogNodeWithType(LogNodeType.Direct);
             }
         }
 
-        private AstNode ParseTargetNodeOrTaskNodeOrLogNodeOrNull()
+        private AstNode ParseNullableNodeUnderProject()
         {
             switch (_scanner.Token)
             {
                 case SingleSlashToken _:
                     Consume<SingleSlashToken>();
-                    return ParseTargetNodeOrTaskNodeOrSingleSlashLogNode();
+                    return ParseSingleSlashNodeUnderProject();
                 case DoubleSlashToken _:
                     Consume<DoubleSlashToken>();
                     return ParseLogNodeWithType(LogNodeType.All);
@@ -158,24 +158,24 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private AstNode ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode()
+        private AstNode ParseSingleSlashQueryNode()
         {
             switch (_scanner.Token)
             {
                 case ProjectToken _:
                     Consume<ProjectToken>();
 
-                    var next = ParseTargetNodeOrTaskNodeOrLogNodeOrNull();
+                    var next = ParseNullableNodeUnderProject();
                     return new ProjectNode(next is TaskNode ? next as TaskNode : next);
                 case TargetToken _:
                     Consume<TargetToken>();
 
-                    next = ParseTaskNodeOrLogNodeOrNull();
+                    next = ParseNullableNodeUnderTarget();
                     return new TargetNode(next);
                 case TaskToken _:
                     Consume<TaskToken>();
 
-                    next = ParseLogNodeOrNull();
+                    next = ParseNullableLogNode();
                     return new TaskNode(next);
                 default:
                     return ParseLogNodeWithType(LogNodeType.Direct);
@@ -188,7 +188,7 @@ namespace Microsoft.Build.Logging.Query.Parse
             {
                 case SingleSlashToken _:
                     Consume<SingleSlashToken>();
-                    return ParseProjectNodeOrTargetNodeOrTaskNodeOrSingleSlashLogNode();
+                    return ParseSingleSlashQueryNode();
                 case DoubleSlashToken _:
                     Consume<DoubleSlashToken>();
                     return ParseLogNodeWithType(LogNodeType.All);
