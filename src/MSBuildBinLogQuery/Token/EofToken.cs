@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class EofToken : Token, IEquatable<EofToken>
+    public class EofToken : Token
     {
-        public EofToken() : base()
+        public static EofToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new EofToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as EofToken);
-        }
+        private static EofToken _instance;
 
-        public bool Equals([AllowNull] EofToken other)
+        private EofToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(EofToken).GetHashCode();
         }
     }
 }

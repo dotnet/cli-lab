@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class WarningToken : Token, IEquatable<WarningToken>
+    public class WarningToken : Token
     {
-        public WarningToken() : base()
+        public static WarningToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new WarningToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as WarningToken);
-        }
+        private static WarningToken _instance;
 
-        public bool Equals([AllowNull] WarningToken other)
+        private WarningToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(WarningToken).GetHashCode();
         }
     }
 }

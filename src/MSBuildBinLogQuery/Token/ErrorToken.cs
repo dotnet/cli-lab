@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class ErrorToken : Token, IEquatable<ErrorToken>
+    public class ErrorToken : Token
     {
-        public ErrorToken() : base()
+        public static ErrorToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new ErrorToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ErrorToken);
-        }
+        private static ErrorToken _instance;
 
-        public bool Equals([AllowNull] ErrorToken other)
+        private ErrorToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(ErrorToken).GetHashCode();
         }
     }
 }

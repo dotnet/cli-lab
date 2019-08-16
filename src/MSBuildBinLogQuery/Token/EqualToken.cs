@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class EqualToken : Token, IEquatable<EqualToken>
+    public class EqualToken : Token
     {
-        public EqualToken() : base()
+        public static EqualToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new EqualToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as EqualToken);
-        }
+        private static EqualToken _instance;
 
-        public bool Equals([AllowNull] EqualToken other)
+        private EqualToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(EqualToken).GetHashCode();
         }
     }
 }

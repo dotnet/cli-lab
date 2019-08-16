@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class TargetToken : Token, IEquatable<TargetToken>
+    public class TargetToken : Token
     {
-        public TargetToken() : base()
+        public static TargetToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new TargetToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as TargetToken);
-        }
+        private static TargetToken _instance;
 
-        public bool Equals([AllowNull] TargetToken other)
+        private TargetToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(TargetToken).GetHashCode();
         }
     }
 }

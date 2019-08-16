@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class TaskToken : Token, IEquatable<TaskToken>
+    public class TaskToken : Token
     {
-        public TaskToken() : base()
+        public static TaskToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new TaskToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as TaskToken);
-        }
+        private static TaskToken _instance;
 
-        public bool Equals([AllowNull] TaskToken other)
+        private TaskToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(TaskToken).GetHashCode();
         }
     }
 }

@@ -1,27 +1,24 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-
 namespace Microsoft.Build.Logging.Query.Token
 {
-    public sealed class MessageToken : Token, IEquatable<MessageToken>
+    public class MessageToken : Token
     {
-        public MessageToken() : base()
+        public static MessageToken Instance
         {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new MessageToken();
+                }
+
+                return _instance;
+            }
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as MessageToken);
-        }
+        private static MessageToken _instance;
 
-        public bool Equals([AllowNull] MessageToken other)
+        private MessageToken() : base()
         {
-            return other != null;
-        }
-
-        public override int GetHashCode()
-        {
-            return nameof(MessageToken).GetHashCode();
         }
     }
 }
