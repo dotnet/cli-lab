@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Logging.Query.Ast;
+using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Construction;
 using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Messaging;
@@ -34,6 +35,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
 
             PrintProjectNodes(build);
             PrintScanAndParseResults(args[1]);
+            PrintInterpResults(build, args[1]);
         }
 
         private static void PrintProjectNodes(Component.Build build)
@@ -211,11 +213,44 @@ namespace Microsoft.Build.Logging.Query.Commandline
         {
             Console.WriteLine(header);
 
-            var queryNode = Parser.Parse(expression);
+            var ast = Parser.Parse(expression);
 
-            for (; queryNode != null; queryNode = (queryNode as ComponentNode)?.Next)
+            for (; ast != null; ast = (ast as ComponentNode)?.Next)
             {
-                Console.WriteLine(queryNode);
+                Console.WriteLine(ast);
+            }
+
+            Console.WriteLine();
+        }
+
+        private static void PrintInterpResults(Component.Build build, string expression, string header = "interp result:")
+        {
+            Console.WriteLine(header);
+
+            var ast = Parser.Parse(expression);
+            var results = ast.Interpret(new[] { build });
+
+            foreach (var result in results)
+            {
+                var text = "";
+                if (result is Log log)
+                {
+                    text = log.Text;
+                }
+                else if (result is Project project)
+                {
+                    text = $"#{project.Id} {project.ProjectFile}";
+                }
+                else if (result is Target target)
+                {
+                    text = $"#{target.Id} {target.Name} {target.ParentProject.ProjectFile}";
+                }
+                else if (result is Task task)
+                {
+                    text = $"#{task.Id} {task.Name} {task.ParentTarget.Name} {task.ParentTarget.ParentProject.ProjectFile}";
+                }
+
+                Console.WriteLine($"  {result.ToString()}: {text}");
             }
 
             Console.WriteLine();
