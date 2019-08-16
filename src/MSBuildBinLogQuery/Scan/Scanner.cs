@@ -157,7 +157,7 @@ namespace Microsoft.Build.Logging.Query.Scan
 
         private void SkipWhiteSpace()
         {
-            while (IsWhiteSpace(_char) && ReadNextCharacter());
+            while (IsWhiteSpace(_char) && ReadNextCharacter()) { }
         }
 
         private static bool IsWhiteSpace(char c)
