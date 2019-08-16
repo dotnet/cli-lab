@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
@@ -23,5 +25,7 @@ namespace Microsoft.Build.Logging.Query.Ast
         {
             return 1;
         }
+
+        public abstract IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components);
     }
 }

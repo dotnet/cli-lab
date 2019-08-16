@@ -1,6 +1,8 @@
+using Microsoft.Build.Logging.Query.Result;
+
 namespace Microsoft.Build.Logging.Query.Messaging
 {
-    public abstract class Log
+    public abstract class Log : QueryResult
     {
         public string Text { get; }
         public Component.Component Parent { get; }

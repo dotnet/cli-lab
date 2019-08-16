@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
@@ -22,6 +26,17 @@ namespace Microsoft.Build.Logging.Query.Ast
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components)
+        {
+            var targets = Filter(components.Select(component => (Project)component));
+            return Next?.Interpret(targets) ?? targets;
+        }
+
+        private IEnumerable<Target> Filter(IEnumerable<Project> projects)
+        {
+            return projects.SelectMany(project => project.OrderedTargets);
         }
     }
 }

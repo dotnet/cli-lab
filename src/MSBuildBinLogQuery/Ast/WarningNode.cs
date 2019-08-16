@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
@@ -22,6 +25,20 @@ namespace Microsoft.Build.Logging.Query.Ast
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components)
+        {
+            if (Type == LogNodeType.All)
+            {
+                return components.SelectMany(component => component.AllWarnings);
+            }
+            else if (Type == LogNodeType.Direct)
+            {
+                return components.SelectMany(Component => Component.Warnings);
+            }
+
+            throw new ArgumentOutOfRangeException();
         }
     }
 }
