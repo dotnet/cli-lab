@@ -161,6 +161,51 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                         new List<ConstraintNode> { new IdNode(81) }),
                     new List<ConstraintNode> { new IdNode(9) })
             };
+
+            yield return new object[]
+            {
+                "/Project[]",
+                new ProjectNode(null as TargetNode)
+            };
+
+            yield return new object[]
+            {
+                "/Project[Id=536]",
+                new ProjectNode(
+                    null as TargetNode,
+                    new List<ConstraintNode> { new IdNode(536) })
+            };
+
+            yield return new object[]
+            {
+                "/Project[ID=448]/Error",
+                new ProjectNode(
+                    new MessageNode(LogNodeType.Direct),
+                    new List<ConstraintNode> { new IdNode(448) })
+            };
+
+            yield return new object[]
+            {
+                "/Project[Id=121]/Task[Id=421]",
+                new ProjectNode(
+                    new TargetNode(
+                        new TaskNode(
+                            null,
+                            new List<ConstraintNode> { new IdNode(421) })),
+                    new List<ConstraintNode> { new IdNode(121) })
+            };
+
+            yield return new object[]
+            {
+                "/Project[Id=1]/Target[Id=2]/Task[Id=3]//Message",
+                new ProjectNode(
+                    new TargetNode(
+                        new TaskNode(
+                            new MessageNode(LogNodeType.All),
+                            new List<ConstraintNode> { new IdNode(3) }),
+                        new List<ConstraintNode> { new IdNode(2) }),
+                    new List<ConstraintNode> { new IdNode(1) })
+            };
         }
 
         [Theory]
@@ -194,6 +239,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("/Task[ID=123")]
         [InlineData("/Target[Id=\"999\"]/Task")]
         [InlineData("/Target[Id,Id=123]")]
+        [InlineData("/Project[[Id=1]]")]
         public void TestParsedAstException(string expression)
         {
             Action action = () =>

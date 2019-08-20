@@ -213,7 +213,7 @@ namespace Microsoft.Build.Logging.Query.Parse
 
             var constraints = ParseConstraints(TryParseProjectConstraint);
             var next = ParseNullableNodeUnderProject();
-            var project = new ProjectNode(next is TaskNode ? next as TaskNode : next);
+            var project = new ProjectNode(next ?? next as TargetNode, constraints);
 
             return project;
         }
