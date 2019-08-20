@@ -5,7 +5,7 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public abstract class Component : QueryResult
+    public abstract class Component : IQueryResult
     {
         public abstract Component Parent { get; }
         public IReadOnlyList<Message> Messages => _messages;

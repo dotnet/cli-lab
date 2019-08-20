@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.Build.Logging.Query.Ast;
 using Microsoft.Build.Logging.Query.Scan;
 using Microsoft.Build.Logging.Query.Token;
@@ -7,6 +8,8 @@ namespace Microsoft.Build.Logging.Query.Parse
     public class Parser
     {
         private readonly Scanner _scanner;
+
+        private delegate bool TryConstraintParser(out ConstraintNode constraint);
 
         private Parser(Scanner scanner)
         {
@@ -95,18 +98,85 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private AstNode ParseSingleSlashNodeUnderTarget()
+        private IdNode ParseIdConstraint()
+        {
+            Consume<IdToken>();
+            Consume<EqualToken>();
+
+            var integerToken = _scanner.Token;
+            Consume<IntegerToken>();
+            var value = (integerToken as IntegerToken).Value;
+
+            return new IdNode(value);
+        }
+
+        private bool TryParseTaskConstraint(out ConstraintNode constraint)
         {
             switch (_scanner.Token)
             {
-                case TaskToken _:
-                    Consume<TaskToken>();
-
-                    var next = ParseNullableLogNode();
-                    return new TaskNode(next);
+                case IdToken _:
+                    constraint = ParseIdConstraint();
+                    return true;
                 default:
-                    return ParseLogNodeWithType(LogNodeType.Direct);
+                    constraint = null;
+                    return false;
+            };
+        }
+
+        private List<ConstraintNode> ParseConstraints(TryConstraintParser tryConstraintParser)
+        {
+            var constraints = new List<ConstraintNode>();
+
+            if (!(_scanner.Token is LeftBracketToken))
+            {
+                return constraints;
             }
+
+            Consume<LeftBracketToken>();
+
+            if (!tryConstraintParser.Invoke(out var constraint))
+            {
+                Consume<RightBracketToken>();
+                return constraints;
+            }
+
+            constraints.Add(constraint);
+
+            while (_scanner.Token is CommaToken)
+            {
+                Consume<CommaToken>();
+
+                if (!tryConstraintParser.Invoke(out var anotherConstraint))
+                {
+                    throw new ParseException(_scanner.Expression);
+                }
+
+                constraints.Add(anotherConstraint);
+            }
+
+            Consume<RightBracketToken>();
+
+            return constraints;
+        }
+
+        private TaskNode ParseTaskNode()
+        {
+            Consume<TaskToken>();
+
+            var constraints = ParseConstraints(TryParseTaskConstraint);
+            var next = ParseNullableLogNode();
+            var task = new TaskNode(next, constraints);
+
+            return task;
+        }
+
+        private AstNode ParseSingleSlashNodeUnderTarget()
+        {
+            return _scanner.Token switch
+            {
+                TaskToken _ => ParseTaskNode() as AstNode,
+                _ => ParseLogNodeWithType(LogNodeType.Direct) as AstNode,
+            };
         }
 
         private AstNode ParseNullableNodeUnderTarget()
@@ -134,10 +204,7 @@ namespace Microsoft.Build.Logging.Query.Parse
                     var next = ParseNullableNodeUnderTarget();
                     return new TargetNode(next);
                 case TaskToken _:
-                    Consume<TaskToken>();
-
-                    next = ParseNullableLogNode();
-                    return new TaskNode(next);
+                    return ParseTaskNode();
                 default:
                     return ParseLogNodeWithType(LogNodeType.Direct);
             }
@@ -173,10 +240,7 @@ namespace Microsoft.Build.Logging.Query.Parse
                     next = ParseNullableNodeUnderTarget();
                     return new TargetNode(next);
                 case TaskToken _:
-                    Consume<TaskToken>();
-
-                    next = ParseNullableLogNode();
-                    return new TaskNode(next);
+                    return ParseTaskNode();
                 default:
                     return ParseLogNodeWithType(LogNodeType.Direct);
             }

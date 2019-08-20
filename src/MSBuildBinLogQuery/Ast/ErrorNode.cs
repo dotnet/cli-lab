@@ -27,7 +27,7 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components)
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
         {
             return Type switch
             {

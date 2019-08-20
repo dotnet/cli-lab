@@ -8,18 +8,18 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class TargetNode : ComponentNode, IEquatable<TargetNode>
+    public class IdNode : ConstraintNode<int>, IEquatable<IdNode>
     {
-        public TargetNode(AstNode next, List<ConstraintNode> constraints = null) : base(next, constraints)
+        public IdNode(int value) : base(value)
         {
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as TargetNode);
+            return Equals(obj as IdNode);
         }
 
-        public bool Equals([AllowNull] TargetNode other)
+        public bool Equals([AllowNull] IdNode other)
         {
             return base.Equals(other);
         }
@@ -31,13 +31,11 @@ namespace Microsoft.Build.Logging.Query.Ast
 
         public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
         {
-            Debug.Assert(components.All(component => component is Project));
+            Debug.Assert(components.All(component => component is IComponentWithId));
 
-            var targets = components
-                .Select(component => component as Project)
-                .SelectMany(project => project.OrderedTargets);
-
-            return Next?.Filter(targets) ?? targets;
+            return components
+                .Select(component => component as IComponentWithId)
+                .Where(component => component.Id == Value);
         }
     }
 }

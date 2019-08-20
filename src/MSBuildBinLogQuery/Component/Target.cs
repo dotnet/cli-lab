@@ -6,7 +6,7 @@ using Microsoft.Build.Logging.Query.Graph;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Target : Component, IEquatable<Target>
+    public class Target : Component, IEquatable<Target>, IComponentWithId
     {
         public int Id { get; }
         public string Name { get; }

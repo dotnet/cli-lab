@@ -5,7 +5,7 @@ using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Task : Component, IEquatable<Task>
+    public class Task : Component, IEquatable<Task>, IComponentWithId
     {
         public int Id { get; }
         public string Name { get; }

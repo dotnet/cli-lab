@@ -9,7 +9,7 @@ using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Component
 {
-    public class Project : Component, IEquatable<Project>
+    public class Project : Component, IEquatable<Project>, IComponentWithId
     {
         public int Id { get; }
         public string ProjectFile { get; }

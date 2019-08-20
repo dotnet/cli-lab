@@ -2,7 +2,7 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Messaging
 {
-    public abstract class Log : QueryResult
+    public abstract class Log : IQueryResult
     {
         public string Text { get; }
         public Component.Component Parent { get; }

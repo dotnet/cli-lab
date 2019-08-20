@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Build.Logging.Query.Component;
@@ -9,7 +10,7 @@ namespace Microsoft.Build.Logging.Query.Ast
 {
     public class TaskNode : ComponentNode, IEquatable<TaskNode>
     {
-        public TaskNode(AstNode next) : base(next)
+        public TaskNode(AstNode next, List<ConstraintNode> constraints = null) : base(next, constraints)
         {
         }
 
@@ -28,15 +29,15 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components)
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
         {
-            var tasks = Filter(components.Select(component => (Target)component));
-            return Next?.Interpret(tasks) ?? tasks;
-        }
+            Debug.Assert(components.All(component => component is Target));
 
-        private IEnumerable<Task> Filter(IEnumerable<Target> targets)
-        {
-            return targets.SelectMany(target => target.OrderedTasks);
+            var tasks = components
+                .Select(component => component as Target)
+                .SelectMany(target => target.OrderedTasks);
+
+            return Next?.Filter(tasks) ?? tasks;
         }
     }
 }

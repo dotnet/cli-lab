@@ -228,7 +228,7 @@ namespace Microsoft.Build.Logging.Query.Commandline
             Console.WriteLine(header);
 
             var ast = Parser.Parse(expression);
-            var results = ast.Interpret(new[] { build });
+            var results = ast.Filter(new[] { build });
 
             foreach (var result in results)
             {

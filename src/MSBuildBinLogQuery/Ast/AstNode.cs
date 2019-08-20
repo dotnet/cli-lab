@@ -26,6 +26,6 @@ namespace Microsoft.Build.Logging.Query.Ast
             return 1;
         }
 
-        public abstract IEnumerable<QueryResult> Interpret(IEnumerable<Component.Component> components);
+        public abstract IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components);
     }
 }
