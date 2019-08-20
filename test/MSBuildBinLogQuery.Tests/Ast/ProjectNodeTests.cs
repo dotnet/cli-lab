@@ -10,12 +10,14 @@ namespace Microsoft.Build.Logging.Query.Tests.Ast
     {
         private readonly TargetNode _testTarget;
         private readonly TaskNode _testTask;
+        private readonly LogNode _testLog;
         private readonly List<ConstraintNode> _testConstraints;
 
         public ProjectNodeTests()
         {
             _testTarget = new TargetNode();
             _testTask = new TaskNode();
+            _testLog = new MessageNode(LogNodeType.All);
             _testConstraints = new List<ConstraintNode>
             {
                 new IdNode(123),
@@ -86,6 +88,29 @@ namespace Microsoft.Build.Logging.Query.Tests.Ast
 
             project.Next.Should().BeOfType<TargetNode>();
             (project.Next as TargetNode).Next.Should().Be(_testTask);
+            project.Constraints.Count.Should().Be(_testConstraints.Count);
+
+            for (var i = 0; i < _testConstraints.Count; i++)
+            {
+                project.Constraints[i].Should().Be(_testConstraints[i]);
+            }
+        }
+
+        [Fact]
+        public void TestConstructor_HasNextLog_NoConstraints()
+        {
+            var project = new ProjectNode(_testLog);
+
+            project.Next.Should().Be(_testLog);
+            project.Constraints.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void TestConstructor_HasNextLog_HasConstraints()
+        {
+            var project = new ProjectNode(_testLog, _testConstraints);
+
+            project.Next.Should().Be(_testLog);
             project.Constraints.Count.Should().Be(_testConstraints.Count);
 
             for (var i = 0; i < _testConstraints.Count; i++)
