@@ -5,7 +5,7 @@ using Microsoft.Build.Logging.Query.Ast;
 using Microsoft.Build.Logging.Query.Parse;
 using Xunit;
 
-namespace Microsoft.Build.Logging.Query.Tests.Scan
+namespace Microsoft.Build.Logging.Query.Tests.Parse
 {
     public class ParserTests
     {
