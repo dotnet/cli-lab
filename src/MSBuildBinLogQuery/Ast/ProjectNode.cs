@@ -13,11 +13,13 @@ namespace Microsoft.Build.Logging.Query.Ast
         {
         }
 
-        public ProjectNode(AstNode next, List<ConstraintNode> constraints = null) : base(next, constraints)
+        public ProjectNode(AstNode next, List<ConstraintNode> constraints = null) :
+            base(next ?? throw new ArgumentNullException(), constraints)
         {
         }
 
-        public ProjectNode(TaskNode next, List<ConstraintNode> constraints = null) : base(new TargetNode(next), constraints)
+        public ProjectNode(TaskNode next, List<ConstraintNode> constraints = null) :
+            base(new TargetNode(next) ?? throw new ArgumentNullException(), constraints)
         {
         }
 

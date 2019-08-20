@@ -14,7 +14,8 @@ namespace Microsoft.Build.Logging.Query.Ast
         {
         }
 
-        public TaskNode(AstNode next, List<ConstraintNode> constraints = null) : base(next, constraints)
+        public TaskNode(AstNode next, List<ConstraintNode> constraints = null) :
+            base(next ?? throw new ArgumentNullException(), constraints)
         {
         }
 
