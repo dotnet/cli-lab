@@ -157,6 +157,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("//warning//message")]
         [InlineData("/Task[ID=\"123\"]")]
         [InlineData("/Task[ID==123]")]
+        [InlineData("/Task[ID]")]
+        [InlineData("/Task[ID=123")]
         public void TestParsedAstException(string expression)
         {
             Action action = () =>
