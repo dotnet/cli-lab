@@ -123,6 +123,19 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
+        private bool TryParseTargetConstraint(out ConstraintNode constraint)
+        {
+            switch (_scanner.Token)
+            {
+                case IdToken _:
+                    constraint = ParseIdConstraint();
+                    return true;
+                default:
+                    constraint = null;
+                    return false;
+            };
+        }
+
         private List<ConstraintNode> ParseConstraints(TryConstraintParser tryConstraintParser)
         {
             var constraints = new List<ConstraintNode>();
@@ -170,6 +183,17 @@ namespace Microsoft.Build.Logging.Query.Parse
             return task;
         }
 
+        private TargetNode ParseTargetNode()
+        {
+            Consume<TargetToken>();
+
+            var constraints = ParseConstraints(TryParseTargetConstraint);
+            var next = ParseNullableNodeUnderTarget();
+            var target = new TargetNode(next, constraints);
+
+            return target;
+        }
+
         private AstNode ParseSingleSlashNodeUnderTarget()
         {
             return _scanner.Token switch
@@ -196,18 +220,12 @@ namespace Microsoft.Build.Logging.Query.Parse
 
         private AstNode ParseSingleSlashNodeUnderProject()
         {
-            switch (_scanner.Token)
+            return _scanner.Token switch
             {
-                case TargetToken _:
-                    Consume<TargetToken>();
-
-                    var next = ParseNullableNodeUnderTarget();
-                    return new TargetNode(next);
-                case TaskToken _:
-                    return ParseTaskNode();
-                default:
-                    return ParseLogNodeWithType(LogNodeType.Direct);
-            }
+                TargetToken _ => ParseTargetNode() as AstNode,
+                TaskToken _ => ParseTaskNode() as AstNode,
+                _ => ParseLogNodeWithType(LogNodeType.Direct) as AstNode,
+            };
         }
 
         private AstNode ParseNullableNodeUnderProject()
@@ -235,10 +253,7 @@ namespace Microsoft.Build.Logging.Query.Parse
                     var next = ParseNullableNodeUnderProject();
                     return new ProjectNode(next is TaskNode ? next as TaskNode : next);
                 case TargetToken _:
-                    Consume<TargetToken>();
-
-                    next = ParseNullableNodeUnderTarget();
-                    return new TargetNode(next);
+                    return ParseTargetNode();
                 case TaskToken _:
                     return ParseTaskNode();
                 default:
