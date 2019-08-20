@@ -128,6 +128,39 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                     new MessageNode(LogNodeType.All),
                     new List<ConstraintNode> { new IdNode(1), new IdNode(2), new IdNode(3) }))
             };
+
+            yield return new object[]
+            {
+                "/Target[]",
+                new TargetNode(null)
+            };
+
+            yield return new object[]
+            {
+                "/Target[Id=153]",
+                new TargetNode(
+                    null,
+                    new List<ConstraintNode> { new IdNode(153) })
+            };
+
+            yield return new object[]
+            {
+                "/Project/Target[Id=980321]//Error",
+                new ProjectNode(
+                    new TargetNode(
+                        new ErrorNode(LogNodeType.All),
+                        new List<ConstraintNode> { new IdNode(980321) }))
+            };
+
+            yield return new object[]
+            {
+                "/Target[Id=9]/Task[ID=81]/Warning",
+                new TargetNode(
+                    new TaskNode(
+                        new WarningNode(LogNodeType.Direct),
+                        new List<ConstraintNode> { new IdNode(81) }),
+                    new List<ConstraintNode> { new IdNode(9) })
+            };
         }
 
         [Theory]
@@ -159,6 +192,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("/Task[ID==123]")]
         [InlineData("/Task[ID]")]
         [InlineData("/Task[ID=123")]
+        [InlineData("/Target[Id=\"999\"]/Task")]
+        [InlineData("/Target[Id,Id=123]")]
         public void TestParsedAstException(string expression)
         {
             Action action = () =>
