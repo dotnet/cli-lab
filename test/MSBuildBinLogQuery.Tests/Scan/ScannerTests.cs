@@ -506,6 +506,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
         [InlineData("9876543210")]
         [InlineData("/project[]/message?")]
         [InlineData("\\project[]\\message")]
+        [InlineData("/Task[Id<123]")]
         public void TestScannedTokensException(string expression)
         {
             Action action = () =>
