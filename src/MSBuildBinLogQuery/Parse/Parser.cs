@@ -191,7 +191,9 @@ namespace Microsoft.Build.Logging.Query.Parse
 
             var constraints = ParseConstraints(TryParseTaskConstraint);
             var next = ParseNullableLogNode();
-            var task = new TaskNode(next, constraints);
+            var task = next == null ?
+                new TaskNode(constraints) :
+                new TaskNode(next, constraints);
 
             return task;
         }
@@ -202,7 +204,9 @@ namespace Microsoft.Build.Logging.Query.Parse
 
             var constraints = ParseConstraints(TryParseTargetConstraint);
             var next = ParseNullableNodeUnderTarget();
-            var target = new TargetNode(next, constraints);
+            var target = next == null ?
+                new TargetNode(constraints) :
+                new TargetNode(next, constraints);
 
             return target;
         }
@@ -213,7 +217,9 @@ namespace Microsoft.Build.Logging.Query.Parse
 
             var constraints = ParseConstraints(TryParseProjectConstraint);
             var next = ParseNullableNodeUnderProject();
-            var project = new ProjectNode(next ?? next as TargetNode, constraints);
+            var project = next == null ?
+                new ProjectNode(constraints) :
+                new ProjectNode(next, constraints);
 
             return project;
         }

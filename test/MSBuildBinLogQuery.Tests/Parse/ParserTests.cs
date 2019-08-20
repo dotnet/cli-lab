@@ -32,19 +32,19 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/task",
-                new TaskNode(null)
+                new TaskNode()
             };
 
             yield return new object[]
             {
                 "/target",
-                new TargetNode(null)
+                new TargetNode()
             };
 
             yield return new object[]
             {
                 "/project",
-                new ProjectNode((AstNode)null)
+                new ProjectNode()
             };
 
             yield return new object[]
@@ -110,7 +110,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/Task[]",
-                new TaskNode(null)
+                new TaskNode()
             };
 
             yield return new object[]
@@ -132,15 +132,13 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/Target[]",
-                new TargetNode(null)
+                new TargetNode()
             };
 
             yield return new object[]
             {
                 "/Target[Id=153]",
-                new TargetNode(
-                    null,
-                    new List<ConstraintNode> { new IdNode(153) })
+                new TargetNode(new List<ConstraintNode> { new IdNode(153) })
             };
 
             yield return new object[]
@@ -165,15 +163,13 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/Project[]",
-                new ProjectNode(null as TargetNode)
+                new ProjectNode()
             };
 
             yield return new object[]
             {
                 "/Project[Id=536]",
-                new ProjectNode(
-                    null as TargetNode,
-                    new List<ConstraintNode> { new IdNode(536) })
+                new ProjectNode(new List<ConstraintNode> { new IdNode(536) })
             };
 
             yield return new object[]
@@ -189,9 +185,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Project[Id=121]/Task[Id=421]",
                 new ProjectNode(
                     new TargetNode(
-                        new TaskNode(
-                            null,
-                            new List<ConstraintNode> { new IdNode(421) })),
+                        new TaskNode(new List<ConstraintNode> { new IdNode(421) })),
                     new List<ConstraintNode> { new IdNode(121) })
             };
 

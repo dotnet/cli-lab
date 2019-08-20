@@ -9,6 +9,10 @@ namespace Microsoft.Build.Logging.Query.Ast
 {
     public class ProjectNode : ComponentNode, IEquatable<ProjectNode>
     {
+        public ProjectNode(List<ConstraintNode> constraints = null) : base(null, constraints)
+        {
+        }
+
         public ProjectNode(AstNode next, List<ConstraintNode> constraints = null) : base(next, constraints)
         {
         }
