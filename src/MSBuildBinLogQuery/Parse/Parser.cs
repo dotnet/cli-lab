@@ -136,6 +136,19 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
+        private bool TryParseProjectConstraint(out ConstraintNode constraint)
+        {
+            switch (_scanner.Token)
+            {
+                case IdToken _:
+                    constraint = ParseIdConstraint();
+                    return true;
+                default:
+                    constraint = null;
+                    return false;
+            };
+        }
+
         private List<ConstraintNode> ParseConstraints(TryConstraintParser tryConstraintParser)
         {
             var constraints = new List<ConstraintNode>();
@@ -194,6 +207,17 @@ namespace Microsoft.Build.Logging.Query.Parse
             return target;
         }
 
+        private ProjectNode ParseProjectNode()
+        {
+            Consume<ProjectToken>();
+
+            var constraints = ParseConstraints(TryParseProjectConstraint);
+            var next = ParseNullableNodeUnderProject();
+            var project = new ProjectNode(next is TaskNode ? next as TaskNode : next);
+
+            return project;
+        }
+
         private AstNode ParseSingleSlashNodeUnderTarget()
         {
             return _scanner.Token switch
@@ -245,20 +269,13 @@ namespace Microsoft.Build.Logging.Query.Parse
 
         private AstNode ParseSingleSlashQueryNode()
         {
-            switch (_scanner.Token)
+            return _scanner.Token switch
             {
-                case ProjectToken _:
-                    Consume<ProjectToken>();
-
-                    var next = ParseNullableNodeUnderProject();
-                    return new ProjectNode(next is TaskNode ? next as TaskNode : next);
-                case TargetToken _:
-                    return ParseTargetNode();
-                case TaskToken _:
-                    return ParseTaskNode();
-                default:
-                    return ParseLogNodeWithType(LogNodeType.Direct);
-            }
+                ProjectToken _ => ParseProjectNode() as AstNode,
+                TargetToken _ => ParseTargetNode() as AstNode,
+                TaskToken _ => ParseTaskNode() as AstNode,
+                _ => ParseLogNodeWithType(LogNodeType.Direct) as AstNode,
+            };
         }
 
         private AstNode ParseQuery()
