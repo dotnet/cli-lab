@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class IdNode : ConstraintNode<int>, IEquatable<IdNode>
+    public sealed class IdNode<TParent> : ConstraintNode<TParent, int>, IEquatable<IdNode<TParent>>
+        where TParent : class, IQueryResult, IResultWithId
     {
         public IdNode(int value) : base(value)
         {
@@ -16,10 +15,10 @@ namespace Microsoft.Build.Logging.Query.Ast
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as IdNode);
+            return Equals(obj as IdNode<TParent>);
         }
 
-        public bool Equals([AllowNull] IdNode other)
+        public bool Equals([AllowNull] IdNode<TParent> other)
         {
             return base.Equals(other);
         }
@@ -29,12 +28,9 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
+        public override IEnumerable<TParent> Filter(IEnumerable<TParent> components)
         {
-            Debug.Assert(components.All(component => component is IComponentWithId));
-
             return components
-                .Select(component => component as IComponentWithId)
                 .Where(component => component.Id == Value);
         }
     }

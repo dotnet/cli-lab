@@ -1,8 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Build.Framework;
-using Microsoft.Build.Logging.Query.Component;
-using Microsoft.Build.Logging.Query.Messaging;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Construction
 {
@@ -36,14 +35,14 @@ namespace Microsoft.Build.Logging.Query.Construction
             _eventArgsDispatcher.ErrorRaised += ErrorRaised;
         }
 
-        public Component.Build HandleEvents(params BuildEventArgs[] buildEvents)
+        public Result.Build HandleEvents(params BuildEventArgs[] buildEvents)
         {
             foreach (var buildEvent in buildEvents)
             {
                 _eventArgsDispatcher.Dispatch(buildEvent);
             }
 
-            var build = new Component.Build();
+            var build = new Result.Build();
 
             AddProjects(build);
             AddLogs(build);
@@ -100,7 +99,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             _errorArgs.Add(args);
         }
 
-        private void AddProjects(Component.Build build)
+        private void AddProjects(Result.Build build)
         {
             var projectArgsById = new Dictionary<int, ProjectStartedEventArgs>();
 
@@ -198,7 +197,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             }
         }
 
-        private void AddLogs(Component.Build build)
+        private void AddLogs(Result.Build build)
         {
             foreach (var args in _messageArgs)
             {
@@ -222,7 +221,7 @@ namespace Microsoft.Build.Logging.Query.Construction
             }
         }
 
-        private Component.Component GetParentComponent(BuildEventArgs args, Component.Build build)
+        private Result.Component GetParentComponent(BuildEventArgs args, Result.Build build)
         {
             return GetParentComponent(
                 args.BuildEventContext.ProjectInstanceId,
@@ -231,7 +230,7 @@ namespace Microsoft.Build.Logging.Query.Construction
                 build);
         }
 
-        private Component.Component GetParentComponent(int projectId, int targetId, int taskId, Component.Build build)
+        private Result.Component GetParentComponent(int projectId, int targetId, int taskId, Result.Build build)
         {
             if (projectId == BuildEventContext.InvalidProjectInstanceId || projectId == 0)
             {

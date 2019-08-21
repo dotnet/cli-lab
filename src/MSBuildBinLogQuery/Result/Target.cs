@@ -4,9 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
-    public class Target : Component, IEquatable<Target>, IComponentWithId
+    public class Target : Component, IEquatable<Target>, IResultWithId
     {
         public int Id { get; }
         public string Name { get; }

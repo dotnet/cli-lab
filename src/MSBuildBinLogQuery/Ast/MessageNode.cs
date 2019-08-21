@@ -6,7 +6,7 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class MessageNode : LogNode, IEquatable<MessageNode>
+    public sealed class MessageNode : LogNode<Message>, IEquatable<MessageNode>
     {
         public MessageNode(LogNodeType type) : base(type)
         {
@@ -27,7 +27,32 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component> components)
+        {
+            return FilterMessages(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Result.Build> components)
+        {
+            return FilterMessages(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Project> components)
+        {
+            return FilterMessages(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Target> components)
+        {
+            return FilterMessages(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Task> components)
+        {
+            return FilterMessages(components);
+        }
+
+        private IEnumerable<IQueryResult> FilterMessages(IEnumerable<Component> components)
         {
             return Type switch
             {

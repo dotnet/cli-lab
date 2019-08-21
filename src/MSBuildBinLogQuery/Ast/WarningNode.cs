@@ -6,7 +6,7 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class WarningNode : LogNode, IEquatable<WarningNode>
+    public sealed class WarningNode : LogNode<Warning>, IEquatable<WarningNode>
     {
         public WarningNode(LogNodeType type) : base(type)
         {
@@ -27,7 +27,32 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component> components)
+        {
+            return FilterWarnings(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Result.Build> components)
+        {
+            return FilterWarnings(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Project> components)
+        {
+            return FilterWarnings(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Target> components)
+        {
+            return FilterWarnings(components);
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Task> components)
+        {
+            return FilterWarnings(components);
+        }
+
+        private IEnumerable<IQueryResult> FilterWarnings(IEnumerable<Component> components)
         {
             return Type switch
             {

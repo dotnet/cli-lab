@@ -7,9 +7,9 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Utility;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
-    public class Project : Component, IEquatable<Project>, IComponentWithId
+    public class Project : Component, IEquatable<Project>, IResultWithId
     {
         public int Id { get; }
         public string ProjectFile { get; }

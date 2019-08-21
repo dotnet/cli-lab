@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Microsoft.Build.Logging.Query.Component;
 using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class TaskNode : ComponentNode, IEquatable<TaskNode>
+    public sealed class TaskNode : ComponentNode<Task, Target>, IEquatable<TaskNode>
     {
-        public TaskNode(List<ConstraintNode> constraints = null) : base(null, constraints)
+        public TaskNode(List<ConstraintNode<Task>> constraints = null) : base(null, constraints)
         {
         }
 
-        public TaskNode(AstNode next, List<ConstraintNode> constraints = null) :
+        public TaskNode(IAstNode<Task> next, List<ConstraintNode<Task>> constraints = null) :
             base(next ?? throw new ArgumentNullException(), constraints)
         {
         }
@@ -34,15 +32,14 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Target> components)
         {
-            Debug.Assert(components.All(component => component is Target));
-
             var tasks = components
-                .Select(component => component as Target)
                 .SelectMany(target => target.OrderedTasks);
 
-            return Next?.Filter(tasks) ?? tasks;
+            var filteredTasks = FilterByConstraints(tasks);
+
+            return Next?.Filter(filteredTasks) ?? filteredTasks;
         }
     }
 }

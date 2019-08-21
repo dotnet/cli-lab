@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.Build.Logging.Query.Utility;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
-    public class Task : Component, IEquatable<Task>, IComponentWithId
+    public class Task : Component, IEquatable<Task>, IResultWithId
     {
         public int Id { get; }
         public string Name { get; }

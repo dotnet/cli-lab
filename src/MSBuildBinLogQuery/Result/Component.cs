@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Build.Logging.Query.Messaging;
-using Microsoft.Build.Logging.Query.Result;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
     public abstract class Component : IQueryResult
     {

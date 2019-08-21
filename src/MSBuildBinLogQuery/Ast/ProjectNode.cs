@@ -1,25 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class ProjectNode : ComponentNode, IEquatable<ProjectNode>
+    public sealed class ProjectNode :
+        ComponentNode<Project, Result.Build>,
+        IEquatable<ProjectNode>
     {
-        public ProjectNode(List<ConstraintNode> constraints = null) : base(null, constraints)
+        public ProjectNode(List<ConstraintNode<Project>> constraints = null) : base(null, constraints)
         {
         }
 
-        public ProjectNode(AstNode next, List<ConstraintNode> constraints = null) :
+        public ProjectNode(IAstNode<Project> next, List<ConstraintNode<Project>> constraints = null) :
             base(next ?? throw new ArgumentNullException(), constraints)
-        {
-        }
-
-        public ProjectNode(TaskNode next, List<ConstraintNode> constraints = null) :
-            base(new TargetNode(next) ?? throw new ArgumentNullException(), constraints)
         {
         }
 
@@ -38,15 +34,14 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<IQueryResult> Filter(IEnumerable<Component.Component> components)
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Result.Build> components)
         {
-            Debug.Assert(components.All(component => component is Component.Build));
-
             var projects = components
-                .Select(component => component as Component.Build)
                 .SelectMany(build => build.ProjectsById.Values);
 
-            return Next?.Filter(projects) ?? projects;
+            var filteredProjects = FilterByConstraints(projects);
+
+            return Next?.Filter(filteredProjects) ?? filteredProjects;
         }
     }
 }

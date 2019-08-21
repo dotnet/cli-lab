@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Build.Logging.Query.Ast;
 using Microsoft.Build.Logging.Query.Parse;
+using Microsoft.Build.Logging.Query.Result;
 using Xunit;
 
 namespace Microsoft.Build.Logging.Query.Tests.Parse
@@ -32,13 +33,13 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/task",
-                new TaskNode()
+                new ProjectNode(new TargetNode(new TaskNode()))
             };
 
             yield return new object[]
             {
                 "/target",
-                new TargetNode()
+                new ProjectNode(new TargetNode())
             };
 
             yield return new object[]
@@ -50,13 +51,13 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/task/message",
-                new TaskNode(new MessageNode(LogNodeType.Direct))
+                new ProjectNode(new TargetNode(new TaskNode(new MessageNode(LogNodeType.Direct))))
             };
 
             yield return new object[]
             {
                 "/target/warning",
-                new TargetNode(new WarningNode(LogNodeType.Direct))
+                new ProjectNode(new TargetNode(new WarningNode(LogNodeType.Direct)))
             };
 
             yield return new object[]
@@ -68,13 +69,13 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/target/task/message",
-                new TargetNode(new TaskNode(new MessageNode(LogNodeType.Direct)))
+                new ProjectNode(new TargetNode(new TaskNode(new MessageNode(LogNodeType.Direct))))
             };
 
             yield return new object[]
             {
                 "/project/task/warning",
-                new ProjectNode(new TaskNode(new WarningNode(LogNodeType.Direct)))
+                new ProjectNode(new TargetNode(new TaskNode(new WarningNode(LogNodeType.Direct))))
             };
 
             yield return new object[]
@@ -92,53 +93,58 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/project//warning",
-                new ProjectNode(new MessageNode(LogNodeType.All))
+                new ProjectNode(new WarningNode(LogNodeType.All))
             };
 
             yield return new object[]
             {
                 "/target/task//error",
-                new TargetNode(new TaskNode(new MessageNode(LogNodeType.All)))
+                new ProjectNode(new TargetNode(new TaskNode(new ErrorNode(LogNodeType.All))))
             };
 
             yield return new object[]
             {
                 "/project/task//message",
-                new ProjectNode(new TaskNode(new MessageNode(LogNodeType.All)))
+                new ProjectNode(new TargetNode(new TaskNode(new MessageNode(LogNodeType.All))))
             };
 
             yield return new object[]
             {
                 "/Task[]",
-                new TaskNode()
+                new ProjectNode(new TargetNode(new TaskNode()))
             };
 
             yield return new object[]
             {
                 "/Task[ID=341]/Message",
-                new TaskNode(
+                new ProjectNode(new TargetNode(new TaskNode(
                     new MessageNode(LogNodeType.Direct),
-                    new List<ConstraintNode> { new IdNode(341) })
+                    new List<ConstraintNode<Task>> { new IdNode<Task>(341) })))
             };
 
             yield return new object[]
             {
                 "/Project/Task[id=1, Id=2, ID=3]//Warning",
-                new ProjectNode(new TaskNode(
-                    new MessageNode(LogNodeType.All),
-                    new List<ConstraintNode> { new IdNode(1), new IdNode(2), new IdNode(3) }))
+                new ProjectNode(new TargetNode(new TaskNode(
+                    new WarningNode(LogNodeType.All),
+                    new List<ConstraintNode<Task>>
+                    {
+                        new IdNode<Task>(1),
+                        new IdNode<Task>(2),
+                        new IdNode<Task>(3)
+                    })))
             };
 
             yield return new object[]
             {
                 "/Target[]",
-                new TargetNode()
+                new ProjectNode(new TargetNode())
             };
 
             yield return new object[]
             {
                 "/Target[Id=153]",
-                new TargetNode(new List<ConstraintNode> { new IdNode(153) })
+                new ProjectNode(new TargetNode(new List<ConstraintNode<Target>> { new IdNode<Target>(153) }))
             };
 
             yield return new object[]
@@ -147,17 +153,17 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(
                         new ErrorNode(LogNodeType.All),
-                        new List<ConstraintNode> { new IdNode(980321) }))
+                        new List<ConstraintNode<Target>> { new IdNode<Target>(980321) }))
             };
 
             yield return new object[]
             {
                 "/Target[Id=9]/Task[ID=81]/Warning",
-                new TargetNode(
+                new ProjectNode(new TargetNode(
                     new TaskNode(
                         new WarningNode(LogNodeType.Direct),
-                        new List<ConstraintNode> { new IdNode(81) }),
-                    new List<ConstraintNode> { new IdNode(9) })
+                        new List<ConstraintNode<Task>> { new IdNode<Task>(81) }),
+                    new List<ConstraintNode<Target>> { new IdNode<Target>(9) }))
             };
 
             yield return new object[]
@@ -169,15 +175,15 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/Project[Id=536]",
-                new ProjectNode(new List<ConstraintNode> { new IdNode(536) })
+                new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(536) })
             };
 
             yield return new object[]
             {
                 "/Project[ID=448]/Error",
                 new ProjectNode(
-                    new MessageNode(LogNodeType.Direct),
-                    new List<ConstraintNode> { new IdNode(448) })
+                    new ErrorNode(LogNodeType.Direct),
+                    new List<ConstraintNode<Project>> { new IdNode<Project>(448) })
             };
 
             yield return new object[]
@@ -185,8 +191,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Project[Id=121]/Task[Id=421]",
                 new ProjectNode(
                     new TargetNode(
-                        new TaskNode(new List<ConstraintNode> { new IdNode(421) })),
-                    new List<ConstraintNode> { new IdNode(121) })
+                        new TaskNode(new List<ConstraintNode<Task>> { new IdNode<Task>(421) })),
+                    new List<ConstraintNode<Project>> { new IdNode<Project>(121) })
             };
 
             yield return new object[]
@@ -196,15 +202,15 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                     new TargetNode(
                         new TaskNode(
                             new MessageNode(LogNodeType.All),
-                            new List<ConstraintNode> { new IdNode(3) }),
-                        new List<ConstraintNode> { new IdNode(2) }),
-                    new List<ConstraintNode> { new IdNode(1) })
+                            new List<ConstraintNode<Task>> { new IdNode<Task>(3) }),
+                        new List<ConstraintNode<Target>> { new IdNode<Target>(2) }),
+                    new List<ConstraintNode<Project>> { new IdNode<Project>(1) })
             };
         }
 
         [Theory]
         [MemberData(nameof(GenerateDataForTestParsedAst))]
-        public void TestParsedAst(string expression, AstNode expectedAst)
+        public void TestParsedAst(string expression, IAstNode expectedAst)
         {
             var actualAst = Parser.Parse(expression);
             actualAst.Should().Be(expectedAst);

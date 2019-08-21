@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Build.Logging.Query.Ast;
+using Microsoft.Build.Logging.Query.Result;
 using Microsoft.Build.Logging.Query.Scan;
 using Microsoft.Build.Logging.Query.Token;
 
@@ -9,14 +10,15 @@ namespace Microsoft.Build.Logging.Query.Parse
     {
         private readonly Scanner _scanner;
 
-        private delegate bool TryConstraintParser(out ConstraintNode constraint);
+        private delegate bool TryConstraintParser<TParent>(out ConstraintNode<TParent> constraint)
+            where TParent : class, IQueryResult, IResultWithId;
 
         private Parser(Scanner scanner)
         {
             _scanner = scanner;
         }
 
-        public static AstNode Parse(Scanner scanner)
+        public static IAstNode<Result.Build> Parse(Scanner scanner)
         {
             var parser = new Parser(scanner);
             var queryNode = parser.ParseQuery();
@@ -29,7 +31,7 @@ namespace Microsoft.Build.Logging.Query.Parse
             throw new ParseException(parser._scanner.Expression);
         }
 
-        public static AstNode Parse(string expression)
+        public static IAstNode Parse(string expression)
         {
             var scanner = new Scanner(expression);
             return Parse(scanner);
@@ -98,7 +100,8 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private IdNode ParseIdConstraint()
+        private IdNode<TParent> ParseIdConstraint<TParent>()
+            where TParent : class, IQueryResult, IResultWithId
         {
             Consume<IdToken>();
             Consume<EqualToken>();
@@ -107,15 +110,15 @@ namespace Microsoft.Build.Logging.Query.Parse
             Consume<IntegerToken>();
             var value = (integerToken as IntegerToken).Value;
 
-            return new IdNode(value);
+            return new IdNode<TParent>(value);
         }
 
-        private bool TryParseTaskConstraint(out ConstraintNode constraint)
+        private bool TryParseTaskConstraint(out ConstraintNode<Task> constraint)
         {
             switch (_scanner.Token)
             {
                 case IdToken _:
-                    constraint = ParseIdConstraint();
+                    constraint = ParseIdConstraint<Task>();
                     return true;
                 default:
                     constraint = null;
@@ -123,12 +126,12 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
-        private bool TryParseTargetConstraint(out ConstraintNode constraint)
+        private bool TryParseTargetConstraint(out ConstraintNode<Target> constraint)
         {
             switch (_scanner.Token)
             {
                 case IdToken _:
-                    constraint = ParseIdConstraint();
+                    constraint = ParseIdConstraint<Target>();
                     return true;
                 default:
                     constraint = null;
@@ -136,12 +139,12 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
-        private bool TryParseProjectConstraint(out ConstraintNode constraint)
+        private bool TryParseProjectConstraint(out ConstraintNode<Project> constraint)
         {
             switch (_scanner.Token)
             {
                 case IdToken _:
-                    constraint = ParseIdConstraint();
+                    constraint = ParseIdConstraint<Project>();
                     return true;
                 default:
                     constraint = null;
@@ -149,9 +152,10 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
-        private List<ConstraintNode> ParseConstraints(TryConstraintParser tryConstraintParser)
+        private List<ConstraintNode<TParent>> ParseConstraints<TParent>(TryConstraintParser<TParent> tryConstraintParser)
+            where TParent : class, IQueryResult, IResultWithId
         {
-            var constraints = new List<ConstraintNode>();
+            var constraints = new List<ConstraintNode<TParent>>();
 
             if (!(_scanner.Token is LeftBracketToken))
             {
@@ -189,7 +193,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<TaskToken>();
 
-            var constraints = ParseConstraints(TryParseTaskConstraint);
+            var constraints = ParseConstraints<Task>(TryParseTaskConstraint);
             var next = ParseNullableLogNode();
             var task = next == null ?
                 new TaskNode(constraints) :
@@ -202,7 +206,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<TargetToken>();
 
-            var constraints = ParseConstraints(TryParseTargetConstraint);
+            var constraints = ParseConstraints<Target>(TryParseTargetConstraint);
             var next = ParseNullableNodeUnderTarget();
             var target = next == null ?
                 new TargetNode(constraints) :
@@ -215,7 +219,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<ProjectToken>();
 
-            var constraints = ParseConstraints(TryParseProjectConstraint);
+            var constraints = ParseConstraints<Project>(TryParseProjectConstraint);
             var next = ParseNullableNodeUnderProject();
             var project = next == null ?
                 new ProjectNode(constraints) :
@@ -224,16 +228,16 @@ namespace Microsoft.Build.Logging.Query.Parse
             return project;
         }
 
-        private AstNode ParseSingleSlashNodeUnderTarget()
+        private IAstNode<Target> ParseSingleSlashNodeUnderTarget()
         {
             return _scanner.Token switch
             {
-                TaskToken _ => ParseTaskNode() as AstNode,
-                _ => ParseLogNodeWithType(LogNodeType.Direct) as AstNode,
+                TaskToken _ => ParseTaskNode() as IAstNode<Target>,
+                _ => ParseLogNodeWithType(LogNodeType.Direct),
             };
         }
 
-        private AstNode ParseNullableNodeUnderTarget()
+        private IAstNode<Target> ParseNullableNodeUnderTarget()
         {
             switch (_scanner.Token)
             {
@@ -248,17 +252,17 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private AstNode ParseSingleSlashNodeUnderProject()
+        private IAstNode<Project> ParseSingleSlashNodeUnderProject()
         {
             return _scanner.Token switch
             {
-                TargetToken _ => ParseTargetNode() as AstNode,
-                TaskToken _ => ParseTaskNode() as AstNode,
-                _ => ParseLogNodeWithType(LogNodeType.Direct) as AstNode,
+                TargetToken _ => ParseTargetNode() as IAstNode<Project>,
+                TaskToken _ => new TargetNode(ParseTaskNode()),
+                _ => ParseLogNodeWithType(LogNodeType.Direct),
             };
         }
 
-        private AstNode ParseNullableNodeUnderProject()
+        private IAstNode<Project> ParseNullableNodeUnderProject()
         {
             switch (_scanner.Token)
             {
@@ -273,18 +277,18 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private AstNode ParseSingleSlashQueryNode()
+        private IAstNode<Result.Build> ParseSingleSlashQueryNode()
         {
             return _scanner.Token switch
             {
-                ProjectToken _ => ParseProjectNode() as AstNode,
-                TargetToken _ => ParseTargetNode() as AstNode,
-                TaskToken _ => ParseTaskNode() as AstNode,
-                _ => ParseLogNodeWithType(LogNodeType.Direct) as AstNode,
+                ProjectToken _ => ParseProjectNode() as IAstNode<Result.Build>,
+                TargetToken _ => new ProjectNode(ParseTargetNode()),
+                TaskToken _ => new ProjectNode(new TargetNode(ParseTaskNode())),
+                _ => ParseLogNodeWithType(LogNodeType.Direct),
             };
         }
 
-        private AstNode ParseQuery()
+        private IAstNode<Result.Build> ParseQuery()
         {
             switch (_scanner.Token)
             {

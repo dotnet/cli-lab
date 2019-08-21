@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Microsoft.Build.Framework;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
     public class Build : Component
     {

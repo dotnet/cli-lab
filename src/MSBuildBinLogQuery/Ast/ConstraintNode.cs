@@ -1,17 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public abstract class ConstraintNode : AstNode
+    public abstract class ConstraintNode<TParent> : IAstNode, IFilterable<TParent, TParent>
+        where TParent : class, IQueryResult
     {
         public ConstraintNode() : base()
         {
         }
+
+        public abstract IEnumerable<TParent> Filter(IEnumerable<TParent> components);
     }
 
-    public abstract class ConstraintNode<TValue> : ConstraintNode, IEquatable<ConstraintNode<TValue>>
+    public abstract class ConstraintNode<TParent, TValue> : ConstraintNode<TParent>
+        where TParent : class, IQueryResult
     {
         public TValue Value { get; }
 
@@ -20,14 +24,9 @@ namespace Microsoft.Build.Logging.Query.Ast
             Value = value;
         }
 
-        public override bool Equals(object obj)
+        protected bool Equals(ConstraintNode<TParent, TValue> other)
         {
-            return Equals(obj as IdNode);
-        }
-
-        public bool Equals([AllowNull] ConstraintNode<TValue> other)
-        {
-            return base.Equals(other) &&
+            return other != null &&
                    EqualityComparer<TValue>.Default.Equals(Value, other.Value);
         }
 
