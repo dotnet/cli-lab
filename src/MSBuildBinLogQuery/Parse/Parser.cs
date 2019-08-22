@@ -123,6 +123,16 @@ namespace Microsoft.Build.Logging.Query.Parse
             return new NameNode<TParent>(value);
         }
 
+        private PathNode<TParent> ParsePathConstraint<TParent>()
+            where TParent : class, IQueryResult, IResultWithPath
+        {
+            Consume<NameToken>();
+            Consume<EqualToken>();
+
+            var value = Consume<StringToken>().Value;
+            return new PathNode<TParent>(value);
+        }
+
         private bool TryParseTaskConstraint(out ConstraintNode<Task> constraint)
         {
             switch (_scanner.Token)
@@ -164,6 +174,9 @@ namespace Microsoft.Build.Logging.Query.Parse
                     return true;
                 case NameToken _:
                     constraint = ParseNameConstraint<Project>();
+                    return true;
+                case PathToken _:
+                    constraint = ParsePathConstraint<Project>();
                     return true;
                 default:
                     constraint = null;
