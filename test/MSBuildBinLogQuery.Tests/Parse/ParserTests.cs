@@ -319,7 +319,10 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
         [InlineData("/Task[ID=123")]
         [InlineData("/Target[Id=\"999\"]/Task")]
         [InlineData("/Target[Id,Id=123]")]
+        [InlineData("/Target[Name=123")]
         [InlineData("/Project[[Id=1]]")]
+        [InlineData("/Project[Name=123]")]
+        [InlineData("/Project[Path=123]")]
         public void TestParsedAstException(string expression)
         {
             Action action = () =>
