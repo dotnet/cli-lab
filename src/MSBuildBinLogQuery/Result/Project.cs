@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
@@ -9,7 +10,7 @@ using Microsoft.Build.Logging.Query.Utility;
 
 namespace Microsoft.Build.Logging.Query.Result
 {
-    public class Project : Component, IEquatable<Project>, IResultWithId
+    public class Project : Component, IEquatable<Project>, IResultWithId, IResultWithName
     {
         public int Id { get; }
         public string ProjectFile { get; }
@@ -27,6 +28,7 @@ namespace Microsoft.Build.Logging.Query.Result
         //       the overall Project.
         public IReadOnlyList<Target> EntryPointTargets => _entryPointTargets;
         public override Component Parent => ParentBuild;
+        public string Name => Path.GetFileNameWithoutExtension(ProjectFile);
 
         private readonly Dictionary<int, Target> _targetsById;
         private readonly Dictionary<string, Target> _targetsByName;

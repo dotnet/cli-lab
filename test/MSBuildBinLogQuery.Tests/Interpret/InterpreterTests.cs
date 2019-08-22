@@ -123,6 +123,27 @@ namespace Microsoft.Build.Logging.Query.Tests.Interpret
                 testBuild2,
                 new[] { testMessage7_Build2, testMessage8_Build2 }
             };
+
+            yield return new object[]
+            {
+                "/Project",
+                testBuild2,
+                new[] { testProject1_Build2, testProject2_Build2 }
+            };
+
+            yield return new object[]
+            {
+                "/Project[Name=\"Proj1\"]",
+                testBuild2,
+                new[] { testProject1_Build2 }
+            };
+
+            yield return new object[]
+            {
+                "/Project[Name=\"Proj2\"]/Target[Name=\"Optimize\"]",
+                testBuild2,
+                new[] { testTarget2_Project2_Build2 }
+            };
         }
 
         [Theory]

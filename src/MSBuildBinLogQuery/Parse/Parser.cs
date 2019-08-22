@@ -162,6 +162,9 @@ namespace Microsoft.Build.Logging.Query.Parse
                 case IdToken _:
                     constraint = ParseIdConstraint<Project>();
                     return true;
+                case NameToken _:
+                    constraint = ParseNameConstraint<Project>();
+                    return true;
                 default:
                     constraint = null;
                     return false;

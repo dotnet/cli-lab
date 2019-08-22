@@ -254,6 +254,21 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                     new List<ConstraintNode<Project>> { new IdNode<Project>(1) }
                 )
             };
+
+            yield return new object[]
+            {
+                "/Project[Name=\"MSBuildBinLogQuery\"]",
+                new ProjectNode(
+                    new List<ConstraintNode<Project>> { new NameNode<Project>("MSBuildBinLogQuery") })
+            };
+
+            yield return new object[]
+            {
+                "/Project[Name=\"MSBuildBinLogQuery\"]//Message",
+                new ProjectNode(
+                    new MessageNode(LogNodeType.All),
+                    new List<ConstraintNode<Project>> { new NameNode<Project>("MSBuildBinLogQuery") })
+            };
         }
 
         [Theory]
