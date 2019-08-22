@@ -11,7 +11,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         private readonly Scanner _scanner;
 
         private delegate bool TryConstraintParser<TParent>(out ConstraintNode<TParent> constraint)
-            where TParent : class, IQueryResult, IResultWithId;
+            where TParent : class, IQueryResult;
 
         private Parser(Scanner scanner)
         {
@@ -185,7 +185,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         }
 
         private List<ConstraintNode<TParent>> ParseConstraints<TParent>(TryConstraintParser<TParent> tryConstraintParser)
-            where TParent : class, IQueryResult, IResultWithId
+            where TParent : class, IQueryResult
         {
             var constraints = new List<ConstraintNode<TParent>>();
 
