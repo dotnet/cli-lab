@@ -269,6 +269,23 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                     new MessageNode(LogNodeType.All),
                     new List<ConstraintNode<Project>> { new NameNode<Project>("MSBuildBinLogQuery") })
             };
+
+            yield return new object[]
+            {
+                "/Project[Path=\"./Proj1.csproj\"]",
+                new ProjectNode(
+                    new List<ConstraintNode<Project>> { new PathNode<Project>("./Proj1.csproj") })
+            };
+
+            yield return new object[]
+            {
+                "/Project[Path=\"./test/Proj1.Tests/Proj1.Tests.csproj\"]/Task[Name=\"ResolveSdk\"]/Warning",
+                new ProjectNode(
+                    new TargetNode(new TaskNode(
+                        new WarningNode(LogNodeType.Direct),
+                        new List<ConstraintNode<Task>> { new NameNode<Task>("ResolveSdk") })),
+                    new List<ConstraintNode<Project>> { new PathNode<Project>("./test/Proj1.Tests/Proj1.Tests.csproj") })
+            };
         }
 
         [Theory]

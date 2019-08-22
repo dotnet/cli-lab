@@ -126,7 +126,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         private PathNode<TParent> ParsePathConstraint<TParent>()
             where TParent : class, IQueryResult, IResultWithPath
         {
-            Consume<NameToken>();
+            Consume<PathToken>();
             Consume<EqualToken>();
 
             var value = Consume<StringToken>().Value;
