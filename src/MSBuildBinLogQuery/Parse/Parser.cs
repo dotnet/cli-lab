@@ -31,7 +31,7 @@ namespace Microsoft.Build.Logging.Query.Parse
             throw new ParseException(parser._scanner.Expression);
         }
 
-        public static IAstNode Parse(string expression)
+        public static IAstNode<Result.Build> Parse(string expression)
         {
             var scanner = new Scanner(expression);
             return Parse(scanner);
