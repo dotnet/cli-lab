@@ -37,11 +37,14 @@ namespace Microsoft.Build.Logging.Query.Parse
             return Parse(scanner);
         }
 
-        private void Consume<TToken>() where TToken : Token.Token
+        private TToken Consume<TToken>() where TToken : Token.Token
         {
             if (_scanner.Token is TToken)
             {
+                var result = _scanner.Token as TToken;
                 _scanner.ReadNextToken();
+
+                return result;
             }
             else
             {
@@ -106,11 +109,18 @@ namespace Microsoft.Build.Logging.Query.Parse
             Consume<IdToken>();
             Consume<EqualToken>();
 
-            var integerToken = _scanner.Token;
-            Consume<IntegerToken>();
-            var value = (integerToken as IntegerToken).Value;
-
+            var value = Consume<IntegerToken>().Value;
             return new IdNode<TParent>(value);
+        }
+
+        private NameNode<TParent> ParseNameConstraint<TParent>()
+            where TParent : class, IQueryResult, IResultWithName
+        {
+            Consume<NameToken>();
+            Consume<EqualToken>();
+
+            var value = Consume<StringToken>().Value;
+            return new NameNode<TParent>(value);
         }
 
         private bool TryParseTaskConstraint(out ConstraintNode<Task> constraint)
@@ -119,6 +129,9 @@ namespace Microsoft.Build.Logging.Query.Parse
             {
                 case IdToken _:
                     constraint = ParseIdConstraint<Task>();
+                    return true;
+                case NameToken _:
+                    constraint = ParseNameConstraint<Task>();
                     return true;
                 default:
                     constraint = null;
@@ -132,6 +145,9 @@ namespace Microsoft.Build.Logging.Query.Parse
             {
                 case IdToken _:
                     constraint = ParseIdConstraint<Target>();
+                    return true;
+                case NameToken _:
+                    constraint = ParseNameConstraint<Target>();
                     return true;
                 default:
                     constraint = null;
