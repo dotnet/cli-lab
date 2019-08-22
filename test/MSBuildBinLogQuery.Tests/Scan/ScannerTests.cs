@@ -524,7 +524,64 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
 
             yield return new object[]
             {
-                "/Project[Name=\"Test\"]/Task[Before=[/Task[Name=\"Compile\"]]]",
+                "/Project[!Before=[/Project[Id=1]]]",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    ExclamationToken.Instance,
+                    BeforeToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(1),
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[!Before=[/Project[!Before=[/Project[Id=1]]]]]",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    ExclamationToken.Instance,
+                    BeforeToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    ExclamationToken.Instance,
+                    BeforeToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(1),
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[Name=\"Test\"]/Task[After=[/Task[Name=\"Compile\"]]]",
                 new Token.Token[]
                 {
                     SingleSlashToken.Instance,
@@ -537,7 +594,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                     SingleSlashToken.Instance,
                     TaskToken.Instance,
                     LeftBracketToken.Instance,
-                    BeforeToken.Instance,
+                    AfterToken.Instance,
                     EqualToken.Instance,
                     LeftBracketToken.Instance,
                     SingleSlashToken.Instance,

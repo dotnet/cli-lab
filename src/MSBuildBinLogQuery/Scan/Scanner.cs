@@ -64,6 +64,10 @@ namespace Microsoft.Build.Logging.Query.Scan
                     ReadNextCharacter();
                     Token = new StringToken(ReadNextString());
                     break;
+                case '!':
+                    ReadNextCharacter();
+                    Token = ExclamationToken.Instance;
+                    break;
                 case 'M':
                 case 'm':
                     ReadNextKeyword("MESSAGE", MessageToken.Instance);
