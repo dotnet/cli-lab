@@ -206,6 +206,54 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                         new List<ConstraintNode<Target>> { new IdNode<Target>(2) }),
                     new List<ConstraintNode<Project>> { new IdNode<Project>(1) })
             };
+
+            yield return new object[]
+            {
+                "/Target[Name=\"Compile\"]",
+                new ProjectNode(
+                    new TargetNode(
+                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }))
+            };
+
+            yield return new object[]
+            {
+                "/Task[Name=\"Message\"]",
+                new ProjectNode(
+                    new TargetNode(
+                        new TaskNode(
+                            new List<ConstraintNode<Task>> { new NameNode<Task>("Message") })))
+            };
+
+            yield return new object[]
+            {
+                "/Target[Name=\"Compile\"]//Message",
+                new ProjectNode(
+                    new TargetNode(
+                        new MessageNode(LogNodeType.All),
+                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }))
+            };
+
+            yield return new object[]
+            {
+                "/Project[Id=1]/Target[Name=\"Compile\"]/Warning",
+                new ProjectNode(
+                    new TargetNode(
+                        new WarningNode(LogNodeType.Direct),
+                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }),
+                    new List<ConstraintNode<Project>> { new IdNode<Project>(1) }
+                )
+            };
+
+            yield return new object[]
+            {
+                "/Project[Id=1]/Task[Name=\"Message\"]//Warning",
+                new ProjectNode(
+                    new TargetNode(new TaskNode(
+                        new WarningNode(LogNodeType.All),
+                        new List<ConstraintNode<Task>> { new NameNode<Task>("Message") })),
+                    new List<ConstraintNode<Project>> { new IdNode<Project>(1) }
+                )
+            };
         }
 
         [Theory]
