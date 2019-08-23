@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuildBinLogQuery", "src\M
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildBinLogQuery.Tests", "test\MSBuildBinLogQuery.Tests\MSBuildBinLogQuery.Tests.csproj", "{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildBinLogQuery.Demo", "test\MSBuildBinLogQuery.Demo\MSBuildBinLogQuery.Demo.csproj", "{11ACC77C-8A09-44EB-9875-40B15797A636}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,18 @@ Global
 		{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}.Release|x64.Build.0 = Release|Any CPU
 		{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}.Release|x86.ActiveCfg = Release|Any CPU
 		{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}.Release|x86.Build.0 = Release|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Debug|x64.Build.0 = Debug|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Debug|x86.Build.0 = Debug|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Release|x64.ActiveCfg = Release|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Release|x64.Build.0 = Release|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Release|x86.ActiveCfg = Release|Any CPU
+		{11ACC77C-8A09-44EB-9875-40B15797A636}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
