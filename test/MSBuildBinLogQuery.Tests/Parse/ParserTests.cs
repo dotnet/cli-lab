@@ -294,7 +294,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new List<ConstraintNode<Project>>
                     {
-                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                        new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode>(
                             new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
                             DependencyNodeType.Direct)
                     }
@@ -307,7 +307,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new List<ConstraintNode<Project>>
                     {
-                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                        new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode>(
                             new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
                             DependencyNodeType.All)
                     }
@@ -324,11 +324,11 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                     ),
                     new List<ConstraintNode<Project>>
                     {
-                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                        new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode>(
                             new ProjectNode(
                                 new List<ConstraintNode<Project>>
                                 {
-                                    new BeforeNode<Project, ProjectNode_BeforeThis>(
+                                    new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode>(
                                         new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
                                         DependencyNodeType.Direct)
                                 }),

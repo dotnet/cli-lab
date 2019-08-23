@@ -7,22 +7,23 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public sealed class BeforeNode<TParent, TGraphNode> :
-        DependencyNode<TParent, TGraphNode>,
-        IEquatable<BeforeNode<TParent, TGraphNode>>
+    public sealed class BeforeNode<TParent, TGraphNode, TAstNode> :
+        DependencyNode<TParent, TGraphNode, TAstNode>,
+        IEquatable<BeforeNode<TParent, TGraphNode, TAstNode>>
         where TParent : Component, IResultWithBeforeThis<TGraphNode>
         where TGraphNode : IDirectedAcyclicGraphNode<TGraphNode>, INodeWithComponent<TParent>
+        where TAstNode : IAstNode
     {
-        public BeforeNode(IAstNode<Result.Build> value, DependencyNodeType type) : base(value, type)
+        public BeforeNode(TAstNode value, DependencyNodeType type) : base(value, type)
         {
         }
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as BeforeNode<TParent, TGraphNode>);
+            return Equals(obj as BeforeNode<TParent, TGraphNode, TAstNode>);
         }
 
-        public bool Equals([AllowNull] BeforeNode<TParent, TGraphNode> other)
+        public bool Equals([AllowNull] BeforeNode<TParent, TGraphNode, TAstNode> other)
         {
             return base.Equals(other);
         }

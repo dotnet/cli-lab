@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Build.Logging.Query.Ast;
 using Microsoft.Build.Logging.Query.Graph;
@@ -134,19 +135,20 @@ namespace Microsoft.Build.Logging.Query.Parse
             return new PathNode<TParent>(value);
         }
 
-        private BeforeNode<TParent, TGraphNode> ParseBeforeConstraint<TParent, TGraphNode>(DependencyNodeType type)
+        private BeforeNode<TParent, TGraphNode, TAstNode> ParseBeforeConstraint<TParent, TGraphNode, TAstNode>(DependencyNodeType type, Func<TAstNode> astParser)
             where TParent : Component, IResultWithBeforeThis<TGraphNode>
             where TGraphNode : IDirectedAcyclicGraphNode<TGraphNode>, INodeWithComponent<TParent>
+            where TAstNode : IAstNode
         {
             Consume<BeforeToken>();
             Consume<EqualToken>();
             Consume<LeftBracketToken>();
 
-            var value = ParseQuery();
+            var value = astParser.Invoke();
 
             Consume<RightBracketToken>();
 
-            return new BeforeNode<TParent, TGraphNode>(value, type);
+            return new BeforeNode<TParent, TGraphNode, TAstNode>(value, type);
         }
 
         private bool TryParseTaskConstraint(out ConstraintNode<Task> constraint)
@@ -195,7 +197,13 @@ namespace Microsoft.Build.Logging.Query.Parse
                     constraint = ParsePathConstraint<Project>();
                     return true;
                 case BeforeToken _:
-                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.Direct);
+                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis, ProjectNode>(
+                        DependencyNodeType.Direct,
+                        () =>
+                        {
+                            Consume<SingleSlashToken>();
+                            return ParseProjectNode();
+                        });
                     return true;
                 case AsteriskToken _:
                     Consume<AsteriskToken>();
@@ -203,7 +211,13 @@ namespace Microsoft.Build.Logging.Query.Parse
                     switch (_scanner.Token)
                     {
                         case BeforeToken _:
-                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.All);
+                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis, ProjectNode>(
+                                DependencyNodeType.All,
+                                () =>
+                                {
+                                    Consume<SingleSlashToken>();
+                                    return ParseProjectNode();
+                                });
                             return true;
                         default:
                             constraint = null;
