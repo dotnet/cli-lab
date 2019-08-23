@@ -8,13 +8,14 @@ namespace Microsoft.Build.Logging.Query.Ast
 {
     public sealed class ProjectNode :
         ComponentNode<Project, Result.Build>,
-        IEquatable<ProjectNode>
+        IEquatable<ProjectNode>,
+        IFilterable<Result.Build, Project>
     {
-        public ProjectNode(List<ConstraintNode<Project>> constraints = null) : base(null, constraints)
+        public ProjectNode(List<ConstraintNode<Project, Result.Build>> constraints = null) : base(null, constraints)
         {
         }
 
-        public ProjectNode(IAstNode<Project> next, List<ConstraintNode<Project>> constraints = null) :
+        public ProjectNode(IAstNode<Project> next, List<ConstraintNode<Project, Result.Build>> constraints = null) :
             base(next ?? throw new ArgumentNullException(), constraints)
         {
         }
@@ -36,12 +37,23 @@ namespace Microsoft.Build.Logging.Query.Ast
 
         public override IEnumerable<IQueryResult> Filter(IEnumerable<Result.Build> components)
         {
-            var projects = components
-                .SelectMany(build => build.ProjectsById.Values);
-
-            var filteredProjects = FilterByConstraints(projects);
+            var filteredProjects = FilterProject(components);
 
             return Next?.Filter(filteredProjects) ?? filteredProjects;
+        }
+
+        IEnumerable<Project> IFilterable<Result.Build, Project>.Filter(IEnumerable<Result.Build> components)
+        {
+            return FilterProject(components);
+        }
+
+        private IEnumerable<Project> FilterProject(IEnumerable<Result.Build> components)
+        {
+            var projects = components
+                .SelectMany(build => build.ProjectsById.Values)
+                .Distinct();
+
+            return FilterByConstraints(projects, components);
         }
     }
 }

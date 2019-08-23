@@ -64,9 +64,9 @@ namespace Microsoft.Build.Logging.Query.Scan
                     ReadNextCharacter();
                     Token = new StringToken(ReadNextString());
                     break;
-                case '!':
+                case '*':
                     ReadNextCharacter();
-                    Token = ExclamationToken.Instance;
+                    Token = AsteriskToken.Instance;
                     break;
                 case 'M':
                 case 'm':

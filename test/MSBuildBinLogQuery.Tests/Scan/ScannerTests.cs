@@ -524,13 +524,13 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
 
             yield return new object[]
             {
-                "/Project[!Before=[/Project[Id=1]]]",
+                "/Project[*Before=[/Project[Id=1]]]",
                 new Token.Token[]
                 {
                     SingleSlashToken.Instance,
                     ProjectToken.Instance,
                     LeftBracketToken.Instance,
-                    ExclamationToken.Instance,
+                    AsteriskToken.Instance,
                     BeforeToken.Instance,
                     EqualToken.Instance,
                     LeftBracketToken.Instance,
@@ -548,20 +548,20 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
 
             yield return new object[]
             {
-                "/Project[!Before=[/Project[!Before=[/Project[Id=1]]]]]",
+                "/Project[*Before=[/Project[*Before=[/Project[Id=1]]]]]",
                 new Token.Token[]
                 {
                     SingleSlashToken.Instance,
                     ProjectToken.Instance,
                     LeftBracketToken.Instance,
-                    ExclamationToken.Instance,
+                    AsteriskToken.Instance,
                     BeforeToken.Instance,
                     EqualToken.Instance,
                     LeftBracketToken.Instance,
                     SingleSlashToken.Instance,
                     ProjectToken.Instance,
                     LeftBracketToken.Instance,
-                    ExclamationToken.Instance,
+                    AsteriskToken.Instance,
                     BeforeToken.Instance,
                     EqualToken.Instance,
                     LeftBracketToken.Instance,

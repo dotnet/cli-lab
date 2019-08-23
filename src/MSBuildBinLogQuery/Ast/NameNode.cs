@@ -6,8 +6,9 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public sealed class NameNode<TParent> : ConstraintNode<TParent, string>, IEquatable<NameNode<TParent>>
+    public sealed class NameNode<TParent, TBefore> : ConstraintNode<TParent, string, TBefore>, IEquatable<NameNode<TParent, TBefore>>
         where TParent : class, IQueryResult, IResultWithName
+        where TBefore : class, IQueryResult
     {
         public NameNode(string value) : base(value)
         {
@@ -15,10 +16,10 @@ namespace Microsoft.Build.Logging.Query.Ast
 
         public override bool Equals(object obj)
         {
-            return Equals(obj as NameNode<TParent>);
+            return Equals(obj as NameNode<TParent, TBefore>);
         }
 
-        public bool Equals([AllowNull] NameNode<TParent> other)
+        public bool Equals([AllowNull] NameNode<TParent, TBefore> other)
         {
             return base.Equals(other);
         }
@@ -28,7 +29,7 @@ namespace Microsoft.Build.Logging.Query.Ast
             return base.GetHashCode();
         }
 
-        public override IEnumerable<TParent> Filter(IEnumerable<TParent> components)
+        public override IEnumerable<TParent> Filter(IEnumerable<TParent> components, IEnumerable<TBefore> previousComponents)
         {
             return components
                 .Where(component => component.Name == Value);

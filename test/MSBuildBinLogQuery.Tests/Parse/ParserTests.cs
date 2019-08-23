@@ -120,7 +120,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Task[ID=341]/Message",
                 new ProjectNode(new TargetNode(new TaskNode(
                     new MessageNode(LogNodeType.Direct),
-                    new List<ConstraintNode<Task>> { new IdNode<Task>(341) })))
+                    new List<ConstraintNode<Task, Target>> { new IdNode<Task, Target>(341) })))
             };
 
             yield return new object[]
@@ -128,11 +128,11 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Project/Task[id=1, Id=2, ID=3]//Warning",
                 new ProjectNode(new TargetNode(new TaskNode(
                     new WarningNode(LogNodeType.All),
-                    new List<ConstraintNode<Task>>
+                    new List<ConstraintNode<Task, Target>>
                     {
-                        new IdNode<Task>(1),
-                        new IdNode<Task>(2),
-                        new IdNode<Task>(3)
+                        new IdNode<Task, Target>(1),
+                        new IdNode<Task, Target>(2),
+                        new IdNode<Task, Target>(3)
                     })))
             };
 
@@ -145,7 +145,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/Target[Id=153]",
-                new ProjectNode(new TargetNode(new List<ConstraintNode<Target>> { new IdNode<Target>(153) }))
+                new ProjectNode(new TargetNode(new List<ConstraintNode<Target, Project>> { new IdNode<Target, Project>(153) }))
             };
 
             yield return new object[]
@@ -154,7 +154,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(
                         new ErrorNode(LogNodeType.All),
-                        new List<ConstraintNode<Target>> { new IdNode<Target>(980321) }))
+                        new List<ConstraintNode<Target, Project>> { new IdNode<Target, Project>(980321) }))
             };
 
             yield return new object[]
@@ -163,8 +163,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(new TargetNode(
                     new TaskNode(
                         new WarningNode(LogNodeType.Direct),
-                        new List<ConstraintNode<Task>> { new IdNode<Task>(81) }),
-                    new List<ConstraintNode<Target>> { new IdNode<Target>(9) }))
+                        new List<ConstraintNode<Task, Target>> { new IdNode<Task, Target>(81) }),
+                    new List<ConstraintNode<Target, Project>> { new IdNode<Target, Project>(9) }))
             };
 
             yield return new object[]
@@ -176,7 +176,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             yield return new object[]
             {
                 "/Project[Id=536]",
-                new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(536) })
+                new ProjectNode(new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(536) })
             };
 
             yield return new object[]
@@ -184,7 +184,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Project[ID=448]/Error",
                 new ProjectNode(
                     new ErrorNode(LogNodeType.Direct),
-                    new List<ConstraintNode<Project>> { new IdNode<Project>(448) })
+                    new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(448) })
             };
 
             yield return new object[]
@@ -192,8 +192,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Project[Id=121]/Task[Id=421]",
                 new ProjectNode(
                     new TargetNode(
-                        new TaskNode(new List<ConstraintNode<Task>> { new IdNode<Task>(421) })),
-                    new List<ConstraintNode<Project>> { new IdNode<Project>(121) })
+                        new TaskNode(new List<ConstraintNode<Task, Target>> { new IdNode<Task, Target>(421) })),
+                    new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(121) })
             };
 
             yield return new object[]
@@ -203,9 +203,9 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                     new TargetNode(
                         new TaskNode(
                             new MessageNode(LogNodeType.All),
-                            new List<ConstraintNode<Task>> { new IdNode<Task>(3) }),
-                        new List<ConstraintNode<Target>> { new IdNode<Target>(2) }),
-                    new List<ConstraintNode<Project>> { new IdNode<Project>(1) })
+                            new List<ConstraintNode<Task, Target>> { new IdNode<Task, Target>(3) }),
+                        new List<ConstraintNode<Target, Project>> { new IdNode<Target, Project>(2) }),
+                    new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(1) })
             };
 
             yield return new object[]
@@ -213,7 +213,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Target[Name=\"Compile\"]",
                 new ProjectNode(
                     new TargetNode(
-                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }))
+                        new List<ConstraintNode<Target, Project>> { new NameNode<Target, Project>("Compile") }))
             };
 
             yield return new object[]
@@ -222,7 +222,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(
                         new TaskNode(
-                            new List<ConstraintNode<Task>> { new NameNode<Task>("Message") })))
+                            new List<ConstraintNode<Task, Target>> { new NameNode<Task, Target>("Message") })))
             };
 
             yield return new object[]
@@ -231,7 +231,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(
                         new MessageNode(LogNodeType.All),
-                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }))
+                        new List<ConstraintNode<Target, Project>> { new NameNode<Target, Project>("Compile") }))
             };
 
             yield return new object[]
@@ -240,8 +240,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(
                         new WarningNode(LogNodeType.Direct),
-                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }),
-                    new List<ConstraintNode<Project>> { new IdNode<Project>(1) }
+                        new List<ConstraintNode<Target, Project>> { new NameNode<Target, Project>("Compile") }),
+                    new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(1) }
                 )
             };
 
@@ -251,8 +251,8 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(new TaskNode(
                         new WarningNode(LogNodeType.All),
-                        new List<ConstraintNode<Task>> { new NameNode<Task>("Message") })),
-                    new List<ConstraintNode<Project>> { new IdNode<Project>(1) }
+                        new List<ConstraintNode<Task, Target>> { new NameNode<Task, Target>("Message") })),
+                    new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(1) }
                 )
             };
 
@@ -260,7 +260,7 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
             {
                 "/Project[Name=\"MSBuildBinLogQuery\"]",
                 new ProjectNode(
-                    new List<ConstraintNode<Project>> { new NameNode<Project>("MSBuildBinLogQuery") })
+                    new List<ConstraintNode<Project, Result.Build>> { new NameNode<Project, Result.Build>("MSBuildBinLogQuery") })
             };
 
             yield return new object[]
@@ -268,14 +268,14 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 "/Project[Name=\"MSBuildBinLogQuery\"]//Message",
                 new ProjectNode(
                     new MessageNode(LogNodeType.All),
-                    new List<ConstraintNode<Project>> { new NameNode<Project>("MSBuildBinLogQuery") })
+                    new List<ConstraintNode<Project, Result.Build>> { new NameNode<Project, Result.Build>("MSBuildBinLogQuery") })
             };
 
             yield return new object[]
             {
                 "/Project[Path=\"./Proj1.csproj\"]",
                 new ProjectNode(
-                    new List<ConstraintNode<Project>> { new PathNode<Project>("./Proj1.csproj") })
+                    new List<ConstraintNode<Project, Result.Build>> { new PathNode<Project, Result.Build>("./Proj1.csproj") })
             };
 
             yield return new object[]
@@ -284,32 +284,32 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(new TaskNode(
                         new WarningNode(LogNodeType.Direct),
-                        new List<ConstraintNode<Task>> { new NameNode<Task>("ResolveSdk") })),
-                    new List<ConstraintNode<Project>> { new PathNode<Project>("./test/Proj1.Tests/Proj1.Tests.csproj") })
+                        new List<ConstraintNode<Task, Target>> { new NameNode<Task, Target>("ResolveSdk") })),
+                    new List<ConstraintNode<Project, Result.Build>> { new PathNode<Project, Result.Build>("./test/Proj1.Tests/Proj1.Tests.csproj") })
             };
 
             yield return new object[]
             {
                 "/Project[Before=[/Project[Id=1]]]",
                 new ProjectNode(
-                    new List<ConstraintNode<Project>>
+                    new List<ConstraintNode<Project, Result.Build>>
                     {
-                        new BeforeNode<Project, ProjectNode_BeforeThis>(
-                            new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
-                            DependencyNodeType.All)
+                        new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode, Result.Build>(
+                            new ProjectNode(new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(1) }),
+                            DependencyNodeType.Direct)
                     }
                 )
             };
 
             yield return new object[]
             {
-                "/Project[!Before=[/Project[Id=1]]]",
+                "/Project[*Before=[/Project[Id=1]]]",
                 new ProjectNode(
-                    new List<ConstraintNode<Project>>
+                    new List<ConstraintNode<Project, Result.Build>>
                     {
-                        new BeforeNode<Project, ProjectNode_BeforeThis>(
-                            new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
-                            DependencyNodeType.Direct)
+                        new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode, Result.Build>(
+                            new ProjectNode(new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(1) }),
+                            DependencyNodeType.All)
                     }
                 )
             };
@@ -320,19 +320,19 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                 new ProjectNode(
                     new TargetNode(
                         new MessageNode(LogNodeType.All),
-                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }
+                        new List<ConstraintNode<Target, Project>> { new NameNode<Target, Project>("Compile") }
                     ),
-                    new List<ConstraintNode<Project>>
+                    new List<ConstraintNode<Project, Result.Build>>
                     {
-                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                        new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode, Result.Build>(
                             new ProjectNode(
-                                new List<ConstraintNode<Project>>
+                                new List<ConstraintNode<Project, Result.Build>>
                                 {
-                                    new BeforeNode<Project, ProjectNode_BeforeThis>(
-                                        new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
-                                        DependencyNodeType.All)
+                                    new BeforeNode<Project, ProjectNode_BeforeThis, ProjectNode, Result.Build>(
+                                        new ProjectNode(new List<ConstraintNode<Project, Result.Build>> { new IdNode<Project, Result.Build>(1) }),
+                                        DependencyNodeType.Direct)
                                 }),
-                            DependencyNodeType.All)
+                            DependencyNodeType.Direct)
                     }
                 )
             };
