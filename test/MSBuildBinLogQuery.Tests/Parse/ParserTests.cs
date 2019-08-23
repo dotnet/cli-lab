@@ -296,20 +296,20 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                     {
                         new BeforeNode<Project, ProjectNode_BeforeThis>(
                             new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
-                            DependencyNodeType.All)
+                            DependencyNodeType.Direct)
                     }
                 )
             };
 
             yield return new object[]
             {
-                "/Project[!Before=[/Project[Id=1]]]",
+                "/Project[*Before=[/Project[Id=1]]]",
                 new ProjectNode(
                     new List<ConstraintNode<Project>>
                     {
                         new BeforeNode<Project, ProjectNode_BeforeThis>(
                             new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
-                            DependencyNodeType.Direct)
+                            DependencyNodeType.All)
                     }
                 )
             };
@@ -330,9 +330,9 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                                 {
                                     new BeforeNode<Project, ProjectNode_BeforeThis>(
                                         new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
-                                        DependencyNodeType.All)
+                                        DependencyNodeType.Direct)
                                 }),
-                            DependencyNodeType.All)
+                            DependencyNodeType.Direct)
                     }
                 )
             };

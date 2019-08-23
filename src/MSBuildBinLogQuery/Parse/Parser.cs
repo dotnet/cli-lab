@@ -195,15 +195,15 @@ namespace Microsoft.Build.Logging.Query.Parse
                     constraint = ParsePathConstraint<Project>();
                     return true;
                 case BeforeToken _:
-                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.All);
+                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.Direct);
                     return true;
-                case ExclamationToken _:
-                    Consume<ExclamationToken>();
+                case AsteriskToken _:
+                    Consume<AsteriskToken>();
 
                     switch (_scanner.Token)
                     {
                         case BeforeToken _:
-                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.Direct);
+                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.All);
                             return true;
                         default:
                             constraint = null;
