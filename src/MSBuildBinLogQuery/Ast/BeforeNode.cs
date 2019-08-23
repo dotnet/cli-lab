@@ -39,7 +39,7 @@ namespace Microsoft.Build.Logging.Query.Ast
             return Type switch
             {
                 DependencyNodeType.All => throw new NotImplementedException(),
-                DependencyNodeType.Direct => components.Intersect(Value.Filter(previousComponents).SelectMany(component => component.Node_BeforeThis.AdjacentNodes.Select(node => node.Component))),
+                DependencyNodeType.Direct => components.Intersect(Value.Filter(previousComponents).SelectMany(component => component.Node_BeforeThis.AdjacentNodes.Select(node => node.Component)).Distinct()),
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
