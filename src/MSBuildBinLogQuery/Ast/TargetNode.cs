@@ -35,7 +35,8 @@ namespace Microsoft.Build.Logging.Query.Ast
         public override IEnumerable<IQueryResult> Filter(IEnumerable<Project> components)
         {
             var targets = components
-                .SelectMany(project => project.OrderedTargets);
+                .SelectMany(project => project.OrderedTargets)
+                .Distinct();
 
             var filteredTargets = FilterByConstraints(targets);
 
