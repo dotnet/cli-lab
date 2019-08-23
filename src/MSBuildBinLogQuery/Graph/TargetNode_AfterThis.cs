@@ -8,14 +8,15 @@ namespace Microsoft.Build.Logging.Query.Graph
     public class TargetNode_AfterThis :
         IDirectedAcyclicGraphNode<TargetNode_AfterThis>,
         IShallowCopyableGraphNode<TargetNode_AfterThis>,
+        INodeWithComponent<Target>,
         IEquatable<TargetNode_AfterThis>
     {
-        public Target TargetInfo { get; }
+        public Target Component { get; }
         public ISet<TargetNode_AfterThis> AdjacentNodes { get; private set; }
 
         public TargetNode_AfterThis(Target targetInfo)
         {
-            TargetInfo = targetInfo;
+            Component = targetInfo;
             AdjacentNodes = new HashSet<TargetNode_AfterThis>();
         }
 
@@ -29,12 +30,12 @@ namespace Microsoft.Build.Logging.Query.Graph
         public bool Equals([AllowNull] TargetNode_AfterThis other)
         {
             return other != null &&
-                   EqualityComparer<Target>.Default.Equals(TargetInfo, other.TargetInfo);
+                   EqualityComparer<Target>.Default.Equals(Component, other.Component);
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(TargetInfo);
+            return HashCode.Combine(Component);
         }
     }
 }
