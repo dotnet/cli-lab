@@ -10,7 +10,7 @@ namespace Microsoft.Build.Logging.Query.Ast
     {
         public IAstNode<TThis> Next { get; }
 
-        public ComponentNode(IAstNode<TThis> next, List<ConstraintNode<TThis>> constraints = null) :
+        public ComponentNode(IAstNode<TThis> next, List<ConstraintNode<TThis, TBefore>> constraints = null) :
             base(constraints)
         {
             Next = next;

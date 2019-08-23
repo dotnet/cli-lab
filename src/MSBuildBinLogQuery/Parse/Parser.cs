@@ -12,8 +12,9 @@ namespace Microsoft.Build.Logging.Query.Parse
     {
         private readonly Scanner _scanner;
 
-        private delegate bool TryConstraintParser<TParent>(out ConstraintNode<TParent> constraint)
-            where TParent : class, IQueryResult;
+        private delegate bool TryConstraintParser<TParent, TBefore>(out ConstraintNode<TParent, TBefore> constraint)
+            where TParent : class, IQueryResult
+            where TBefore : class, IQueryResult;
 
         private Parser(Scanner scanner)
         {
@@ -105,40 +106,46 @@ namespace Microsoft.Build.Logging.Query.Parse
             }
         }
 
-        private IdNode<TParent> ParseIdConstraint<TParent>()
+        private IdNode<TParent, TBefore> ParseIdConstraint<TParent, TBefore>()
             where TParent : class, IQueryResult, IResultWithId
+            where TBefore : class, IQueryResult
         {
             Consume<IdToken>();
             Consume<EqualToken>();
 
             var value = Consume<IntegerToken>().Value;
-            return new IdNode<TParent>(value);
+            return new IdNode<TParent, TBefore>(value);
         }
 
-        private NameNode<TParent> ParseNameConstraint<TParent>()
+        private NameNode<TParent, TBefore> ParseNameConstraint<TParent, TBefore>()
             where TParent : class, IQueryResult, IResultWithName
+            where TBefore : class, IQueryResult
         {
             Consume<NameToken>();
             Consume<EqualToken>();
 
             var value = Consume<StringToken>().Value;
-            return new NameNode<TParent>(value);
+            return new NameNode<TParent, TBefore>(value);
         }
 
-        private PathNode<TParent> ParsePathConstraint<TParent>()
+        private PathNode<TParent, TBefore> ParsePathConstraint<TParent, TBefore>()
             where TParent : class, IQueryResult, IResultWithPath
+            where TBefore : class, IQueryResult
         {
             Consume<PathToken>();
             Consume<EqualToken>();
 
             var value = Consume<StringToken>().Value;
-            return new PathNode<TParent>(value);
+            return new PathNode<TParent, TBefore>(value);
         }
 
-        private BeforeNode<TParent, TGraphNode, TAstNode> ParseBeforeConstraint<TParent, TGraphNode, TAstNode>(DependencyNodeType type, Func<TAstNode> astParser)
+        private BeforeNode<TParent, TGraphNode, TAstNode, TBefore> ParseBeforeConstraint<TParent, TGraphNode, TAstNode, TBefore>(
+            DependencyNodeType type,
+            Func<TAstNode> astParser)
             where TParent : Component, IResultWithBeforeThis<TGraphNode>
             where TGraphNode : IDirectedAcyclicGraphNode<TGraphNode>, INodeWithComponent<TParent>
-            where TAstNode : IAstNode
+            where TAstNode : IAstNode, IFilterable<TBefore, TParent>
+            where TBefore : class, IQueryResult
         {
             Consume<BeforeToken>();
             Consume<EqualToken>();
@@ -148,18 +155,18 @@ namespace Microsoft.Build.Logging.Query.Parse
 
             Consume<RightBracketToken>();
 
-            return new BeforeNode<TParent, TGraphNode, TAstNode>(value, type);
+            return new BeforeNode<TParent, TGraphNode, TAstNode, TBefore>(value, type);
         }
 
-        private bool TryParseTaskConstraint(out ConstraintNode<Task> constraint)
+        private bool TryParseTaskConstraint(out ConstraintNode<Task, Target> constraint)
         {
             switch (_scanner.Token)
             {
                 case IdToken _:
-                    constraint = ParseIdConstraint<Task>();
+                    constraint = ParseIdConstraint<Task, Target>();
                     return true;
                 case NameToken _:
-                    constraint = ParseNameConstraint<Task>();
+                    constraint = ParseNameConstraint<Task, Target>();
                     return true;
                 default:
                     constraint = null;
@@ -167,15 +174,15 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
-        private bool TryParseTargetConstraint(out ConstraintNode<Target> constraint)
+        private bool TryParseTargetConstraint(out ConstraintNode<Target, Project> constraint)
         {
             switch (_scanner.Token)
             {
                 case IdToken _:
-                    constraint = ParseIdConstraint<Target>();
+                    constraint = ParseIdConstraint<Target, Project>();
                     return true;
                 case NameToken _:
-                    constraint = ParseNameConstraint<Target>();
+                    constraint = ParseNameConstraint<Target, Project>();
                     return true;
                 default:
                     constraint = null;
@@ -183,21 +190,21 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
-        private bool TryParseProjectConstraint(out ConstraintNode<Project> constraint)
+        private bool TryParseProjectConstraint(out ConstraintNode<Project, Result.Build> constraint)
         {
             switch (_scanner.Token)
             {
                 case IdToken _:
-                    constraint = ParseIdConstraint<Project>();
+                    constraint = ParseIdConstraint<Project, Result.Build>();
                     return true;
                 case NameToken _:
-                    constraint = ParseNameConstraint<Project>();
+                    constraint = ParseNameConstraint<Project, Result.Build>();
                     return true;
                 case PathToken _:
-                    constraint = ParsePathConstraint<Project>();
+                    constraint = ParsePathConstraint<Project, Result.Build>();
                     return true;
                 case BeforeToken _:
-                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis, ProjectNode>(
+                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis, ProjectNode, Result.Build>(
                         DependencyNodeType.Direct,
                         () =>
                         {
@@ -211,7 +218,7 @@ namespace Microsoft.Build.Logging.Query.Parse
                     switch (_scanner.Token)
                     {
                         case BeforeToken _:
-                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis, ProjectNode>(
+                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis, ProjectNode, Result.Build>(
                                 DependencyNodeType.All,
                                 () =>
                                 {
@@ -229,10 +236,11 @@ namespace Microsoft.Build.Logging.Query.Parse
             };
         }
 
-        private List<ConstraintNode<TParent>> ParseConstraints<TParent>(TryConstraintParser<TParent> tryConstraintParser)
+        private List<ConstraintNode<TParent, TBefore>> ParseConstraints<TParent, TBefore>(TryConstraintParser<TParent, TBefore> tryConstraintParser)
             where TParent : class, IQueryResult
+            where TBefore : class, IQueryResult
         {
-            var constraints = new List<ConstraintNode<TParent>>();
+            var constraints = new List<ConstraintNode<TParent, TBefore>>();
 
             if (!(_scanner.Token is LeftBracketToken))
             {
@@ -270,7 +278,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<TaskToken>();
 
-            var constraints = ParseConstraints<Task>(TryParseTaskConstraint);
+            var constraints = ParseConstraints<Task, Target>(TryParseTaskConstraint);
             var next = ParseNullableLogNode();
             var task = next == null ?
                 new TaskNode(constraints) :
@@ -283,7 +291,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<TargetToken>();
 
-            var constraints = ParseConstraints<Target>(TryParseTargetConstraint);
+            var constraints = ParseConstraints<Target, Project>(TryParseTargetConstraint);
             var next = ParseNullableNodeUnderTarget();
             var target = next == null ?
                 new TargetNode(constraints) :
@@ -296,7 +304,7 @@ namespace Microsoft.Build.Logging.Query.Parse
         {
             Consume<ProjectToken>();
 
-            var constraints = ParseConstraints<Project>(TryParseProjectConstraint);
+            var constraints = ParseConstraints<Project, Result.Build>(TryParseProjectConstraint);
             var next = ParseNullableNodeUnderProject();
             var project = next == null ?
                 new ProjectNode(constraints) :
