@@ -3,13 +3,13 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public abstract class DependencyNode<TParent, TGraphNode> : ConstraintNode<TParent, IAstNode<TParent>>
+    public abstract class DependencyNode<TParent, TGraphNode> : ConstraintNode<TParent, IAstNode<Result.Build>>
         where TParent : class, IQueryResult
         where TGraphNode : IDirectedAcyclicGraphNode<TGraphNode>
     {
         public DependencyNodeType Type { get; }
 
-        public DependencyNode(IAstNode<TParent> value, DependencyNodeType type) : base(value)
+        public DependencyNode(IAstNode<Result.Build> value, DependencyNodeType type) : base(value)
         {
             Type = type;
         }

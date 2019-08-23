@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Microsoft.Build.Logging.Query.Ast;
+using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Result;
 using Microsoft.Build.Logging.Query.Scan;
 using Microsoft.Build.Logging.Query.Token;
@@ -133,6 +134,21 @@ namespace Microsoft.Build.Logging.Query.Parse
             return new PathNode<TParent>(value);
         }
 
+        private BeforeNode<TParent, TGraphNode> ParseBeforeConstraint<TParent, TGraphNode>(DependencyNodeType type)
+            where TParent : Component, IResultWithBeforeThis<TGraphNode>
+            where TGraphNode : IDirectedAcyclicGraphNode<TGraphNode>, INodeWithComponent<TParent>
+        {
+            Consume<BeforeToken>();
+            Consume<EqualToken>();
+            Consume<LeftBracketToken>();
+
+            var value = ParseQuery();
+
+            Consume<RightBracketToken>();
+
+            return new BeforeNode<TParent, TGraphNode>(value, type);
+        }
+
         private bool TryParseTaskConstraint(out ConstraintNode<Task> constraint)
         {
             switch (_scanner.Token)
@@ -178,6 +194,21 @@ namespace Microsoft.Build.Logging.Query.Parse
                 case PathToken _:
                     constraint = ParsePathConstraint<Project>();
                     return true;
+                case BeforeToken _:
+                    constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.All);
+                    return true;
+                case ExclamationToken _:
+                    Consume<ExclamationToken>();
+
+                    switch (_scanner.Token)
+                    {
+                        case BeforeToken _:
+                            constraint = ParseBeforeConstraint<Project, ProjectNode_BeforeThis>(DependencyNodeType.Direct);
+                            return true;
+                        default:
+                            constraint = null;
+                            return false;
+                    }
                 default:
                     constraint = null;
                     return false;

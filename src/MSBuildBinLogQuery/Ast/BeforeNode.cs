@@ -13,7 +13,7 @@ namespace Microsoft.Build.Logging.Query.Ast
         where TParent : Component, IResultWithBeforeThis<TGraphNode>
         where TGraphNode : IDirectedAcyclicGraphNode<TGraphNode>, INodeWithComponent<TParent>
     {
-        public BeforeNode(IAstNode<TParent> value, DependencyNodeType type) : base(value, type)
+        public BeforeNode(IAstNode<Result.Build> value, DependencyNodeType type) : base(value, type)
         {
         }
 
@@ -34,8 +34,12 @@ namespace Microsoft.Build.Logging.Query.Ast
 
         public override IEnumerable<TParent> Filter(IEnumerable<TParent> components)
         {
-            return components
-                .SelectMany(component => component.Node_BeforeThis.AdjacentNodes.Select(node => node.Component));
+            return Type switch
+            {
+                DependencyNodeType.All => throw new NotImplementedException(),
+                DependencyNodeType.Direct => components.SelectMany(component => component.Node_BeforeThis.AdjacentNodes.Select(node => node.Component)),
+                _ => throw new ArgumentOutOfRangeException(),
+            };
         }
     }
 }

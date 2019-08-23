@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Microsoft.Build.Logging.Query.Ast;
+using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Parse;
 using Microsoft.Build.Logging.Query.Result;
 using Xunit;
@@ -285,6 +286,55 @@ namespace Microsoft.Build.Logging.Query.Tests.Parse
                         new WarningNode(LogNodeType.Direct),
                         new List<ConstraintNode<Task>> { new NameNode<Task>("ResolveSdk") })),
                     new List<ConstraintNode<Project>> { new PathNode<Project>("./test/Proj1.Tests/Proj1.Tests.csproj") })
+            };
+
+            yield return new object[]
+            {
+                "/Project[Before=[/Project[Id=1]]]",
+                new ProjectNode(
+                    new List<ConstraintNode<Project>>
+                    {
+                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                            new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
+                            DependencyNodeType.All)
+                    }
+                )
+            };
+
+            yield return new object[]
+            {
+                "/Project[!Before=[/Project[Id=1]]]",
+                new ProjectNode(
+                    new List<ConstraintNode<Project>>
+                    {
+                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                            new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
+                            DependencyNodeType.Direct)
+                    }
+                )
+            };
+
+            yield return new object[]
+            {
+                "/Project[Before=[/Project[Before=[/Project[Id=1]]]]]/Target[Name=\"Compile\"]//Message",
+                new ProjectNode(
+                    new TargetNode(
+                        new MessageNode(LogNodeType.All),
+                        new List<ConstraintNode<Target>> { new NameNode<Target>("Compile") }
+                    ),
+                    new List<ConstraintNode<Project>>
+                    {
+                        new BeforeNode<Project, ProjectNode_BeforeThis>(
+                            new ProjectNode(
+                                new List<ConstraintNode<Project>>
+                                {
+                                    new BeforeNode<Project, ProjectNode_BeforeThis>(
+                                        new ProjectNode(new List<ConstraintNode<Project>> { new IdNode<Project>(1) }),
+                                        DependencyNodeType.All)
+                                }),
+                            DependencyNodeType.All)
+                    }
+                )
             };
         }
 
