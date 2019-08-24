@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Microsoft.Build.Logging.Query.Component;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Graph
 {

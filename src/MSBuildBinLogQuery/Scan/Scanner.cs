@@ -78,7 +78,21 @@ namespace Microsoft.Build.Logging.Query.Scan
                     break;
                 case 'P':
                 case 'p':
-                    ReadNextKeyword("PROJECT", () => ProjectToken.Instance);
+                    ReadNextCharacter();
+
+                    if (char.ToUpper(_char) == 'R')
+                    {
+                        ReadNextKeyword("ROJECT", () => ProjectToken.Instance);
+                    }
+                    else if (char.ToUpper(_char) == 'A')
+                    {
+                        ReadNextKeyword("ATH", () => PathToken.Instance);
+                    }
+                    else
+                    {
+                        throw new ScanException(Expression);
+                    }
+
                     break;
                 case 'T':
                 case 't':
@@ -94,18 +108,32 @@ namespace Microsoft.Build.Logging.Query.Scan
                     if (char.ToUpper(_char) == 'R')
                     {
                         ReadNextKeyword("RGET", () => TargetToken.Instance);
-                        break;
                     }
                     else if (char.ToUpper(_char) == 'S')
                     {
                         ReadNextKeyword("SK", () => TaskToken.Instance);
-                        break;
                     }
                     else
                     {
                         throw new ScanException(Expression);
                     }
+
+                    break;
+                case 'I':
+                case 'i':
+                    ReadNextKeyword("ID", () => IdToken.Instance);
+                    break;
+                case 'N':
+                case 'n':
+                    ReadNextKeyword("NAME", () => NameToken.Instance);
+                    break;
                 default:
+                    if (char.IsDigit(_char))
+                    {
+                        Token = new IntegerToken(ReadNextInteger());
+                        break;
+                    }
+
                     throw new ScanException(Expression);
             }
         }
@@ -141,6 +169,24 @@ namespace Microsoft.Build.Logging.Query.Scan
             }
 
             Token = thunk.Invoke();
+        }
+
+        private int ReadNextInteger()
+        {
+            var stringBuilder = new StringBuilder();
+
+            while (char.IsDigit(_char))
+            {
+                stringBuilder.Append(_char);
+                ReadNextCharacter();
+            }
+
+            if (int.TryParse(stringBuilder.ToString(), out var value))
+            {
+                return value;
+            }
+
+            throw new ScanException(Expression);
         }
 
         private bool ReadNextCharacter()

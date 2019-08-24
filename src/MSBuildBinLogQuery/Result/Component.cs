@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Microsoft.Build.Logging.Query.Messaging;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
-    public abstract class Component
+    public abstract class Component : IQueryResult
     {
         public abstract Component Parent { get; }
         public IReadOnlyList<Message> Messages => _messages;

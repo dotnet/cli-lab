@@ -7,9 +7,9 @@ using Microsoft.Build.Framework;
 using Microsoft.Build.Logging.Query.Graph;
 using Microsoft.Build.Logging.Query.Utility;
 
-namespace Microsoft.Build.Logging.Query.Component
+namespace Microsoft.Build.Logging.Query.Result
 {
-    public class Project : Component, IEquatable<Project>
+    public class Project : Component, IEquatable<Project>, IResultWithId, IResultWithName, IResultWithPath
     {
         public int Id { get; }
         public string ProjectFile { get; }
@@ -27,6 +27,8 @@ namespace Microsoft.Build.Logging.Query.Component
         //       the overall Project.
         public IReadOnlyList<Target> EntryPointTargets => _entryPointTargets;
         public override Component Parent => ParentBuild;
+        public string Name => System.IO.Path.GetFileNameWithoutExtension(ProjectFile);
+        public string Path => ProjectFile;
 
         private readonly Dictionary<int, Target> _targetsById;
         private readonly Dictionary<string, Target> _targetsByName;

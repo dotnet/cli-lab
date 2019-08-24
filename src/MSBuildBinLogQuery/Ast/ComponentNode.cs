@@ -1,32 +1,30 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public abstract class ComponentNode : AstNode, IEquatable<ComponentNode>
+    public abstract class ComponentNode<TThis, TBefore> : AstNodeWithConstraints<TThis, TBefore>
+        where TThis : Component
+        where TBefore : Component
     {
-        public AstNode Next { get; }
+        public IAstNode<TThis> Next { get; }
 
-        public ComponentNode(AstNode next) : base()
+        public ComponentNode(IAstNode<TThis> next, List<ConstraintNode<TThis>> constraints = null) :
+            base(constraints)
         {
             Next = next;
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals(obj as ComponentNode);
-        }
-
-        public bool Equals([AllowNull] ComponentNode other)
+        protected bool Equals(ComponentNode<TThis, TBefore> other)
         {
             return base.Equals(other) &&
-                   EqualityComparer<AstNode>.Default.Equals(Next, other.Next);
-        }
+                   EqualityComparer<IAstNode<TThis>>.Default.Equals(Next, other.Next);
+;        }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Next);
+            return HashCode.Combine(GetConstraintHashCode(), Next);
         }
     }
 }

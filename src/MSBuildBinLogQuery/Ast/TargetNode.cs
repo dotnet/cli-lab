@@ -1,11 +1,19 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public class TargetNode : ComponentNode, IEquatable<TargetNode>
+    public sealed class TargetNode : ComponentNode<Target, Project>, IEquatable<TargetNode>
     {
-        public TargetNode(AstNode next) : base(next)
+        public TargetNode(List<ConstraintNode<Target>> constraints = null) : base(null, constraints)
+        {
+        }
+
+        public TargetNode(IAstNode<Target> next, List<ConstraintNode<Target>> constraints = null) :
+            base(next ?? throw new ArgumentNullException(), constraints)
         {
         }
 
@@ -22,6 +30,16 @@ namespace Microsoft.Build.Logging.Query.Ast
         public override int GetHashCode()
         {
             return base.GetHashCode();
+        }
+
+        public override IEnumerable<IQueryResult> Filter(IEnumerable<Project> components)
+        {
+            var targets = components
+                .SelectMany(project => project.OrderedTargets);
+
+            var filteredTargets = FilterByConstraints(targets);
+
+            return Next?.Filter(filteredTargets) ?? filteredTargets;
         }
     }
 }
