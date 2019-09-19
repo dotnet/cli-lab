@@ -39,10 +39,9 @@
       <Output TaskParameter="MsiVersion" PropertyName="MsiVersion" />
     </GenerateMsiVersion>
 
-    <GenerateGuidFromName Name="$(DotnetCoreUninstallMSIInstallerFile)">
-      <Output TaskParameter="OutputGuid"
-          PropertyName="DotnetCoreUninstallInstallerUpgradeCode" />
-    </GenerateGuidFromName>
+    <PropertyGroup>
+      <DotnetCoreUninstallInstallerUpgradeCode>7E7330FB-5FB7-7D28-EE34-A332CBE91551</DotnetCoreUninstallInstallerUpgradeCode>
+    </PropertyGroup>
 
   </Target>
 

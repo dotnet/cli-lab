@@ -26,12 +26,6 @@
     <Property Id="MSIFASTINSTALL" Value="7" />
     <WixVariable Id="WixUILicenseRtf" Value="$(var.MicrosoftEula)" />
 
-    <Property Id="DOTNETCOREUNINSTALLTEXE">
-      <DirectorySearch Id="DOTNETPATH" Path="[#DOTNETDOTNETCOREUNINSTALLHOME]">
-        <FileSearch Id="DOTNETCOREUNINSTALLTEXESEARCH" Name="dotnet-core-uninstall.exe" />
-      </DirectorySearch>
-    </Property>
-
   </Product>
   <Fragment>
     <Directory Id="TARGETDIR" Name="SourceDir">
