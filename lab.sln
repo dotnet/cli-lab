@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dotnet-core-uninstall.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuildBinLogQuery", "src\MSBuildBinLogQuery\MSBuildBinLogQuery.csproj", "{A7FF737E-4ADE-4B5A-BA1C-3F4B7129590F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildBinLogQuery.Tests", "test\MSBuildBinLogQuery.Tests\MSBuildBinLogQuery.Tests.csproj", "{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuildBinLogQuery.Tests", "test\MSBuildBinLogQuery.Tests\MSBuildBinLogQuery.Tests.csproj", "{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "redist", "src\redist\redist.csproj", "{9D9C4522-1992-4820-9248-9630C38FC25E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,18 @@ Global
 		{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}.Release|x64.Build.0 = Release|Any CPU
 		{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}.Release|x86.ActiveCfg = Release|Any CPU
 		{9664B2B1-3B5D-4F99-A0D5-B38BF3E96672}.Release|x86.Build.0 = Release|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Debug|x64.Build.0 = Debug|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Debug|x86.Build.0 = Debug|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Release|x64.ActiveCfg = Release|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Release|x64.Build.0 = Release|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Release|x86.ActiveCfg = Release|Any CPU
+		{9D9C4522-1992-4820-9248-9630C38FC25E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -2,9 +2,7 @@
   <PropertyGroup>
     <AssemblyName>dotnet-core-uninstall</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PublishSingleFile>true</PublishSingleFile>
-    <RuntimeIdentifiers>win-x64;win-x86;osx-x64</RuntimeIdentifiers>
-    <SelfContained>true</SelfContained>
+    <RuntimeIdentifiers>win-x86;osx-x64</RuntimeIdentifiers>
     <SignAssembly>true</SignAssembly>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
@@ -35,14 +33,5 @@
       <LastGenOutput>LocalizableStrings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-  <Target Name="PublishSingleFile" AfterTargets="Build">
-    <MSBuild
-      BuildInParallel="False"
-      Projects="$(MSBuildThisFileDirectory)\dotnet-core-uninstall.csproj"
-      Properties="NoBuild=true"
-      Targets="Publish">
-    </MSBuild>
-  </Target>
 
 </Project>

@@ -1,0 +1,30 @@
+<Project>
+  <PropertyGroup>
+    <DotnetCoreUninstallOutputDirectory>$(ArtifactsDir)layout\dotnet-core-uninstall\</DotnetCoreUninstallOutputDirectory>
+    <DownloadsFolder>$(IntermediateOutputPath)downloads\</DownloadsFolder>
+    <_PublishSingleFileForRid>true</_PublishSingleFileForRid>
+    <_PublishSingleFileForRid Condition="'$(RID)' == 'win-x86'">false</_PublishSingleFileForRid>
+    <_GenerateLayoutDependsOnTargets>CleanLayoutPath;PublishDotnetCoreUninstallProject</_GenerateLayoutDependsOnTargets>
+    <_GenerateLayoutDependsOnTargets Condition="'$(RID)' == 'win-x86'">CleanLayoutPath;PublishDotnetCoreUninstallProject;SignLayout</_GenerateLayoutDependsOnTargets>
+  </PropertyGroup>
+
+  <Target Name="CleanLayoutPath">
+    <!-- Remove everything from the publish directory so we don't have left over items from previous builds -->
+    <RemoveDir Directories="$(DotnetCoreUninstallOutputDirectory)" />
+    <MakeDir Directories="$(DotnetCoreUninstallOutputDirectory)" />
+  </Target>
+
+  <Target Name="GenerateLayout"
+          DependsOnTargets="$(_GenerateLayoutDependsOnTargets)"
+          BeforeTargets="AfterBuild">
+  </Target>
+
+  <Target Name="PublishDotnetCoreUninstallProject" AfterTargets="Build">
+    <MSBuild
+      BuildInParallel="False"
+      Projects="$(RepoRoot)\src\dotnet-core-uninstall\dotnet-core-uninstall.csproj"
+      Properties="PublishDir=$(DotnetCoreUninstallOutputDirectory);PublishSingleFile=$(_PublishSingleFileForRid);RuntimeIdentifier=$(RID);PublishTrimmed=true;SelfContained=true"
+      Targets="Publish">
+    </MSBuild>
+  </Target>
+</Project>

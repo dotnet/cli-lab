@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <Target Name="SetDotnetCoreUninstallBrandingInfo">
+    <PropertyGroup>
+      <BuildName>SDK.Uninstall.Tool</BuildName>
+      <DotnetCoreUninstallBrandName>Microsoft .NET Core SDK Uninstall Tool</DotnetCoreUninstallBrandName>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="SetupWixProperties" DependsOnTargets="SetupFileExtensions;GetCurrentRuntimeInformation">
+    <!-- AcquireWix Properties -->
+    <PropertyGroup>
+      <WixVersion>3.10.4</WixVersion>
+      <WixDownloadUrl>https://dotnetcli.azureedge.net/build/wix/wix.$(WixVersion).zip</WixDownloadUrl>
+      <WixRoot>$(ArtifactsDir)Tools/WixTools/$(WixVersion)</WixRoot>
+      <WixDestinationPath>$(WixRoot)/WixTools.$(WixVersion).zip</WixDestinationPath>
+      <WixDownloadSentinel>$(WixRoot)/WixDownload.$(WixVersion).sentinel</WixDownloadSentinel>
+    </PropertyGroup>
+
+    <!-- Generate MSI/Bundle Properties -->
+    <PropertyGroup>
+      <DotnetCoreUninstallGenerateMsiPowershellScript>$(MSBuildThisFileDirectory)packaging/windows/dotnetCoreUninstall/generatemsi.ps1</DotnetCoreUninstallGenerateMsiPowershellScript>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <ArtifactNameWithVersionDotnetCoreUninstall>dotnet-core-uninstall-$(Version)</ArtifactNameWithVersionDotnetCoreUninstall>
+      <DotnetCoreUninstallMSIInstallerFile>$(ArtifactsShippingPackagesDir)$(ArtifactNameWithVersionDotnetCoreUninstall)$(InstallerExtension)</DotnetCoreUninstallMSIInstallerFile>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="MsiTargetsSetupInputOutputs"
+          DependsOnTargets="GenerateLayout;SetupWixProperties;GetDotnetCoreUninstallGitCommitInfo">
+
+    <GenerateMsiVersion CommitCount="$(GitCommitCount)"
+                        VersionMajor="$(VersionMajor)"
+                        VersionMinor="$(VersionMinor)"
+                        VersionPatch="$(VersionPatch)">
+      <Output TaskParameter="MsiVersion" PropertyName="MsiVersion" />
+    </GenerateMsiVersion>
+
+    <PropertyGroup>
+      <DotnetCoreUninstallInstallerUpgradeCode>7E7330FB-5FB7-7D28-EE34-A332CBE91551</DotnetCoreUninstallInstallerUpgradeCode>
+    </PropertyGroup>
+
+  </Target>
+
+  <Target Name="AcquireWix"
+          DependsOnTargets="SetupWixProperties;MsiTargetsSetupInputOutputs"
+          Inputs="$(WixDownloadSentinel)"
+          Outputs="$(WixDestinationPath)">
+
+    <!-- Setup sentinel to take advantage of incrementality -->
+    <MakeDir Directories="$(WixRoot)" />
+    <WriteLinesToFile
+        File="$(WixDownloadSentinel)"
+        Lines="$(WixVersion)"
+        Overwrite="true"
+        Encoding="Unicode"/>
+
+    <DownloadFile
+        Uri="$(WixDownloadUrl)"
+        DestinationPath="$(WixDestinationPath)"
+        Overwrite="false" />
+
+    <ExtractArchiveToDirectory
+        SourceArchive="$(WixDestinationPath)"
+        DestinationDirectory="$(WixRoot)" />
+
+  </Target>
+
+  <Target Name="GenerateDotnetCoreUninstallMsi"
+          DependsOnTargets="GenerateLayout;AcquireWix;MsiTargetsSetupInputOutputs;SetDotnetCoreUninstallBrandingInfo"
+          Condition=" '$(OS)' == 'Windows_NT' "
+          Inputs="$(DotnetCoreUninstallOutputDirectory)**/*;
+                    $(DotnetCoreUninstallGenerateMsiPowershellScript)"
+          Outputs="$(DotnetCoreUninstallMSIInstallerFile)">
+
+    <Exec Command="powershell -NoProfile -NoLogo $(DotnetCoreUninstallGenerateMsiPowershellScript) ^
+                      '$(DotnetCoreUninstallOutputDirectory.TrimEnd('\'))' ^
+                      '$(DotnetCoreUninstallMSIInstallerFile)' ^
+                      '$(WixRoot)' ^
+                      '$(DotnetCoreUninstallBrandName)' ^
+                      '$(MsiVersion)' ^
+                      '$(DotnetCoreUninstallInstallerUpgradeCode)' ^
+                      '$(Architecture)' ^
+                      -InformationAction Continue" />
+  </Target>
+
+</Project>

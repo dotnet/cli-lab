@@ -6,7 +6,10 @@
   </PropertyGroup>
   <!-- Repo Version Information -->
   <PropertyGroup>
-    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionMajor>0</VersionMajor>
+    <VersionMinor>1</VersionMinor>
+    <VersionPatch>0</VersionPatch>
+    <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionPatch)</VersionPrefix>
     <PreReleaseVersionLabel>preview</PreReleaseVersionLabel>
   </PropertyGroup>
 </Project>
