@@ -246,6 +246,11 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">Uninstalling: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UninstallNotAllowedExceptionFormat">
+        <source>Uninstallation not allowed. The following .NET Core SDKs cannot be uninstalled: {0}</source>
+        <target state="new">Uninstallation not allowed. The following .NET Core SDKs cannot be uninstalled: {0}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UninstallRuntimeOptionDescription">
         <source>Remove .NET Core Runtimes only.</source>
         <target state="new">Remove .NET Core Runtimes only.</target>

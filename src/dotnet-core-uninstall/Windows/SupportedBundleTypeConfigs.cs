@@ -14,7 +14,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             var gridView = new GridView();
 
-            gridView.SetColumns(Enumerable.Repeat(ColumnDefinition.SizeToContent(), 4).ToArray());
+            gridView.SetColumns(Enumerable.Repeat(ColumnDefinition.SizeToContent(), 5).ToArray());
             gridView.SetRows(Enumerable.Repeat(RowDefinition.SizeToContent(), Math.Max(bundles.Count, 1)).ToArray());
 
             foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
@@ -23,6 +23,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 gridView.SetChild(new ContentView(bundle.Version.ToStringWithAsterisk()), 1, index);
                 gridView.SetChild(new ContentView(bundle.Arch.ToString().ToLower()), 2, index);
                 gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 3, index);
+                gridView.SetChild((bundle.Version is SdkVersion && !bundle.UninstallAllowed) ?
+                    new ContentView($"[Uninstall Not Allowed]") :
+                    new ContentView($""), 
+                    4, index);
             }
 
             return gridView;

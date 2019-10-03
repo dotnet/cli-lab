@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Windows;
-using NuGet.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 {
@@ -13,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public BundleArch Arch { get; }
         public string UninstallCommand { get; }
         public string DisplayName { get; }
-        public bool UninstallAllowed { get; }
+        public bool UninstallAllowed { get; set; }
 
         public Bundle(BundleVersion version, BundleArch arch, string uninstallCommand, string displayName)
         {
@@ -26,10 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             Arch = arch;
             UninstallCommand = uninstallCommand;
             DisplayName = displayName;
-            UninstallAllowed = (version is SdkVersion || version is RuntimeVersion || version is AspNetRuntimeVersion) ? // TODO all versions or just sdk?
-                !VSVersionHelper.GetVSVersions().Any(vsVersion => vsVersion.Equals(VSVersionHelper.VSToDotnetVersion(
-                    new SemanticVersion(version.Major, version.Minor, version.Patch))))
-                : true;
+            UninstallAllowed = true;
         }
 
         public static Bundle From(BundleVersion version, BundleArch arch, string uninstallCommand, string displayName)

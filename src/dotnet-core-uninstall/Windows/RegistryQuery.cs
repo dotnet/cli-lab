@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
@@ -33,8 +34,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .Select(name => uninstalls.OpenSubKey(name))
                 .Where(bundle => IsDotNetCoreBundle(bundle));
 
-            return bundles
-                .Select(bundle => WrapRegistryKey(bundle));
+            var wrappedBundles = bundles
+              .Select(bundle => WrapRegistryKey(bundle)).ToList();
+
+            // Check which .net core versions visual studio depends on and marks sdk versions that cannot be uninstalled
+            return VSVersionHelper.AssignUninstallAllowed(wrappedBundles);
         }
 
         private static bool IsDotNetCoreBundle(RegistryKey registryKey)
