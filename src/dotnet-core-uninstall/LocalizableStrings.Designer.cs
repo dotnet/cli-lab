@@ -208,6 +208,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Include .NET Core SDKs that cannot be uninstalled..
+        /// </summary>
+        internal static string ListIncludeRequiredOptionDescription {
+            get {
+                return ResourceManager.GetString("ListIncludeRequiredOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List .NET Core Runtimes..
         /// </summary>
         internal static string ListRuntimeOptionDescription {

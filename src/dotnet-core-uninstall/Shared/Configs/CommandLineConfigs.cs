@@ -18,6 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly string HostingBundleOptionName = "hosting-bundle";
         public static readonly string X64OptionName = "x64";
         public static readonly string X86OptionName = "x86";
+        public static readonly string IncludeRequiredOptionName = "include-required";
         public static readonly string ListCommandName = "list";
 
         public static readonly Option UninstallAllOption = new Option(
@@ -111,6 +112,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly Option ListHostingBundleOption = new Option(
             $"--{HostingBundleOptionName}",
             LocalizableStrings.ListHostingBundleOptionDescription);
+
+        public static readonly Option ListIncludeRequiredOption = new Option(
+            $"--{IncludeRequiredOptionName}",
+            LocalizableStrings.ListIncludeRequiredOptionDescription);
 
         public static readonly Option UninstallX64Option = new Option(
             $"--{X64OptionName}",
@@ -215,7 +220,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             ListAuxOptions = supportedListBundleTypeOptions
                 .Append(VerbosityOption)
                 .Append(ListX64Option)
-                .Append(ListX86Option);
+                .Append(ListX86Option)
+                .Append(ListIncludeRequiredOption);
 
             foreach (var option in UninstallMainOptions
                 .Concat(UninstallAuxOptions)

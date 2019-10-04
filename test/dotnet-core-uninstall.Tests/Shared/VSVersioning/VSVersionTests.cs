@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Xunit;
@@ -12,16 +13,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
     public class VSVersionTests
     {
         [Theory]
-        [InlineData(new string[] { "0.9.9" }, new bool[] { true })]
-        [InlineData(new string[] { "0.0.0" }, new bool[] { false })]
-        [InlineData(new string[] { "0.0.9" }, new bool[] { false })]
-        [InlineData(new string[] { "0.9.9", "0.9.8" }, new bool[] { true, true })]
-        [InlineData(new string[] { "0.1.0", "0.0.1" }, new bool[] { false, false })]
-        [InlineData(new string[] { "0.9.9", "0.9.8", "0.0.0" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "0.9.9", "0.9.8", "0.0.9" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "0.0.0", "0.9.9", "0.0.1" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "0.0.0", "0.9.9", "0.1.0" }, new bool[] { false, true, false })]
-        [InlineData(new string[] { "0.0.0", "0.0.1", "0.0.9", "0.1.0"}, new bool[] { true, true, false, false })]
+        [InlineData(new string[] { "1.0.0" }, new bool[] { false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false })]
+        [InlineData(new string[] { "2.1.0", "1.0.1" }, new bool[] { false, false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "1.1.0" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "2.0.0" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "1.0.2" }, new bool[] { true, true, false })]
+        [InlineData(new string[] { "2.1.500", "2.1.600" }, new bool[] { false, false })]
+        [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new bool[] { false, true, false })]
+        [InlineData(new string[] { "2.2.100", "2.2.200" }, new bool[] { false, false })]
+        [InlineData(new string[] { "2.2.100", "2.2.200", "2.2.300" }, new bool[] { false, true, false })]
         internal void TestUninstallAllowed(string[] versions, bool[] allowed)
         {
             var bundles = new List<Bundle<SdkVersion>>();
@@ -31,11 +32,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             }
             bundles.ForEach(b => b.UninstallAllowed.Should().Be(true));
 
-            var resultBundles = VSVersionHelper.AssignUninstallAllowed(bundles);
+            VSVersionHelper.AssignUninstallAllowed(bundles);
 
             for (int i = 0; i < versions.Length; i++)
             {
-                resultBundles
+                bundles
                     .Where(b => b.Version is SdkVersion)
                     .ToArray()[i]
                     .UninstallAllowed.Should().Be(allowed[i]);
@@ -43,17 +44,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         }
 
         [Theory]
-        [InlineData(new string[] { "0.9.9" }, new bool[] { true })]
-        [InlineData(new string[] { "0.0.0" }, new bool[] { false })]
-        [InlineData(new string[] { "0.0.9" }, new bool[] { false })]
-        [InlineData(new string[] { "0.9.9", "0.9.8" }, new bool[] { true, true })]
-        [InlineData(new string[] { "0.1.0", "0.0.1" }, new bool[] { false, false })]
-        [InlineData(new string[] { "0.9.9", "0.9.8", "0.0.0" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "0.9.9", "0.9.8", "0.0.9" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "0.0.0", "0.9.9", "0.0.1" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "0.0.0", "0.9.9", "0.1.0" }, new bool[] { false, true, false })]
-        [InlineData(new string[] { "0.0.0", "0.0.1", "0.0.9", "0.1.0" }, new bool[] { true, true, false, false })]
-        internal void TestUninstallError(string[] versions, bool[] allowed)
+        [InlineData("1.0.0")]
+        [InlineData("2.1.0", "1.0.1" )]
+        [InlineData("2.1.500", "2.1.600")]
+        [InlineData("2.2.100", "2.2.200" )]
+        internal void TestUninstallError(params string[] versions)
         {
             var bundles = new List<Bundle>();
             foreach (string v in versions)
@@ -61,53 +56,58 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            var resultBundles = VSVersionHelper.AssignUninstallAllowed(bundles);
-            // Check we get an error when we're supposed to:
-            if (allowed.Any(allowed => !allowed)) // If there are any sdk's that should be marked as uninstallable
+            VSVersionHelper.AssignUninstallAllowed(bundles);
+            // None of the bundles are uninstallable-> throw error
+            var exception = Assert.Throws<UninstallationNotAllowedException>(() => VSVersionHelper.CheckUninstallable(bundles));
+            foreach (string v in versions) 
             {
-                var exception = Assert.Throws<UninstallationNotAllowedException>(() => VSVersionHelper.CheckUninstallable(resultBundles));
-                for (int i = 0; i < versions.Length; i++) 
-                {
-                    if (!allowed[i])
-                    {
-                        Assert.Contains(versions[i], exception.Message);
-                    } 
-                    else
-                    {
-                        Assert.DoesNotContain(versions[i], exception.Message);
-                    }
-                }
-            } 
-            else
-            {
-                VSVersionHelper.CheckUninstallable(resultBundles); // Should not throw exception
+                Assert.Contains(v, exception.Message);
             }
         }
 
         [Theory]
-        [InlineData("0.0.0")]
-        [InlineData("0.0.9")]
-        internal void TestErrorWithMixedVersions(string version)
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "1.1.0" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "2.0.0" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "1.0.2" }, new bool[] { true, true, false })]
+        [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new bool[] { false, true, false })]
+        [InlineData(new string[] { "2.2.100", "2.2.200", "2.2.300" }, new bool[] { false, true, false })]
+        internal void TestRemoveNotUninstallable(string[] versions, bool[] allowed)
         {
-            var resultBundles = VSVersionHelper.AssignUninstallAllowed(new List<Bundle>
+            var bundles = new List<Bundle>
             {
-                new Bundle<SdkVersion>(new SdkVersion(version), new BundleArch(), string.Empty, version),
                 new Bundle<RuntimeVersion>(new RuntimeVersion(), new BundleArch(), string.Empty, "RuntimeVersion"),
                 new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion(), new BundleArch(), string.Empty, "AspNetVersion"),
                 new Bundle<HostingBundleVersion>(new HostingBundleVersion(), new BundleArch(), string.Empty, "HostingBundleVersion")
-            });
+            };
+            foreach (string v in versions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
+            }
+
+            VSVersionHelper.AssignUninstallAllowed(bundles);
 
             // Check that we still have all of the non-sdk bundles
-            Assert.Contains(resultBundles, b => b.Version is RuntimeVersion);
-            Assert.Contains(resultBundles, b => b.Version is HostingBundleVersion);
-            Assert.Contains(resultBundles, b => b.Version is AspNetRuntimeVersion);
+            Assert.Contains(bundles, b => b.Version is RuntimeVersion);
+            Assert.Contains(bundles, b => b.Version is HostingBundleVersion);
+            Assert.Contains(bundles, b => b.Version is AspNetRuntimeVersion);
 
             // Check the we didn't mark any of the non-sdk's as uninstallable
-            var exception = Assert.Throws<UninstallationNotAllowedException>(() => VSVersionHelper.CheckUninstallable(resultBundles));
-            Assert.Contains(version, exception.Message);
-            Assert.DoesNotContain("RuntimeVersion", exception.Message);
-            Assert.DoesNotContain("AspNetVersion", exception.Message);
-            Assert.DoesNotContain("HostingBundleVersion", exception.Message);
+            var lst = VSVersionHelper.CheckUninstallable(bundles).Select(i => i.DisplayName);
+            Assert.Contains("RuntimeVersion", lst);
+            Assert.Contains("AspNetVersion", lst);
+            Assert.Contains("HostingBundleVersion", lst);
+            for (int i = 0; i < versions.Length; i++)
+            {
+                if (allowed[i])
+                {
+                    Assert.Contains(versions[i], lst);
+                } 
+                else
+                {
+                    Assert.DoesNotContain(versions[i], lst);
+                }
+            }
         }
     }
 }

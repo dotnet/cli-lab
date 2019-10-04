@@ -51,7 +51,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var filtered = GetFilteredBundles(GetAllBundles());
 
-            VSVersionHelper.CheckUninstallable(filtered);
+            filtered = VSVersionHelper.CheckUninstallable(filtered);
 
             if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DryRunOption.Name) != null)
             {

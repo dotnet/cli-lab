@@ -41,6 +41,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
+            if (listCommandParseResult.CommandResult.OptionResult(CommandLineConfigs.IncludeRequiredOptionName) == null)
+            {
+                bundles = bundles.Where(bundle => bundle.UninstallAllowed);
+            }
+
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
             var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
 

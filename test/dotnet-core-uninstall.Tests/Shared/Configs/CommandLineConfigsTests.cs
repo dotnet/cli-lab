@@ -24,6 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("list --sdk -v q", new string[] { "verbosity", "sdk" })]
         [InlineData("list --runtime --verbosity minimal", new string[] { "verbosity", "runtime" })]
         [InlineData("list --sdk --runtime -v normal", new string[] { "verbosity", "sdk", "runtime" })]
+        [InlineData("list --include-required", new string[] { "include-required" })]
         internal void TestListCommandAccept(string command, string[] expectedAuxOptions)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);

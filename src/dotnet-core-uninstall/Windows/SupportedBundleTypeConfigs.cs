@@ -25,7 +25,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 gridView.SetChild(new ContentView($"\"{bundle.DisplayName}\""), 3, index);
                 gridView.SetChild((bundle.Version is SdkVersion && !bundle.UninstallAllowed) ?
                     new ContentView($"[Uninstall Not Allowed]") :
-                    new ContentView($""), 
+                    new ContentView($""),
                     4, index);
             }
 

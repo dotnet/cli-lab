@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
@@ -19,6 +20,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         public static IEnumerable<Bundle> GetInstalledBundles()
         {
             var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath);
+            VSVersionHelper.AssignUninstallAllowed(sdks); // Mark not uninstallable sdks
             var runtimes = GetInstalledBundles<RuntimeVersion>(
                 DotNetRuntimeInstallPath,
                 DotNetAspAllInstallPath,

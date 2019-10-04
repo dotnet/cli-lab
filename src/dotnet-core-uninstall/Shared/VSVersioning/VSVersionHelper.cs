@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using Microsoft.DotNet.Tools.Uninstall.Properties;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
-using Microsoft.VisualStudio.Setup.Configuration;
-using Newtonsoft.Json;
 using NuGet.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
@@ -17,82 +12,64 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
     /// </summary>
     internal static class VSVersionHelper
     {
-        private static Dictionary<SemanticVersion, SemanticVersion> VersionConversions;
-
-        private const int REGDB_E_CLASSNOTREG = unchecked((int)0x80040154);
+        /// <summary>
+        /// Divisions within version bands. Not inclusive, groupings: [2.1.000, 2.1.600) [2.1.600, 2.2.00) [2.0.00, 2.2.200) [2.2.200, 2.3.00)
+        /// </summary>
+        private static readonly SemanticVersion[] SpecialCaseDivisions = { new SemanticVersion(2, 1, 600), new SemanticVersion(2, 2, 200) };
 
         /// <summary>
-        /// Assigns the uninstallAllowed flag for each sdkVersion in sdkVersions
+        /// Assigns the uninstallAllowed flag to false for the highest sdkVersion in each band (Major.Minor) to ensure vs still functions properly
+        /// Note that 2.1.5/2.1.6 and 2.2.1/2.2.2 count as band cutoffs 
         /// </summary>
-        public static IEnumerable<Bundle> AssignUninstallAllowed(IEnumerable<Bundle> bundles)
+        public static void AssignUninstallAllowed(IEnumerable<Bundle> bundles)
         {
-            // TODO add filtering by provider key?
-            var InstalledSdkBundles = bundles
-                .Where(b => b.Version is SdkVersion)
-                .Select((b, i) => b as Bundle<SdkVersion>);
-            IEnumerable<SemanticVersion> VSVersions = GetVSVersions();
-            // For each version of vs, mark the .net core sdk with the highest version number as uninstallable
-            foreach (SemanticVersion vsVersion in VSVersions)
+            var bundlesByBand = SortByBand(bundles.Where(b => b.Version is SdkVersion).Select(b => b as Bundle<SdkVersion>));
+
+            foreach (IEnumerable<Bundle> band in bundlesByBand)
             {
-                var sdkDepends = VSToDotnetVersionRange(vsVersion);
-                if (sdkDepends != null)
-                {
-                    var intersection = InstalledSdkBundles
-                        .Where(bundle => (sdkDepends.Item1 <= bundle.Version.SemVer && bundle.Version.SemVer < sdkDepends.Item2)); // Filter for valid sdks
-                    if (intersection.Count() > 0)
-                    {
-                        bundles.First(b => b.Equals(intersection.Max())).UninstallAllowed = false;
-                    }
-                }
+                band.Max().UninstallAllowed = false;
             }
-            return bundles;
         }
 
         /// <summary>
-        /// Converts visual studio version to tuple of [the minimum .net core sdk version, the max .net core version it depends on)
+        /// Splits bundles into groups such that one of each group must be kept to protect visual studio: 
+        ///     In general: 1 per Major.Minor band, except specialCaseDivision
         /// </summary>
-        /// <returns>null if the vs version doesn't depend on a dotnet version</returns>
-        private static Tuple<SemanticVersion, SemanticVersion> VSToDotnetVersionRange(SemanticVersion vsVersion)
+        private static IEnumerable<IEnumerable<Bundle>> SortByBand(IEnumerable<Bundle<SdkVersion>> bundles)
         {
-            if ((vsVersion.Major < 15 || vsVersion.Major >= 16)
-#if DEBUG
-                && vsVersion.Major > 0 // Include mock data when debugging
-#endif
-                )
+            var sortedBundles = new List<IEnumerable<Bundle>>() as IEnumerable<IEnumerable<Bundle>>;
+            var majorMinorGroups = bundles.GroupBy(bundle => bundle.Version.MajorMinor);
+            foreach (SemanticVersion specialCase in SpecialCaseDivisions)
             {
-                // VS version doesn't depend on a dotnet distribution
-                return null;
+                sortedBundles = sortedBundles.Concat(
+                    majorMinorGroups.Select(bundleList => DivideSpecialCases(bundleList, specialCase))
+                    .SelectMany(lst => lst));
             }
-            if (VersionConversions == null)
-            {
-                // Deserialize static dictionary
-                VersionConversions = JsonConvert.DeserializeObject<Dictionary<string, string>>(Resources.VS_SDKVersions)
-                    .Select((pair, i) => new KeyValuePair<SemanticVersion, SemanticVersion>(
-                        SemanticVersion.Parse(pair.Key), SemanticVersion.Parse(pair.Value)))
-                    .ToDictionary(x => x.Key, x => x.Value);
-            }
-            if (!VersionConversions.TryGetValue(vsVersion, out SemanticVersion dotnetVersion)) 
-            {
-                // If we don't have the exact vs version in the map, choose the closest // TODO right approach?-> have all major.minor in map?
-                dotnetVersion = VersionConversions
-                    .Where(item => vsVersion.Major == item.Key.Major && vsVersion.Minor == item.Key.Minor)
-                    .OrderBy(item => Math.Abs(vsVersion.Patch - item.Key.Patch)).First().Value; 
-            }
-            return new Tuple<SemanticVersion, SemanticVersion>(dotnetVersion, new SemanticVersion(dotnetVersion.Major, dotnetVersion.Minor + 1, 0)); 
+            return sortedBundles;
         }
 
         /// <summary>
-        /// Check that the sdkbundles in bundles are uninstallable, throw an error if not
+        /// Splits bundleList based on the special case division
         /// </summary>
-        public static void CheckUninstallable(IEnumerable<Bundle> bundles)
+        private static IEnumerable<IEnumerable<Bundle>> DivideSpecialCases(IEnumerable<Bundle> bundleList, SemanticVersion division)
         {
-            var uninstallablebundles = bundles
-                .Where(item => (item.Version is SdkVersion) && !item.UninstallAllowed);
-            if (uninstallablebundles.Count() > 0)
+            return bundleList.FirstOrDefault().Version.MajorMinor.Equals(new MajorMinorVersion(division.Major, division.Minor)) ?
+                bundleList.GroupBy(bundle => bundle.Version.SemVer.Patch < division.Patch) as IEnumerable<IEnumerable<Bundle>> :
+                new List<IEnumerable<Bundle>> { bundleList };
+        }
+
+        /// <summary>
+        /// Check that the bundles are uninstallable, removes uninstallable bundles, and throws an error if not
+        /// </summary>
+        public static IEnumerable<Bundle> CheckUninstallable(IEnumerable<Bundle> bundles)
+        {
+            var uninstallablebundles = bundles.Where(item => item.UninstallAllowed);
+            if (uninstallablebundles.Count() == 0)
             {
-                // Invalid command, trying to uninstall a sdk vs relies on-> fail
-                throw new UninstallationNotAllowedException(GetErrorStringList(uninstallablebundles));
+                // Invalid command, all bundles are uninstallable
+                throw new UninstallationNotAllowedException(GetErrorStringList(bundles));
             }
+            return uninstallablebundles;
         }
 
         /// <summary>
@@ -101,79 +78,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
         public static string GetErrorStringList(IEnumerable<Bundle> bundles)
         {
             var errorString = string.Empty;
-            foreach(Bundle b in bundles)
+            foreach (Bundle b in bundles)
             {
                 errorString += "\n\t" + b.DisplayName;
             }
-            
+
             return errorString;
         }
-
-        /// <summary>
-        /// Returns all VS versions on the local windows machine
-        /// </summary>
-        /// <returns></returns>
-        private static IEnumerable<SemanticVersion> GetVSVersions()
-        {
-            var versions = new List<SemanticVersion>();
-            try
-            {
-                var query = (ISetupConfiguration2)GenerateQuery();
-                var e = query.EnumAllInstances();
-
-                int fetched;
-                var instances = new ISetupInstance[1];
-                do
-                {
-                    e.Next(1, instances, out fetched);
-                    if (fetched <= 0) continue;
-
-                    var instance = instances[0];
-                    var state = ((ISetupInstance2)instance).GetState();
-
-                    var installedVersion = instance.GetInstallationVersion(); // TODO this returns a different patch num format than listed in jsons
-                    if (!Version.TryParse(installedVersion, out Version version))
-                        continue;
-
-                    versions.Add(new SemanticVersion(version.Major, version.Minor, version.Revision));
-                } while (fetched > 0);
-            }
-            catch (COMException)
-            {
-            }
-            catch (DllNotFoundException)
-            {
-            }
-#if DEBUG
-            versions.Add(new SemanticVersion(0, 0, 0));
-            versions.Add(new SemanticVersion(0, 0, 1));
-            versions.Add(new SemanticVersion(0, 0, 2));
-#endif
-            return versions.AsReadOnly();
-        }
-
-        private static ISetupConfiguration GenerateQuery()
-        {
-            try
-            {
-                return new SetupConfiguration();
-            }
-
-            catch (COMException ex) when (ex.ErrorCode == REGDB_E_CLASSNOTREG)
-            {
-                // Try to get the class object using app-local call.
-                var result = GetSetupConfiguration(out ISetupConfiguration query, IntPtr.Zero);
-
-                if (result < 0)
-                    throw new COMException($"Failed to get {nameof(query)}", result);
-
-                return query;
-            }
-        }
-
-        [DllImport("Microsoft.VisualStudio.Setup.Configuration.Native.dll", ExactSpelling = true, PreserveSig = true)]
-        private static extern int GetSetupConfiguration(
-            [MarshalAs(UnmanagedType.Interface)] [Out] out ISetupConfiguration configuration,
-            IntPtr reserved);
     }
 }
