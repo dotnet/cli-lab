@@ -20,14 +20,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         public static IEnumerable<Bundle> GetInstalledBundles()
         {
             var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath);
-            VSVersionHelper.AssignUninstallAllowed(sdks); // Mark not uninstallable sdks
             var runtimes = GetInstalledBundles<RuntimeVersion>(
                 DotNetRuntimeInstallPath,
                 DotNetAspAllInstallPath,
                 DotNetAspAppInstallPath,
                 DotNetHostFxrInstallPath);
 
-            return sdks.Concat(runtimes);
+            var allBundles = sdks.Concat(runtimes).ToList();
+            VSVersionHelper.AssignUninstallAllowed(allBundles); // Mark not uninstallable sdks
+            return allBundles;
         }
 
         private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)
