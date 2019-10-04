@@ -3,7 +3,6 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Xunit;
@@ -32,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             }
             bundles.ForEach(b => b.UninstallAllowed.Should().Be(true));
 
-            VSVersionHelper.AssignUninstallAllowed(bundles);
+            VisualStudioSafeVersionsExtracter.AssignUninstallAllowed(bundles);
 
             for (int i = 0; i < versions.Length; i++)
             {
@@ -56,9 +55,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            VSVersionHelper.AssignUninstallAllowed(bundles);
+            VisualStudioSafeVersionsExtracter.AssignUninstallAllowed(bundles);
             // None of the bundles are uninstallable-> throw error
-            var exception = Assert.Throws<UninstallationNotAllowedException>(() => VSVersionHelper.CheckUninstallable(bundles));
+            var exception = Assert.Throws<UninstallationNotAllowedException>(() => VisualStudioSafeVersionsExtracter.RemoveUninstallableBundles(bundles));
             foreach (string v in versions) 
             {
                 Assert.Contains(v, exception.Message);
@@ -85,7 +84,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            VSVersionHelper.AssignUninstallAllowed(bundles);
+            VisualStudioSafeVersionsExtracter.AssignUninstallAllowed(bundles);
 
             // Check that we still have all of the non-sdk bundles
             Assert.Contains(bundles, b => b.Version is RuntimeVersion);
@@ -93,7 +92,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             Assert.Contains(bundles, b => b.Version is AspNetRuntimeVersion);
 
             // Check the we didn't mark any of the non-sdk's as uninstallable
-            var lst = VSVersionHelper.CheckUninstallable(bundles).Select(i => i.DisplayName);
+            var lst = VisualStudioSafeVersionsExtracter.RemoveUninstallableBundles(bundles).Select(i => i.DisplayName);
             Assert.Contains("RuntimeVersion", lst);
             Assert.Contains("AspNetVersion", lst);
             Assert.Contains("HostingBundleVersion", lst);

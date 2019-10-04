@@ -37,8 +37,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var wrappedBundles = bundles
               .Select(bundle => WrapRegistryKey(bundle)).ToList();
 
-            // Check which .net core versions visual studio depends on and marks sdk versions that cannot be uninstalled
-            VSVersionHelper.AssignUninstallAllowed(wrappedBundles);
+            VisualStudioSafeVersionsExtracter.AssignUninstallAllowed(wrappedBundles);
 
             return wrappedBundles;
         }

@@ -27,7 +27,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 DotNetHostFxrInstallPath);
 
             var allBundles = sdks.Concat(runtimes).ToList();
-            VSVersionHelper.AssignUninstallAllowed(allBundles); // Mark not uninstallable sdks
+            VisualStudioSafeVersionsExtracter.AssignUninstallAllowed(allBundles);
             return allBundles;
         }
 
