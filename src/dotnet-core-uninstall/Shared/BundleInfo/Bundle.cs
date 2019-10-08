@@ -11,7 +11,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public BundleArch Arch { get; }
         public string UninstallCommand { get; }
         public string DisplayName { get; }
-        public bool UninstallAllowed { get; set; }
 
         public Bundle(BundleVersion version, BundleArch arch, string uninstallCommand, string displayName)
         {
@@ -24,7 +23,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
             Arch = arch;
             UninstallCommand = uninstallCommand;
             DisplayName = displayName;
-            UninstallAllowed = true;
         }
 
         public static Bundle From(BundleVersion version, BundleArch arch, string uninstallCommand, string displayName)

@@ -14,7 +14,6 @@ using System.Threading;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -50,8 +49,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             HandleVersionOption();
 
             var filtered = GetFilteredBundles(GetAllBundles());
-
-            filtered = VisualStudioSafeVersionsExtracter.RemoveUninstallableBundles(filtered);
 
             if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DryRunOption.Name) != null)
             {

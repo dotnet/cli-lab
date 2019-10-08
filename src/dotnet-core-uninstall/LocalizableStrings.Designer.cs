@@ -496,15 +496,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstallation not allowed. The following .NET Core SDKs cannot be uninstalled: {0}.
-        /// </summary>
-        internal static string UninstallNotAllowedExceptionFormat {
-            get {
-                return ResourceManager.GetString("UninstallNotAllowedExceptionFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Remove .NET Core Runtimes only..
         /// </summary>
         internal static string UninstallRuntimeOptionDescription {

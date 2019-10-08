@@ -294,9 +294,6 @@ Do you want to continue? [Y/n] </value>
   <data name="ConfirmationPromptInvalidExceptionMessage" xml:space="preserve">
     <value>Allowed values are "Y" and "n".</value>
   </data>
-  <data name="UninstallNotAllowedExceptionFormat" xml:space="preserve">
-    <value>Uninstallation not allowed. The following .NET Core SDKs cannot be uninstalled: {0}</value>
-  </data>
   <data name="ListIncludeRequiredOptionDescription" xml:space="preserve">
     <value>Include .NET Core SDKs that cannot be uninstalled.</value>
   </data>

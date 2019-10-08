@@ -14,6 +14,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
     {
         public static IEnumerable<Bundle> GetInstalledBundles()
         {
+            return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(GetAllInstalledBundles());
+        }
+
+        public static IEnumerable<Bundle> GetAllInstalledBundles()
+        {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE");
 
@@ -36,8 +41,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             var wrappedBundles = bundles
               .Select(bundle => WrapRegistryKey(bundle)).ToList();
-
-            VisualStudioSafeVersionsExtracter.AssignUninstallAllowed(wrappedBundles);
 
             return wrappedBundles;
         }

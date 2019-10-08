@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
     internal static class SupportedBundleTypeConfigs
     {
-        private static readonly Func<IList<Bundle>, GridView> _gridViewGeneratorWithArch = bundles =>
+        private static readonly Func<IDictionary<Bundle, string>, GridView> _gridViewGeneratorWithArch = bundles =>
         {
             var gridView = new GridView();
 
@@ -20,12 +20,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             foreach (var (bundle, index) in bundles.Select((bundle, index) => (bundle, index)))
             {
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
-                gridView.SetChild(new ContentView(bundle.Version.ToString()), 1, index);
-                gridView.SetChild(new ContentView($"({bundle.Arch.ToString().ToLower()})"), 2, index);
-                gridView.SetChild((bundle.Version is SdkVersion && !bundle.UninstallAllowed) ?
-                    new ContentView($"[Uninstall Not Allowed]") :
-                    new ContentView($""),
-                    3, index);
+                gridView.SetChild(new ContentView(bundle.Key.Version.ToString()), 1, index);
+                gridView.SetChild(new ContentView($"({bundle.Key.Arch.ToString().ToLower()})"), 2, index);
+                gridView.SetChild(new ContentView(bundle.Value), 3, index);
             }
 
             return gridView;
