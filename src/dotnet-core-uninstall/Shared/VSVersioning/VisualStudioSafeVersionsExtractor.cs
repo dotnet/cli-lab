@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using NuGet.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
@@ -14,9 +16,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
         // Divisions within version bands. Not inclusive, groupings: [2.1.000, 2.1.600) [2.1.600, 2.2.00) [2.0.00, 2.2.200) [2.2.200, 2.3.00)
         private static readonly SemanticVersion[] SpecialCaseDivisions = { new SemanticVersion(2, 1, 600), new SemanticVersion(2, 2, 200) };
 
+        // The tool should not be used to uninstall any more recent versions of the sdk
+        private static readonly SemanticVersion UpperLimit = new SemanticVersion(3, 0, 0);
+
         public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
         {
-            var required = new List<Bundle>();
+            var required = bundles.Where(b => b.Version.SemVer >= UpperLimit).ToList();
             var bundlesByBand = SortSdkBundlesByVersionBand(bundles
                 .Where(b => b.Version is SdkVersion)
                 .Select(b => b as Bundle<SdkVersion>));
@@ -47,6 +52,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             return bundleList.FirstOrDefault().Version.MajorMinor.Equals(new MajorMinorVersion(division.Major, division.Minor)) ?
                 bundleList.GroupBy(bundle => bundle.Version.SemVer.Patch < division.Patch) as IEnumerable<IEnumerable<Bundle>> :
                 new List<IEnumerable<Bundle>> { bundleList };
+        }
+
+        public static Dictionary<Bundle, string> GetListCommandUninstallableStrings(IEnumerable<Bundle> allBundles)
+        {
+            var uninstallable = GetUninstallableBundles(allBundles);
+            var required = allBundles.Where(b => !uninstallable.Contains(b));
+
+            var ListCommandStringResults = uninstallable.Select(b => new KeyValuePair<Bundle, string>(b, string.Empty))
+                        .ToDictionary(i => i.Key, i => i.Value);
+            if (required.Where(b => b.Version.SemVer < SpecialCaseDivisions[0]).Count() > 0) 
+            {
+                ListCommandStringResults.Add(required.Where(b => b.Version.SemVer < SpecialCaseDivisions[0]).Max(), "[Required by Visual Studio 2017]");
+            }
+            foreach (var recentSdk in required.Where(b => b.Version.SemVer >= UpperLimit))
+            {
+                ListCommandStringResults.Add(recentSdk, $"[Cannot uninstall version {UpperLimit} and above]");
+            }
+
+            return ListCommandStringResults.Concat(required
+                .Where(b => !ListCommandStringResults.Keys.Contains(b))
+                .Select(b => new KeyValuePair<Bundle, string>(b, $"[Required for {b.Version.Major}.{b.Version.Minor} Applications]")))
+                .OrderByDescending(pair => pair.Key)
+                .ToDictionary(i => i.Key, i => i.Value);
         }
     }
 }

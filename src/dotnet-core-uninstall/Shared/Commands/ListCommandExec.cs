@@ -42,8 +42,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
-            var uninstallableBundles = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
-
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
             var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
 
@@ -59,14 +57,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 if (typeSelection.HasFlag(bundleType.Type))
                 {
                     var filteredBundlesByType = bundleType
-                        .Filter(filteredBundlesByArch)
-                        .OrderByDescending(bundle => bundle);
+                        .Filter(filteredBundlesByArch);
 
-                    var uninstallMap = filteredBundlesByType
-                        .Select(bundle => uninstallableBundles.Contains(bundle) ?
-                        new KeyValuePair<Bundle, string>(bundle, string.Empty) :
-                        new KeyValuePair<Bundle, string>(bundle, "[Not Uninstallable]"))
-                        .ToDictionary(i => i.Key, i => i.Value);
+                    var uninstallMap = VisualStudioSafeVersionsExtractor.GetListCommandUninstallableStrings(filteredBundlesByType);
 
                     stackView.Add(new ContentView(bundleType.Header));
                     stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap));
