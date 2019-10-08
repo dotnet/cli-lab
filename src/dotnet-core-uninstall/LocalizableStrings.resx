@@ -267,7 +267,7 @@
   <data name="ListX86OptionDescription" xml:space="preserve">
     <value>List x86 .NET Core SDKs or Runtimes.</value>
   </data>
-  <data name="DryRunOptionDescription" xml:space="preserve">
+  <data name="DryRunCommandDescription" xml:space="preserve">
     <value>Display .NET Core SDKs and Runtimes that will be removed.</value>
   </data>
   <data name="YesOptionDescription" xml:space="preserve">
@@ -294,7 +294,7 @@ Do you want to continue? [Y/n] </value>
   <data name="ConfirmationPromptInvalidExceptionMessage" xml:space="preserve">
     <value>Allowed values are "Y" and "n".</value>
   </data>
-  <data name="ListIncludeRequiredOptionDescription" xml:space="preserve">
-    <value>Include .NET Core SDKs that cannot be uninstalled.</value>
+  <data name="RemoveCommandDescription" xml:space="preserve">
+    <value>Remove the specified .NET Core SDKs or Runtimes.</value>
   </data>
 </root>

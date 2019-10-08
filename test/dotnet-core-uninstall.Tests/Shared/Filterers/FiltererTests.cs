@@ -17,7 +17,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     {
         internal abstract Option Option { get; }
         internal abstract string DefaultTestArgValue { get; }
-        internal virtual Filterer OptionFilterer => OptionFilterers.OptionFiltererDictionary[Option];
+        internal virtual Filterer OptionFilterer => OptionFilterers.OptionFiltererDictionary[Option.Name];
 
         internal const BundleArch DefaultTestArchSelection = BundleArch.X86 | BundleArch.X64;
 
@@ -142,7 +142,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         internal virtual void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"dry-run --{Option.Name} {argValue}");
 
             OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection, archSelection)
                 .Should().BeEquivalentTo(expected);
@@ -151,7 +151,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection)
             where TException : Exception
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"dry-run --{Option.Name} {argValue}");
             Action action = () => OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection, archSelection);
 
             action.Should().Throw<TException>();
@@ -160,7 +160,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         internal virtual void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage)
             where TException : Exception
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"--{Option.Name} {argValue}");
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"dry-run --{Option.Name} {argValue}");
             Action action = () => OptionFilterer.Filter(parseResult, Option, testBundles, typeSelection, archSelection);
 
             action.Should().Throw<TException>(errorMessage);

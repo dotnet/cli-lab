@@ -32,7 +32,7 @@ To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-co
 Do you want to continue? [Y/n] </target>
         <note />
       </trans-unit>
-      <trans-unit id="DryRunOptionDescription">
+      <trans-unit id="DryRunCommandDescription">
         <source>Display .NET Core SDKs and Runtimes that will be removed.</source>
         <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
         <note />
@@ -101,11 +101,6 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">List .NET Core Runtime &amp; Hosting Bundles.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListIncludeRequiredOptionDescription">
-        <source>Include .NET Core SDKs that cannot be uninstalled.</source>
-        <target state="new">Include .NET Core SDKs that cannot be uninstalled.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListRuntimeOptionDescription">
         <source>List .NET Core Runtimes.</source>
         <target state="new">List .NET Core Runtimes.</target>
@@ -154,6 +149,11 @@ Run this command as administrator, and take out the -—dry-run option to remove
       <trans-unit id="OptionsConflictExceptionMessageFormat">
         <source>You must specify only one of the options: {0}.</source>
         <target state="new">You must specify only one of the options: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RemoveCommandDescription">
+        <source>Remove the specified .NET Core SDKs or Runtimes.</source>
+        <target state="new">Remove the specified .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="RequiredArgMissingForUninstallCommandExceptionMessage">

@@ -104,9 +104,9 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         /// <summary>
         ///   Looks up a localized string similar to Display .NET Core SDKs and Runtimes that will be removed..
         /// </summary>
-        internal static string DryRunOptionDescription {
+        internal static string DryRunCommandDescription {
             get {
-                return ResourceManager.GetString("DryRunOptionDescription", resourceCulture);
+                return ResourceManager.GetString("DryRunCommandDescription", resourceCulture);
             }
         }
         
@@ -208,15 +208,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Include .NET Core SDKs that cannot be uninstalled..
-        /// </summary>
-        internal static string ListIncludeRequiredOptionDescription {
-            get {
-                return ResourceManager.GetString("ListIncludeRequiredOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to List .NET Core Runtimes..
         /// </summary>
         internal static string ListRuntimeOptionDescription {
@@ -303,6 +294,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string OptionsConflictExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("OptionsConflictExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove the specified .NET Core SDKs or Runtimes..
+        /// </summary>
+        internal static string RemoveCommandDescription {
+            get {
+                return ResourceManager.GetString("RemoveCommandDescription", resourceCulture);
             }
         }
         
