@@ -393,7 +393,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             (parseResult.Errors.Count != 0 ||
                 parseResult.UnparsedTokens.Count != 0 ||
                 parseResult.UnmatchedTokens.Count != 0 ||
-                parseResult.RootCommandResult.Tokens.Count != 0)
+                parseResult.CommandResult.Tokens.Count != 0)
             .Should().BeTrue();
         }
 
@@ -733,11 +733,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         }
 
         [MacOsOnlyTheory]
-        [InlineData("", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("-v q", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--all", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("--yes", BundleType.Sdk | BundleType.Runtime)]
-        [InlineData("-y", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("remove", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("remove -v q", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("remove --all", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("remove --yes", BundleType.Sdk | BundleType.Runtime)]
+        [InlineData("remove -y", BundleType.Sdk | BundleType.Runtime)]
         internal void TestGetTypeSelectionRootCommandMacOs(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
