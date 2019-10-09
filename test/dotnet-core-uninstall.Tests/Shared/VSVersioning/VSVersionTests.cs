@@ -83,11 +83,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         }
 
         [Theory]
-        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "", "[Required by Visual Studio 2017]" })]
-        [InlineData(new string[] { "2.3.0", "2.2.0", "2.1.0" }, new string[] { "[Required for 2.3 Applications]", "[Required for 2.2 Applications]", "[Required by Visual Studio 2017]" })]
-        [InlineData(new string[] { "1.0.0", "1.0.1", "1.1.0" }, new string[] { "", "[Required for 1.0 Applications]", "[Required by Visual Studio 2017]" })]
-        [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new string[] { "[Required by Visual Studio 2017]", "", "[Required for 2.1 Applications]" })]
-        [InlineData(new string[] { "2.1.500", "3.0.1", "3.0.0" }, new string[] { "[Required by Visual Studio 2017]", "[Cannot uninstall version 3.0.0 and above]", "[Cannot uninstall version 3.0.0 and above]" })]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "", "Required by Visual Studio 2017" })]
+        [InlineData(new string[] { "2.3.0", "2.2.0", "2.1.0" }, new string[] { "Required for 2.3 Applications", "Required for 2.2 Applications", "Required by Visual Studio 2017" })]
+        [InlineData(new string[] { "1.0.0", "1.0.1", "1.1.0" }, new string[] { "", "Required for 1.0 Applications", "[Required by Visual Studio 2017" })]
+        [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new string[] { "Required by Visual Studio 2017", "", "Required for 2.1 Applications" })]
+        [InlineData(new string[] { "2.1.500", "3.0.1", "3.0.0" }, new string[] { "Required by Visual Studio 2017", "Cannot uninstall version 3.0.0 and above", "Cannot uninstall version 3.0.0 and above" })]
         internal void TestGetListCommandUninstallableStrings(string[] versions, string[] expectedStrings)
         {
             var bundles = new List<Bundle>
@@ -101,7 +101,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            var strings = VisualStudioSafeVersionsExtractor.GetListCommandUninstallableStrings(bundles);
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
 
             strings.Count().Should().Be(bundles.Count());
             strings.Where(pair => !(pair.Key.Version is SdkVersion)).Select(pair => pair.Value).ToList().ForEach(str => str.Should().Be(string.Empty));

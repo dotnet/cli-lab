@@ -118,7 +118,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///
         ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
         ///
-        ///Run this command as administrator, and take out the -—dry-run option to remove these items..
+        ///Run as administrator and use the remove command to remove these items..
         /// </summary>
         internal static string DryRunOutputFormat {
             get {
@@ -316,6 +316,32 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ///{0}: {1}
+        ///
+        ///Uninstalling this item will cause Visual Studio to break.
+        ///
+        ///Are you sure you want to continue? [Y/n] .
+        /// </summary>
+        internal static string RequiredBundleConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("RequiredBundleConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Warning: {0}: {1}
+        ///Uninstalling this item will cause Visual Studio to break.
+        ///.
+        /// </summary>
+        internal static string RequiredBundleConfirmationPromptWarningFormat {
+            get {
+                return ResourceManager.GetString("RequiredBundleConfirmationPromptWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified version is not found: &quot;{0}&quot;..
         /// </summary>
         internal static string SpecifiedVersionNotFoundExceptionMessageFormat {
@@ -492,6 +518,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallNormalVerbosityFormat {
             get {
                 return ResourceManager.GetString("UninstallNormalVerbosityFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above..
+        /// </summary>
+        internal static string UninstallNotAllowedExceptionFormat {
+            get {
+                return ResourceManager.GetString("UninstallNotAllowedExceptionFormat", resourceCulture);
             }
         }
         

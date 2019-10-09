@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             CommandBundleFilter.HandleVersionOption();
 
-            var filtered = CommandBundleFilter.GetFilteredBundles();
+            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings();
 
             if (CommandLineConfigs.CommandLineParseResult.CommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {
@@ -39,7 +39,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     throw new NotAdminException();
                 }
 
-                DoIt(filtered);
+                DoIt(filtered.Keys);
             }
             else
             {
@@ -48,7 +48,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     throw new NotAdminException();
                 }
 
-                AskIt(filtered);
+                if (AskIt(filtered))
+                {
+                    if (AskWithWarningsForRequiredBundles(filtered))
+                    {
+                        DoIt(filtered.Keys);
+                    }
+                }
             }
         }
 
@@ -201,25 +207,43 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return args;
         }
 
-        private static void AskIt(IEnumerable<Bundle> bundles)
+        private static bool AskIt(IDictionary<Bundle, string> bundles)
         {
-            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
+            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
             Console.Write(string.Format(LocalizableStrings.ConfirmationPromptOutputFormat, displayNames));
 
             var response = Console.ReadLine().Trim().ToUpper();
 
-            if (response.Equals("Y"))
+            if (response.Equals("Y") || response.Equals("N"))
             {
-                DoIt(bundles);
-            }
-            else if (response.Equals("N"))
-            {
-                return;
+                return response.Equals("Y");
             }
             else
             {
                 throw new ConfirmationPromptInvalidException();
             }
+        }
+
+        private static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles) 
+        {
+            var requiredBundles = bundles.Where(b => !b.Value.Equals(string.Empty));
+            foreach (var pair in requiredBundles)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(string.Format(LocalizableStrings.RequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
+                Console.ResetColor();
+                var response = Console.ReadLine().Trim().ToUpper();
+                if (response.Equals("N"))
+                {
+                    return false ;
+                }
+                else if (!response.Equals("Y"))
+                {
+                    throw new ConfirmationPromptInvalidException();
+                }
+            }
+
+            return true;
         }
     }
 }

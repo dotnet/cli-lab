@@ -281,7 +281,7 @@ Specified versions:
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Run this command as administrator, and take out the -—dry-run option to remove these items.</value>
+Run as administrator and use the remove command to remove these items.</value>
   </data>
   <data name="ConfirmationPromptOutputFormat" xml:space="preserve">
     <value>The following items will be removed:
@@ -296,5 +296,22 @@ Do you want to continue? [Y/n] </value>
   </data>
   <data name="RemoveCommandDescription" xml:space="preserve">
     <value>Remove the specified .NET Core SDKs or Runtimes.</value>
+  </data>
+  <data name="UninstallNotAllowedExceptionFormat" xml:space="preserve">
+    <value>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</value>
+  </data>
+  <data name="RequiredBundleConfirmationPromptOutputFormat" xml:space="preserve">
+    <value>
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio to break.
+
+Are you sure you want to continue? [Y/n] </value>
+  </data>
+  <data name="RequiredBundleConfirmationPromptWarningFormat" xml:space="preserve">
+    <value>
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio to break.
+</value>
   </data>
 </root>

@@ -23,7 +23,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 gridView.SetChild(new ContentView(bundle.Key.Version.ToStringWithAsterisk()), 1, index);
                 gridView.SetChild(new ContentView(bundle.Key.Arch.ToString().ToLower()), 2, index);
                 gridView.SetChild(new ContentView($"\"{bundle.Key.DisplayName}\""), 3, index);
-                gridView.SetChild(new ContentView(bundle.Value), 4, index);
+                gridView.SetChild(new ContentView(bundle.Value.Equals(string.Empty) ? string.Empty : $"[{bundle.Value}]"), 4, index);
             }
 
             return gridView;
@@ -41,7 +41,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
                 gridView.SetChild(new ContentView(bundle.Key.Version.ToStringWithAsterisk()), 1, index);
                 gridView.SetChild(new ContentView($"\"{bundle.Key.DisplayName}\""), 2, index);
-                gridView.SetChild(new ContentView(bundle.Value), 3, index);
+                gridView.SetChild(new ContentView(bundle.Value.Equals(string.Empty) ? string.Empty : $"[{bundle.Value}]"), 3, index);
             }
 
             return gridView;
