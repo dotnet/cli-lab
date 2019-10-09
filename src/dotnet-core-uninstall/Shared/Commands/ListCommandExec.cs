@@ -9,6 +9,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
@@ -20,13 +21,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             if (RuntimeInfo.RunningOnWindows)
             {
                 Execute(
-                    RegistryQuery.GetInstalledBundles(),
+                    RegistryQuery.GetAllInstalledBundles(),
                     Windows.SupportedBundleTypeConfigs.SupportedBundleTypes);
             }
             else if (RuntimeInfo.RunningOnOSX)
             {
                 Execute(
-                    FileSystemExplorer.GetInstalledBundles(),
+                    FileSystemExplorer.GetAllInstalledBundles(),
                     MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes);
             }
             else
@@ -41,12 +42,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
+            var uninstallableBundles = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
+
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
             var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
 
             var stackView = new StackLayoutView();
 
             var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
+
 
             var footnotes = new List<string>();
 
@@ -58,8 +62,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                         .Filter(filteredBundlesByArch)
                         .OrderByDescending(bundle => bundle);
 
+                    var uninstallMap = filteredBundlesByType
+                        .Select(bundle => uninstallableBundles.Contains(bundle) ?
+                        new KeyValuePair<Bundle, string>(bundle, string.Empty) :
+                        new KeyValuePair<Bundle, string>(bundle, "[Not Uninstallable]"))
+                        .ToDictionary(i => i.Key, i => i.Value);
+
                     stackView.Add(new ContentView(bundleType.Header));
-                    stackView.Add(bundleType.GridViewGenerator.Invoke(filteredBundlesByType.ToArray()));
+                    stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap));
                     stackView.Add(new ContentView(string.Empty));
 
                     footnotes.AddRange(filteredBundlesByType

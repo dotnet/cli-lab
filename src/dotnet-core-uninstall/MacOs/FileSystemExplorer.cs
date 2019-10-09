@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
@@ -18,6 +19,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 
         public static IEnumerable<Bundle> GetInstalledBundles()
         {
+            return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(GetAllInstalledBundles());
+        }
+
+        public static IEnumerable<Bundle> GetAllInstalledBundles()
+        {
             var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath);
             var runtimes = GetInstalledBundles<RuntimeVersion>(
                 DotNetRuntimeInstallPath,
@@ -25,7 +31,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 DotNetAspAppInstallPath,
                 DotNetHostFxrInstallPath);
 
-            return sdks.Concat(runtimes);
+            return sdks.Concat(runtimes).ToList();
         }
 
         private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)

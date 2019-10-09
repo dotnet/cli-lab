@@ -12,7 +12,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         public string Footnote { get; private set; }
         public bool HasFootnote => Footnote != null;
 
-        protected SemanticVersion SemVer { get; private set; }
+        public SemanticVersion SemVer { get; private set; }
 
         public virtual int Major => SemVer.Major;
         public virtual int Minor => SemVer.Minor;

@@ -101,6 +101,11 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">List .NET Core Runtime &amp; Hosting Bundles.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListIncludeRequiredOptionDescription">
+        <source>Include .NET Core SDKs that cannot be uninstalled.</source>
+        <target state="new">Include .NET Core SDKs that cannot be uninstalled.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListRuntimeOptionDescription">
         <source>List .NET Core Runtimes.</source>
         <target state="new">List .NET Core Runtimes.</target>

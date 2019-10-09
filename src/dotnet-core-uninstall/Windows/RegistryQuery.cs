@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
@@ -12,6 +13,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
     internal static class RegistryQuery
     {
         public static IEnumerable<Bundle> GetInstalledBundles()
+        {
+            return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(GetAllInstalledBundles());
+        }
+
+        public static IEnumerable<Bundle> GetAllInstalledBundles()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE");
@@ -33,8 +39,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 .Select(name => uninstalls.OpenSubKey(name))
                 .Where(bundle => IsDotNetCoreBundle(bundle));
 
-            return bundles
-                .Select(bundle => WrapRegistryKey(bundle));
+            var wrappedBundles = bundles
+              .Select(bundle => WrapRegistryKey(bundle)).ToList();
+
+            return wrappedBundles;
         }
 
         private static bool IsDotNetCoreBundle(RegistryKey registryKey)
