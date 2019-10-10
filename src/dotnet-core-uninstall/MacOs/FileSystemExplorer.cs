@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
