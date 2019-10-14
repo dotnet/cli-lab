@@ -8,6 +8,8 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
@@ -16,7 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
     {
         private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1", "10.10.10" };
 
-        [Theory]
+        [WindowsOnlyTheory]
         [InlineData("remove --all --sdk", new string[] { "1.0.0", "2.1.0"})]
         [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "2.1.0" })]
         [InlineData("whatif --all --sdk", new string[] { "1.0.0", "2.1.0" })]
@@ -25,6 +27,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         [InlineData("remove --sdk 1.0.1 2.1.0 1.0.1", new string[] { "2.1.0", "1.0.1", "1.0.1" })]
         [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200", 
             new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200" })]
+        internal void TestRequiredUninstallableWhenExplicitlyAddedWindows(string command, string[] expectedUninstallable)
+        {
+            TestRequiredUninstallableWhenExplicitlyAdded(command, expectedUninstallable);
+        }
+
+        [MacOsOnlyTheory]
+        [InlineData("remove --all --sdk", new string[] { "1.0.0", "2.1.0", "3.0.0" })]
+        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "2.1.0", "3.0.0" })]
+        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "2.1.0", "3.0.0" })]
+        [InlineData("remove --sdk 1.0.1", new string[] { "1.0.1" })]
+        [InlineData("remove --sdk 1.0.0", new string[] { "1.0.0" })]
+        [InlineData("remove --sdk 1.0.1 2.1.0 1.0.1", new string[] { "2.1.0", "1.0.1", "1.0.1" })]
+        [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 3.0.0",
+            new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0" })]
+        internal void TestRequiredUninstallableWhenExplicitlyAddedMac(string command, string[] expectedUninstallable)
+        {
+            TestRequiredUninstallableWhenExplicitlyAdded(command, expectedUninstallable);
+        }
+
         internal void TestRequiredUninstallableWhenExplicitlyAdded(string command, string[] expectedUninstallable)
         {
             var bundles = new List<Bundle<SdkVersion>>();
@@ -43,9 +64,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
             requiredBundles.Should().BeEquivalentTo(versions.Where(v => !expectedUninstallable.Contains(v)));
         }
 
-        [Theory]
+        [WindowsOnlyTheory]
         [InlineData("remove --sdk 3.0.0")]
         [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 3.0.0 3.0.1 10.10.10")]
+        internal void TestUpperLimitAlwaysRequiredWindows(string command)
+        {
+            TestUpperLimitAlwaysRequired(command);
+        }
+
+        [MacOsOnlyTheory]
+        [InlineData("remove --sdk 5.0.0")]
+        [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 5.0.0 5.0.1 10.10.10")]
+        internal void TestUpperLimitAlwaysRequiredMac(string command)
+        {
+            TestUpperLimitAlwaysRequired(command);
+        }
+
         internal void TestUpperLimitAlwaysRequired(string command)
         {
             var bundles = new List<Bundle<SdkVersion>>();
