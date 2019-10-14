@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 {
-    public class CommandLineConfigsTests 
+    public class CommandLineConfigsTests
     {
         [Theory]
         [InlineData("list", new string[] { })]

@@ -118,7 +118,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///
         ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
         ///
-        ///Run as administrator and use the remove command to remove these items..
+        ///Run as administrator and use the remove command to uninstall these items..
         /// </summary>
         internal static string DryRunOutputFormat {
             get {
@@ -208,7 +208,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List .NET Core Runtimes..
+        ///   Looks up a localized string similar to List .NET Core Runtimes that can be uninstalled..
         /// </summary>
         internal static string ListRuntimeOptionDescription {
             get {
@@ -217,7 +217,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List .NET Core SDKs..
+        ///   Looks up a localized string similar to List .NET Core SDKs that can be uninstalled..
         /// </summary>
         internal static string ListSdkOptionDescription {
             get {
@@ -249,6 +249,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string MacOsBundleDisplayNameFormat {
             get {
                 return ResourceManager.GetString("MacOsBundleDisplayNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required for {0}.{1} Applications, you will not be able to run these applications without this SDK.
+        /// </summary>
+        internal static string MajorMinorRequirementLong {
+            get {
+                return ResourceManager.GetString("MajorMinorRequirementLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required for {0}.{1} Applications.
+        /// </summary>
+        internal static string MajorMinorRequirementShort {
+            get {
+                return ResourceManager.GetString("MajorMinorRequirementShort", resourceCulture);
             }
         }
         
@@ -567,6 +585,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio.
+        /// </summary>
+        internal static string UpperLimitRequirementLong {
+            get {
+                return ResourceManager.GetString("UpperLimitRequirementLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot uninstall version {0} and above.
+        /// </summary>
+        internal static string UpperLimitRequirementShort {
+            get {
+                return ResourceManager.GetString("UpperLimitRequirementShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic]..
         /// </summary>
         internal static string VerbosityLevelInvalidExceptionMessage {
@@ -599,6 +635,33 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string VersionBeforeOptionExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("VersionBeforeOptionExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Display .NET Core Uninstall Tool Version Information..
+        /// </summary>
+        internal static string VersionOptionDescription {
+            get {
+                return ResourceManager.GetString("VersionOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required by Visual Studio 2017, Visual Studio will break without this SDK.
+        /// </summary>
+        internal static string VisualStudioRequirementLong {
+            get {
+                return ResourceManager.GetString("VisualStudioRequirementLong", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Required by Visual Studio 2017.
+        /// </summary>
+        internal static string VisualStudioRequirementShort {
+            get {
+                return ResourceManager.GetString("VisualStudioRequirementShort", resourceCulture);
             }
         }
         

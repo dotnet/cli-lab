@@ -11,6 +11,7 @@ using System.Linq;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using NuGet.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -75,7 +76,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
             else
             {
-                return OptionFilterers.OptionFiltererDictionary[option.Name].Filter(
+                return OptionFilterers.OptionFiltererDictionary[option].Filter(
                     parseResult,
                     option,
                     bundles,
@@ -88,7 +89,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var allBundles = GetAllBundles();
             var filteredBundles = GetFilteredBundles(allBundles);
-            return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles)
+            return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles, CommandLineConfigs.IsVerbosityLevelAboveNormal())
                     .Where(pair => filteredBundles.Contains(pair.Key))
                     .ToDictionary(i => i.Key, i => i.Value);
         }

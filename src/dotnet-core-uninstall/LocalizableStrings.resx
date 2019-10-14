@@ -256,10 +256,10 @@
     <value>List .NET Core Runtime &amp; Hosting Bundles.</value>
   </data>
   <data name="ListRuntimeOptionDescription" xml:space="preserve">
-    <value>List .NET Core Runtimes.</value>
+    <value>List .NET Core Runtimes that can be uninstalled.</value>
   </data>
   <data name="ListSdkOptionDescription" xml:space="preserve">
-    <value>List .NET Core SDKs.</value>
+    <value>List .NET Core SDKs that can be uninstalled.</value>
   </data>
   <data name="ListX64OptionDescription" xml:space="preserve">
     <value>List x64 .NET Core SDKs or Runtimes.</value>
@@ -281,7 +281,7 @@ Specified versions:
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Run as administrator and use the remove command to remove these items.</value>
+Run as administrator and use the remove command to uninstall these items.</value>
   </data>
   <data name="ConfirmationPromptOutputFormat" xml:space="preserve">
     <value>The following items will be removed:
@@ -313,5 +313,26 @@ Are you sure you want to continue? [Y/n] </value>
 Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio to break.
 </value>
+  </data>
+  <data name="VersionOptionDescription" xml:space="preserve">
+    <value>Display .NET Core Uninstall Tool Version Information.</value>
+  </data>
+  <data name="MajorMinorRequirementLong" xml:space="preserve">
+    <value>Required for {0}.{1} Applications, you will not be able to run these applications without this SDK</value>
+  </data>
+  <data name="MajorMinorRequirementShort" xml:space="preserve">
+    <value>Required for {0}.{1} Applications</value>
+  </data>
+  <data name="UpperLimitRequirementLong" xml:space="preserve">
+    <value>Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio</value>
+  </data>
+  <data name="UpperLimitRequirementShort" xml:space="preserve">
+    <value>Cannot uninstall version {0} and above</value>
+  </data>
+  <data name="VisualStudioRequirementLong" xml:space="preserve">
+    <value>Required by Visual Studio 2017, Visual Studio will break without this SDK</value>
+  </data>
+  <data name="VisualStudioRequirementShort" xml:space="preserve">
+    <value>Required by Visual Studio 2017</value>
   </data>
 </root>

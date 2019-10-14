@@ -1,43 +1,44 @@
 ﻿using System.Collections.Generic;
+using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Filterers;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
     internal static class OptionFilterers
     {
-        public static readonly IDictionary<string, Filterer> OptionFiltererDictionary
-            = new Dictionary<string, Filterer>
+        public static readonly IDictionary<Option, Filterer> OptionFiltererDictionary
+            = new Dictionary<Option, Filterer>
             {
                 {
-                    CommandLineConfigs.UninstallAllOption.Name,
+                    CommandLineConfigs.UninstallAllOption,
                     new AllOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallAllLowerPatchesOption.Name,
+                    CommandLineConfigs.UninstallAllLowerPatchesOption,
                     new AllLowerPatchesOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallAllButLatestOption.Name,
+                    CommandLineConfigs.UninstallAllButLatestOption,
                     new AllButLatestOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallAllButOption.Name,
+                    CommandLineConfigs.UninstallAllButOption,
                     new AllButOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallAllBelowOption.Name,
+                    CommandLineConfigs.UninstallAllBelowOption,
                     new AllBelowOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallAllPreviewsOption.Name,
+                    CommandLineConfigs.UninstallAllPreviewsOption,
                     new AllPreviewsOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallAllPreviewsButLatestOption.Name,
+                    CommandLineConfigs.UninstallAllPreviewsButLatestOption,
                     new AllPreviewsButLatestOptionFilterer()
                 },
                 {
-                    CommandLineConfigs.UninstallMajorMinorOption.Name,
+                    CommandLineConfigs.UninstallMajorMinorOption,
                     new MajorMinorOptionFilterer()
                 }
             };

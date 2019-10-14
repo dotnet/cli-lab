@@ -4,6 +4,7 @@ using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
+using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
@@ -82,7 +83,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             }
         }
 
-        [Theory]
+        
+        [WindowsOnlyTheory]
         [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "", "Required by Visual Studio 2017" })]
         [InlineData(new string[] { "2.3.0", "2.2.0", "2.1.0" }, new string[] { "Required for 2.3 Applications", "Required for 2.2 Applications", "Required by Visual Studio 2017" })]
         [InlineData(new string[] { "1.0.0", "1.0.1", "1.1.0" }, new string[] { "", "Required for 1.0 Applications", "Required by Visual Studio 2017" })]
@@ -101,13 +103,66 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles, false);
 
             strings.Count().Should().Be(bundles.Count());
             strings.Where(pair => !(pair.Key.Version is SdkVersion)).Select(pair => pair.Value).ToList().ForEach(str => str.Should().Be(string.Empty));
             for (int i = 0; i < versions.Length; i++)
             {
                 strings.First(pair => pair.Key.DisplayName.Equals(versions[i])).Value.Should().Be(expectedStrings[i]);
+            }
+        }
+
+        [MacOsOnlyTheory]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "", "Required for 1.0 Applications" })]
+        [InlineData(new string[] { "2.3.0", "2.2.0" }, new string[] { "Required for 2.3 Applications", "Required for 2.2 Applications" })]
+        [InlineData(new string[] { "2.1.500", "3.0.1", "3.0.0" }, new string[] { "Required for 2.1 Applications", "Cannot uninstall version 3.0.0 and above", "Cannot uninstall version 3.0.0 and above" })]
+        internal void TestGetListCommandUninstallableStringsMac(string[] versions, string[] expectedStrings)
+        {
+            var bundles = new List<Bundle>
+            {
+                new Bundle<RuntimeVersion>(new RuntimeVersion(), new BundleArch(), string.Empty, "RuntimeVersion"),
+                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion(), new BundleArch(), string.Empty, "AspNetVersion"),
+                new Bundle<HostingBundleVersion>(new HostingBundleVersion(), new BundleArch(), string.Empty, "HostingBundleVersion")
+            };
+            foreach (string v in versions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
+            }
+
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles, false);
+
+            strings.Count().Should().Be(bundles.Count());
+            strings.Where(pair => !(pair.Key.Version is SdkVersion)).Select(pair => pair.Value).ToList().ForEach(str => str.Should().Be(string.Empty));
+            for (int i = 0; i < versions.Length; i++)
+            {
+                strings.First(pair => pair.Key.DisplayName.Equals(versions[i])).Value.Should().Be(expectedStrings[i]);
+            }
+        }
+
+        [WindowsOnlyTheory]
+        [InlineData(new string[] { "1.0.1" }, new string[] { "Required by Visual Studio 2017" })]
+        [InlineData(new string[] { "2.3.0", "2.2.0", "2.1.0" }, new string[] { "Required for 2.3 Applications", "Required for 2.2 Applications", "Required by Visual Studio 2017" })]
+        internal void TestGetListCommandUninstallableVerboseStrings(string[] versions, string[] expectedStrings)
+        {
+            var bundles = new List<Bundle>
+            {
+                new Bundle<RuntimeVersion>(new RuntimeVersion(), new BundleArch(), string.Empty, "RuntimeVersion"),
+                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion(), new BundleArch(), string.Empty, "AspNetVersion"),
+                new Bundle<HostingBundleVersion>(new HostingBundleVersion(), new BundleArch(), string.Empty, "HostingBundleVersion")
+            };
+            foreach (string v in versions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
+            }
+
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles, true); 
+
+            strings.Count().Should().Be(bundles.Count());
+            strings.Where(pair => !(pair.Key.Version is SdkVersion)).Select(pair => pair.Value).ToList().ForEach(str => str.Should().Be(string.Empty));
+            for (int i = 0; i < versions.Length; i++)
+            {
+                strings.First(pair => pair.Key.DisplayName.Equals(versions[i])).Value.Length.Should().BeGreaterThan(expectedStrings[i].Length);
             }
         }
     }

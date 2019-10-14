@@ -45,7 +45,7 @@ Specified versions:
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Run as administrator and use the remove command to remove these items.</source>
+Run as administrator and use the remove command to uninstall these items.</source>
         <target state="new">*** DRY RUN OUTPUT
 Specified versions:
 {0}
@@ -53,7 +53,7 @@ Specified versions:
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Run as administrator and use the remove command to remove these items.</target>
+Run as administrator and use the remove command to uninstall these items.</target>
         <note />
       </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
@@ -102,13 +102,13 @@ Run as administrator and use the remove command to remove these items.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListRuntimeOptionDescription">
-        <source>List .NET Core Runtimes.</source>
-        <target state="new">List .NET Core Runtimes.</target>
+        <source>List .NET Core Runtimes that can be uninstalled.</source>
+        <target state="new">List .NET Core Runtimes that can be uninstalled.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListSdkOptionDescription">
-        <source>List .NET Core SDKs.</source>
-        <target state="new">List .NET Core SDKs.</target>
+        <source>List .NET Core SDKs that can be uninstalled.</source>
+        <target state="new">List .NET Core SDKs that can be uninstalled.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListX64OptionDescription">
@@ -124,6 +124,16 @@ Run as administrator and use the remove command to remove these items.</target>
       <trans-unit id="MacOsBundleDisplayNameFormat">
         <source>Microsoft .NET Core {0} {1} (x64)</source>
         <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MajorMinorRequirementLong">
+        <source>Required for {0}.{1} Applications, you will not be able to run these applications without this SDK</source>
+        <target state="new">Required for {0}.{1} Applications, you will not be able to run these applications without this SDK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MajorMinorRequirementShort">
+        <source>Required for {0}.{1} Applications</source>
+        <target state="new">Required for {0}.{1} Applications</target>
         <note />
       </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
@@ -312,6 +322,16 @@ Uninstalling this item will cause Visual Studio to break.
         <target state="new">The uninstallation operation failed. Exit code was {1} for "{0}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpperLimitRequirementLong">
+        <source>Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio</source>
+        <target state="new">Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UpperLimitRequirementShort">
+        <source>Cannot uninstall version {0} and above</source>
+        <target state="new">Cannot uninstall version {0} and above</target>
+        <note />
+      </trans-unit>
       <trans-unit id="VerbosityLevelInvalidExceptionMessage">
         <source>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
         <target state="new">Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
@@ -330,6 +350,21 @@ Uninstalling this item will cause Visual Studio to break.
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
         <source>Do not use a version before an option: {0}.</source>
         <target state="new">Do not use a version before an option: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VersionOptionDescription">
+        <source>Display .NET Core Uninstall Tool Version Information.</source>
+        <target state="new">Display .NET Core Uninstall Tool Version Information.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VisualStudioRequirementLong">
+        <source>Required by Visual Studio 2017, Visual Studio will break without this SDK</source>
+        <target state="new">Required by Visual Studio 2017, Visual Studio will break without this SDK</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VisualStudioRequirementShort">
+        <source>Required by Visual Studio 2017</source>
+        <target state="new">Required by Visual Studio 2017</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">

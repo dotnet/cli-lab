@@ -59,7 +59,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     var filteredBundlesByType = bundleType
                         .Filter(filteredBundlesByArch);
 
-                    var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(filteredBundlesByType);
+                    var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(filteredBundlesByType, 
+                        CommandLineConfigs.IsVerbosityLevelAboveNormal());
 
                     stackView.Add(new ContentView(bundleType.Header));
                     stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap));

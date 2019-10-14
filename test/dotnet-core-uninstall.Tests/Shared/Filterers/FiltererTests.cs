@@ -17,7 +17,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
     {
         internal abstract Option Option { get; }
         internal abstract string DefaultTestArgValue { get; }
-        internal virtual Filterer OptionFilterer => OptionFilterers.OptionFiltererDictionary[Option.Name];
+        internal virtual Filterer OptionFilterer => OptionFilterers.OptionFiltererDictionary[Option];
 
         internal const BundleArch DefaultTestArchSelection = BundleArch.X86 | BundleArch.X64;
 

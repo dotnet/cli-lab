@@ -48,7 +48,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     throw new NotAdminException();
                 }
 
-                if (AskIt(filtered))
+                if (AskItAndReturnUserAnswer(filtered))
                 {
                     if (AskWithWarningsForRequiredBundles(filtered))
                     {
@@ -207,16 +207,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return args;
         }
 
-        private static bool AskIt(IDictionary<Bundle, string> bundles)
+        private static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles)
         {
             var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
             Console.Write(string.Format(LocalizableStrings.ConfirmationPromptOutputFormat, displayNames));
 
             var response = Console.ReadLine().Trim().ToUpper();
 
-            if (response.Equals("Y") || response.Equals("N"))
+            if (response.Equals("Y"))
             {
-                return response.Equals("Y");
+                return true;
+            }
+            else if (response.Equals("N"))
+            {
+                return false;
             }
             else
             {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using NuGet.Versioning;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
@@ -16,7 +17,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
         private static readonly SemanticVersion[] SpecialCaseDivisions = { new SemanticVersion(2, 1, 600), new SemanticVersion(2, 2, 200) };
 
         // The tool should not be used to uninstall any more recent versions of the sdk
-        public static readonly SemanticVersion UpperLimit = new SemanticVersion(3, 0, 0);
+        public static readonly SemanticVersion UpperLimit = RuntimeInfo.RunningOnWindows ? new SemanticVersion(3, 0, 0) : new SemanticVersion(5, 0, 0);
 
         public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
         {
@@ -53,25 +54,28 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
                 new List<IEnumerable<Bundle>> { bundleList };
         }
 
-        public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles)
+        public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles, bool verbose)
         {
             var uninstallable = GetUninstallableBundles(allBundles);
             var required = allBundles.Where(b => !uninstallable.Contains(b));
 
             var ListCommandStringResults = uninstallable.Select(b => new KeyValuePair<Bundle, string>(b, string.Empty))
                         .ToDictionary(i => i.Key, i => i.Value);
-            if (required.Where(b => b.Version.SemVer < SpecialCaseDivisions[0]).Count() > 0) 
+            if (RuntimeInfo.RunningOnWindows && required.Where(b => b.Version.SemVer < SpecialCaseDivisions[0]).Count() > 0) 
             {
-                ListCommandStringResults.Add(required.Where(b => b.Version.SemVer < SpecialCaseDivisions[0]).Max(), "Required by Visual Studio 2017");
+                ListCommandStringResults.Add(required.Where(b => b.Version.SemVer < SpecialCaseDivisions[0]).Max(),
+                    verbose ? LocalizableStrings.VisualStudioRequirementLong : LocalizableStrings.VisualStudioRequirementShort);
             }
             foreach (var recentSdk in required.Where(b => b.Version.SemVer >= UpperLimit))
             {
-                ListCommandStringResults.Add(recentSdk, $"Cannot uninstall version {UpperLimit} and above");
+                ListCommandStringResults.Add(recentSdk, string.Format(
+                    verbose ? LocalizableStrings.UpperLimitRequirementLong : LocalizableStrings.UpperLimitRequirementShort,  UpperLimit));
             }
 
             return ListCommandStringResults.Concat(required
                 .Where(b => !ListCommandStringResults.Keys.Contains(b))
-                .Select(b => new KeyValuePair<Bundle, string>(b, $"Required for {b.Version.Major}.{b.Version.Minor} Applications")))
+                .Select(b => new KeyValuePair<Bundle, string>(b, string.Format(verbose ? LocalizableStrings.MajorMinorRequirementLong :
+                    LocalizableStrings.MajorMinorRequirementShort, b.Version.Major, b.Version.Minor))))
                 .OrderByDescending(pair => pair.Key)
                 .ToDictionary(i => i.Key, i => i.Value);
         }
