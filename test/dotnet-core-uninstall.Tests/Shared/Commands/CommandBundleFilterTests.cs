@@ -33,9 +33,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [MacOsOnlyTheory]
-        [InlineData("remove --all --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })] 
-        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
-        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
+        [InlineData("remove --all-below 5.0.0 --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })] 
+        [InlineData("dry-run --all-below 5.0.0 --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
+        [InlineData("whatif --all-below 5.0.0 --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
         internal void TestRequiredUninstallableWhenExplicitlyAddedMac(string command, string[] expectedUninstallable)
         {
             TestRequiredUninstallableWhenExplicitlyAdded(command, expectedUninstallable);

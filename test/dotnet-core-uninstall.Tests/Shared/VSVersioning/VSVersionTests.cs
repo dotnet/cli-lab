@@ -131,7 +131,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "3.1.500", "5.0.1", "5.0.0" }, new string[] { "None", "None", "None" })]
         internal void TestGetListCommandUninstallableStringsMac(string[] versions, string[] expectedStrings)
         {
-            TestGetListCommandUninstallableStrings(versions, expectedStrings);
+            TestGetListCommandUninstallableStrings(versions, ConvertStringInput(expectedStrings));
         }
 
         internal void TestGetListCommandUninstallableStrings(string[] versions, string[] expectedStrings)
