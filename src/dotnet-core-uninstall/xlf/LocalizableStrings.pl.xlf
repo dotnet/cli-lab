@@ -56,6 +56,11 @@ To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-co
 Run as administrator and use the remove command to uninstall these items.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ForceOptionDescription">
+        <source>Execute the command including unreccommended unisntallations.</source>
+        <target state="new">Execute the command including unreccommended unisntallations.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
         <source>"{0}" is treated as a version {1} in this tool.</source>
         <target state="new">"{0}" is treated as a version {1} in this tool.</target>
@@ -126,16 +131,6 @@ Run as administrator and use the remove command to uninstall these items.</targe
         <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
         <note />
       </trans-unit>
-      <trans-unit id="MajorMinorRequirementLong">
-        <source>Required for {0}.{1} Applications, you will not be able to run these applications without this SDK</source>
-        <target state="new">Required for {0}.{1} Applications, you will not be able to run these applications without this SDK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MajorMinorRequirementShort">
-        <source>Required for {0}.{1} Applications</source>
-        <target state="new">Required for {0}.{1} Applications</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
         <source>You must specify exactly one version for option: {0}.</source>
         <target state="new">You must specify exactly one version for option: {0}.</target>
@@ -197,6 +192,11 @@ Uninstalling this item will cause Visual Studio to break.
 </target>
         <note />
       </trans-unit>
+      <trans-unit id="RequirementExplainationString">
+        <source>Maybe needed for Visual Studio{0}. Specify individually or use —force to remove</source>
+        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —force to remove</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
         <source>The specified version is not found: "{0}".</source>
         <target state="new">The specified version is not found: "{0}".</target>
@@ -228,8 +228,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllLowerPatchesOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</target>
+        <source>Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllOptionDescription">
@@ -238,13 +238,13 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsButLatestOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</target>
+        <source>Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes that are marked as previews.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews.</target>
+        <source>Remove .NET Core SDKs or Runtimes marked as previews.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAspNetRuntimeOptionDescription">
@@ -322,12 +322,7 @@ Uninstalling this item will cause Visual Studio to break.
         <target state="new">The uninstallation operation failed. Exit code was {1} for "{0}".</target>
         <note />
       </trans-unit>
-      <trans-unit id="UpperLimitRequirementLong">
-        <source>Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio</source>
-        <target state="new">Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="UpperLimitRequirementShort">
+      <trans-unit id="UpperLimitRequirement">
         <source>Cannot uninstall version {0} and above</source>
         <target state="new">Cannot uninstall version {0} and above</target>
         <note />
@@ -355,16 +350,6 @@ Uninstalling this item will cause Visual Studio to break.
       <trans-unit id="VersionOptionDescription">
         <source>Display .NET Core Uninstall Tool Version Information.</source>
         <target state="new">Display .NET Core Uninstall Tool Version Information.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="VisualStudioRequirementLong">
-        <source>Required by Visual Studio 2017, Visual Studio will break without this SDK</source>
-        <target state="new">Required by Visual Studio 2017, Visual Studio will break without this SDK</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="VisualStudioRequirementShort">
-        <source>Required by Visual Studio 2017</source>
-        <target state="new">Required by Visual Studio 2017</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">

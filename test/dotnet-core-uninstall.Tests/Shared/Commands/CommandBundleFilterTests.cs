@@ -8,7 +8,6 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Xunit;
 
@@ -19,9 +18,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1", "10.10.10" };
 
         [WindowsOnlyTheory]
-        [InlineData("remove --all --sdk", new string[] { "1.0.0", "2.1.0"})]
-        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "2.1.0" })]
-        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "2.1.0" })]
+        [InlineData("remove --all --sdk", new string[] { "1.0.0", "1.0.1", "3.0.0"})]
+        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "1.0.1", "3.0.0" })]
+        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "1.0.1", "3.0.0" })]
+        [InlineData("remove --all-below 5.0.0 --sdk --force", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
         [InlineData("remove --sdk 1.0.1", new string[] { "1.0.1" })]
         [InlineData("remove --sdk 1.0.0", new string[] { "1.0.0" })]
         [InlineData("remove --sdk 1.0.1 2.1.0 1.0.1", new string[] { "2.1.0", "1.0.1", "1.0.1" })]
@@ -33,14 +33,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [MacOsOnlyTheory]
-        [InlineData("remove --all --sdk", new string[] { "1.0.0", "2.1.0", "3.0.0" })]
-        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "2.1.0", "3.0.0" })]
-        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "2.1.0", "3.0.0" })]
-        [InlineData("remove --sdk 1.0.1", new string[] { "1.0.1" })]
-        [InlineData("remove --sdk 1.0.0", new string[] { "1.0.0" })]
-        [InlineData("remove --sdk 1.0.1 2.1.0 1.0.1", new string[] { "2.1.0", "1.0.1", "1.0.1" })]
-        [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 3.0.0",
-            new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0" })]
+        [InlineData("remove --all --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })] 
+        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
+        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "3.0.0", "3.0.1" })]
         internal void TestRequiredUninstallableWhenExplicitlyAddedMac(string command, string[] expectedUninstallable)
         {
             TestRequiredUninstallableWhenExplicitlyAdded(command, expectedUninstallable);
@@ -65,22 +60,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [WindowsOnlyTheory]
-        [InlineData("remove --sdk 3.0.0")]
+        [InlineData("remove --sdk 10.10.10")]
+        [InlineData("remove --sdk --all --force")]
         [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 3.0.0 3.0.1 10.10.10")]
         internal void TestUpperLimitAlwaysRequiredWindows(string command)
-        {
-            TestUpperLimitAlwaysRequired(command);
-        }
-
-        [MacOsOnlyTheory]
-        [InlineData("remove --sdk 5.0.0")]
-        [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 5.0.0 5.0.1 10.10.10")]
-        internal void TestUpperLimitAlwaysRequiredMac(string command)
-        {
-            TestUpperLimitAlwaysRequired(command);
-        }
-
-        internal void TestUpperLimitAlwaysRequired(string command)
         {
             var bundles = new List<Bundle<SdkVersion>>();
             foreach (string v in versions)

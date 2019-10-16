@@ -118,6 +118,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             new[] { "--yes", "-y" },
             LocalizableStrings.YesOptionDescription);
 
+        public static readonly Option ForceOption = new Option(
+            "--force",
+            LocalizableStrings.ForceOptionDescription);
+
         public static readonly Option[] UninstallFilterBundlesOptions = new Option[]
         {
             UninstallAllOption,
@@ -187,7 +191,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             RemoveAuxOptions = UninstallBundleTypeOptions
                 .Where(option => supportedBundleTypeNames.Contains(option.Name))
                 .Concat(AdditionalUninstallOptions)
-                .Append(YesOption);
+                .Append(YesOption)
+                .Append(ForceOption);
             if (RuntimeInfo.RunningOnWindows)
             {
                 RemoveAuxOptions = RemoveAuxOptions.Concat(ArchUninstallOptions);
@@ -207,9 +212,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             ListAuxOptions = ListBundleTypeOptions
                 .Where(option => supportedBundleTypeNames.Contains(option.Name))
-                .Append(VerbosityOption)
-                .Append(ListX64Option)
-                .Append(ListX86Option);
+                .Append(VerbosityOption);
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                ListAuxOptions = ListAuxOptions
+                    .Append(ListX64Option)
+                    .Append(ListX86Option);
+            }
             AssignOptionsToCommand(ListCommand, ListAuxOptions);
 
             ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
@@ -301,12 +310,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 throw new VerbosityLevelInvalidException();
             }
-        }
-
-        public static bool IsVerbosityLevelAboveNormal()
-        {
-            return CommandLineConfigs.CommandLineParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Detailed)
-                || CommandLineConfigs.CommandLineParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Diagnostic);
         }
 
         private static void AssignOptionsToCommand(Command command, IEnumerable<Option> options, bool addVersionArgument = false)

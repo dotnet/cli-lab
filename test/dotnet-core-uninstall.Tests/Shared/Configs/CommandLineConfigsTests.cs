@@ -198,6 +198,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
         [Theory]
         [InlineData("--all --sdk", new string[] { "sdk" })]
+        [InlineData("--all --sdk --force", new string[] { "sdk", "force" })]
         [InlineData("--all-below 2.2.300 --runtime", new string[] { "runtime" })]
         [InlineData("--all-but 2.1.5 2.1.7 3.0.0-preview-10086 --sdk --runtime", new string[] { "sdk", "runtime" })]
         [InlineData("2.1.300 3.0.100-preview-276262-01 --verbosity diagnostic", new string[] { "verbosity" })]

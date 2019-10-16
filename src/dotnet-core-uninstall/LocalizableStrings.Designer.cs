@@ -127,6 +127,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Execute the command including unreccommended unisntallations..
+        /// </summary>
+        internal static string ForceOptionDescription {
+            get {
+                return ResourceManager.GetString("ForceOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is treated as a version {1} in this tool..
         /// </summary>
         internal static string HostingBundleFootnoteFormat {
@@ -253,24 +262,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Required for {0}.{1} Applications, you will not be able to run these applications without this SDK.
-        /// </summary>
-        internal static string MajorMinorRequirementLong {
-            get {
-                return ResourceManager.GetString("MajorMinorRequirementLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required for {0}.{1} Applications.
-        /// </summary>
-        internal static string MajorMinorRequirementShort {
-            get {
-                return ResourceManager.GetString("MajorMinorRequirementShort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You must specify exactly one version for option: {0}..
         /// </summary>
         internal static string MoreThanOneVersionSpecifiedExceptionMessageFormat {
@@ -360,6 +351,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maybe needed for Visual Studio{0}. Specify individually or use —force to remove.
+        /// </summary>
+        internal static string RequirementExplainationString {
+            get {
+                return ResourceManager.GetString("RequirementExplainationString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified version is not found: &quot;{0}&quot;..
         /// </summary>
         internal static string SpecifiedVersionNotFoundExceptionMessageFormat {
@@ -414,7 +414,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that have been superceded by higher patches..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json..
         /// </summary>
         internal static string UninstallAllLowerPatchesOptionDescription {
             get {
@@ -432,7 +432,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview..
         /// </summary>
         internal static string UninstallAllPreviewsButLatestOptionDescription {
             get {
@@ -441,7 +441,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes that are marked as previews..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes marked as previews..
         /// </summary>
         internal static string UninstallAllPreviewsOptionDescription {
             get {
@@ -585,20 +585,11 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot uninstall version {0} and above, SDK versions handled properly by Visual Studio.
-        /// </summary>
-        internal static string UpperLimitRequirementLong {
-            get {
-                return ResourceManager.GetString("UpperLimitRequirementLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Cannot uninstall version {0} and above.
         /// </summary>
-        internal static string UpperLimitRequirementShort {
+        internal static string UpperLimitRequirement {
             get {
-                return ResourceManager.GetString("UpperLimitRequirementShort", resourceCulture);
+                return ResourceManager.GetString("UpperLimitRequirement", resourceCulture);
             }
         }
         
@@ -644,24 +635,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string VersionOptionDescription {
             get {
                 return ResourceManager.GetString("VersionOptionDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required by Visual Studio 2017, Visual Studio will break without this SDK.
-        /// </summary>
-        internal static string VisualStudioRequirementLong {
-            get {
-                return ResourceManager.GetString("VisualStudioRequirementLong", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required by Visual Studio 2017.
-        /// </summary>
-        internal static string VisualStudioRequirementShort {
-            get {
-                return ResourceManager.GetString("VisualStudioRequirementShort", resourceCulture);
             }
         }
         
