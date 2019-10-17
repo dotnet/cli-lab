@@ -127,11 +127,20 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute the command including unreccommended unisntallations..
+        ///   Looks up a localized string similar to Force removal of versions that might be used by Visual Studio or SDK..
         /// </summary>
-        internal static string ForceOptionDescription {
+        internal static string ForceOptionDescriptionMac {
             get {
-                return ResourceManager.GetString("ForceOptionDescription", resourceCulture);
+                return ResourceManager.GetString("ForceOptionDescriptionMac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Force removal of versions that might be used by Visual Studio..
+        /// </summary>
+        internal static string ForceOptionDescriptionWindows {
+            get {
+                return ResourceManager.GetString("ForceOptionDescriptionWindows", resourceCulture);
             }
         }
         
@@ -186,6 +195,17 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListCommandHostingBundleHeader {
             get {
                 return ResourceManager.GetString("ListCommandHostingBundleHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+        ///.
+        /// </summary>
+        internal static string ListCommandOutput {
+            get {
+                return ResourceManager.GetString("ListCommandOutput", resourceCulture);
             }
         }
         
@@ -351,7 +371,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maybe needed for Visual Studio{0}. Specify individually or use —force to remove.
+        ///   Looks up a localized string similar to Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove.
         /// </summary>
         internal static string RequirementExplainationString {
             get {
@@ -504,7 +524,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The specified version to uninstall. You may list several versions, and response files are supported..
+        ///   Looks up a localized string similar to The specified version to uninstall. You may list several versions. Response files are supported..
         /// </summary>
         internal static string UninstallNoOptionArgumentDescription {
             get {
@@ -522,11 +542,20 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall..
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall..
         /// </summary>
-        internal static string UninstallNoOptionDescription {
+        internal static string UninstallNoOptionDescriptionMac {
             get {
-                return ResourceManager.GetString("UninstallNoOptionDescription", resourceCulture);
+                return ResourceManager.GetString("UninstallNoOptionDescriptionMac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall..
+        /// </summary>
+        internal static string UninstallNoOptionDescriptionWindows {
+            get {
+                return ResourceManager.GetString("UninstallNoOptionDescriptionWindows", resourceCulture);
             }
         }
         
@@ -630,7 +659,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Display .NET Core Uninstall Tool Version Information..
+        ///   Looks up a localized string similar to Display .NET Core Uninstall Tool version information..
         /// </summary>
         internal static string VersionOptionDescription {
             get {

@@ -56,9 +56,14 @@ To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-co
 Run as administrator and use the remove command to uninstall these items.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ForceOptionDescription">
-        <source>Execute the command including unreccommended unisntallations.</source>
-        <target state="new">Execute the command including unreccommended unisntallations.</target>
+      <trans-unit id="ForceOptionDescriptionMac">
+        <source>Force removal of versions that might be used by Visual Studio or SDK.</source>
+        <target state="new">Force removal of versions that might be used by Visual Studio or SDK.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ForceOptionDescriptionWindows">
+        <source>Force removal of versions that might be used by Visual Studio.</source>
+        <target state="new">Force removal of versions that might be used by Visual Studio.</target>
         <note />
       </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
@@ -89,6 +94,15 @@ Run as administrator and use the remove command to uninstall these items.</targe
       <trans-unit id="ListCommandHostingBundleHeader">
         <source>.NET Core Runtime &amp; Hosting Bundles:</source>
         <target state="new">.NET Core Runtime &amp; Hosting Bundles:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListCommandOutput">
+        <source>
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</source>
+        <target state="new">
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</target>
         <note />
       </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">
@@ -193,8 +207,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="RequirementExplainationString">
-        <source>Maybe needed for Visual Studio{0}. Specify individually or use —force to remove</source>
-        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —force to remove</target>
+        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
@@ -268,8 +282,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentDescription">
-        <source>The specified version to uninstall. You may list several versions, and response files are supported.</source>
-        <target state="new">The specified version to uninstall. You may list several versions, and response files are supported.</target>
+        <source>The specified version to uninstall. You may list several versions. Response files are supported.</source>
+        <target state="new">The specified version to uninstall. You may list several versions. Response files are supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentName">
@@ -277,9 +291,14 @@ Uninstalling this item will cause Visual Studio to break.
         <target state="new">VERSION</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallNoOptionDescription">
-        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</source>
-        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</target>
+      <trans-unit id="UninstallNoOptionDescriptionMac">
+        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallNoOptionDescriptionWindows">
+        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNormalVerbosityFormat">
@@ -348,8 +367,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="VersionOptionDescription">
-        <source>Display .NET Core Uninstall Tool Version Information.</source>
-        <target state="new">Display .NET Core Uninstall Tool Version Information.</target>
+        <source>Display .NET Core Uninstall Tool version information.</source>
+        <target state="new">Display .NET Core Uninstall Tool version information.</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">

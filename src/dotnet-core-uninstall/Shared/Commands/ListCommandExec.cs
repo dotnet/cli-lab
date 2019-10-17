@@ -7,6 +7,7 @@ using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
@@ -40,8 +41,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             IEnumerable<Bundle> bundles,
             IEnumerable<BundleTypePrintInfo> supportedBundleTypes)
         {
+            Console.WriteLine(LocalizableStrings.ListCommandOutput);
+
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 
+            var verbose = listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Detailed) ||
+                listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Diagnostic);
             var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
             var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
 
@@ -62,7 +67,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(filteredBundlesByType);
 
                     stackView.Add(new ContentView(bundleType.Header));
-                    stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap));
+                    stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap, verbose));
                     stackView.Add(new ContentView(string.Empty));
 
                     footnotes.AddRange(filteredBundlesByType

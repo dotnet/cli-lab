@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
     internal static class SupportedBundleTypeConfigs
     {
-        private static readonly Func<IDictionary<Bundle, string>, GridView> _gridViewGeneratorWithArch = bundles =>
+        private static readonly Func<IDictionary<Bundle, string>, bool, GridView> _gridViewGeneratorWithArch = (bundles, verbose) =>
         {
             var gridView = new GridView();
 
