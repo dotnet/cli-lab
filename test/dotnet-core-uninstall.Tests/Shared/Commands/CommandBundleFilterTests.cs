@@ -8,6 +8,7 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Xunit;
 
@@ -91,12 +92,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
             }
             CheckUpperLimitAlwaysRequired(string.Format(command, "--runtime"), runtimeBundles);
 
-            var otherBundles = new List<Bundle>();
-            foreach (string v in versions)
+            if (RuntimeInfo.RunningOnWindows)
             {
-                otherBundles.Add(new Bundle<HostingBundleVersion>(new HostingBundleVersion(v), new BundleArch(), string.Empty, v));
+                // Hosting bundles are only on windows
+                var otherBundles = new List<Bundle>();
+                foreach (string v in versions)
+                {
+                    otherBundles.Add(new Bundle<HostingBundleVersion>(new HostingBundleVersion(v), new BundleArch(), string.Empty, v));
+                }
+                CheckUpperLimitAlwaysRequired(string.Format(command, "--hosting-bundle"), otherBundles);
             }
-            CheckUpperLimitAlwaysRequired(string.Format(command, "--hosting-bundle"), otherBundles);
         }
 
         internal void CheckUpperLimitAlwaysRequired(string command, IEnumerable<Bundle> bundles)
