@@ -41,15 +41,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             return (dividedBundles, bundleList);
         }
 
-        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList) // TODO have to test on mac
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList)
         {
-            var dividedRuntimes = bundleList
-                .Where(bundle => bundle.Version.SemVer < UpperLimit)
+            var bundlesAboveLimit = bundleList.Where(bundle => bundle.Version.SemVer >= UpperLimit);
+            bundleList = bundleList.Except(bundlesAboveLimit);
+
+            var dividedBundles = bundleList
                 .Where(bundle => bundle.Version is RuntimeVersion)
                 .GroupBy(bundle => bundle.Version.MajorMinor)
-                .Select(pair => (pair as IEnumerable<Bundle>, "TODO")) // TODO add sdk protection
-                .ToDictionary(key => key.Item1, value => value.Item2); // TODO add real string here
-            return (dividedRuntimes, bundleList.Where(bundle => !(bundle.Version is RuntimeVersion) || bundle.Version.SemVer >= UpperLimit)); // TODO only protect runtimes?
+                .Select(pair => (pair as IEnumerable<Bundle>, string.Format(LocalizableStrings.RequirementExplainationString, " or SDKs")))
+                .ToDictionary(key => key.Item1, value => value.Item2); 
+
+            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion); // TODO protect highest SDK-> ok?
+            if (sdks != null && sdks.Count() > 0)
+            {
+                dividedBundles.Add(sdks, string.Format(LocalizableStrings.RequirementExplainationString, string.Empty));
+            }
+
+            var remainingBundles = bundleList
+                .Where(bundle => !(bundle.Version is RuntimeVersion || bundle.Version is SdkVersion))
+                .Concat(bundlesAboveLimit);
+            return (dividedBundles, remainingBundles);
         }
 
         private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyVersionDivisions(IEnumerable<Bundle> bundles)
