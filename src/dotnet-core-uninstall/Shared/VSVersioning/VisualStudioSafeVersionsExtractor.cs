@@ -43,7 +43,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
 
         public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
         {
-            if (!RuntimeInfo.RunningOnWindows) // TODO this will be changed when mac protection is added
+            if (!RuntimeInfo.RunningOnWindows)
             {
                 return bundles;
             }
@@ -63,7 +63,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
 
         public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles)
         {
-            if (!RuntimeInfo.RunningOnWindows) // TODO this will be changed when mac protection is added
+            if (!RuntimeInfo.RunningOnWindows)
             {
                 return allBundles.Select(bundle => (bundle, string.Empty))
                     .ToDictionary(i => i.bundle, i => i.Item2);

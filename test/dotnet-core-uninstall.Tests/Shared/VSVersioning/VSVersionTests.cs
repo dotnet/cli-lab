@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             TestGetUninstallable(versions, allowed);
         }
 
-        // TODO For now we are not protecting versions on mac
+        // For now we are not protecting versions on mac
         [MacOsOnlyTheory]
         [InlineData(new string[] { "1.0.0" }, new bool[] { true })]
         [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, true })]
