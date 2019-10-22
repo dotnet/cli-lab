@@ -234,10 +234,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         internal override void TestFiltererGood(IEnumerable<Bundle> testBundles, string argValue, IEnumerable<Bundle> expected, BundleType typeSelection, BundleArch archSelection)
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"remove {argValue}");
 
             (OptionFilterer as ArgFilterer<IEnumerable<string>>).Filter(
-                parseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                parseResult.CommandResult.Tokens.Select(t => t.Value),
                 testBundles,
                 typeSelection,
                 archSelection)
@@ -248,7 +248,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
             Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>).Filter(
-                parseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                parseResult.CommandResult.Tokens.Select(t => t.Value),
                 testBundles,
                 typeSelection,
                 archSelection);
@@ -258,9 +258,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         internal override void TestFiltererException<TException>(IEnumerable<Bundle> testBundles, string argValue, BundleType typeSelection, BundleArch archSelection, string errorMessage)
         {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"{argValue}");
+            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"remove {argValue}");
             Action action = () => (OptionFilterer as ArgFilterer<IEnumerable<string>>).Filter(
-                parseResult.RootCommandResult.Tokens.Select(t => t.Value),
+                parseResult.CommandResult.Tokens.Select(t => t.Value),
                 testBundles,
                 typeSelection,
                 archSelection);

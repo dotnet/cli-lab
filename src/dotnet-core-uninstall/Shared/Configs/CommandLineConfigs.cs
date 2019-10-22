@@ -7,18 +7,40 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
     internal static class CommandLineConfigs
     {
+        private static readonly string ListCommandName = "list";
+        private static readonly string DryRunCommandName = "dry-run";
+        private static readonly string WhatIfCommandName = "whatif";
+        private static readonly string RemoveCommandName = "remove";
+
+        public static readonly RootCommand UninstallRootCommand = new RootCommand(
+            RuntimeInfo.RunningOnWindows ? LocalizableStrings.UninstallNoOptionDescriptionWindows 
+            : LocalizableStrings.UninstallNoOptionDescriptionMac);
+
+        public static readonly Command ListCommand = new Command(
+            ListCommandName,
+            LocalizableStrings.ListCommandDescription);
+
+        public static readonly Command DryRunCommand = new Command(
+            DryRunCommandName,
+            LocalizableStrings.DryRunCommandDescription);
+
+        public static readonly Command RemoveCommand = new Command(
+           RemoveCommandName,
+            LocalizableStrings.RemoveCommandDescription);
+
+
         public static readonly string SdkOptionName = "sdk";
         public static readonly string RuntimeOptionName = "runtime";
         public static readonly string AspNetRuntimeOptionName = "aspnet-runtime";
         public static readonly string HostingBundleOptionName = "hosting-bundle";
         public static readonly string X64OptionName = "x64";
         public static readonly string X86OptionName = "x86";
-        public static readonly string ListCommandName = "list";
 
         public static readonly Option UninstallAllOption = new Option(
             "--all",
@@ -80,46 +102,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
         };
 
-        public static readonly Option UninstallSdkOption = new Option(
-            $"--{SdkOptionName}",
-            LocalizableStrings.UninstallSdkOptionDescription);
-
-        public static readonly Option UninstallRuntimeOption = new Option(
-            $"--{RuntimeOptionName}",
-            LocalizableStrings.UninstallRuntimeOptionDescription);
-
-        public static readonly Option UninstallAspNetRuntimeOption = new Option(
-            $"--{AspNetRuntimeOptionName}",
-            LocalizableStrings.UninstallAspNetRuntimeOptionDescription);
-
-        public static readonly Option UninstallHostingBundleOption = new Option(
-            $"--{HostingBundleOptionName}",
-            LocalizableStrings.UninstallHostingBundleOptionDescription);
-
-        public static readonly Option ListSdkOption = new Option(
-            $"--{SdkOptionName}",
-            LocalizableStrings.ListSdkOptionDescription);
-
-        public static readonly Option ListRuntimeOption = new Option(
-            $"--{RuntimeOptionName}",
-            LocalizableStrings.ListRuntimeOptionDescription);
-
-        public static readonly Option ListAspNetRuntimeOption = new Option(
-            $"--{AspNetRuntimeOptionName}",
-            LocalizableStrings.ListAspNetRuntimeOptionDescription);
-
-        public static readonly Option ListHostingBundleOption = new Option(
-            $"--{HostingBundleOptionName}",
-            LocalizableStrings.ListHostingBundleOptionDescription);
-
-        public static readonly Option UninstallX64Option = new Option(
-            $"--{X64OptionName}",
-            LocalizableStrings.UninstallX64OptionDescription);
-
-        public static readonly Option UninstallX86Option = new Option(
-            $"--{X86OptionName}",
-            LocalizableStrings.UninstallX86OptionDescription);
-
         public static readonly Option ListX64Option = new Option(
             $"--{X64OptionName}",
             LocalizableStrings.ListX64OptionDescription);
@@ -128,21 +110,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             $"--{X86OptionName}",
             LocalizableStrings.ListX86OptionDescription);
 
-        public static readonly Option VersionOption = new Option(
-            "--version")
+        public static readonly Option VersionOption = new Option("--version")
         {
             IsHidden = true
         };
-
-        public static readonly Option DryRunOption = new Option(
-            "--dry-run",
-            LocalizableStrings.DryRunOptionDescription);
 
         public static readonly Option YesOption = new Option(
             new[] { "--yes", "-y" },
             LocalizableStrings.YesOptionDescription);
 
-        public static readonly IEnumerable<Option> UninstallMainOptions = new Option[]
+        public static readonly Option ForceOption = new Option(
+            "--force",
+            RuntimeInfo.RunningOnWindows ? LocalizableStrings.ForceOptionDescriptionWindows
+            : LocalizableStrings.ForceOptionDescriptionMac);
+
+        public static readonly Option[] UninstallFilterBundlesOptions = new Option[]
         {
             UninstallAllOption,
             UninstallAllLowerPatchesOption,
@@ -151,17 +133,39 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallAllBelowOption,
             UninstallAllPreviewsOption,
             UninstallAllPreviewsButLatestOption,
-            UninstallMajorMinorOption,
+            UninstallMajorMinorOption
         };
 
-        public static readonly RootCommand UninstallRootCommand = new RootCommand(
-            LocalizableStrings.UninstallNoOptionDescription);
+        public static readonly Option[] ListBundleTypeOptions = new Option[]
+        {
+            new Option($"--{SdkOptionName}", LocalizableStrings.ListSdkOptionDescription),
+            new Option($"--{RuntimeOptionName}", LocalizableStrings.ListRuntimeOptionDescription),
+            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.ListAspNetRuntimeOptionDescription),
+            new Option($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription)
+        };
 
-        public static readonly Command ListCommand = new Command(
-            ListCommandName,
-            LocalizableStrings.ListCommandDescription);
+        public static readonly Option[] UninstallBundleTypeOptions = new Option[]
+        {
+            new Option($"--{SdkOptionName}", LocalizableStrings.UninstallSdkOptionDescription),
+            new Option($"--{RuntimeOptionName}", LocalizableStrings.UninstallRuntimeOptionDescription),
+            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.UninstallAspNetRuntimeOptionDescription),
+            new Option($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription)
+        };
 
-        public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel>
+        public static readonly Option[] ArchUninstallOptions = new Option[]
+        {
+            new Option($"--{X64OptionName}", LocalizableStrings.UninstallX64OptionDescription),
+            new Option($"--{X86OptionName}", LocalizableStrings.UninstallX86OptionDescription)
+        };
+
+        public static readonly Option[] AdditionalUninstallOptions = new Option[]
+        {
+            VerbosityOption,
+            VersionOption, 
+            ForceOption
+        };
+
+        public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel> 
         {
             { "q", VerbosityLevel.Quiet }, { "quiet", VerbosityLevel.Quiet },
             { "m", VerbosityLevel.Minimal }, { "minimal", VerbosityLevel.Minimal },
@@ -171,74 +175,64 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         };
 
         public static readonly ParseResult CommandLineParseResult;
-        public static readonly IEnumerable<Option> UninstallAuxOptions;
+        public static readonly IEnumerable<Option> RemoveAuxOptions;
+        public static readonly IEnumerable<Option> DryRunAuxOptions;
+        public static readonly IEnumerable<Option> WhatIfAuxOptions;
         public static readonly IEnumerable<Option> ListAuxOptions;
 
-        static CommandLineConfigs()
+        static CommandLineConfigs() 
         {
-            UninstallRootCommand.AddArgument(new Argument<IEnumerable<string>>
-            {
-                Name = LocalizableStrings.UninstallNoOptionArgumentName,
-                Description = LocalizableStrings.UninstallNoOptionArgumentDescription
-            });
+            UninstallRootCommand.AddOption(new Option("--version", LocalizableStrings.VersionOptionDescription));
+            DryRunCommand.AddAlias(WhatIfCommandName);
 
             UninstallRootCommand.AddCommand(ListCommand);
+            UninstallRootCommand.AddCommand(DryRunCommand);
+            UninstallRootCommand.AddCommand(RemoveCommand);
 
             var supportedBundleTypeNames = SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => type.OptionName);
 
-            var supportedUninstallBundleTypeOptions = new Option[]
-            {
-                UninstallSdkOption,
-                UninstallRuntimeOption,
-                UninstallAspNetRuntimeOption,
-                UninstallHostingBundleOption
-            }
-            .Where(option => supportedBundleTypeNames.Contains(option.Name));
-
-            var supportedListBundleTypeOptions = new Option[]
-            {
-                ListSdkOption,
-                ListRuntimeOption,
-                ListAspNetRuntimeOption,
-                ListHostingBundleOption
-            }
-            .Where(option => supportedBundleTypeNames.Contains(option.Name));
-
-            UninstallAuxOptions = supportedUninstallBundleTypeOptions
-                .Append(VerbosityOption)
-                .Append(UninstallX64Option)
-                .Append(UninstallX86Option)
-                .Append(VersionOption)
-                .Append(DryRunOption)
+            RemoveAuxOptions = UninstallBundleTypeOptions
+                .Where(option => supportedBundleTypeNames.Contains(option.Name))
+                .Concat(AdditionalUninstallOptions)
                 .Append(YesOption);
-
-            ListAuxOptions = supportedListBundleTypeOptions
-                .Append(VerbosityOption)
-                .Append(ListX64Option)
-                .Append(ListX86Option);
-
-            foreach (var option in UninstallMainOptions
-                .Concat(UninstallAuxOptions)
-                .OrderBy(option => option.Name))
+            if (RuntimeInfo.RunningOnWindows)
             {
-                UninstallRootCommand.AddOption(option);
+                RemoveAuxOptions = RemoveAuxOptions.Concat(ArchUninstallOptions);
             }
+            AssignOptionsToCommand(RemoveCommand, RemoveAuxOptions
+                .Concat(UninstallFilterBundlesOptions), true);
 
-            foreach (var option in ListAuxOptions
-                .OrderBy(option => option.Name))
+            DryRunAuxOptions = UninstallBundleTypeOptions
+                .Where(option => supportedBundleTypeNames.Contains(option.Name))
+                .Concat(AdditionalUninstallOptions);
+            if (RuntimeInfo.RunningOnWindows)
             {
-                ListCommand.AddOption(option);
+                DryRunAuxOptions = DryRunAuxOptions.Concat(ArchUninstallOptions);
             }
+            AssignOptionsToCommand(DryRunCommand, DryRunAuxOptions
+                .Concat(UninstallFilterBundlesOptions), true);
+
+            ListAuxOptions = ListBundleTypeOptions
+                .Where(option => supportedBundleTypeNames.Contains(option.Name))
+                .Append(VerbosityOption);
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                ListAuxOptions = ListAuxOptions
+                    .Append(ListX64Option)
+                    .Append(ListX86Option);
+            }
+            AssignOptionsToCommand(ListCommand, ListAuxOptions);
 
             ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
-            UninstallRootCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
+            DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute()));
+            RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
 
             CommandLineParseResult = UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)
         {
-            var specified = UninstallMainOptions
+            var specified = UninstallFilterBundlesOptions
                 .Where(option => commandResult.OptionResult(option.Name) != null);
 
             if (specified.Count() > 1)
@@ -252,11 +246,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 var optionName = $"--{specifiedOption.Name}";
 
-                if (specifiedOption.Equals(UninstallAllButOption))
+                if (specifiedOption.Name.Equals(UninstallAllButOption.Name))
                 {
                     throw new VersionBeforeOptionException(optionName);
                 }
-                else if (specifiedOption.Equals(UninstallAllBelowOption) || specifiedOption.Equals(UninstallMajorMinorOption))
+                else if (specifiedOption.Name.Equals(UninstallAllBelowOption.Name) || specifiedOption.Name.Equals(UninstallMajorMinorOption.Name))
                 {
                     throw new MoreThanOneVersionSpecifiedException(optionName);
                 }
@@ -317,6 +311,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             else
             {
                 throw new VerbosityLevelInvalidException();
+            }
+        }
+
+        private static void AssignOptionsToCommand(Command command, IEnumerable<Option> options, bool addVersionArgument = false)
+        {
+            foreach (var option in options
+                .OrderBy(option => option.Name))
+            {
+                command.AddOption(option);
+            }
+            if (addVersionArgument)
+            {
+                command.AddArgument(new Argument<IEnumerable<string>>
+                {
+                    Name = LocalizableStrings.UninstallNoOptionArgumentName,
+                    Description = LocalizableStrings.UninstallNoOptionArgumentDescription
+                });
             }
         }
     }

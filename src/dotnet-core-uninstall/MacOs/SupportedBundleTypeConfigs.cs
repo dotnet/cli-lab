@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
     internal static class SupportedBundleTypeConfigs
     {
-        private static readonly Func<IDictionary<Bundle, string>, GridView> _gridViewGeneratorWithArch = bundles =>
+        private static readonly Func<IDictionary<Bundle, string>, bool, GridView> _gridViewGeneratorWithArch = (bundles, verbose) =>
         {
             var gridView = new GridView();
 
@@ -22,7 +22,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
                 gridView.SetChild(new ContentView(bundle.Key.Version.ToString()), 1, index);
                 gridView.SetChild(new ContentView($"({bundle.Key.Arch.ToString().ToLower()})"), 2, index);
-                gridView.SetChild(new ContentView(bundle.Value), 3, index);
+                gridView.SetChild(new ContentView(bundle.Value.Equals(string.Empty) ? string.Empty : $"[{bundle.Value}]"), 3, index);
             }
 
             return gridView;

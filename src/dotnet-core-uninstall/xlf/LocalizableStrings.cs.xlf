@@ -32,7 +32,7 @@ To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-co
 Do you want to continue? [Y/n] </target>
         <note />
       </trans-unit>
-      <trans-unit id="DryRunOptionDescription">
+      <trans-unit id="DryRunCommandDescription">
         <source>Display .NET Core SDKs and Runtimes that will be removed.</source>
         <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
         <note />
@@ -45,7 +45,7 @@ Specified versions:
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Run this command as administrator, and take out the -—dry-run option to remove these items.</source>
+Run as administrator and use the remove command to uninstall these items.</source>
         <target state="new">*** DRY RUN OUTPUT
 Specified versions:
 {0}
@@ -53,7 +53,17 @@ Specified versions:
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Run this command as administrator, and take out the -—dry-run option to remove these items.</target>
+Run as administrator and use the remove command to uninstall these items.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ForceOptionDescriptionMac">
+        <source>Force removal of versions that might be used by Visual Studio or SDK.</source>
+        <target state="new">Force removal of versions that might be used by Visual Studio or SDK.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ForceOptionDescriptionWindows">
+        <source>Force removal of versions that might be used by Visual Studio.</source>
+        <target state="new">Force removal of versions that might be used by Visual Studio.</target>
         <note />
       </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
@@ -86,6 +96,15 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">.NET Core Runtime &amp; Hosting Bundles:</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListCommandOutput">
+        <source>
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</source>
+        <target state="new">
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">
         <source>.NET Core Runtimes:</source>
         <target state="new">.NET Core Runtimes:</target>
@@ -101,19 +120,14 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">List .NET Core Runtime &amp; Hosting Bundles.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListIncludeRequiredOptionDescription">
-        <source>Include .NET Core SDKs that cannot be uninstalled.</source>
-        <target state="new">Include .NET Core SDKs that cannot be uninstalled.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListRuntimeOptionDescription">
-        <source>List .NET Core Runtimes.</source>
-        <target state="new">List .NET Core Runtimes.</target>
+        <source>List .NET Core Runtimes that can be uninstalled.</source>
+        <target state="new">List .NET Core Runtimes that can be uninstalled.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListSdkOptionDescription">
-        <source>List .NET Core SDKs.</source>
-        <target state="new">List .NET Core SDKs.</target>
+        <source>List .NET Core SDKs that can be uninstalled.</source>
+        <target state="new">List .NET Core SDKs that can be uninstalled.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListX64OptionDescription">
@@ -156,9 +170,45 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">You must specify only one of the options: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="RemoveCommandDescription">
+        <source>Remove the specified .NET Core SDKs or Runtimes.</source>
+        <target state="new">Remove the specified .NET Core SDKs or Runtimes.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="RequiredArgMissingForUninstallCommandExceptionMessage">
         <source>Required argument missing for the uninstall command.</source>
         <target state="new">Required argument missing for the uninstall command.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RequiredBundleConfirmationPromptOutputFormat">
+        <source>
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio to break.
+
+Are you sure you want to continue? [Y/n] </source>
+        <target state="new">
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio to break.
+
+Are you sure you want to continue? [Y/n] </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RequiredBundleConfirmationPromptWarningFormat">
+        <source>
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio to break.
+</source>
+        <target state="new">
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio to break.
+</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="RequirementExplainationString">
+        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
@@ -192,8 +242,8 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllLowerPatchesOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes that have been superceded by higher patches.</target>
+        <source>Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllOptionDescription">
@@ -202,13 +252,13 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsButLatestOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews, except the one highest preview.</target>
+        <source>Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes that are marked as previews.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes that are marked as previews.</target>
+        <source>Remove .NET Core SDKs or Runtimes marked as previews.</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAspNetRuntimeOptionDescription">
@@ -232,8 +282,8 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentDescription">
-        <source>The specified version to uninstall. You may list several versions, and response files are supported.</source>
-        <target state="new">The specified version to uninstall. You may list several versions, and response files are supported.</target>
+        <source>The specified version to uninstall. You may list several versions. Response files are supported.</source>
+        <target state="new">The specified version to uninstall. You may list several versions. Response files are supported.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionArgumentName">
@@ -241,14 +291,24 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">VERSION</target>
         <note />
       </trans-unit>
-      <trans-unit id="UninstallNoOptionDescription">
-        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</source>
-        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</target>
+      <trans-unit id="UninstallNoOptionDescriptionMac">
+        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallNoOptionDescriptionWindows">
+        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNormalVerbosityFormat">
         <source>Uninstalling: {0}.</source>
         <target state="new">Uninstalling: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallNotAllowedExceptionFormat">
+        <source>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</source>
+        <target state="new">Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallRuntimeOptionDescription">
@@ -281,6 +341,11 @@ Run this command as administrator, and take out the -—dry-run option to remove
         <target state="new">The uninstallation operation failed. Exit code was {1} for "{0}".</target>
         <note />
       </trans-unit>
+      <trans-unit id="UpperLimitRequirement">
+        <source>Cannot uninstall version {0} and above</source>
+        <target state="new">Cannot uninstall version {0} and above</target>
+        <note />
+      </trans-unit>
       <trans-unit id="VerbosityLevelInvalidExceptionMessage">
         <source>Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</source>
         <target state="new">Allowed verbosity levels are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</target>
@@ -299,6 +364,11 @@ Run this command as administrator, and take out the -—dry-run option to remove
       <trans-unit id="VersionBeforeOptionExceptionMessageFormat">
         <source>Do not use a version before an option: {0}.</source>
         <target state="new">Do not use a version before an option: {0}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="VersionOptionDescription">
+        <source>Display .NET Core Uninstall Tool version information.</source>
+        <target state="new">Display .NET Core Uninstall Tool version information.</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">

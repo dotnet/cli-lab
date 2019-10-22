@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
     internal static class SupportedBundleTypeConfigs
     {
-        private static readonly Func<IDictionary<Bundle, string>, GridView> _gridViewGeneratorWithArch = bundles =>
+        private static readonly Func<IDictionary<Bundle, string>, bool, GridView> _gridViewGeneratorWithArch = (bundles, verbose) =>
         {
             var gridView = new GridView();
 
@@ -22,14 +22,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
                 gridView.SetChild(new ContentView(bundle.Key.Version.ToStringWithAsterisk()), 1, index);
                 gridView.SetChild(new ContentView(bundle.Key.Arch.ToString().ToLower()), 2, index);
-                gridView.SetChild(new ContentView($"\"{bundle.Key.DisplayName}\""), 3, index);
-                gridView.SetChild(new ContentView(bundle.Value), 4, index);
+                gridView.SetChild(new ContentView(verbose ? $"\"{bundle.Key.DisplayName}\"" : string.Empty), 3, index);
+                gridView.SetChild(new ContentView(bundle.Value.Equals(string.Empty) ? string.Empty : $"[{bundle.Value}]"), 4, index);
             }
 
             return gridView;
         };
 
-        private static readonly Func<IDictionary<Bundle, string>, GridView> _gridViewGeneratorWithoutArch = bundles =>
+        private static readonly Func<IDictionary<Bundle, string>, bool, GridView> _gridViewGeneratorWithoutArch = (bundles, verbose) =>
         {
             var gridView = new GridView();
 
@@ -40,8 +40,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 gridView.SetChild(new ContentView(string.Empty), 0, index);
                 gridView.SetChild(new ContentView(bundle.Key.Version.ToStringWithAsterisk()), 1, index);
-                gridView.SetChild(new ContentView($"\"{bundle.Key.DisplayName}\""), 2, index);
-                gridView.SetChild(new ContentView(bundle.Value), 3, index);
+                gridView.SetChild(new ContentView(verbose ? $"\"{bundle.Key.DisplayName}\"" : string.Empty), 2, index);
+                gridView.SetChild(new ContentView(bundle.Value.Equals(string.Empty) ? string.Empty : $"[{bundle.Value}]"), 3, index);
             }
 
             return gridView;

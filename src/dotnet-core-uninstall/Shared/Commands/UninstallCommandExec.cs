@@ -4,9 +4,6 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
-using Microsoft.DotNet.Tools.Uninstall.Windows;
-using System.Reflection;
-using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using System.Linq;
 using System.Diagnostics;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
@@ -29,39 +26,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
-        private static readonly Lazy<string> _assemblyVersion =
-            new Lazy<string>(() =>
-            {
-                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-                var assemblyVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                if (assemblyVersionAttribute == null)
-                {
-                    return assembly.GetName().Version.ToString();
-                }
-                else
-                {
-                    return assemblyVersionAttribute.InformationalVersion;
-                }
-            });
-
         public static void Execute()
         {
-            HandleVersionOption();
+            CommandBundleFilter.HandleVersionOption();
 
-            var filtered = GetFilteredBundles(GetAllBundles());
+            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings();
 
-            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.DryRunOption.Name) != null)
-            {
-                TryIt(filtered);
-            }
-            else if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
+            if (CommandLineConfigs.CommandLineParseResult.CommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {
                 if (!IsAdmin())
                 {
                     throw new NotAdminException();
                 }
 
-                DoIt(filtered);
+                DoIt(filtered.Keys);
             }
             else
             {
@@ -70,59 +48,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     throw new NotAdminException();
                 }
 
-                AskIt(filtered);
-            }
-        }
-
-        private static IEnumerable<Bundle> GetAllBundles()
-        {
-            if (RuntimeInfo.RunningOnWindows)
-            {
-                return RegistryQuery.GetInstalledBundles();
-            }
-            else if (RuntimeInfo.RunningOnOSX)
-            {
-                return FileSystemExplorer.GetInstalledBundles();
-            }
-            else
-            {
-                throw new OperatingSystemNotSupportedException();
-            }
-        }
-
-        private static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> bundles)
-        {
-            var option = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetUninstallMainOption();
-            var typeSelection = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetTypeSelection();
-            var archSelection = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetArchSelection();
-
-            if (option == null)
-            {
-                if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.Tokens.Count == 0)
+                if (AskItAndReturnUserAnswer(filtered))
                 {
-                    throw new RequiredArgMissingForUninstallCommandException();
+                    if (AskWithWarningsForRequiredBundles(filtered))
+                    {
+                        DoIt(filtered.Keys);
+                    }
                 }
-
-                return OptionFilterers.UninstallNoOptionFilterer.Filter(
-                    CommandLineConfigs.CommandLineParseResult.RootCommandResult.Tokens.Select(t => t.Value),
-                    bundles,
-                    typeSelection,
-                    archSelection);
-            }
-            else
-            {
-                return OptionFilterers.OptionFiltererDictionary[option].Filter(
-                    CommandLineConfigs.CommandLineParseResult,
-                    option,
-                    bundles,
-                    typeSelection,
-                    archSelection);
             }
         }
 
         private static void DoIt(IEnumerable<Bundle> bundles)
         {
-            var verbosityLevel = CommandLineConfigs.CommandLineParseResult.RootCommandResult.GetVerbosityLevel();
+            var verbosityLevel = CommandLineConfigs.CommandLineParseResult.CommandResult.GetVerbosityLevel();
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
             var canceled = false;
@@ -269,26 +207,20 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return args;
         }
 
-        private static void TryIt(IEnumerable<Bundle> bundles)
+        private static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles)
         {
-            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
-            Console.WriteLine(string.Format(LocalizableStrings.DryRunOutputFormat, displayNames));
-        }
-
-        private static void AskIt(IEnumerable<Bundle> bundles)
-        {
-            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.DisplayName}"));
+            var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
             Console.Write(string.Format(LocalizableStrings.ConfirmationPromptOutputFormat, displayNames));
 
             var response = Console.ReadLine().Trim().ToUpper();
 
             if (response.Equals("Y"))
             {
-                DoIt(bundles);
+                return true;
             }
             else if (response.Equals("N"))
             {
-                return;
+                return false;
             }
             else
             {
@@ -296,13 +228,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static void HandleVersionOption()
+        private static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles) 
         {
-            if (CommandLineConfigs.CommandLineParseResult.RootCommandResult.OptionResult(CommandLineConfigs.VersionOption.Name) != null)
+            var requiredBundles = bundles.Where(b => !b.Value.Equals(string.Empty));
+            foreach (var pair in requiredBundles)
             {
-                Console.WriteLine(_assemblyVersion.Value);
-                Environment.Exit(0);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(string.Format(LocalizableStrings.RequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
+                Console.ResetColor();
+                var response = Console.ReadLine().Trim().ToUpper();
+                if (response.Equals("N"))
+                {
+                    return false ;
+                }
+                else if (!response.Equals("Y"))
+                {
+                    throw new ConfirmationPromptInvalidException();
+                }
             }
+
+            return true;
         }
     }
 }
