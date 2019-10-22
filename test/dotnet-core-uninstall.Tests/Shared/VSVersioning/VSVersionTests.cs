@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using NuGet.Versioning;
@@ -247,7 +248,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             {
                 output[i] = input[i].Equals("None") ? string.Empty :
                     SemanticVersion.TryParse(input[i], out _) ? string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit) :
-                    string.Format(LocalizableStrings.RequirementExplainationString, input[i]);
+                    string.Format(LocalizableStrings.RequirementExplainationString, RuntimeInfo.RunningOnOSX ? " for Mac" + input[i] : input[i]);
             }
 
             return output;

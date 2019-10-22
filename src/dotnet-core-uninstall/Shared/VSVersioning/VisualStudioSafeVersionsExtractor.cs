@@ -49,13 +49,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             var dividedBundles = bundleList
                 .Where(bundle => bundle.Version is RuntimeVersion)
                 .GroupBy(bundle => bundle.Version.MajorMinor)
-                .Select(pair => (pair as IEnumerable<Bundle>, string.Format(LocalizableStrings.RequirementExplainationString, " or SDKs")))
+                .Select(pair => (pair as IEnumerable<Bundle>, string.Format(LocalizableStrings.RequirementExplainationString, " for Mac or SDKs")))
                 .ToDictionary(key => key.Item1, value => value.Item2); 
 
-            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion); // TODO protect highest SDK-> ok?
+            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion);
             if (sdks != null && sdks.Count() > 0)
             {
-                dividedBundles.Add(sdks, string.Format(LocalizableStrings.RequirementExplainationString, string.Empty));
+                dividedBundles.Add(sdks, string.Format(LocalizableStrings.RequirementExplainationString, " for Mac"));
             }
 
             var remainingBundles = bundleList
