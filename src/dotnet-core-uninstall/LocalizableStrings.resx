@@ -190,13 +190,13 @@
     <value>Remove .NET Core SDKs or Runtimes that match the specified `major.minor` version.</value>
   </data>
   <data name="UninstallNoOptionArgumentDescription" xml:space="preserve">
-    <value>The specified version to uninstall. You may list several versions, and response files are supported.</value>
+    <value>The specified version to uninstall. You may list several versions. Response files are supported.</value>
   </data>
   <data name="UninstallNoOptionArgumentName" xml:space="preserve">
     <value>VERSION</value>
   </data>
-  <data name="UninstallNoOptionDescription" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using .NET Core SDK or Runtime installers. Read the documentation of this tool at https://aka.ms/dotnet-core-uninstall.</value>
+  <data name="UninstallNoOptionDescriptionWindows" xml:space="preserve">
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
   </data>
   <data name="VerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>
@@ -315,15 +315,26 @@ Uninstalling this item will cause Visual Studio to break.
 </value>
   </data>
   <data name="VersionOptionDescription" xml:space="preserve">
-    <value>Display .NET Core Uninstall Tool Version Information.</value>
+    <value>Display .NET Core Uninstall Tool version information.</value>
   </data>
   <data name="UpperLimitRequirement" xml:space="preserve">
     <value>Cannot uninstall version {0} and above</value>
   </data>
   <data name="RequirementExplainationString" xml:space="preserve">
-    <value>Maybe needed for Visual Studio{0}. Specify individually or use —force to remove</value>
+    <value>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</value>
   </data>
-  <data name="ForceOptionDescription" xml:space="preserve">
-    <value>Execute the command including unreccommended unisntallations.</value>
+  <data name="ForceOptionDescriptionWindows" xml:space="preserve">
+    <value>Force removal of versions that might be used by Visual Studio.</value>
+  </data>
+  <data name="ForceOptionDescriptionMac" xml:space="preserve">
+    <value>Force removal of versions that might be used by Visual Studio or SDK.</value>
+  </data>
+  <data name="ListCommandOutput" xml:space="preserve">
+    <value>
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</value>
+  </data>
+  <data name="UninstallNoOptionDescriptionMac" xml:space="preserve">
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
   </data>
 </root>

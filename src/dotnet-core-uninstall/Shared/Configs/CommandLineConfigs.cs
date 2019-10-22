@@ -19,7 +19,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         private static readonly string RemoveCommandName = "remove";
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
-            LocalizableStrings.UninstallNoOptionDescription);
+            RuntimeInfo.RunningOnWindows ? LocalizableStrings.UninstallNoOptionDescriptionWindows 
+            : LocalizableStrings.UninstallNoOptionDescriptionMac);
 
         public static readonly Command ListCommand = new Command(
             ListCommandName,
@@ -120,7 +121,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly Option ForceOption = new Option(
             "--force",
-            LocalizableStrings.ForceOptionDescription);
+            RuntimeInfo.RunningOnWindows ? LocalizableStrings.ForceOptionDescriptionWindows
+            : LocalizableStrings.ForceOptionDescriptionMac);
 
         public static readonly Option[] UninstallFilterBundlesOptions = new Option[]
         {
@@ -159,7 +161,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly Option[] AdditionalUninstallOptions = new Option[]
         {
             VerbosityOption,
-            VersionOption
+            VersionOption, 
+            ForceOption
         };
 
         public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel> 
@@ -191,8 +194,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             RemoveAuxOptions = UninstallBundleTypeOptions
                 .Where(option => supportedBundleTypeNames.Contains(option.Name))
                 .Concat(AdditionalUninstallOptions)
-                .Append(YesOption)
-                .Append(ForceOption);
+                .Append(YesOption);
             if (RuntimeInfo.RunningOnWindows)
             {
                 RemoveAuxOptions = RemoveAuxOptions.Concat(ArchUninstallOptions);
