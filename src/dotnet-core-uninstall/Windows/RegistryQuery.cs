@@ -49,7 +49,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             return IsDotNetCoreBundleDisplayName(registryKey.GetValue("DisplayName") as string)
                 && IsDotNetCoreBundlePublisher(registryKey.GetValue("Publisher") as string)
-                && IsDotNetCoreBundleUninstaller(registryKey.GetValue("WindowsInstaller") as int?);
+                && IsDotNetCoreBundleUninstaller(registryKey.GetValue("WindowsInstaller") as int?)
+                && IsNotVisualStudioDummyVersion(registryKey.GetValue("DisplayName") as string);
+        }
+
+        private static bool IsNotVisualStudioDummyVersion(string displayName)
+        {
+            return !displayName.Contains(" from Visual Studio");
         }
 
         private static bool IsDotNetCoreBundleDisplayName(string displayName)
