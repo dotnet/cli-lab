@@ -14,6 +14,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
     internal static class CommandLineConfigs
     {
+        public static Parser UninstallCommandParser;
+
         private static readonly string ListCommandName = "list";
         private static readonly string DryRunCommandName = "dry-run";
         private static readonly string WhatIfCommandName = "whatif";
@@ -228,9 +230,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute()));
             RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
 
-            var parser = new CommandLineBuilder(UninstallRootCommand)
-                         .Build();
-            CommandLineParseResult = parser.Parse(Environment.GetCommandLineArgs());
+            UninstallCommandParser = new CommandLineBuilder(UninstallRootCommand)
+                .UseDefaults()
+                .UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
+                .Build();
+            CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)

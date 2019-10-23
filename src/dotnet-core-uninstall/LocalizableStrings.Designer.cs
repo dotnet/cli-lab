@@ -145,6 +145,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        /// </summary>
+        internal static string HelpExplainationParagraphMac {
+            get {
+                return ResourceManager.GetString("HelpExplainationParagraphMac", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        /// </summary>
+        internal static string HelpExplainationParagraphWindows {
+            get {
+                return ResourceManager.GetString("HelpExplainationParagraphWindows", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &quot;{0}&quot; is treated as a version {1} in this tool..
         /// </summary>
         internal static string HostingBundleFootnoteFormat {

@@ -10,7 +10,7 @@ namespace Microsoft.DotNet.Tools.Uninstall
     {
         internal static int Main(string[] args)
         {
-            return CommandLineConfigs.UninstallRootCommand.InvokeAsync(args).Result;
+            return CommandLineConfigs.UninstallCommandParser.InvokeAsync(args).Result;
         }
     }
 }

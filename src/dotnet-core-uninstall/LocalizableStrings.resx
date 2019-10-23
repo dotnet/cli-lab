@@ -337,4 +337,10 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
   <data name="UninstallNoOptionDescriptionMac" xml:space="preserve">
     <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
   </data>
+  <data name="HelpExplainationParagraphMac" xml:space="preserve">
+    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</value>
+  </data>
+  <data name="HelpExplainationParagraphWindows" xml:space="preserve">
+    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</value>
+  </data>
 </root>

@@ -66,6 +66,16 @@ Run as administrator and use the remove command to uninstall these items.</targe
         <target state="new">Force removal of versions that might be used by Visual Studio.</target>
         <note />
       </trans-unit>
+      <trans-unit id="HelpExplainationParagraphMac">
+        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="HelpExplainationParagraphWindows">
+        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
         <source>"{0}" is treated as a version {1} in this tool.</source>
         <target state="new">"{0}" is treated as a version {1} in this tool.</target>
