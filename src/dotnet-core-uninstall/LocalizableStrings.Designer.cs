@@ -127,7 +127,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Force removal of versions that might be used by Visual Studio or SDK..
+        ///   Looks up a localized string similar to Force removal of versions that might be used by Visual Studio for Mac or SDKs..
         /// </summary>
         internal static string ForceOptionDescriptionMac {
             get {
@@ -199,17 +199,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
-        ///.
-        /// </summary>
-        internal static string ListCommandOutput {
-            get {
-                return ResourceManager.GetString("ListCommandOutput", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to .NET Core Runtimes:.
         /// </summary>
         internal static string ListCommandRuntimeHeader {
@@ -269,6 +258,17 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string ListX86OptionDescription {
             get {
                 return ResourceManager.GetString("ListX86OptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+        ///.
+        /// </summary>
+        internal static string MacListCommandOutput {
+            get {
+                return ResourceManager.GetString("MacListCommandOutput", resourceCulture);
             }
         }
         
@@ -673,6 +673,17 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string VersionOptionDescription {
             get {
                 return ResourceManager.GetString("VersionOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+        ///.
+        /// </summary>
+        internal static string WindowsListCommandOutput {
+            get {
+                return ResourceManager.GetString("WindowsListCommandOutput", resourceCulture);
             }
         }
         

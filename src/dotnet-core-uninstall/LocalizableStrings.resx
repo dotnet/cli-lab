@@ -327,9 +327,9 @@ Uninstalling this item will cause Visual Studio to break.
     <value>Force removal of versions that might be used by Visual Studio.</value>
   </data>
   <data name="ForceOptionDescriptionMac" xml:space="preserve">
-    <value>Force removal of versions that might be used by Visual Studio or SDK.</value>
+    <value>Force removal of versions that might be used by Visual Studio for Mac or SDKs.</value>
   </data>
-  <data name="ListCommandOutput" xml:space="preserve">
+  <data name="WindowsListCommandOutput" xml:space="preserve">
     <value>
 This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
 </value>
@@ -342,5 +342,10 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
   </data>
   <data name="MacSDKRequirementExplainationString" xml:space="preserve">
     <value>Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</value>
+  </data>
+  <data name="MacListCommandOutput" xml:space="preserve">
+    <value>
+This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+</value>
   </data>
 </root>
