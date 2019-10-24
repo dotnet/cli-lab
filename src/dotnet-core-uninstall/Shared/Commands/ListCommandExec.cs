@@ -41,7 +41,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             IEnumerable<Bundle> bundles,
             IEnumerable<BundleTypePrintInfo> supportedBundleTypes)
         {
-            Console.WriteLine(LocalizableStrings.ListCommandOutput);
+            Console.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsListCommandOutput : LocalizableStrings.MacListCommandOutput);
 
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
 

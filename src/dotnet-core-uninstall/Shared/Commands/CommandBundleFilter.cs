@@ -11,7 +11,6 @@ using System.Linq;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using NuGet.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {

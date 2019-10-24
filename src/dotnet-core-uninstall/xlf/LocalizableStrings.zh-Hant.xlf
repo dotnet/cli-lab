@@ -57,8 +57,8 @@ Run as administrator and use the remove command to uninstall these items.</targe
         <note />
       </trans-unit>
       <trans-unit id="ForceOptionDescriptionMac">
-        <source>Force removal of versions that might be used by Visual Studio or SDK.</source>
-        <target state="new">Force removal of versions that might be used by Visual Studio or SDK.</target>
+        <source>Force removal of versions that might be used by Visual Studio for Mac or SDKs.</source>
+        <target state="new">Force removal of versions that might be used by Visual Studio for Mac or SDKs.</target>
         <note />
       </trans-unit>
       <trans-unit id="ForceOptionDescriptionWindows">
@@ -96,15 +96,6 @@ Run as administrator and use the remove command to uninstall these items.</targe
         <target state="new">.NET Core Runtime &amp; Hosting Bundles:</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListCommandOutput">
-        <source>
-This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
-</source>
-        <target state="new">
-This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
-</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListCommandRuntimeHeader">
         <source>.NET Core Runtimes:</source>
         <target state="new">.NET Core Runtimes:</target>
@@ -140,9 +131,28 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
         <target state="new">List x86 .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MacListCommandOutput">
+        <source>
+This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+</source>
+        <target state="new">
+This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MacOsBundleDisplayNameFormat">
         <source>Microsoft .NET Core {0} {1} (x64)</source>
         <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacRuntimeRequirementExplainationString">
+        <source>Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacSDKRequirementExplainationString">
+        <source>Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
@@ -204,11 +214,6 @@ Uninstalling this item will cause Visual Studio to break.
 Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio to break.
 </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RequirementExplainationString">
-        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
-        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
@@ -369,6 +374,20 @@ Uninstalling this item will cause Visual Studio to break.
       <trans-unit id="VersionOptionDescription">
         <source>Display .NET Core Uninstall Tool version information.</source>
         <target state="new">Display .NET Core Uninstall Tool version information.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsListCommandOutput">
+        <source>
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</source>
+        <target state="new">
+This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsRequirementExplainationString">
+        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">

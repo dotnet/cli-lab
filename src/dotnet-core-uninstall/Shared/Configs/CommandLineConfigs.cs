@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -227,7 +228,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute()));
             RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
 
-            CommandLineParseResult = UninstallRootCommand.Parse(Environment.GetCommandLineArgs());
+            var parser = new CommandLineBuilder(UninstallRootCommand)
+                         .Build();
+            CommandLineParseResult = parser.Parse(Environment.GetCommandLineArgs());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)

@@ -3,6 +3,7 @@ using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using NuGet.Versioning;
@@ -13,6 +14,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
     public class VSVersionTests
     {
         [WindowsOnlyTheory]
+        [InlineData(new string[] { }, new bool[] { })]
         [InlineData(new string[] { "1.0.0" }, new bool[] { false })]
         [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false })]
         [InlineData(new string[] { "2.1.0", "1.0.1" }, new bool[] { false, false })]
@@ -27,23 +29,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { false, false, false })]
         internal void TestGetUninstallableWindows(string[] versions, bool[] allowed)
         {
-            TestGetUninstallable(versions, allowed);
-        }
-
-        // For now we are not protecting versions on mac
-        [MacOsOnlyTheory]
-        [InlineData(new string[] { "1.0.0" }, new bool[] { true })]
-        [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, true })]
-        [InlineData(new string[] { "2.1.0", "1.0.1" }, new bool[] { true, true })]
-        [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { true, true, true })]
-        internal void TestGetUninstallableMac(string[] versions, bool[] allowed)
-        {
-            TestGetUninstallable(versions, allowed);
-        }
-
-        internal void TestGetUninstallable(string[] versions, bool[] allowed)
-        {
-            var bundles = new List<Bundle<SdkVersion>>();
+            var bundles = new List<Bundle>();
             foreach (string v in versions)
             {
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, string.Empty));
@@ -51,7 +37,34 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
 
             var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
 
-            CheckAllowed(bundles, uninstallable, allowed);
+            CheckAllowed(bundles, uninstallable, allowed, null);
+        }
+
+        [MacOsOnlyTheory]
+        [InlineData(new string[] { }, new bool[] { }, new string[] { }, new bool[] { })]
+        [InlineData(new string[] { "1.0.0" }, new bool[] { false }, new string[] { }, new bool[] { })]
+        [InlineData(new string[] { }, new bool[] { }, new string[] { "1.0.0" }, new bool[] { false })]
+        [InlineData(new string[] { "1.0.0" }, new bool[] { false }, new string[] { "1.0.0" }, new bool[] { false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false }, new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false })]
+        [InlineData(new string[] { "2.1.0", "1.0.1" }, new bool[] { false, true }, new string[] { "1.0.0", "1.1.0" }, new bool[] { false, false })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new bool[] { false, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new bool[] { true, true, true, false, false })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new bool[] { false, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.0" }, new bool[] { true, false, false, false })]
+        [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { false, false, false }, new string[] { "5.0.0", "10.0.0" }, new bool[] { false, false })]
+        internal void TestGetUninstallableMac(string[] sdkVersions, bool[] sdkAllowed, string[] runtimeVersions,  bool[] runtimeAllowed)
+        {
+            var bundles = new List<Bundle>();
+            foreach (string v in sdkVersions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, string.Empty));
+            }
+            foreach (string v in runtimeVersions)
+            {
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, string.Empty));
+            }
+
+            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
+
+            CheckAllowed(bundles, uninstallable, sdkAllowed, runtimeAllowed);
         }
 
         [WindowsOnlyTheory]
@@ -64,108 +77,186 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { false, false, false })]
         internal void TestGetUninstallableNonSdkVersionsWindows(string[] versions, bool[] allowed)
         {
-            TestGetUninstallableNonSdkVersions(versions, allowed);
-        }
-
-        [MacOsOnlyTheory]
-        [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, true })]
-        [InlineData(new string[] { "1.0.0", "1.0.1", "1.1.0" }, new bool[] { true, true, true })]
-        [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { true, true, true })]
-        internal void TestGetUninstallableNonSdkVersionsMac(string[] versions, bool[] allowed)
-        {
-            TestGetUninstallableNonSdkVersions(versions, allowed);
-        }
-
-        internal void TestGetUninstallableNonSdkVersions(string[] versions, bool[] allowed)
-        {
-            var bundles = new List<Bundle>
-            {
-                new Bundle<RuntimeVersion>(new RuntimeVersion(), new BundleArch(), string.Empty, "RuntimeVersion"),
-                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion(), new BundleArch(), string.Empty, "AspNetVersion"),
-                new Bundle<HostingBundleVersion>(new HostingBundleVersion(), new BundleArch(), string.Empty, "HostingBundleVersion")
-            };
+            var bundles = new List<Bundle>();
             foreach (string v in versions)
             {
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
+            TestGetUninstallableNonSdkVersions(bundles, allowed, null);
+        }
+
+        [MacOsOnlyTheory]
+        [InlineData(new string[] { "1.0.0" }, new bool[] { false }, new string[] { "1.0.0" }, new bool[] { false })]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false }, new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false })]
+        [InlineData(new string[] { "2.1.0", "1.0.1" }, new bool[] { false, true }, new string[] { "2.0.0", "1.1.0" }, new bool[] { false, false })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new bool[] { false, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new bool[] { true, true, true, false, false })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new bool[] { false, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.0" }, new bool[] { true, false, false, false })]
+        [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { false, false, false }, new string[] { "5.0.0", "10.0.0" }, new bool[] { false, false })]
+        internal void TestGetUninstallableNonSdkVersionsMac(string[] sdkVersions, bool[] sdkAllowed, string[] runtimeVersions, bool[] runtimeAllowed)
+        {
+            var bundles = new List<Bundle>();
+            foreach (string v in sdkVersions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
+            }
+            foreach (string v in runtimeVersions)
+            {
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, v));
+            }
+            TestGetUninstallableNonSdkVersions(bundles, sdkAllowed, runtimeAllowed);
+        }
+
+        internal void TestGetUninstallableNonSdkVersions(IEnumerable<Bundle> bundles, bool[] sdkAllowed, bool[] runtimeAllowed)
+        {
+            bundles = bundles.Concat(new List<Bundle>
+            { 
+                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion("1.0.0"), new BundleArch(), string.Empty, "AspNetVersion"),
+                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion("10.0.0"), new BundleArch(), string.Empty, "AspNetVersion"),
+                new Bundle<HostingBundleVersion>(new HostingBundleVersion("1.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion"),
+                new Bundle<HostingBundleVersion>(new HostingBundleVersion("10.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion")
+            });
 
             var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
 
             // Check that we still have all of the non-sdk bundles
-            bundles.Should().Contain(b => b.Version is RuntimeVersion);
-            bundles.Should().Contain(b => b.Version is AspNetRuntimeVersion);
-            bundles.Should().Contain(b => b.Version is HostingBundleVersion);
+            uninstallable.Where(b => b.Version is AspNetRuntimeVersion).Should().HaveCount(1);
+            uninstallable.Where(b => b.Version is HostingBundleVersion).Should().HaveCount(1);
 
-            CheckAllowed(bundles, uninstallable, allowed);
+            CheckAllowed(bundles, uninstallable, sdkAllowed, runtimeAllowed);
         }
 
-        private void CheckAllowed(IEnumerable<Bundle> bundles, IEnumerable<Bundle> uninstallable, bool[] allowed)
+        private void CheckAllowed(IEnumerable<Bundle> bundles, IEnumerable<Bundle> uninstallable, bool[] sdkAllowed, bool[] runtimeAllowed)
         {
-            var fullList = bundles.Where(b => b.Version is SdkVersion).ToArray();
-            for (int i = 0; i < fullList.Count(); i++)
+            var sdkBundles = bundles.Where(bundle => bundle.Version is SdkVersion).ToArray();
+            var runtimeBundles = bundles.Where(bundle => bundle.Version is RuntimeVersion).ToArray();
+            var otherBundles = bundles.Except(sdkBundles).Except(runtimeBundles);
+            for (int i = 0; i < sdkBundles.Count(); i++)
             {
-                if (allowed[i])
+                if (sdkAllowed[i])
                 {
-                    uninstallable.Should().Contain(fullList[i]);
+                    uninstallable.Should().Contain(sdkBundles[i]);
                 }
                 else
                 {
-                    uninstallable.Should().NotContain(fullList[i]);
+                    uninstallable.Should().NotContain(sdkBundles[i]);
+                }
+            }
+            
+            for (int i = 0; i < runtimeBundles.Count(); i++)
+            {
+                if (runtimeAllowed[i])
+                {
+                    uninstallable.Should().Contain(runtimeBundles[i]);
+                }
+                else
+                {
+                    uninstallable.Should().NotContain(runtimeBundles[i]);
+                }
+            }
+            // Check others are uninstallable unless their version is above the upper limit
+            foreach (Bundle bundle in otherBundles)
+            {
+                if (bundle.Version.SemVer > VisualStudioSafeVersionsExtractor.UpperLimit)
+                {
+                    uninstallable.Should().NotContain(bundle);
+                }
+                else
+                {
+                    uninstallable.Should().Contain(bundle);
                 }
             }
         }
 
         [WindowsOnlyTheory]
+        [InlineData(new string[] { }, new string[] { })]
         [InlineData(new string[] { "1.0.1", "1.0.0" }, new string[] { "", "None" })]
         [InlineData(new string[] { "2.3.0", "2.1.800", "2.1.300" }, new string[] { "", " 2019", " 2017" })]
         [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new string[] { " 2017", "None", " 2019" })]
         [InlineData(new string[] { "2.1.500", "5.0.1", "5.0.0" }, new string[] { " 2017", "5.0.0", "5.0.0" })]
         internal void TestGetListCommandUninstallableStringsWindows(string[] versions, string[] expectedStrings)
         {
-            TestGetListCommandUninstallableStrings(versions, ConvertStringInput(expectedStrings));
-        }
-
-        [MacOsOnlyTheory]
-        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "None" })]
-        [InlineData(new string[] { "2.3.0", "2.2.0" }, new string[] { "None", "None" })]
-        [InlineData(new string[] { "3.1.500", "5.0.1", "5.0.0" }, new string[] { "None", "None", "None" })]
-        internal void TestGetListCommandUninstallableStringsMac(string[] versions, string[] expectedStrings)
-        {
-            TestGetListCommandUninstallableStrings(versions, ConvertStringInput(expectedStrings));
-        }
-
-        internal void TestGetListCommandUninstallableStrings(string[] versions, string[] expectedStrings)
-        {
-            var bundles = new List<Bundle>
-            {
-                new Bundle<RuntimeVersion>(new RuntimeVersion(), new BundleArch(), string.Empty, "RuntimeVersion"),
-                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion(), new BundleArch(), string.Empty, "AspNetVersion"),
-                new Bundle<HostingBundleVersion>(new HostingBundleVersion(), new BundleArch(), string.Empty, "HostingBundleVersion")
-            };
+            var bundles = new List<Bundle>();
             foreach (string v in versions)
             {
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
-
-            strings.Count().Should().Be(bundles.Count());
-            strings.Where(pair => !(pair.Key.Version is SdkVersion)).Select(pair => pair.Value).ToList().ForEach(str => str.Should().Be(string.Empty));
-            for (int i = 0; i < versions.Length; i++)
-            {
-                strings.First(pair => pair.Key.DisplayName.Equals(versions[i])).Value.Should().Be(expectedStrings[i]);
-            }
+            TestGetListCommandUninstallableStrings(bundles, ExpandExpectationShortHand(expectedStrings), new string[0]);
         }
 
-        private string[] ConvertStringInput(string[] input)
+        [MacOsOnlyTheory]
+        [InlineData(new string[] { }, new string[] { }, new string[] { }, new string[] { })]
+        [InlineData(new string[] { }, new string[] { }, new string[] { "1.0.0" }, new string[] { "Runtime" })]
+        [InlineData(new string[] { "1.0.0" }, new string[] { "SDK" }, new string[] { }, new string[] { })]
+        [InlineData(new string[] { "1.0.0" }, new string[] { "SDK" }, new string[] { "1.0.0" }, new string[] { "Runtime" })]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "Runtime" })]
+        [InlineData(new string[] { "2.1.0", "1.0.1" }, new string[] { "SDK", "None" }, new string[] { "2.0.0", "1.1.0" }, new string[] { "Runtime", "Runtime" })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new string[] { "SDK", "5.0.0" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new string[] { "None", "None", "None", "Runtime", "Runtime" })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new string[] { "SDK", "5.0.0" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.0" }, new string[] { "None", "Runtime", "Runtime", "5.0.0" })]
+        [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new string[] { "5.0.0", "5.0.0", "5.0.0" }, new string[] { "5.0.0", "10.0.0" }, new string[] { "5.0.0", "5.0.0" })]
+        internal void TestGetListCommandUninstallableStringsMac(string[] sdkVersions, string[] sdkExpected, string[] runtimeVersions, string[] runtimeExpected)
         {
+            var bundles = new List<Bundle>();
+            foreach (string v in sdkVersions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
+            }
+            foreach (string v in runtimeVersions)
+            {
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, v));
+            }
+
+            TestGetListCommandUninstallableStrings(bundles, ExpandExpectationShortHand(sdkExpected), ExpandExpectationShortHand(runtimeExpected));
+        }
+
+        internal void TestGetListCommandUninstallableStrings(IEnumerable<Bundle> bundles, string[] sdkExpected, string[] runtimeExpected)
+        {
+            bundles = bundles.Concat(new List<Bundle>
+            {
+                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion("1.0.0"), new BundleArch(), string.Empty, "AspNetVersion"),
+                new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion("10.0.0"), new BundleArch(), string.Empty, "AspNetVersion"),
+                new Bundle<HostingBundleVersion>(new HostingBundleVersion("1.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion"),
+                new Bundle<HostingBundleVersion>(new HostingBundleVersion("10.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion")
+            });
+
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            strings.Count().Should().Be(bundles.Count());
+
+            var sdkBundles = strings.Where(pair => pair.Key.Version is SdkVersion).ToArray();
+            var sdkStrings = sdkBundles.Select(pair => pair.Value);
+            var runtimeBundles = strings.Where(pair => pair.Key.Version is RuntimeVersion).ToArray();
+            var runtimeStrings = runtimeBundles.Select(pair => pair.Value);
+            var otherBundles = strings.Except(sdkBundles).Except(runtimeBundles);
+
+            sdkStrings.Should().BeEquivalentTo(sdkExpected);
+            runtimeStrings.Should().BeEquivalentTo(runtimeExpected);
+
+            otherBundles.Should().HaveCount(4);
+            // All bundles above the upper limit are required
+            otherBundles.Where(pair => pair.Key.Version.SemVer >= VisualStudioSafeVersionsExtractor.UpperLimit)
+                .ToList().ForEach(str => str.Value.Should().Be(string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit)));
+            // Non-sdk bundles are always uninstallable below the upper limit
+            otherBundles.Where(pair => pair.Key.Version.SemVer < VisualStudioSafeVersionsExtractor.UpperLimit)
+                .ToList().ForEach(str => str.Value.Should().Be(string.Empty));
+        }
+
+        private string[] ExpandExpectationShortHand(string[] input)
+        {
+            var shortHandToFullExpectedString = new Dictionary<string, string>
+            {
+                { "None", string.Empty },
+                { "5.0.0", string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit) },
+                { string.Empty, string.Format(LocalizableStrings.WindowsRequirementExplainationString, string.Empty)},
+                { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017")},
+                { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019")},
+                { "SDK", LocalizableStrings.MacSDKRequirementExplainationString},
+                { "Runtime", LocalizableStrings.MacRuntimeRequirementExplainationString}
+            };
             var output = new string[input.Length];
             
             for (int i = 0; i < input.Length; i++)
             {
-                output[i] = input[i].Equals("None") ? string.Empty :
-                    SemanticVersion.TryParse(input[i], out var parsed) ? string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit) :
-                    string.Format(LocalizableStrings.RequirementExplainationString, input[i]);
+                output[i] = shortHandToFullExpectedString[input[i]];
             }
 
             return output;

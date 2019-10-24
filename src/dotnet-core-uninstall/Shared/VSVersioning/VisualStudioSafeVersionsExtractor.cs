@@ -14,21 +14,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
 
         // Must keep one of each of these divisions to ensure Visual Studio works. 
         // Pairs are [inclusive, exclusive)
-        private static readonly Dictionary<(SemanticVersion, SemanticVersion), string> VersionDivisionsToExplaination = new Dictionary<(SemanticVersion, SemanticVersion), string>
+        private static readonly Dictionary<(SemanticVersion, SemanticVersion), string> WindowsVersionDivisionsToExplaination = new Dictionary<(SemanticVersion, SemanticVersion), string>
         {
-            { (new SemanticVersion(1, 0, 0), new SemanticVersion(2, 0, 0)),  string.Format(LocalizableStrings.RequirementExplainationString, "") },
-            { (new SemanticVersion(2, 0, 0), new SemanticVersion(2, 1, 300)), string.Format(LocalizableStrings.RequirementExplainationString, "") },
-            { (new SemanticVersion(2, 1, 300), new SemanticVersion(2, 1, 600)), string.Format(LocalizableStrings.RequirementExplainationString, " 2017") },
-            { (new SemanticVersion(2, 1, 600), new SemanticVersion(2, 1, 900)), string.Format(LocalizableStrings.RequirementExplainationString, " 2019") },
-            { (new SemanticVersion(2, 2, 100), new SemanticVersion(2, 2, 200)), string.Format(LocalizableStrings.RequirementExplainationString, " 2017") },
-            { (new SemanticVersion(2, 2, 200), new SemanticVersion(2, 2, 500)), string.Format(LocalizableStrings.RequirementExplainationString, " 2019") },
-            { (new SemanticVersion(2, 2, 500), UpperLimit), string.Format(LocalizableStrings.RequirementExplainationString, "") }
+            { (new SemanticVersion(1, 0, 0), new SemanticVersion(2, 0, 0)),  string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") },
+            { (new SemanticVersion(2, 0, 0), new SemanticVersion(2, 1, 300)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") },
+            { (new SemanticVersion(2, 1, 300), new SemanticVersion(2, 1, 600)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017") },
+            { (new SemanticVersion(2, 1, 600), new SemanticVersion(2, 1, 900)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
+            { (new SemanticVersion(2, 2, 100), new SemanticVersion(2, 2, 200)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017") },
+            { (new SemanticVersion(2, 2, 200), new SemanticVersion(2, 2, 500)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
+            { (new SemanticVersion(2, 2, 500), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") }
         };
 
-        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyVersionDivisions(IEnumerable<Bundle> bundleList)
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyWindowsVersionDivisions(IEnumerable<Bundle> bundleList)
         {
             var dividedBundles = new Dictionary<IEnumerable<Bundle>, string>();
-            foreach (var (division, explaination) in VersionDivisionsToExplaination)
+            foreach (var (division, explaination) in WindowsVersionDivisionsToExplaination)
             {
                 var bundlesInRange = bundleList.Where(bundle => bundle.Version is SdkVersion && division.Item1 <= bundle.Version.SemVer && bundle.Version.SemVer < division.Item2);
                 bundleList = bundleList.Except(bundlesInRange);
@@ -41,13 +41,43 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             return (dividedBundles, bundleList);
         }
 
-        public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList)
         {
-            if (!RuntimeInfo.RunningOnWindows)
+            var bundlesAboveLimit = bundleList.Where(bundle => bundle.Version.SemVer >= UpperLimit);
+            bundleList = bundleList.Except(bundlesAboveLimit);
+
+            var dividedBundles = bundleList
+                .Where(bundle => bundle.Version is RuntimeVersion)
+                .GroupBy(bundle => bundle.Version.MajorMinor)
+                .Select(pair => (pair as IEnumerable<Bundle>, LocalizableStrings.MacRuntimeRequirementExplainationString))
+                .ToDictionary(key => key.Item1, value => value.Item2); 
+
+            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion);
+            if (sdks != null && sdks.Count() > 0)
             {
-                return bundles;
+                dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplainationString);
             }
 
+            var remainingBundles = bundleList
+                .Where(bundle => !(bundle.Version is RuntimeVersion || bundle.Version is SdkVersion))
+                .Concat(bundlesAboveLimit);
+            return (dividedBundles, remainingBundles);
+        }
+
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyVersionDivisions(IEnumerable<Bundle> bundles)
+        {
+            if (RuntimeInfo.RunningOnWindows)
+            {
+                return ApplyWindowsVersionDivisions(bundles);
+            }
+            else
+            {
+                return ApplyMacVersionDivisions(bundles);
+            }
+        }
+
+        public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
+        {
             var required = new List<Bundle>();
             var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(bundles);
 
@@ -63,12 +93,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
 
         public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles)
         {
-            if (!RuntimeInfo.RunningOnWindows)
-            {
-                return allBundles.Select(bundle => (bundle, string.Empty))
-                    .ToDictionary(i => i.bundle, i => i.Item2);
-            }
-
             var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(allBundles);
 
             var bundlesAboveUpperLimit = remainingBundles.Where(bundle => bundle.Version.SemVer >= UpperLimit);
