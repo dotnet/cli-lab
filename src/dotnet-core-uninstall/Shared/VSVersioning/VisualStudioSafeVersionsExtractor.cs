@@ -16,13 +16,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
         // Pairs are [inclusive, exclusive)
         private static readonly Dictionary<(SemanticVersion, SemanticVersion), string> WindowsVersionDivisionsToExplaination = new Dictionary<(SemanticVersion, SemanticVersion), string>
         {
-            { (new SemanticVersion(1, 0, 0), new SemanticVersion(2, 0, 0)),  string.Format(LocalizableStrings.RequirementExplainationString, "") },
-            { (new SemanticVersion(2, 0, 0), new SemanticVersion(2, 1, 300)), string.Format(LocalizableStrings.RequirementExplainationString, "") },
-            { (new SemanticVersion(2, 1, 300), new SemanticVersion(2, 1, 600)), string.Format(LocalizableStrings.RequirementExplainationString, " 2017") },
-            { (new SemanticVersion(2, 1, 600), new SemanticVersion(2, 1, 900)), string.Format(LocalizableStrings.RequirementExplainationString, " 2019") },
-            { (new SemanticVersion(2, 2, 100), new SemanticVersion(2, 2, 200)), string.Format(LocalizableStrings.RequirementExplainationString, " 2017") },
-            { (new SemanticVersion(2, 2, 200), new SemanticVersion(2, 2, 500)), string.Format(LocalizableStrings.RequirementExplainationString, " 2019") },
-            { (new SemanticVersion(2, 2, 500), UpperLimit), string.Format(LocalizableStrings.RequirementExplainationString, "") }
+            { (new SemanticVersion(1, 0, 0), new SemanticVersion(2, 0, 0)),  string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") },
+            { (new SemanticVersion(2, 0, 0), new SemanticVersion(2, 1, 300)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") },
+            { (new SemanticVersion(2, 1, 300), new SemanticVersion(2, 1, 600)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017") },
+            { (new SemanticVersion(2, 1, 600), new SemanticVersion(2, 1, 900)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
+            { (new SemanticVersion(2, 2, 100), new SemanticVersion(2, 2, 200)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017") },
+            { (new SemanticVersion(2, 2, 200), new SemanticVersion(2, 2, 500)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
+            { (new SemanticVersion(2, 2, 500), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") }
         };
 
         private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyWindowsVersionDivisions(IEnumerable<Bundle> bundleList)
@@ -49,13 +49,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             var dividedBundles = bundleList
                 .Where(bundle => bundle.Version is RuntimeVersion)
                 .GroupBy(bundle => bundle.Version.MajorMinor)
-                .Select(pair => (pair as IEnumerable<Bundle>, string.Format(LocalizableStrings.RequirementExplainationString, " for Mac or SDKs")))
+                .Select(pair => (pair as IEnumerable<Bundle>, LocalizableStrings.MacRuntimeRequirementExplainationString))
                 .ToDictionary(key => key.Item1, value => value.Item2); 
 
             var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion);
             if (sdks != null && sdks.Count() > 0)
             {
-                dividedBundles.Add(sdks, string.Format(LocalizableStrings.RequirementExplainationString, " for Mac"));
+                dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplainationString);
             }
 
             var remainingBundles = bundleList

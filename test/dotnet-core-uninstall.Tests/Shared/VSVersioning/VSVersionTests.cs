@@ -181,18 +181,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            TestGetListCommandUninstallableStrings(bundles, ConvertStringInput(expectedStrings), new string[0]);
+            TestGetListCommandUninstallableStrings(bundles, ExpandExpectationShortHand(expectedStrings), new string[0]);
         }
 
         [MacOsOnlyTheory]
         [InlineData(new string[] { }, new string[] { }, new string[] { }, new string[] { })]
-        [InlineData(new string[] { }, new string[] { }, new string[] { "1.0.0" }, new string[] { " or SDKs" })]
-        [InlineData(new string[] { "1.0.0" }, new string[] { "" }, new string[] { }, new string[] { })]
-        [InlineData(new string[] { "1.0.0" }, new string[] { "" }, new string[] { "1.0.0" }, new string[] { " or SDKs" })]
-        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "" }, new string[] { "1.0.0", "1.0.1" }, new string[] { "None", " or SDKs" })]
-        [InlineData(new string[] { "2.1.0", "1.0.1" }, new string[] { "", "None" }, new string[] { "2.0.0", "1.1.0" }, new string[] { " or SDKs", " or SDKs" })]
-        [InlineData(new string[] { "3.0.0", "5.0.0" }, new string[] { "", "5.0.0" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new string[] { "None", "None", "None", " or SDKs", " or SDKs" })]
-        [InlineData(new string[] { "3.0.0", "5.0.0" }, new string[] { "", "5.0.0" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.0" }, new string[] { "None", " or SDKs", " or SDKs", "5.0.0" })]
+        [InlineData(new string[] { }, new string[] { }, new string[] { "1.0.0" }, new string[] { "Runtime" })]
+        [InlineData(new string[] { "1.0.0" }, new string[] { "SDK" }, new string[] { }, new string[] { })]
+        [InlineData(new string[] { "1.0.0" }, new string[] { "SDK" }, new string[] { "1.0.0" }, new string[] { "Runtime" })]
+        [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "Runtime" })]
+        [InlineData(new string[] { "2.1.0", "1.0.1" }, new string[] { "SDK", "None" }, new string[] { "2.0.0", "1.1.0" }, new string[] { "Runtime", "Runtime" })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new string[] { "SDK", "5.0.0" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new string[] { "None", "None", "None", "Runtime", "Runtime" })]
+        [InlineData(new string[] { "3.0.0", "5.0.0" }, new string[] { "SDK", "5.0.0" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.0" }, new string[] { "None", "Runtime", "Runtime", "5.0.0" })]
         [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new string[] { "5.0.0", "5.0.0", "5.0.0" }, new string[] { "5.0.0", "10.0.0" }, new string[] { "5.0.0", "5.0.0" })]
         internal void TestGetListCommandUninstallableStringsMac(string[] sdkVersions, string[] sdkExpected, string[] runtimeVersions, string[] runtimeExpected)
         {
@@ -206,7 +206,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, v));
             }
 
-            TestGetListCommandUninstallableStrings(bundles, ConvertStringInput(sdkExpected), ConvertStringInput(runtimeExpected));
+            TestGetListCommandUninstallableStrings(bundles, ExpandExpectationShortHand(sdkExpected), ExpandExpectationShortHand(runtimeExpected));
         }
 
         internal void TestGetListCommandUninstallableStrings(IEnumerable<Bundle> bundles, string[] sdkExpected, string[] runtimeExpected)
@@ -240,15 +240,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 .ToList().ForEach(str => str.Value.Should().Be(string.Empty));
         }
 
-        private string[] ConvertStringInput(string[] input)
+        private string[] ExpandExpectationShortHand(string[] input)
         {
+            var shortHandToFullExpectedString = new Dictionary<string, string>
+            {
+                { "None", string.Empty },
+                { "5.0.0", string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit) },
+                { string.Empty, string.Format(LocalizableStrings.WindowsRequirementExplainationString, string.Empty)},
+                { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017")},
+                { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019")},
+                { "SDK", LocalizableStrings.MacSDKRequirementExplainationString},
+                { "Runtime", LocalizableStrings.MacRuntimeRequirementExplainationString}
+            };
             var output = new string[input.Length];
             
             for (int i = 0; i < input.Length; i++)
             {
-                output[i] = input[i].Equals("None") ? string.Empty :
-                    SemanticVersion.TryParse(input[i], out _) ? string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit) :
-                    string.Format(LocalizableStrings.RequirementExplainationString, RuntimeInfo.RunningOnOSX ? " for Mac" + input[i] : input[i]);
+                output[i] = shortHandToFullExpectedString[input[i]];
             }
 
             return output;
