@@ -282,6 +282,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove.
+        /// </summary>
+        internal static string MacRuntimeRequirementExplainationString {
+            get {
+                return ResourceManager.GetString("MacRuntimeRequirementExplainationString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove.
+        /// </summary>
+        internal static string MacSDKRequirementExplainationString {
+            get {
+                return ResourceManager.GetString("MacSDKRequirementExplainationString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must specify exactly one version for option: {0}..
         /// </summary>
         internal static string MoreThanOneVersionSpecifiedExceptionMessageFormat {
@@ -367,15 +385,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string RequiredBundleConfirmationPromptWarningFormat {
             get {
                 return ResourceManager.GetString("RequiredBundleConfirmationPromptWarningFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove.
-        /// </summary>
-        internal static string RequirementExplainationString {
-            get {
-                return ResourceManager.GetString("RequirementExplainationString", resourceCulture);
             }
         }
         
@@ -664,6 +673,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string VersionOptionDescription {
             get {
                 return ResourceManager.GetString("VersionOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove.
+        /// </summary>
+        internal static string WindowsRequirementExplainationString {
+            get {
+                return ResourceManager.GetString("WindowsRequirementExplainationString", resourceCulture);
             }
         }
         

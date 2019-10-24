@@ -145,6 +145,16 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
         <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
         <note />
       </trans-unit>
+      <trans-unit id="MacRuntimeRequirementExplainationString">
+        <source>Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacSDKRequirementExplainationString">
+        <source>Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
         <source>You must specify exactly one version for option: {0}.</source>
         <target state="new">You must specify exactly one version for option: {0}.</target>
@@ -204,11 +214,6 @@ Uninstalling this item will cause Visual Studio to break.
 Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio to break.
 </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RequirementExplainationString">
-        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
-        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
@@ -369,6 +374,11 @@ Uninstalling this item will cause Visual Studio to break.
       <trans-unit id="VersionOptionDescription">
         <source>Display .NET Core Uninstall Tool version information.</source>
         <target state="new">Display .NET Core Uninstall Tool version information.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsRequirementExplainationString">
+        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
+        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">
