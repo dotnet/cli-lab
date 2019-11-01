@@ -17,43 +17,9 @@
         <target state="new">Allowed values are "Y" and "n".</target>
         <note />
       </trans-unit>
-      <trans-unit id="ConfirmationPromptOutputFormat">
-        <source>The following items will be removed:
-{0}
-
-To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
-
-Do you want to continue? [Y/n] </source>
-        <target state="new">The following items will be removed:
-{0}
-
-To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
-
-Do you want to continue? [Y/n] </target>
-        <note />
-      </trans-unit>
       <trans-unit id="DryRunCommandDescription">
         <source>Display .NET Core SDKs and Runtimes that will be removed.</source>
         <target state="new">Display .NET Core SDKs and Runtimes that will be removed.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="DryRunOutputFormat">
-        <source>*** DRY RUN OUTPUT
-Specified versions:
-{0}
-*** END DRY RUN OUTPUT
-
-To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
-
-Run as administrator and use the remove command to uninstall these items.</source>
-        <target state="new">*** DRY RUN OUTPUT
-Specified versions:
-{0}
-*** END DRY RUN OUTPUT
-
-To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
-
-Run as administrator and use the remove command to uninstall these items.</target>
         <note />
       </trans-unit>
       <trans-unit id="ForceOptionDescriptionMac">
@@ -67,8 +33,8 @@ Run as administrator and use the remove command to uninstall these items.</targe
         <note />
       </trans-unit>
       <trans-unit id="HelpExplainationParagraphMac">
-        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
-        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
+        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpExplainationParagraphWindows">
@@ -141,6 +107,40 @@ Run as administrator and use the remove command to uninstall these items.</targe
         <target state="new">List x86 .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MacConfirmationPromptOutputFormat">
+        <source>The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </source>
+        <target state="new">The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacDryRunOutputFormat">
+        <source>*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Run as administrator and use the remove command to uninstall these items.</source>
+        <target state="new">*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Run as administrator and use the remove command to uninstall these items.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MacListCommandOutput">
         <source>
 This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
@@ -153,6 +153,32 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
       <trans-unit id="MacOsBundleDisplayNameFormat">
         <source>Microsoft .NET Core {0} {1} (x64)</source>
         <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacRequiredBundleConfirmationPromptOutputFormat">
+        <source>
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio for Mac to break.
+
+Are you sure you want to continue? [Y/n] </source>
+        <target state="new">
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio for Mac to break.
+
+Are you sure you want to continue? [Y/n] </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MacRequiredBundleConfirmationPromptWarningFormat">
+        <source>
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio for to break.
+</source>
+        <target state="new">
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio for to break.
+</target>
         <note />
       </trans-unit>
       <trans-unit id="MacRuntimeRequirementExplainationString">
@@ -200,32 +226,6 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
         <target state="new">Required argument missing for the uninstall command.</target>
         <note />
       </trans-unit>
-      <trans-unit id="RequiredBundleConfirmationPromptOutputFormat">
-        <source>
-{0}: {1}
-
-Uninstalling this item will cause Visual Studio to break.
-
-Are you sure you want to continue? [Y/n] </source>
-        <target state="new">
-{0}: {1}
-
-Uninstalling this item will cause Visual Studio to break.
-
-Are you sure you want to continue? [Y/n] </target>
-        <note />
-      </trans-unit>
-      <trans-unit id="RequiredBundleConfirmationPromptWarningFormat">
-        <source>
-Warning: {0}: {1}
-Uninstalling this item will cause Visual Studio to break.
-</source>
-        <target state="new">
-Warning: {0}: {1}
-Uninstalling this item will cause Visual Studio to break.
-</target>
-        <note />
-      </trans-unit>
       <trans-unit id="SpecifiedVersionNotFoundExceptionMessageFormat">
         <source>The specified version is not found: "{0}".</source>
         <target state="new">The specified version is not found: "{0}".</target>
@@ -237,13 +237,13 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllBelowOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain.</target>
+        <source>Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain. (*)</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButLatestOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes, except the one highest version.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes, except the one highest version.</target>
+        <source>Remove .NET Core SDKs or Runtimes, except the one highest version. (*)</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes, except the one highest version. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButOptionArgumentName">
@@ -252,28 +252,28 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllButOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes, except those specified.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes, except those specified.</target>
+        <source>Remove .NET Core SDKs or Runtimes, except those specified. (*)</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes, except those specified. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllLowerPatchesOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</target>
+        <source>Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json. (*)</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllOptionDescription">
-        <source>Remove all .NET Core SDKs or Runtimes.</source>
-        <target state="new">Remove all .NET Core SDKs or Runtimes.</target>
+        <source>Remove all .NET Core SDKs or Runtimes. (*)</source>
+        <target state="new">Remove all .NET Core SDKs or Runtimes. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsButLatestOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</target>
+        <source>Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview. (*)</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsOptionDescription">
-        <source>Remove .NET Core SDKs or Runtimes marked as previews.</source>
-        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews.</target>
+        <source>Remove .NET Core SDKs or Runtimes marked as previews. (*)</source>
+        <target state="new">Remove .NET Core SDKs or Runtimes marked as previews. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAspNetRuntimeOptionDescription">
@@ -307,8 +307,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescriptionMac">
-        <source>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</source>
-        <target state="new">Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</target>
+        <source>Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</source>
+        <target state="new">Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallNoOptionDescriptionWindows">
@@ -386,12 +386,72 @@ Uninstalling this item will cause Visual Studio to break.
         <target state="new">Display .NET Core Uninstall Tool version information.</target>
         <note />
       </trans-unit>
+      <trans-unit id="WindowsConfirmationPromptOutputFormat">
+        <source>The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </source>
+        <target state="new">The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsDryRunOutputFormat">
+        <source>*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Run as administrator and use the remove command to uninstall these items.</source>
+        <target state="new">*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Run as administrator and use the remove command to uninstall these items.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="WindowsListCommandOutput">
         <source>
 This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
 </source>
         <target state="new">
 This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsRequiredBundleConfirmationPromptOutputFormat">
+        <source>
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio to break.
+
+Are you sure you want to continue? [Y/n] </source>
+        <target state="new">
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio to break.
+
+Are you sure you want to continue? [Y/n] </target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsRequiredBundleConfirmationPromptWarningFormat">
+        <source>
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio to break.
+</source>
+        <target state="new">
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio to break.
 </target>
         <note />
       </trans-unit>

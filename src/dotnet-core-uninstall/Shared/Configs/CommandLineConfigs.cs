@@ -232,7 +232,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             UninstallCommandParser = new CommandLineBuilder(UninstallRootCommand)
                 .UseDefaults()
-                .UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
+                //.UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
                 .Build();
             CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());
         }

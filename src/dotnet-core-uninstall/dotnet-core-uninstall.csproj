@@ -14,10 +14,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="2.3.2200-develop-g2d3a6646" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
-    <PackageReference Include="NuGet.Versioning" Version="5.1.0" />
-    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19317.1" />
-    <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.19317.1" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0" />
+    <PackageReference Include="NuGet.Versioning" Version="5.3.0" />
+    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19405.1" />
+    <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.19405.1" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
   </ItemGroup>
 

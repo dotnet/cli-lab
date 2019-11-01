@@ -88,41 +88,11 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following items will be removed:
-        ///{0}
-        ///
-        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
-        ///
-        ///Do you want to continue? [Y/n] .
-        /// </summary>
-        internal static string ConfirmationPromptOutputFormat {
-            get {
-                return ResourceManager.GetString("ConfirmationPromptOutputFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Display .NET Core SDKs and Runtimes that will be removed..
         /// </summary>
         internal static string DryRunCommandDescription {
             get {
                 return ResourceManager.GetString("DryRunCommandDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to *** DRY RUN OUTPUT
-        ///Specified versions:
-        ///{0}
-        ///*** END DRY RUN OUTPUT
-        ///
-        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
-        ///
-        ///Run as administrator and use the remove command to uninstall these items..
-        /// </summary>
-        internal static string DryRunOutputFormat {
-            get {
-                return ResourceManager.GetString("DryRunOutputFormat", resourceCulture);
             }
         }
         
@@ -145,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplainationParagraphMac {
             get {
@@ -280,6 +250,36 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following items will be removed:
+        ///{0}
+        ///
+        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///
+        ///Do you want to continue? [Y/n] .
+        /// </summary>
+        internal static string MacConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("MacConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *** DRY RUN OUTPUT
+        ///Specified versions:
+        ///{0}
+        ///*** END DRY RUN OUTPUT
+        ///
+        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///
+        ///Run as administrator and use the remove command to uninstall these items..
+        /// </summary>
+        internal static string MacDryRunOutputFormat {
+            get {
+                return ResourceManager.GetString("MacDryRunOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
         ///.
@@ -296,6 +296,32 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string MacOsBundleDisplayNameFormat {
             get {
                 return ResourceManager.GetString("MacOsBundleDisplayNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///{0}: {1}
+        ///
+        ///Uninstalling this item will cause Visual Studio for Mac to break.
+        ///
+        ///Are you sure you want to continue? [Y/n] .
+        /// </summary>
+        internal static string MacRequiredBundleConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("MacRequiredBundleConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Warning: {0}: {1}
+        ///Uninstalling this item will cause Visual Studio for to break.
+        ///.
+        /// </summary>
+        internal static string MacRequiredBundleConfirmationPromptWarningFormat {
+            get {
+                return ResourceManager.GetString("MacRequiredBundleConfirmationPromptWarningFormat", resourceCulture);
             }
         }
         
@@ -381,32 +407,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ///{0}: {1}
-        ///
-        ///Uninstalling this item will cause Visual Studio to break.
-        ///
-        ///Are you sure you want to continue? [Y/n] .
-        /// </summary>
-        internal static string RequiredBundleConfirmationPromptOutputFormat {
-            get {
-                return ResourceManager.GetString("RequiredBundleConfirmationPromptOutputFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 
-        ///Warning: {0}: {1}
-        ///Uninstalling this item will cause Visual Studio to break.
-        ///.
-        /// </summary>
-        internal static string RequiredBundleConfirmationPromptWarningFormat {
-            get {
-                return ResourceManager.GetString("RequiredBundleConfirmationPromptWarningFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to The specified version is not found: &quot;{0}&quot;..
         /// </summary>
         internal static string SpecifiedVersionNotFoundExceptionMessageFormat {
@@ -425,7 +425,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain. (*).
         /// </summary>
         internal static string UninstallAllBelowOptionDescription {
             get {
@@ -434,7 +434,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes, except the one highest version..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes, except the one highest version. (*).
         /// </summary>
         internal static string UninstallAllButLatestOptionDescription {
             get {
@@ -452,7 +452,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes, except those specified..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes, except those specified. (*).
         /// </summary>
         internal static string UninstallAllButOptionDescription {
             get {
@@ -461,7 +461,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json. (*).
         /// </summary>
         internal static string UninstallAllLowerPatchesOptionDescription {
             get {
@@ -470,7 +470,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core SDKs or Runtimes..
+        ///   Looks up a localized string similar to Remove all .NET Core SDKs or Runtimes. (*).
         /// </summary>
         internal static string UninstallAllOptionDescription {
             get {
@@ -479,7 +479,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview. (*).
         /// </summary>
         internal static string UninstallAllPreviewsButLatestOptionDescription {
             get {
@@ -488,7 +488,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes marked as previews..
+        ///   Looks up a localized string similar to Remove .NET Core SDKs or Runtimes marked as previews. (*).
         /// </summary>
         internal static string UninstallAllPreviewsOptionDescription {
             get {
@@ -569,7 +569,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall..
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall..
         /// </summary>
         internal static string UninstallNoOptionDescriptionMac {
             get {
@@ -695,6 +695,36 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The following items will be removed:
+        ///{0}
+        ///
+        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///
+        ///Do you want to continue? [Y/n] .
+        /// </summary>
+        internal static string WindowsConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("WindowsConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to *** DRY RUN OUTPUT
+        ///Specified versions:
+        ///{0}
+        ///*** END DRY RUN OUTPUT
+        ///
+        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///
+        ///Run as administrator and use the remove command to uninstall these items..
+        /// </summary>
+        internal static string WindowsDryRunOutputFormat {
+            get {
+                return ResourceManager.GetString("WindowsDryRunOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
         ///.
@@ -702,6 +732,32 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string WindowsListCommandOutput {
             get {
                 return ResourceManager.GetString("WindowsListCommandOutput", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///{0}: {1}
+        ///
+        ///Uninstalling this item will cause Visual Studio to break.
+        ///
+        ///Are you sure you want to continue? [Y/n] .
+        /// </summary>
+        internal static string WindowsRequiredBundleConfirmationPromptOutputFormat {
+            get {
+                return ResourceManager.GetString("WindowsRequiredBundleConfirmationPromptOutputFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 
+        ///Warning: {0}: {1}
+        ///Uninstalling this item will cause Visual Studio to break.
+        ///.
+        /// </summary>
+        internal static string WindowsRequiredBundleConfirmationPromptWarningFormat {
+            get {
+                return ResourceManager.GetString("WindowsRequiredBundleConfirmationPromptWarningFormat", resourceCulture);
             }
         }
         
