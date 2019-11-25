@@ -3,19 +3,18 @@ using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
-    public class UninstallHelpBuilder : IHelpBuilder // TODO inherit from helpbuilder once package is updated
+    public class UninstallHelpBuilder : HelpBuilder
     {
-        private readonly IConsole Console;
+        public UninstallHelpBuilder(IConsole console) : base(console) { }
 
-        public UninstallHelpBuilder(IConsole console)
+        public override void Write(ICommand command)
         {
-            Console = console;
-        }
-
-        public void Write(ICommand command)
-        {
-            Console.Out.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
-                LocalizableStrings.HelpExplainationParagraphMac);
+            base.Write(command);
+            if (command.Name.Equals("dry-run") || command.Name.Equals("remove"))
+            {
+                Console.Out.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
+                    LocalizableStrings.HelpExplainationParagraphMac);
+            }
         }
     }
 }
