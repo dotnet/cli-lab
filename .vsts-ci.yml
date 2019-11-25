@@ -121,12 +121,15 @@ jobs:
           --prepareMachine
           /p:RID=$(_RID)
         displayName: Build
-      - task: CopyFiles@2
+      - task: ArchiveFiles@2
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
-          sourceFolder: 'artifacts/layout/dotnet-core-uninstall/'
-          contents: 'dotnet-core-uninstall'
-          targetFolder: '$(Build.ArtifactStagingDirectory)'
+          rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
+          includeRootFolder: false
+          archiveType: 'tar'
+          tarCompression: 'gz'
+          archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+          replaceExistingArchive: true
       - task: PublishBuildArtifacts@1
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
