@@ -154,28 +154,28 @@
     <value>VERSION</value>
   </data>
   <data name="UninstallAllBelowOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain.</value>
+    <value>Remove .NET Core SDKs or Runtimes below the specified version. The specified version will remain. (*)</value>
   </data>
   <data name="UninstallAllButLatestOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core SDKs or Runtimes, except the one highest version.</value>
+    <value>Remove .NET Core SDKs or Runtimes, except the one highest version. (*)</value>
   </data>
   <data name="UninstallAllButOptionArgumentName" xml:space="preserve">
     <value>VERSIONS</value>
   </data>
   <data name="UninstallAllButOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core SDKs or Runtimes, except those specified.</value>
+    <value>Remove .NET Core SDKs or Runtimes, except those specified. (*)</value>
   </data>
   <data name="UninstallAllLowerPatchesOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json.</value>
+    <value>Remove .NET Core SDKs or Runtimes superseded by higher patches. Protects global.json. (*)</value>
   </data>
   <data name="UninstallAllOptionDescription" xml:space="preserve">
-    <value>Remove all .NET Core SDKs or Runtimes.</value>
+    <value>Remove all .NET Core SDKs or Runtimes. (*)</value>
   </data>
   <data name="UninstallAllPreviewsButLatestOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview.</value>
+    <value>Remove .NET Core SDKs or Runtimes marked as previews, except the one highest preview. (*)</value>
   </data>
   <data name="UninstallAllPreviewsOptionDescription" xml:space="preserve">
-    <value>Remove .NET Core SDKs or Runtimes marked as previews.</value>
+    <value>Remove .NET Core SDKs or Runtimes marked as previews. (*)</value>
   </data>
   <data name="UninstallationFailedExceptionMessageFormat" xml:space="preserve">
     <value>Timeout during uninstall: {0}.</value>
@@ -273,7 +273,7 @@
   <data name="YesOptionDescription" xml:space="preserve">
     <value>Execute the command without requiring Y/n confirmation.</value>
   </data>
-  <data name="DryRunOutputFormat" xml:space="preserve">
+  <data name="WindowsDryRunOutputFormat" xml:space="preserve">
     <value>*** DRY RUN OUTPUT
 Specified versions:
 {0}
@@ -283,7 +283,7 @@ To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-co
 
 Run as administrator and use the remove command to uninstall these items.</value>
   </data>
-  <data name="ConfirmationPromptOutputFormat" xml:space="preserve">
+  <data name="WindowsConfirmationPromptOutputFormat" xml:space="preserve">
     <value>The following items will be removed:
 {0}
 
@@ -300,7 +300,7 @@ Do you want to continue? [Y/n] </value>
   <data name="UninstallNotAllowedExceptionFormat" xml:space="preserve">
     <value>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</value>
   </data>
-  <data name="RequiredBundleConfirmationPromptOutputFormat" xml:space="preserve">
+  <data name="WindowsRequiredBundleConfirmationPromptOutputFormat" xml:space="preserve">
     <value>
 {0}: {1}
 
@@ -308,7 +308,7 @@ Uninstalling this item will cause Visual Studio to break.
 
 Are you sure you want to continue? [Y/n] </value>
   </data>
-  <data name="RequiredBundleConfirmationPromptWarningFormat" xml:space="preserve">
+  <data name="WindowsRequiredBundleConfirmationPromptWarningFormat" xml:space="preserve">
     <value>
 Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio to break.
@@ -335,7 +335,7 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
 </value>
   </data>
   <data name="UninstallNoOptionDescriptionMac" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
   </data>
   <data name="MacRuntimeRequirementExplainationString" xml:space="preserve">
     <value>Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</value>
@@ -346,6 +346,44 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
   <data name="MacListCommandOutput" xml:space="preserve">
     <value>
 This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+</value>
+  </data>
+  <data name="HelpExplainationParagraphMac" xml:space="preserve">
+    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</value>
+  </data>
+  <data name="HelpExplainationParagraphWindows" xml:space="preserve">
+    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</value>
+  </data>
+  <data name="MacConfirmationPromptOutputFormat" xml:space="preserve">
+    <value>The following items will be removed:
+{0}
+
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Do you want to continue? [Y/n] </value>
+  </data>
+  <data name="MacDryRunOutputFormat" xml:space="preserve">
+    <value>*** DRY RUN OUTPUT
+Specified versions:
+{0}
+*** END DRY RUN OUTPUT
+
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+
+Run as administrator and use the remove command to uninstall these items.</value>
+  </data>
+  <data name="MacRequiredBundleConfirmationPromptOutputFormat" xml:space="preserve">
+    <value>
+{0}: {1}
+
+Uninstalling this item will cause Visual Studio for Mac to break.
+
+Are you sure you want to continue? [Y/n] </value>
+  </data>
+  <data name="MacRequiredBundleConfirmationPromptWarningFormat" xml:space="preserve">
+    <value>
+Warning: {0}: {1}
+Uninstalling this item will cause Visual Studio for to break.
 </value>
   </data>
 </root>

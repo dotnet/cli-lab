@@ -210,7 +210,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         private static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles)
         {
             var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
-            Console.Write(string.Format(LocalizableStrings.ConfirmationPromptOutputFormat, displayNames));
+            Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat : 
+                LocalizableStrings.MacConfirmationPromptOutputFormat, displayNames));
 
             var response = Console.ReadLine().Trim().ToUpper();
 
@@ -234,7 +235,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             foreach (var pair in requiredBundles)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(string.Format(LocalizableStrings.RequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
+                Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptOutputFormat : 
+                    LocalizableStrings.MacRequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
                 var response = Console.ReadLine().Trim().ToUpper();
                 if (response.Equals("N"))

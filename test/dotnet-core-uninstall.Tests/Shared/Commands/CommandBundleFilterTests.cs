@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine;
+using System.CommandLine.Invocation;
 using System.Linq;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -110,5 +111,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
             Action filteringAction = () => CommandBundleFilter.GetFilteredBundles(bundles, parseResult);
             filteringAction.Should().Throw<UninstallationNotAllowedException>();
         }
+
+        [Fact]
+        public void TestHelpOutputContainsExplainationParagraph()
+        {
+            foreach (var command in new string[] { "dry-run -h", "whatif -h", "remove -h" }) 
+            {
+                var console = new TestConsole();
+                _ = CommandLineConfigs.UninstallCommandParser.InvokeAsync(command, console).Result;
+
+                console.Out.ToString().Should().Contain(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
+                    LocalizableStrings.HelpExplainationParagraphMac);
+            }
+        }
+
     }
 }

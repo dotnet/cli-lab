@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -18,12 +19,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         private static void TryIt(IDictionary<Bundle, string> bundles)
         {
             var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
-            Console.WriteLine(string.Format(LocalizableStrings.DryRunOutputFormat, displayNames));
+            Console.WriteLine(string.Format(RuntimeInfo.RunningOnWindows ? 
+                LocalizableStrings.WindowsDryRunOutputFormat : LocalizableStrings.MacDryRunOutputFormat, displayNames));
 
             foreach (var pair in bundles.Where(b => !b.Value.Equals(string.Empty)))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(string.Format(LocalizableStrings.RequiredBundleConfirmationPromptWarningFormat, pair.Key.DisplayName, pair.Value));
+                Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptWarningFormat : 
+                    LocalizableStrings.MacRequiredBundleConfirmationPromptWarningFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
             }
         }
