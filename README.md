@@ -11,6 +11,9 @@ Run the build script at the root of the repo (build.sh or build.cmd) and provide
 ## .NET Foundation
 The `dotnet-core-uninstall` tool is a .NET Foundation project. See the .NET home repo to find other .NET-related projects.
 
+## Code of Conduct
+This project has adopted the code of conduct defined by the [Contributor Covenant](https://www.contributor-covenant.org/) to clarify expected behavior in our community. For more information, see the [.NET Foundation Code of Conduct](https://www.dotnetfoundation.org/code-of-conduct).
+
 ## License
 .NET Core (including this repo) is licensed under the MIT license.
 
