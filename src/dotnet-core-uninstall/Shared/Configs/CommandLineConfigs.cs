@@ -185,7 +185,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         static CommandLineConfigs() 
         {
-            UninstallRootCommand.AddOption(new Option("--version", LocalizableStrings.VersionOptionDescription));
             DryRunCommand.AddAlias(WhatIfCommandName);
 
             UninstallRootCommand.AddCommand(ListCommand);
@@ -232,6 +231,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             UninstallCommandParser = new CommandLineBuilder(UninstallRootCommand)
                 .UseDefaults()
+                .UseVersionOption()
                 .UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
                 .Build();
             CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());

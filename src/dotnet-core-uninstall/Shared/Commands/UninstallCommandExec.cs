@@ -215,7 +215,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var response = Console.ReadLine().Trim().ToUpper();
 
-            if (response.Equals("Y"))
+            if (response.Equals("Y") || response.Equals("YES"))
             {
                 return true;
             }
@@ -243,7 +243,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 {
                     return false ;
                 }
-                else if (!response.Equals("Y"))
+                else if (!(response.Equals("Y") || response.Equals("YES")))
                 {
                     throw new ConfirmationPromptInvalidException();
                 }

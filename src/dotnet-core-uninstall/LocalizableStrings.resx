@@ -292,7 +292,7 @@ To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-co
 Do you want to continue? [Y/n] </value>
   </data>
   <data name="ConfirmationPromptInvalidExceptionMessage" xml:space="preserve">
-    <value>Allowed values are "Y" and "n".</value>
+    <value>Allowed values are "Y", "YES", and "N".</value>
   </data>
   <data name="RemoveCommandDescription" xml:space="preserve">
     <value>Remove the specified .NET Core SDKs or Runtimes.</value>
