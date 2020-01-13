@@ -97,13 +97,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.IntegrationTests
                 CommandLineConfigs.CommandLineParseResult = CommandLineConfigs.UninstallRootCommand.Parse($"dry-run { options }");
                 DryRunCommandExec.Execute(bundleCollector);
                 var output = testConsole.GetStringBuilder().ToString();
-                output.Should().ContainAll(expectedBundles.Select(s => s + "\n")); // Add whitespace to ensure x.x.x-preview and x.x.x can be differentiated
+                var remainingExpectedBundles = expectedBundles.Where(s => !output.Contains(s + "\r"));
+                output.Should().ContainAll(remainingExpectedBundles.Select(s => s + "\n")); // Add whitespace to ensure x.x.x-preview and x.x.x can be differentiated
 
                 // Check no extra bundles are in the output
                 var unexpectedBundles = bundleCollector.GetAllInstalledBundles()
                     .Where(bundle => options.Contains(bundle.UninstallCommand)) // Bundles of the correct type
                     .Select(bundle => bundle.DisplayName)
-                    .Where(bundle => !expectedBundles.Any(expected => expected.Contains(bundle)));//!expectedBundles.Contains(bundle));
+                    .Where(bundle => !expectedBundles.Any(expected => expected.Contains(bundle)));
                 if (unexpectedBundles.Count() != 0)
                 {
                     output.Should().NotContainAny(unexpectedBundles); 
