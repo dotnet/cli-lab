@@ -8,33 +8,25 @@ using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
-using Microsoft.DotNet.Tools.Uninstall.Windows;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class ListCommandExec
     {
-        public static void Execute()
+        private static IConsole SysConsole;
+        private static Region Region;
+        private static string[] Args;
+
+        public static void Execute(IBundleCollector bundleCollector, IConsole console = null, Region region = null, string[] args = null)
         {
-            if (RuntimeInfo.RunningOnWindows)
-            {
-                Execute(
-                    RegistryQuery.GetAllInstalledBundles(),
-                    Windows.SupportedBundleTypeConfigs.SupportedBundleTypes);
-            }
-            else if (RuntimeInfo.RunningOnOSX)
-            {
-                Execute(
-                    FileSystemExplorer.GetAllInstalledBundles(),
-                    MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes);
-            }
-            else
-            {
-                throw new OperatingSystemNotSupportedException();
-            }
+            SysConsole = console == null? new SystemConsole() : console;
+            Region = region == null? new Region(0, 0, Console.WindowWidth, int.MaxValue) : region;
+            Args = args == null? Environment.GetCommandLineArgs(): args;
+            Execute(
+                bundleCollector.GetAllInstalledBundles(),
+                bundleCollector.GetSupportedBundleTypes());
         }
 
         private static void Execute(
@@ -43,7 +35,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             Console.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsListCommandOutput : LocalizableStrings.MacListCommandOutput);
 
-            var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
+            var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+
+            var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Args);
 
             var verbose = listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Detailed) ||
                 listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Diagnostic);
@@ -63,11 +57,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 {
                     var filteredBundlesByType = bundleType
                         .Filter(filteredBundlesByArch);
-
-                    var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(filteredBundlesByType);
+                    var filteredWithStrings = uninstallMap.Where(pair => filteredBundlesByType.Contains(pair.Key)).ToDictionary(i => i.Key, i => i.Value);
 
                     stackView.Add(new ContentView(bundleType.Header));
-                    stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap, verbose));
+                    stackView.Add(bundleType.GridViewGenerator.Invoke(filteredWithStrings, verbose));
                     stackView.Add(new ContentView(string.Empty));
 
                     footnotes.AddRange(filteredBundlesByType
@@ -87,8 +80,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
 
             stackView.Render(
-                new ConsoleRenderer(new SystemConsole()),
-                new Region(0, 0, Console.WindowWidth, int.MaxValue));
+                new ConsoleRenderer(SysConsole),
+                Region);
         }
     }
 }

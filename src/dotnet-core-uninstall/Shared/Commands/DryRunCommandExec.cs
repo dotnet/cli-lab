@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class DryRunCommandExec
     {
-        public static void Execute()
+        public static void Execute(IBundleCollector bundleCollector)
         {
             CommandBundleFilter.HandleVersionOption();
 
-            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings();
+            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector);
             TryIt(filtered);
         }
 

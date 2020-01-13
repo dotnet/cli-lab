@@ -11,6 +11,7 @@ using System.Threading;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -26,11 +27,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
-        public static void Execute()
+        public static void Execute(IBundleCollector bundleCollector)
         {
             CommandBundleFilter.HandleVersionOption();
 
-            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings();
+            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector);
 
             if (CommandLineConfigs.CommandLineParseResult.CommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {

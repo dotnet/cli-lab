@@ -2,22 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
-    internal static class RegistryQuery
+    internal class RegistryQuery : IBundleCollector
     {
-        public static IEnumerable<Bundle> GetInstalledBundles()
+        public IEnumerable<Bundle> GetInstalledBundles()
         {
             return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(GetAllInstalledBundles());
         }
 
-        public static IEnumerable<Bundle> GetAllInstalledBundles()
+        public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
             var uninstalls = Registry.LocalMachine
                 .OpenSubKey("SOFTWARE");
@@ -47,7 +49,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return wrappedBundles;
         }
 
-        private static bool IsDotNetCoreBundle(RegistryKey registryKey)
+        private bool IsDotNetCoreBundle(RegistryKey registryKey)
         {
             return IsDotNetCoreBundleDisplayName(registryKey.GetValue("DisplayName") as string)
                 && IsDotNetCoreBundlePublisher(registryKey.GetValue("Publisher") as string)
@@ -55,31 +57,31 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 && IsNotVisualStudioDummyVersion(registryKey.GetValue("DisplayName") as string);
         }
 
-        private static bool IsNotVisualStudioDummyVersion(string displayName)
+        private bool IsNotVisualStudioDummyVersion(string displayName)
         {
             return !displayName.Contains(" from Visual Studio");
         }
 
-        private static bool IsDotNetCoreBundleDisplayName(string displayName)
+        private bool IsDotNetCoreBundleDisplayName(string displayName)
         {
             return displayName == null ?
                 false :
                 Regexes.BundleDisplayNameRegex.IsMatch(displayName);
         }
 
-        private static bool IsDotNetCoreBundlePublisher(string publisher)
+        private bool IsDotNetCoreBundlePublisher(string publisher)
         {
             return publisher == null ?
                 false :
                 Regexes.BundlePublisherRegex.IsMatch(publisher);
         }
 
-        private static bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)
+        private bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)
         {
             return windowsInstaller == null;
         }
 
-        private static Bundle WrapRegistryKey(RegistryKey registryKey)
+        private Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
@@ -95,7 +97,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return Bundle.From(version, arch, uninstallCommand, displayName);
         }
 
-        private static void ParseVersionAndArch(RegistryKey registryKey, string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)
+        private void ParseVersionAndArch(RegistryKey registryKey, string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
@@ -131,6 +133,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 case "": arch = BundleArch.X64 | BundleArch.X86; break;
                 default: throw new ArgumentException();
             }
+        }
+
+        public IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
+        {
+            return Windows.SupportedBundleTypeConfigs.SupportedBundleTypes;
         }
     }
 }
