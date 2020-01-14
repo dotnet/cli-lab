@@ -208,13 +208,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return args;
         }
 
-        private static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles)
+        public static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles, string userResponse = null)
         {
             var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
             Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat : 
                 LocalizableStrings.MacConfirmationPromptOutputFormat, displayNames));
 
-            var response = Console.ReadLine().Trim().ToUpper();
+            var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
 
             if (response.Equals("Y") || response.Equals("YES"))
             {
@@ -230,7 +230,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles) 
+        public static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles, string userResponse = null) 
         {
             var requiredBundles = bundles.Where(b => !b.Value.Equals(string.Empty));
             foreach (var pair in requiredBundles)
@@ -239,7 +239,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptOutputFormat : 
                     LocalizableStrings.MacRequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
-                var response = Console.ReadLine().Trim().ToUpper();
+                var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
                 if (response.Equals("N"))
                 {
                     return false ;

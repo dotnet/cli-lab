@@ -29,7 +29,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             return sdks.Concat(runtimes).ToList();
         }
 
-        private IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)
+        private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
             string bundleTypeString;
@@ -50,7 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                     string.Format(LocalizableStrings.MacOsBundleDisplayNameFormat, bundleTypeString, group.First().Version.ToString())));
         }
 
-        private IEnumerable<(TBundleVersion Version, string Path)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
+        private static IEnumerable<(TBundleVersion Version, string Path)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
             return Directory.Exists(path) ?
@@ -66,7 +66,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 new List<(TBundleVersion Version, string Path)>();
         }
 
-        private string GetUninstallCommand(IEnumerable<string> paths)
+        private static string GetUninstallCommand(IEnumerable<string> paths)
         {
             return string.Join(" ", paths);
         }

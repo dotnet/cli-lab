@@ -49,7 +49,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return wrappedBundles;
         }
 
-        private bool IsDotNetCoreBundle(RegistryKey registryKey)
+        private static bool IsDotNetCoreBundle(RegistryKey registryKey)
         {
             return IsDotNetCoreBundleDisplayName(registryKey.GetValue("DisplayName") as string)
                 && IsDotNetCoreBundlePublisher(registryKey.GetValue("Publisher") as string)
@@ -57,31 +57,31 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 && IsNotVisualStudioDummyVersion(registryKey.GetValue("DisplayName") as string);
         }
 
-        private bool IsNotVisualStudioDummyVersion(string displayName)
+        private static bool IsNotVisualStudioDummyVersion(string displayName)
         {
             return !displayName.Contains(" from Visual Studio");
         }
 
-        private bool IsDotNetCoreBundleDisplayName(string displayName)
+        private static bool IsDotNetCoreBundleDisplayName(string displayName)
         {
             return displayName == null ?
                 false :
                 Regexes.BundleDisplayNameRegex.IsMatch(displayName);
         }
 
-        private bool IsDotNetCoreBundlePublisher(string publisher)
+        private static bool IsDotNetCoreBundlePublisher(string publisher)
         {
             return publisher == null ?
                 false :
                 Regexes.BundlePublisherRegex.IsMatch(publisher);
         }
 
-        private bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)
+        private static bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)
         {
             return windowsInstaller == null;
         }
 
-        private Bundle WrapRegistryKey(RegistryKey registryKey)
+        private static Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
@@ -97,12 +97,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return Bundle.From(version, arch, uninstallCommand, displayName);
         }
 
-        private void ParseVersionAndArch(RegistryKey registryKey, string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)
+        private static void ParseVersionAndArch(RegistryKey registryKey, string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)
         {
             var match = Regexes.BundleDisplayNameRegex.Match(displayName);
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
             var archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value ?? string.Empty;
             var versionFromCachePath = cachePathMatch.Groups[Regexes.VersionGroupName].Value;
+            // Note: ASP.NET Core runtimes do not include version in the cache path, need to get version from registry:
             var versionFromRegistry = string.Join('.', (registryKey.GetValue("DisplayVersion") as string).Split('.').Take(3));
             var versionString = string.IsNullOrEmpty(versionFromCachePath) ? versionFromRegistry : versionFromCachePath;
             var hasAuxVersion = cachePathMatch.Groups[Regexes.AuxVersionGroupName].Success;
