@@ -18,6 +18,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
     public class CommandBundleFilterTests
     {
         private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "5.0.0", "5.0.1", "10.10.10" };
+        private Dictionary<string, BundleArch> versionsWithArch = new Dictionary<string, BundleArch>
+        {
+            { "3.0.0", BundleArch.X64 },
+            { "3.0.0-preview", BundleArch.X64 },
+            { "1.0.1", BundleArch.X64 },
+            { "1.0.0", BundleArch.X64 },
+            { "3.0.1", BundleArch.X86 },
+            { "3.0.2", BundleArch.X86 },
+            { "3.0.2-preview1", BundleArch.X86 },
+            { "3.0.2-preview2", BundleArch.X86 },
+            { "3.1.0", BundleArch.X86 },
+            { "2.1.1", BundleArch.X86 },
+        };
 
         [WindowsOnlyTheory]
         [InlineData("remove --all --sdk", new string[] { "1.0.0", "1.0.1" })]
@@ -31,7 +44,27 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
             new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200" })]
         internal void TestRequiredUninstallableWhenExplicitlyAddedWindows(string command, string[] expectedUninstallable)
         {
-            TestRequiredUninstallableWhenExplicitlyAdded(command, expectedUninstallable, new string[0]);
+            var bundles = new List<Bundle>();
+            foreach (string v in versions)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), "sdk", v));
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), "runtime", v));
+            }
+            TestRequiredUninstallableWhenExplicitlyAdded(bundles, command, expectedUninstallable, new string[0]);
+        }
+
+        [WindowsOnlyTheory]
+        [InlineData("whatif --all --sdk --x64", new string[] { "3.0.0", "3.0.0-preview", "1.0.0" })]
+        [InlineData("whatif --all --sdk --x86", new string[] { "3.0.1", "3.0.2", "3.0.2-preview1", "3.0.2-preview2" })]
+        internal void TestRequiredUninstallableWithOptionsWindows(string command, string[] expectedUninstallableSdk)
+        {
+            var bundles = new List<Bundle>();
+            foreach (var pair in versionsWithArch)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(pair.Key), pair.Value, "sdk", pair.Key));
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(pair.Key), pair.Value, "runtime", pair.Key));
+            }
+            TestRequiredUninstallableWhenExplicitlyAdded(bundles, command, expectedUninstallableSdk, new string[0]);
         }
 
         [MacOsOnlyTheory]
@@ -43,18 +76,31 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         [InlineData("remove --runtime 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200", new string[] { }, new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200" })]
         internal void TestRequiredUninstallableWhenExplicitlyAddedMac(string command, string[] expectedUninstallableSdk, string[] expectedUninstallableRuntime)
         {
-            TestRequiredUninstallableWhenExplicitlyAdded(command, expectedUninstallableSdk, expectedUninstallableRuntime);
-        }
-
-        internal void TestRequiredUninstallableWhenExplicitlyAdded(string command, string[] expectedUninstallableSdk, string[] expectedUninstallableRuntime)
-        {
             var bundles = new List<Bundle>();
             foreach (string v in versions)
             {
-                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
-                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, v));
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), "sdk", v));
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), "runtime", v));
             }
+            TestRequiredUninstallableWhenExplicitlyAdded(bundles, command, expectedUninstallableSdk, expectedUninstallableRuntime);
+        }
 
+        [MacOsOnlyTheory]
+        [InlineData("remove --all-previews --sdk", new string[] { "3.0.0-preview", "3.0.2-preview1", "3.0.2-preview2" })]
+        [InlineData("remove --all-lower-patches --sdk", new string[] { "1.0.0", "3.0.1", "3.0.0", "3.0.0-preview", "3.0.2-preview1", "3.0.2-preview2" })]
+        internal void TestRequiredUninstallableWithOptionsMac(string command, string[] expectedUninstallableSdk)
+        {
+            var bundles = new List<Bundle>();
+            foreach (var pair in versionsWithArch)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion(pair.Key), pair.Value, "sdk", pair.Key));
+                bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(pair.Key), pair.Value, "runtime", pair.Key));
+            }
+            TestRequiredUninstallableWhenExplicitlyAdded(bundles, command, expectedUninstallableSdk, new string[0]);
+        }
+
+        internal void TestRequiredUninstallableWhenExplicitlyAdded(IEnumerable<Bundle> bundles, string command, string[] expectedUninstallableSdk, string[] expectedUninstallableRuntime)
+        {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
             var uninstallableBundles = CommandBundleFilter.GetFilteredBundles(bundles, parseResult);
 
@@ -63,13 +109,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
             var uninstallableRuntimes = uninstallableBundles.Where(b => b.Version is RuntimeVersion).Select(b => b.DisplayName);
             var requiredRuntimes = bundles.Except(uninstallableBundles).Where(b => b.Version is RuntimeVersion).Select(b => b.DisplayName);
 
-            (uninstallableSdks.Count() + requiredSdks.Count()).Should().Be(versions.Length);
+            bundles = bundles.Where(bundle => command.Contains(bundle.UninstallCommand)); // Only check bundles of type specified (SDK, Runtime, etc)
+            (uninstallableSdks.Count() + requiredSdks.Count()).Should().Be(bundles.Count());
             uninstallableSdks.ToHashSet().Should().BeEquivalentTo(expectedUninstallableSdk.ToHashSet());
-            requiredSdks.Should().BeEquivalentTo(versions.Where(v => !expectedUninstallableSdk.Contains(v)));
+            requiredSdks.Should().BeEquivalentTo(bundles.Select(bundle => bundle.DisplayName).Where(v => !expectedUninstallableSdk.Contains(v)));
 
-            (uninstallableRuntimes.Count() + requiredRuntimes.Count()).Should().Be(versions.Length);
+            (uninstallableRuntimes.Count() + requiredRuntimes.Count()).Should().Be(bundles.Count());
             uninstallableRuntimes.ToHashSet().Should().BeEquivalentTo(expectedUninstallableRuntime.ToHashSet());
-            requiredRuntimes.Should().BeEquivalentTo(versions.Where(v => !expectedUninstallableRuntime.Contains(v)));
+            requiredRuntimes.Should().BeEquivalentTo(bundles.Select(bundle => bundle.DisplayName).Where(v => !expectedUninstallableRuntime.Contains(v)));
         }
 
         [Theory]

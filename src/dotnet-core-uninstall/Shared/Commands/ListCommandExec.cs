@@ -15,15 +15,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class ListCommandExec
     {
-        private static IConsole SysConsole;
-        private static Region Region;
-        private static string[] Args;
-
-        public static void Execute(IBundleCollector bundleCollector, IConsole console = null, Region region = null, string[] args = null)
+        public static void Execute(IBundleCollector bundleCollector)
         {
-            SysConsole = console == null? new SystemConsole() : console;
-            Region = region == null? new Region(0, 0, Console.WindowWidth, int.MaxValue) : region;
-            Args = args == null? Environment.GetCommandLineArgs(): args;
             Execute(
                 bundleCollector.GetAllInstalledBundles(),
                 bundleCollector.GetSupportedBundleTypes());
@@ -35,38 +28,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             Console.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsListCommandOutput : LocalizableStrings.MacListCommandOutput);
 
-            var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
-
-            var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Args);
-
+            var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
             var verbose = listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Detailed) ||
                 listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Diagnostic);
-            var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
-            var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
+
+            var sortedBundles = GetFilteredBundlesWithRequirements(bundles, supportedBundleTypes, listCommandParseResult);
 
             var stackView = new StackLayoutView();
-
-            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
-
-
             var footnotes = new List<string>();
 
-            foreach (var bundleType in supportedBundleTypes)
+            foreach ((var bundleType, var filteredBundles) in sortedBundles)
             {
-                if (typeSelection.HasFlag(bundleType.Type))
-                {
-                    var filteredBundlesByType = bundleType
-                        .Filter(filteredBundlesByArch);
-                    var filteredWithStrings = uninstallMap.Where(pair => filteredBundlesByType.Contains(pair.Key)).ToDictionary(i => i.Key, i => i.Value);
+                stackView.Add(new ContentView(bundleType.Header));
+                stackView.Add(bundleType.GridViewGenerator.Invoke(filteredBundles, verbose));
+                stackView.Add(new ContentView(string.Empty));
 
-                    stackView.Add(new ContentView(bundleType.Header));
-                    stackView.Add(bundleType.GridViewGenerator.Invoke(filteredWithStrings, verbose));
-                    stackView.Add(new ContentView(string.Empty));
-
-                    footnotes.AddRange(filteredBundlesByType
-                        .Where(bundle => bundle.Version.HasFootnote)
-                        .Select(bundle => bundle.Version.Footnote));
-                }
+                footnotes.AddRange(filteredBundles
+                    .Where(bundle => bundle.Key.Version.HasFootnote)
+                    .Select(bundle => bundle.Key.Version.Footnote));
             }
 
             foreach (var footnote in footnotes)
@@ -80,8 +59,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
 
             stackView.Render(
-                new ConsoleRenderer(SysConsole),
-                Region);
+                new ConsoleRenderer(new SystemConsole()),
+                new Region(0, 0, Console.WindowWidth, int.MaxValue));
+        }
+
+        public static Dictionary<BundleTypePrintInfo, Dictionary<Bundle, string>> GetFilteredBundlesWithRequirements(
+            IEnumerable<Bundle> bundles,
+            IEnumerable<BundleTypePrintInfo> supportedBundleTypes, 
+            ParseResult parseResult)
+        {
+            var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+
+            var typeSelection = parseResult.CommandResult.GetTypeSelection();
+            var archSelection = parseResult.CommandResult.GetArchSelection();
+
+            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
+
+            return supportedBundleTypes.Where(type => typeSelection.HasFlag(type.Type))
+                                       .Select(type => new KeyValuePair<BundleTypePrintInfo, Dictionary<Bundle, string>>(type,
+                                            uninstallMap.Where(pair => type.Filter(filteredBundlesByArch).Contains(pair.Key)).ToDictionary(i => i.Key, i => i.Value)))
+                                       .ToDictionary(i => i.Key, i => i.Value);
         }
     }
 }
