@@ -3,6 +3,8 @@
 
 using System.CommandLine.Invocation;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall
 {
@@ -10,6 +12,10 @@ namespace Microsoft.DotNet.Tools.Uninstall
     {
         internal static int Main(string[] args)
         {
+            if (!(RuntimeInfo.RunningOnOSX || RuntimeInfo.RunningOnWindows))
+            {
+                throw new OperatingSystemNotSupportedException();
+            }
             return CommandLineConfigs.UninstallCommandParser.InvokeAsync(args).Result;
         }
     }

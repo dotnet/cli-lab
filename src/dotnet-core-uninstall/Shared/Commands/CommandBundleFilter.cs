@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
-using Microsoft.DotNet.Tools.Uninstall.Windows;
 using System.Reflection;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using System.Linq;
@@ -31,23 +29,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 }
             });
 
-        private static IEnumerable<Bundle> GetAllBundles()
-        {
-            if (RuntimeInfo.RunningOnWindows)
-            {
-                return RegistryQuery.GetAllInstalledBundles();
-            }
-            else if (RuntimeInfo.RunningOnOSX)
-            {
-                return FileSystemExplorer.GetAllInstalledBundles();
-            }
-            else
-            {
-                throw new OperatingSystemNotSupportedException();
-            }
-        }
-
-        public static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> bundles, ParseResult parseResult = null)
+        public static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> allBundles, ParseResult parseResult = null)
         {
             if (parseResult == null)
             {
@@ -57,6 +39,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var option = parseResult.CommandResult.GetUninstallMainOption();
             var typeSelection = parseResult.CommandResult.GetTypeSelection();
             var archSelection = parseResult.CommandResult.GetArchSelection();
+            var bundles = allBundles;
 
             if (option == null)
             {
@@ -83,7 +66,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             if (parseResult.CommandResult.OptionResult(CommandLineConfigs.ForceOption.Name) == null)
             {
-                bundles = FilterRequiredBundles(bundles, parseResult.CommandResult.Tokens);
+                bundles = FilterRequiredBundles(allBundles, parseResult.CommandResult.Tokens).Intersect(bundles);
             }
             if (bundles.Any(bundle => bundle.Version.SemVer >= VisualStudioSafeVersionsExtractor.UpperLimit))
             {
@@ -92,9 +75,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return bundles;
         }
 
-        public static IDictionary<Bundle, string> GetFilteredWithRequirementStrings()
+        public static IDictionary<Bundle, string> GetFilteredWithRequirementStrings(IBundleCollector bundleCollector)
         {
-            var allBundles = GetAllBundles();
+            var allBundles = bundleCollector.GetAllInstalledBundles();
             var filteredBundles = GetFilteredBundles(allBundles);
             return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles)
                     .Where(pair => filteredBundles.Contains(pair.Key))

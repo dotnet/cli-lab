@@ -79,7 +79,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Allowed values are &quot;Y&quot; and &quot;n&quot;..
+        ///   Looks up a localized string similar to Allowed values are &quot;Y&quot;, &quot;YES&quot;, and &quot;N&quot;..
         /// </summary>
         internal static string ConfirmationPromptInvalidExceptionMessage {
             get {

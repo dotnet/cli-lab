@@ -4,11 +4,13 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.Linq;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using Microsoft.DotNet.Tools.Uninstall.Windows;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
@@ -177,7 +179,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             { "diag", VerbosityLevel.Diagnostic }, { "diagnostic", VerbosityLevel.Diagnostic }
         };
 
-        public static readonly ParseResult CommandLineParseResult;
+        public static ParseResult CommandLineParseResult;
         public static readonly IEnumerable<Option> RemoveAuxOptions;
         public static readonly IEnumerable<Option> DryRunAuxOptions;
         public static readonly IEnumerable<Option> WhatIfAuxOptions;
@@ -185,7 +187,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         static CommandLineConfigs() 
         {
-            UninstallRootCommand.AddOption(new Option("--version", LocalizableStrings.VersionOptionDescription));
             DryRunCommand.AddAlias(WhatIfCommandName);
 
             UninstallRootCommand.AddCommand(ListCommand);
@@ -226,12 +227,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
             AssignOptionsToCommand(ListCommand, ListAuxOptions);
 
-            ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute()));
-            DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute()));
-            RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute()));
+            var bundleCollector = RuntimeInfo.RunningOnWindows ? new RegistryQuery() as IBundleCollector : new FileSystemExplorer() as IBundleCollector;
+            ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute(bundleCollector)));
+            DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute(bundleCollector)));
+            RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute(bundleCollector)));
 
             UninstallCommandParser = new CommandLineBuilder(UninstallRootCommand)
                 .UseDefaults()
+                .UseVersionOption()
                 .UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
                 .Build();
             CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());

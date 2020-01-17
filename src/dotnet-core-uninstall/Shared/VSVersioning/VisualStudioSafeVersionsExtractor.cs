@@ -111,7 +111,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             }
 
             return requirementStringResults
-                .OrderByDescending(pair => pair.bundle)
+                .OrderByDescending(pair => pair.bundle.DisplayName)
                 .ToDictionary(i => i.bundle, i => i.Item2);
         }
     }

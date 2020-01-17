@@ -4,11 +4,11 @@ using System.IO;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
-using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
-    internal static class FileSystemExplorer
+    internal class FileSystemExplorer : IBundleCollector
     {
         private static readonly string DotNetInstallPath = Path.Combine("/", "usr", "local", "share", "dotnet");
         private static readonly string DotNetSdkInstallPath = Path.Combine(DotNetInstallPath, "sdk");
@@ -17,12 +17,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         private static readonly string DotNetAspAppInstallPath = Path.Combine(DotNetInstallPath, "shared", "Microsoft.AspNetCore.App");
         private static readonly string DotNetHostFxrInstallPath = Path.Combine(DotNetInstallPath, "host", "fxr");
 
-        public static IEnumerable<Bundle> GetInstalledBundles()
-        {
-            return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(GetAllInstalledBundles());
-        }
-
-        public static IEnumerable<Bundle> GetAllInstalledBundles()
+        public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
             var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath);
             var runtimes = GetInstalledBundles<RuntimeVersion>(
@@ -74,6 +69,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
         private static string GetUninstallCommand(IEnumerable<string> paths)
         {
             return string.Join(" ", paths);
+        }
+
+        public IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
+        {
+            return MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes;
         }
     }
 }

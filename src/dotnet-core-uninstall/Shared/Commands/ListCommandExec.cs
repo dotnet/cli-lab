@@ -8,33 +8,18 @@ using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs.Verbosity;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
-using Microsoft.DotNet.Tools.Uninstall.Windows;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class ListCommandExec
     {
-        public static void Execute()
+        public static void Execute(IBundleCollector bundleCollector)
         {
-            if (RuntimeInfo.RunningOnWindows)
-            {
-                Execute(
-                    RegistryQuery.GetAllInstalledBundles(),
-                    Windows.SupportedBundleTypeConfigs.SupportedBundleTypes);
-            }
-            else if (RuntimeInfo.RunningOnOSX)
-            {
-                Execute(
-                    FileSystemExplorer.GetAllInstalledBundles(),
-                    MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes);
-            }
-            else
-            {
-                throw new OperatingSystemNotSupportedException();
-            }
+            Execute(
+                bundleCollector.GetAllInstalledBundles(),
+                bundleCollector.GetSupportedBundleTypes());
         }
 
         private static void Execute(
@@ -44,36 +29,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             Console.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsListCommandOutput : LocalizableStrings.MacListCommandOutput);
 
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
-
             var verbose = listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Detailed) ||
                 listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Diagnostic);
-            var typeSelection = listCommandParseResult.CommandResult.GetTypeSelection();
-            var archSelection = listCommandParseResult.CommandResult.GetArchSelection();
+
+            var sortedBundles = GetFilteredBundlesWithRequirements(bundles, supportedBundleTypes, listCommandParseResult);
 
             var stackView = new StackLayoutView();
-
-            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
-
-
             var footnotes = new List<string>();
 
-            foreach (var bundleType in supportedBundleTypes)
+            foreach ((var bundleType, var filteredBundles) in sortedBundles)
             {
-                if (typeSelection.HasFlag(bundleType.Type))
-                {
-                    var filteredBundlesByType = bundleType
-                        .Filter(filteredBundlesByArch);
+                stackView.Add(new ContentView(bundleType.Header));
+                stackView.Add(bundleType.GridViewGenerator.Invoke(filteredBundles, verbose));
+                stackView.Add(new ContentView(string.Empty));
 
-                    var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(filteredBundlesByType);
-
-                    stackView.Add(new ContentView(bundleType.Header));
-                    stackView.Add(bundleType.GridViewGenerator.Invoke(uninstallMap, verbose));
-                    stackView.Add(new ContentView(string.Empty));
-
-                    footnotes.AddRange(filteredBundlesByType
-                        .Where(bundle => bundle.Version.HasFootnote)
-                        .Select(bundle => bundle.Version.Footnote));
-                }
+                footnotes.AddRange(filteredBundles
+                    .Where(bundle => bundle.Key.Version.HasFootnote)
+                    .Select(bundle => bundle.Key.Version.Footnote));
             }
 
             foreach (var footnote in footnotes)
@@ -89,6 +61,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             stackView.Render(
                 new ConsoleRenderer(new SystemConsole()),
                 new Region(0, 0, Console.WindowWidth, int.MaxValue));
+        }
+
+        public static Dictionary<BundleTypePrintInfo, Dictionary<Bundle, string>> GetFilteredBundlesWithRequirements(
+            IEnumerable<Bundle> bundles,
+            IEnumerable<BundleTypePrintInfo> supportedBundleTypes, 
+            ParseResult parseResult)
+        {
+            var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+
+            var typeSelection = parseResult.CommandResult.GetTypeSelection();
+            var archSelection = parseResult.CommandResult.GetArchSelection();
+
+            var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
+
+            return supportedBundleTypes.Where(type => typeSelection.HasFlag(type.Type))
+                                       .Select(type => new KeyValuePair<BundleTypePrintInfo, Dictionary<Bundle, string>>(type,
+                                            uninstallMap.Where(pair => type.Filter(filteredBundlesByArch).Contains(pair.Key)).ToDictionary(i => i.Key, i => i.Value)))
+                                       .ToDictionary(i => i.Key, i => i.Value);
         }
     }
 }

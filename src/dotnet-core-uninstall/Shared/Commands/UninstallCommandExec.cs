@@ -11,6 +11,7 @@ using System.Threading;
 using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
+using Microsoft.DotNet.Tools.Uninstall.MacOs;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -26,11 +27,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
-        public static void Execute()
+        public static void Execute(IBundleCollector bundleCollector)
         {
             CommandBundleFilter.HandleVersionOption();
 
-            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings();
+            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector);
 
             if (CommandLineConfigs.CommandLineParseResult.CommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
             {
@@ -207,15 +208,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return args;
         }
 
-        private static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles)
+        public static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles, string userResponse = null)
         {
             var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
             Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat : 
                 LocalizableStrings.MacConfirmationPromptOutputFormat, displayNames));
 
-            var response = Console.ReadLine().Trim().ToUpper();
+            var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
 
-            if (response.Equals("Y"))
+            if (response.Equals("Y") || response.Equals("YES"))
             {
                 return true;
             }
@@ -229,7 +230,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        private static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles) 
+        public static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles, string userResponse = null) 
         {
             var requiredBundles = bundles.Where(b => !b.Value.Equals(string.Empty));
             foreach (var pair in requiredBundles)
@@ -238,12 +239,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptOutputFormat : 
                     LocalizableStrings.MacRequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
-                var response = Console.ReadLine().Trim().ToUpper();
+                var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
                 if (response.Equals("N"))
                 {
                     return false ;
                 }
-                else if (!response.Equals("Y"))
+                else if (!(response.Equals("Y") || response.Equals("YES")))
                 {
                     throw new ConfirmationPromptInvalidException();
                 }

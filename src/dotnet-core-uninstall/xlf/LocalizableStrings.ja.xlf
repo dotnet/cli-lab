@@ -13,8 +13,8 @@
         <note />
       </trans-unit>
       <trans-unit id="ConfirmationPromptInvalidExceptionMessage">
-        <source>Allowed values are "Y" and "n".</source>
-        <target state="new">Allowed values are "Y" and "n".</target>
+        <source>Allowed values are "Y", "YES", and "N".</source>
+        <target state="new">Allowed values are "Y", "YES", and "N".</target>
         <note />
       </trans-unit>
       <trans-unit id="DryRunCommandDescription">

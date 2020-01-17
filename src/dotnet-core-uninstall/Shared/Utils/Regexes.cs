@@ -97,6 +97,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
             $@"\\dotnet\-(?<{TypeGroupName}>runtime)\-{_runtimeVersionCachePathRegex}\-win\-{_archRegex.ToString()}\.exe|\\dotnet\-win\-{_archRegex.ToString()}\.{_runtimeVersionCachePathRegex.ToString()}\.exe");
         private static readonly Regex _aspNetRuntimeCachePathRegex = new Regex(
             $@"\\(?<{TypeGroupName}>AspNetCore)\.{_aspNetRuntimeVersionCachePathRegex.ToString()}\.RuntimePackageStore_{_archRegex.ToString()}\.exe|\\(?<{TypeGroupName}>aspnetcore\-runtime)\-{_aspNetRuntimeVersionCachePathRegex.ToString()}\-win\-{_archRegex.ToString()}\.exe");
+        private static readonly Regex _aspNetSharedFrameworkCachePathRegex = new Regex(
+            $@"\\(?<{TypeGroupName}>AspNetCoreSharedFrameworkBundle)-{_archRegex.ToString()}\.exe");
         private static readonly Regex _hostingBundleCachePathRegex = new Regex(
             $@"\\DotNetCore\.({_hostingBundleAuxVersionCachePathRegex.ToString()}_)?{_hostingBundleVersionCachePathRegex.ToString()}\-(?<{TypeGroupName}>WindowsHosting)\.exe|\\dotnetcore\.{_hostingBundleAuxVersionCachePathRegex.ToString()}_{_hostingBundleVersionCachePathRegex.ToString()}\-(?<{TypeGroupName}>windowshosting)\.exe|\\dotnet\-(?<{TypeGroupName}>hosting)\-{_hostingBundleVersionCachePathRegex.ToString()}\-win\.exe");
 
@@ -107,6 +109,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         public static readonly Regex BundleDisplayNameRegex = new Regex(
             $@"^({_sdkDisplayNameRegex.ToString()}|{_runtimeDisplayNameRegex.ToString()}|{_aspNetRuntimeDisplayNameRegex.ToString()}|{_hostingBundleDisplayNameRegex.ToString()})$");
         public static readonly Regex BundleCachePathRegex = new Regex(
-            $@"({_sdkCachePathRegex.ToString()}|{_runtimeCachePathRegex.ToString()}|{_aspNetRuntimeCachePathRegex.ToString()}|{_hostingBundleCachePathRegex.ToString()})$");
+            $@"({_sdkCachePathRegex.ToString()}|{_runtimeCachePathRegex.ToString()}|{_aspNetRuntimeCachePathRegex.ToString()}|{_aspNetSharedFrameworkCachePathRegex.ToString()}|{_hostingBundleCachePathRegex.ToString()})$");
     }
 }
