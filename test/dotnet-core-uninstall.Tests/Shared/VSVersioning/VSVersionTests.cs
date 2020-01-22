@@ -259,5 +259,38 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
 
             return output;
         }
+
+        [Fact]
+        internal void TestUninstallableStringsCorrectManySDKs()
+        {
+            var bundles = new List<Bundle>
+            {
+                new Bundle<SdkVersion>(new SdkVersion("3.0.100-preview-0"), BundleArch.X64, string.Empty, "3.0.100"),
+                new Bundle<RuntimeVersion>(new RuntimeVersion("2.0.0"), BundleArch.X64, string.Empty, "2.0.0"),
+            };
+
+            for (int i = 0; i < 5; i++)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion("2.0." + i), BundleArch.X64, string.Empty, "2.0." + i));
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion("2.0." + i + "-preview-0"), BundleArch.X64, string.Empty, "2.0." + i + "-preview-0"));
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion("2.0." + i + "-preview-1"), BundleArch.X64, string.Empty, "2.0." + i + "-preview-1"));
+            }
+
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            strings.Count.Should().Be(bundles.Count);
+
+            var expectedProtected = new string[]{ "3.0.100", "2.0.4" };
+            var expectedUninstallable = bundles.Select(bundle => bundle.DisplayName)
+                .Except(expectedProtected);
+
+            strings.Where(pair => pair.Key.Version is SdkVersion)
+                .Where(pair => string.IsNullOrEmpty(pair.Value))
+                .Select(pair => pair.Key.DisplayName)
+                .Should().BeEquivalentTo(expectedUninstallable);
+            
+            strings.Where(pair => !string.IsNullOrEmpty(pair.Value))
+                .Select(pair => pair.Key.DisplayName)
+                .Should().BeEquivalentTo(expectedProtected);
+        }
     }
 }
