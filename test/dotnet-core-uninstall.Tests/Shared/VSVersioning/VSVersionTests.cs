@@ -260,7 +260,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             return output;
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         internal void TestUninstallableStringsCorrectManySDKs()
         {
             var bundles = new List<Bundle>
@@ -283,7 +283,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             AssertRequirementStringsCorrect(bundles, strings, expectedProtected);
         }
 
-        [Fact]
+        [WindowsOnlyFact]
         internal void TestUninstallableStringsCorrectAcrossRequirementDivisions()
         {
             var bundles = new List<Bundle>
