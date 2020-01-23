@@ -53,7 +53,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         }
     }
 
-    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle<TBundleVersion>>, IEquatable<Bundle<TBundleVersion>>
+    internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle>, IEquatable<Bundle<TBundleVersion>>
         where TBundleVersion: BundleVersion, IComparable<TBundleVersion>
     {
         public new TBundleVersion Version => base.Version as TBundleVersion;
@@ -64,10 +64,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
         public int CompareTo(object obj)
         {
-            return CompareTo(obj as Bundle<TBundleVersion>);
+            return CompareTo(obj as Bundle);
         }
 
-        public int CompareTo(Bundle<TBundleVersion> other)
+        public int CompareTo(Bundle other)
         {
             if (other == null)
             {
@@ -76,7 +76,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
 
             return Version.Equals(other.Version) ?
                 Arch - other.Arch :
-                Version.CompareTo(other.Version);
+                Version.SemVer.CompareTo(other.Version.SemVer);
         }
 
         public static IEnumerable<Bundle<TBundleVersion>> FilterWithSameBundleType(IEnumerable<Bundle> bundles)

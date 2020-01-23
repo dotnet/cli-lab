@@ -93,5 +93,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
         }
 
         public abstract Bundle ToBundle(BundleArch arch, string uninstallCommand, string displayName);
+
+        public SemanticVersion GetVersionWithoutTags()
+        {
+            return new SemanticVersion(this.Major, this.Minor, this.SemVer.Patch);
+        }
     }
 }

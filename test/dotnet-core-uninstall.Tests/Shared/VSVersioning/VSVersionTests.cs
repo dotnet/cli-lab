@@ -259,5 +259,60 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
 
             return output;
         }
+
+        [WindowsOnlyFact]
+        internal void TestUninstallableStringsCorrectManySDKs()
+        {
+            var bundles = new List<Bundle>
+            {
+                new Bundle<SdkVersion>(new SdkVersion("3.0.100-preview-0"), BundleArch.X64, string.Empty, "3.0.100"),
+                new Bundle<RuntimeVersion>(new RuntimeVersion("2.0.0"), BundleArch.X64, string.Empty, "2.0.0"),
+            };
+
+            for (int i = 0; i < 5; i++)
+            {
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion("2.0." + i), BundleArch.X64, string.Empty, "2.0." + i));
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion("2.0." + i + "-preview-0"), BundleArch.X64, string.Empty, "2.0." + i + "-preview-0"));
+                bundles.Add(new Bundle<SdkVersion>(new SdkVersion("2.0." + i + "-preview-1"), BundleArch.X64, string.Empty, "2.0." + i + "-preview-1"));
+            }
+
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            strings.Count.Should().Be(bundles.Count);
+
+            var expectedProtected = new string[]{ "3.0.100", "2.0.4" };
+            AssertRequirementStringsCorrect(bundles, strings, expectedProtected);
+        }
+
+        [WindowsOnlyFact]
+        internal void TestUninstallableStringsCorrectAcrossRequirementDivisions()
+        {
+            var bundles = new List<Bundle>
+            {
+                new Bundle<SdkVersion>(new SdkVersion("2.0.0"), BundleArch.X64, string.Empty, "2.0.0"),
+                new Bundle<SdkVersion>(new SdkVersion("2.0.0-preview-0"), BundleArch.X64, string.Empty, "2.0.0-preview-0"),
+                new Bundle<SdkVersion>(new SdkVersion("2.0.0-preview-1"), BundleArch.X64, string.Empty, "2.0.0-preview-1")
+            };
+
+            var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            var expectedProtected = new string[] { "2.0.0" };
+            AssertRequirementStringsCorrect(bundles, strings, expectedProtected);
+        }
+
+        private void AssertRequirementStringsCorrect(List<Bundle> bundles, Dictionary<Bundle, string> bundleStringPairs, string[] expectedProtected)
+        {
+            bundleStringPairs.Count.Should().Be(bundles.Count);
+
+            var expectedUninstallable = bundles.Select(bundle => bundle.DisplayName)
+                .Except(expectedProtected);
+
+            bundleStringPairs.Where(pair => pair.Key.Version is SdkVersion)
+                .Where(pair => string.IsNullOrEmpty(pair.Value))
+                .Select(pair => pair.Key.DisplayName)
+                .Should().BeEquivalentTo(expectedUninstallable);
+
+            bundleStringPairs.Where(pair => !string.IsNullOrEmpty(pair.Value))
+                .Select(pair => pair.Key.DisplayName)
+                .Should().BeEquivalentTo(expectedProtected);
+        }
     }
 }

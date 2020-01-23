@@ -30,7 +30,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             var dividedBundles = new Dictionary<IEnumerable<Bundle>, string>();
             foreach (var (division, explaination) in WindowsVersionDivisionsToExplaination)
             {
-                var bundlesInRange = bundleList.Where(bundle => bundle.Version is SdkVersion && division.Item1 <= bundle.Version.SemVer && bundle.Version.SemVer < division.Item2);
+                var bundlesInRange = bundleList.Where(bundle => bundle.Version is SdkVersion && 
+                                                      division.Item1 <= bundle.Version.GetVersionWithoutTags() && bundle.Version.GetVersionWithoutTags() < division.Item2);
                 bundleList = bundleList.Except(bundlesInRange);
                 if (bundlesInRange.Count() > 0)
                 {
