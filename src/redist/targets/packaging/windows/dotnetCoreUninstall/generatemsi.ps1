@@ -51,7 +51,6 @@ function RunCandle
 
     $candleOutput = .\candle.exe -nologo `
         -dDotnetSrc="$inputDir" `
-        -dMicrosoftEula="$PSScriptRoot\dotnetCoreUninstall\dummyeula.rtf" `
         -dProductMoniker="$ProductMoniker" `
         -dBuildVersion="$DotnetMSIVersion" `
         -dUpgradeCode="$UpgradeCode" `
