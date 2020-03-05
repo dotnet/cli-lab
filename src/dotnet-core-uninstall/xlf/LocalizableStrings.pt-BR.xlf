@@ -182,13 +182,13 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="MacRuntimeRequirementExplainationString">
-        <source>Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</source>
-        <target state="new">Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</target>
+        <source>Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</source>
+        <target state="new">Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="MacSDKRequirementExplainationString">
-        <source>Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</source>
-        <target state="new">Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove</target>
+        <source>Used by Visual Studio for Mac. Specify individually or use —-force to remove</source>
+        <target state="new">Used by Visual Studio for Mac. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
@@ -422,10 +422,18 @@ Run as administrator and use the remove command to uninstall these items.</targe
       </trans-unit>
       <trans-unit id="WindowsListCommandOutput">
         <source>
-This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+This tool can not uninstall versions of the runtime or SDK that are 
+    - SDKs installed using Visual Studio 2019 Update 3 or later.
+    - SDKs and runtimes installed via zip/scripts.
+    - Runtimes installed with SDKs (these should be removed by removing that SDK).
+The versions that can be uninstalled with this tool are:
 </source>
         <target state="new">
-This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+This tool can not uninstall versions of the runtime or SDK that are 
+    - SDKs installed using Visual Studio 2019 Update 3 or later.
+    - SDKs and runtimes installed via zip/scripts.
+    - Runtimes installed with SDKs (these should be removed by removing that SDK).
+The versions that can be uninstalled with this tool are:
 </target>
         <note />
       </trans-unit>
@@ -456,8 +464,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="WindowsRequirementExplainationString">
-        <source>Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</source>
-        <target state="new">Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove</target>
+        <source>Used by Visual Studio{0}. Specify individually or use —-force to remove</source>
+        <target state="new">Used by Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">

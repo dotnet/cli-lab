@@ -326,7 +326,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maybe needed for Visual Studio for Mac or SDKs. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove.
         /// </summary>
         internal static string MacRuntimeRequirementExplainationString {
             get {
@@ -335,7 +335,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maybe needed for Visual Studio for Mac. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by Visual Studio for Mac. Specify individually or use —-force to remove.
         /// </summary>
         internal static string MacSDKRequirementExplainationString {
             get {
@@ -726,7 +726,11 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///This tool can not uninstall versions of the runtime or SDK that are installed using Visual Studio 2019 Update 3 or via zip/scripts. The versions that can be uninstalled with this tool are:
+        ///This tool can not uninstall versions of the runtime or SDK that are 
+        ///    - SDKs installed using Visual Studio 2019 Update 3 or later.
+        ///    - SDKs and runtimes installed via zip/scripts.
+        ///    - Runtimes installed with SDKs (these should be removed by removing that SDK).
+        ///The versions that can be uninstalled with this tool are:
         ///.
         /// </summary>
         internal static string WindowsListCommandOutput {
@@ -762,7 +766,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Maybe needed for Visual Studio{0}. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by Visual Studio{0}. Specify individually or use —-force to remove.
         /// </summary>
         internal static string WindowsRequirementExplainationString {
             get {
