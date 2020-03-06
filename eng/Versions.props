@@ -10,5 +10,7 @@
     <VersionMinor>0</VersionMinor>
     <VersionPatch>0</VersionPatch>
     <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionPatch)</VersionPrefix>
+    <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
+    <DotNetFinalVersionKind>release</DotNetFinalVersionKind>
   </PropertyGroup>
 </Project>
