@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <CoreSdkTaskDll>$(ArtifactsDir)tasks\bin\core-sdk-tasks\$(Configuration)\netcoreapp3.0\core-sdk-tasks.dll</CoreSdkTaskDll>
+    <CoreSdkTaskDll>$(ArtifactsDir)tasks\bin\core-sdk-tasks\$(Configuration)\netcoreapp3.1\core-sdk-tasks.dll</CoreSdkTaskDll>
     <CoreSdkTaskProject>$(RepoRoot)src\core-sdk-tasks\core-sdk-tasks.csproj</CoreSdkTaskProject>
   </PropertyGroup>
 

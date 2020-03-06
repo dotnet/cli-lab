@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win-x86;osx-x64</RuntimeIdentifiers>
     <SignAssembly>true</SignAssembly>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
