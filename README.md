@@ -2,6 +2,9 @@
 # Uninstall Tool: `dotnet-core-uninstall`
 This repo contains the `dotnet-core-uninstall` tool, a command line tool for uninstalling versions of the .NET Core SDK, Runtime, ASP.NET Core Runtime, and Hosting Bundles. For more information about the use of this tool, see the docs [here](https://aka.ms/dotnet-core-uninstall-docs). To download the latest version of the tool, see [the releases page](https://github.com/dotnet/cli-lab/releases).
 
+## Why isn’t the .NET Core Uninstall Tool a .NET Core Global Tool?
+An early prototype of the .NET Core Uninstall Tool was a .NET Core Global Tool. Since .NET Core Global Tools are runtime-dependent applications they use a version of the .NET Core Runtime that is installed on the machine. The purpose of the tool is to uninstall arbitrary .NET Core SDKs and Runtimes, so may attempt to uninstall the version that’s running the current process. When this happened, we didn’t find a way to recover from the error and uninstall other SDKs and Runtimes. We saw this as particularly problematic because users might not be clear what runtimes are in SDKs that are being uninstalled or which runtime is currently being used.
+
 ## Contributing
 We welcome you to try things out, [file issues](https://github.com/dotnet/cli-lab/issues), make feature requests and join us in design conversations.
 
