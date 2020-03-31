@@ -60,7 +60,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             stackView.Render(
                 new ConsoleRenderer(new SystemConsole()),
-                new Region(0, 0, Console.WindowWidth, int.MaxValue));
+                new Region(0, 0, int.MaxValue, int.MaxValue));
         }
 
         public static Dictionary<BundleTypePrintInfo, Dictionary<Bundle, string>> GetFilteredBundlesWithRequirements(
