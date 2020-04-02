@@ -113,13 +113,13 @@
 
 To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Do you want to continue? [Y/n] </source>
+Do you want to continue? [y/n] </source>
         <target state="new">The following items will be removed:
 {0}
 
 To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Do you want to continue? [Y/n] </target>
+Do you want to continue? [y/n] </target>
         <note />
       </trans-unit>
       <trans-unit id="MacDryRunOutputFormat">
@@ -161,13 +161,13 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
 
 Uninstalling this item will cause Visual Studio for Mac to break.
 
-Are you sure you want to continue? [Y/n] </source>
+Are you sure you want to continue? [y/n] </source>
         <target state="new">
 {0}: {1}
 
 Uninstalling this item will cause Visual Studio for Mac to break.
 
-Are you sure you want to continue? [Y/n] </target>
+Are you sure you want to continue? [y/n] </target>
         <note />
       </trans-unit>
       <trans-unit id="MacRequiredBundleConfirmationPromptWarningFormat">
@@ -392,13 +392,13 @@ Uninstalling this item will cause Visual Studio for to break.
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Do you want to continue? [Y/n] </source>
+Do you want to continue? [y/n] </source>
         <target state="new">The following items will be removed:
 {0}
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Do you want to continue? [Y/n] </target>
+Do you want to continue? [y/n] </target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsDryRunOutputFormat">
@@ -443,13 +443,13 @@ The versions that can be uninstalled with this tool are:
 
 Uninstalling this item will cause Visual Studio to break.
 
-Are you sure you want to continue? [Y/n] </source>
+Are you sure you want to continue? [y/n] </source>
         <target state="new">
 {0}: {1}
 
 Uninstalling this item will cause Visual Studio to break.
 
-Are you sure you want to continue? [Y/n] </target>
+Are you sure you want to continue? [y/n] </target>
         <note />
       </trans-unit>
       <trans-unit id="WindowsRequiredBundleConfirmationPromptWarningFormat">
@@ -469,8 +469,8 @@ Uninstalling this item will cause Visual Studio to break.
         <note />
       </trans-unit>
       <trans-unit id="YesOptionDescription">
-        <source>Execute the command without requiring Y/n confirmation.</source>
-        <target state="new">Execute the command without requiring Y/n confirmation.</target>
+        <source>Execute the command without requiring y/n confirmation.</source>
+        <target state="new">Execute the command without requiring y/n confirmation.</target>
         <note />
       </trans-unit>
     </body>

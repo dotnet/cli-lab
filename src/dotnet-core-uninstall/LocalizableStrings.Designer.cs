@@ -255,7 +255,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///
         ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
         ///
-        ///Do you want to continue? [Y/n] .
+        ///Do you want to continue? [y/n] .
         /// </summary>
         internal static string MacConfirmationPromptOutputFormat {
             get {
@@ -305,7 +305,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///
         ///Uninstalling this item will cause Visual Studio for Mac to break.
         ///
-        ///Are you sure you want to continue? [Y/n] .
+        ///Are you sure you want to continue? [y/n] .
         /// </summary>
         internal static string MacRequiredBundleConfirmationPromptOutputFormat {
             get {
@@ -700,7 +700,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///
         ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
         ///
-        ///Do you want to continue? [Y/n] .
+        ///Do you want to continue? [y/n] .
         /// </summary>
         internal static string WindowsConfirmationPromptOutputFormat {
             get {
@@ -745,7 +745,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///
         ///Uninstalling this item will cause Visual Studio to break.
         ///
-        ///Are you sure you want to continue? [Y/n] .
+        ///Are you sure you want to continue? [y/n] .
         /// </summary>
         internal static string WindowsRequiredBundleConfirmationPromptOutputFormat {
             get {
@@ -775,7 +775,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Execute the command without requiring Y/n confirmation..
+        ///   Looks up a localized string similar to Execute the command without requiring y/n confirmation..
         /// </summary>
         internal static string YesOptionDescription {
             get {

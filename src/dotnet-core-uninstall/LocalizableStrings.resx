@@ -271,7 +271,7 @@
     <value>Display .NET Core SDKs and Runtimes that will be removed.</value>
   </data>
   <data name="YesOptionDescription" xml:space="preserve">
-    <value>Execute the command without requiring Y/n confirmation.</value>
+    <value>Execute the command without requiring y/n confirmation.</value>
   </data>
   <data name="WindowsDryRunOutputFormat" xml:space="preserve">
     <value>*** DRY RUN OUTPUT
@@ -289,7 +289,7 @@ Run as administrator and use the remove command to uninstall these items.</value
 
 To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Do you want to continue? [Y/n] </value>
+Do you want to continue? [y/n] </value>
   </data>
   <data name="ConfirmationPromptInvalidExceptionMessage" xml:space="preserve">
     <value>Allowed values are "Y", "YES", and "N".</value>
@@ -306,7 +306,7 @@ Do you want to continue? [Y/n] </value>
 
 Uninstalling this item will cause Visual Studio to break.
 
-Are you sure you want to continue? [Y/n] </value>
+Are you sure you want to continue? [y/n] </value>
   </data>
   <data name="WindowsRequiredBundleConfirmationPromptWarningFormat" xml:space="preserve">
     <value>
@@ -364,7 +364,7 @@ This tool can not uninstall versions of the runtime or SDK that are installed us
 
 To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
 
-Do you want to continue? [Y/n] </value>
+Do you want to continue? [y/n] </value>
   </data>
   <data name="MacDryRunOutputFormat" xml:space="preserve">
     <value>*** DRY RUN OUTPUT
@@ -382,7 +382,7 @@ Run as administrator and use the remove command to uninstall these items.</value
 
 Uninstalling this item will cause Visual Studio for Mac to break.
 
-Are you sure you want to continue? [Y/n] </value>
+Are you sure you want to continue? [y/n] </value>
   </data>
   <data name="MacRequiredBundleConfirmationPromptWarningFormat" xml:space="preserve">
     <value>
