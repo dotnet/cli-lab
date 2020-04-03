@@ -3,7 +3,6 @@
     <DotnetCoreUninstallOutputDirectory>$(ArtifactsDir)layout\dotnet-core-uninstall\</DotnetCoreUninstallOutputDirectory>
     <DownloadsFolder>$(IntermediateOutputPath)downloads\</DownloadsFolder>
     <_PublishSingleFileForRid>true</_PublishSingleFileForRid>
-    <_PublishSingleFileForRid Condition="'$(RID)' == 'win-x86'">false</_PublishSingleFileForRid>
     <_GenerateLayoutDependsOnTargets>CleanLayoutPath;PublishDotnetCoreUninstallProject</_GenerateLayoutDependsOnTargets>
     <_GenerateLayoutDependsOnTargets Condition="'$(RID)' == 'win-x86'">CleanLayoutPath;PublishDotnetCoreUninstallProject;SignLayout</_GenerateLayoutDependsOnTargets>
   </PropertyGroup>
