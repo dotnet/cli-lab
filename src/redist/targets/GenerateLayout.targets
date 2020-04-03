@@ -25,5 +25,12 @@
       Properties="PublishDir=$(DotnetCoreUninstallOutputDirectory);PublishSingleFile=$(_PublishSingleFileForRid);RuntimeIdentifier=$(RID);PublishTrimmed=true;SelfContained=true"
       Targets="Publish">
     </MSBuild>
+
+    <MakeDir Directories="$(ArtifactsShippingPackagesDir)"
+             Condition="'$(RID)' == 'win-x86'" />
+    <ZipDirectory SourceDirectory="$(DotnetCoreUninstallOutputDirectory)" 
+                  DestinationFile="$(ArtifactsShippingPackagesDir)dotnet-core-uninstall.zip"
+                  Condition="'$(RID)' == 'win-x86'"
+                  Overwrite="true" />
   </Target>
 </Project>
