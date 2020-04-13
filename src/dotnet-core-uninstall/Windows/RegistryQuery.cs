@@ -111,7 +111,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 string.Format(LocalizableStrings.HostingBundleFootnoteFormat, displayName, versionString) :
                 null;
 
-            if (string.IsNullOrEmpty(displayName) || string.IsNullOrEmpty(versionString) || string.IsNullOrEmpty(archString))
+            if (string.IsNullOrEmpty(displayName) || string.IsNullOrEmpty(versionString))
             {
                 version = null;
                 arch = BundleArch.X64 | BundleArch.X86;
