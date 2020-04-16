@@ -18,7 +18,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         private static readonly Regex _majorMinorRegex = new Regex(
             $@"(?<{MajorGroupName}>\d+)\.(?<{MinorGroupName}>\d+)");
         private static readonly Regex _previewVersionNumberRegex = new Regex(
-            $@"(\d+(\.\d+)?)?");
+            $@"(\d+(\.\d+)*)?");
         private static readonly Regex _previewVersionNumberRuntimeDisplayNameRegex = new Regex(
             $@"(\s\d+(\.\d+)?)?");
         private static readonly Regex _rcVersionNumberRegex = new Regex(
@@ -35,7 +35,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         private static readonly Regex _previewVersionAspNetRuntimeDisplayNameRegex = new Regex(
             $@"(?<{PreviewGroupName}>\s(Preview{_previewVersionNumberRuntimeDisplayNameRegex.ToString()}(\sBuild\s{_buildNumberRegex.ToString()}(\.\d+|\-\d+)?)?|Release\sCandidate\s{_rcVersionNumberRegex.ToString()}))");
         private static readonly Regex _previewVersionHostingBundleDisplayNameRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\s(Preview{_previewVersionNumberRuntimeDisplayNameRegex.ToString()}(\s(Build\s{_buildNumberRegex.ToString()}(\.\d+|\-\d+)?|{_buildNumberRegex.ToString()}(\s{_buildNumberRegex.ToString()})?(\spreview{_previewVersionNumberRegex.ToString()})?))?|Release\sCandidate\s{_rcVersionNumberRegex.ToString()}))");
+            $@"(?<{PreviewGroupName}>\s(Preview{_previewVersionNumberRuntimeDisplayNameRegex.ToString()}(\s(Build\s{_buildNumberRegex.ToString()}(\.\d+|\-\d+)?|Build\spreview{_previewVersionNumberRegex.ToString()}|{_buildNumberRegex.ToString()}(\s{_buildNumberRegex.ToString()})?(\spreview{_previewVersionNumberRegex.ToString()})?))?|Release\sCandidate\s{_rcVersionNumberRegex.ToString()}))");
         private static readonly Regex _previewVersionSdkCachePathRegex = new Regex(
             $@"(?<{PreviewGroupName}>\-(preview{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}(\.\d+)?)\-(?<{BuildGroupName}>\d+))");
         private static readonly Regex _previewVersionRuntimeCachePathRegex = new Regex(
