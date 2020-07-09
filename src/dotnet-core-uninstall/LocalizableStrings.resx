@@ -331,7 +331,7 @@ Uninstalling this item will cause Visual Studio to break.
   </data>
   <data name="WindowsListCommandOutput" xml:space="preserve">
     <value>
-This tool can not uninstall versions of the runtime or SDK that are 
+This tool cannot uninstall versions of the runtime or SDK that are 
     - SDKs installed using Visual Studio 2019 Update 3 or later.
     - SDKs and runtimes installed via zip/scripts.
     - Runtimes installed with SDKs (these should be removed by removing that SDK).
@@ -349,7 +349,7 @@ The versions that can be uninstalled with this tool are:
   </data>
   <data name="MacListCommandOutput" xml:space="preserve">
     <value>
-This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+This tool cannot uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
 </value>
   </data>
   <data name="HelpExplainationParagraphMac" xml:space="preserve">
