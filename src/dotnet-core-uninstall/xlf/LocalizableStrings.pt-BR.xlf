@@ -143,10 +143,10 @@ Run as administrator and use the remove command to uninstall these items.</targe
       </trans-unit>
       <trans-unit id="MacListCommandOutput">
         <source>
-This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+This tool cannot uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
 </source>
         <target state="new">
-This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+This tool cannot uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
 </target>
         <note />
       </trans-unit>
@@ -422,14 +422,14 @@ Run as administrator and use the remove command to uninstall these items.</targe
       </trans-unit>
       <trans-unit id="WindowsListCommandOutput">
         <source>
-This tool can not uninstall versions of the runtime or SDK that are 
+This tool cannot uninstall versions of the runtime or SDK that are 
     - SDKs installed using Visual Studio 2019 Update 3 or later.
     - SDKs and runtimes installed via zip/scripts.
     - Runtimes installed with SDKs (these should be removed by removing that SDK).
 The versions that can be uninstalled with this tool are:
 </source>
         <target state="new">
-This tool can not uninstall versions of the runtime or SDK that are 
+This tool cannot uninstall versions of the runtime or SDK that are 
     - SDKs installed using Visual Studio 2019 Update 3 or later.
     - SDKs and runtimes installed via zip/scripts.
     - Runtimes installed with SDKs (these should be removed by removing that SDK).
