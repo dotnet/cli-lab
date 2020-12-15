@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
+using System.CommandLine.Parsing;
 using System.Linq;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -234,7 +235,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             UninstallCommandParser = new CommandLineBuilder(UninstallRootCommand)
                 .UseDefaults()
-                .UseVersionOption()
                 .UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
                 .Build();
             CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());
@@ -243,7 +243,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static Option GetUninstallMainOption(this CommandResult commandResult)
         {
             var specified = UninstallFilterBundlesOptions
-                .Where(option => commandResult.OptionResult(option.Name) != null);
+                .Where(option => commandResult.FindResultFor(option) != null);
 
             if (specified.Count() > 1)
             {
@@ -277,6 +277,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             var supportedBundleTypes = SupportedBundleTypeConfigs.GetSupportedBundleTypes();
 
+            //TODO: fix this, new version accepts alias instead of option name
             var typeSelection = supportedBundleTypes
                 .Where(type => commandResult.OptionResult(type.OptionName) != null)
                 .Select(type => type.Type)
@@ -294,6 +295,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 (OptionName: X64OptionName, Arch: BundleArch.X64),
                 (OptionName: X86OptionName, Arch: BundleArch.X86)
             }
+            // TODO: fix this, new version accepts alias instead of option name
             .Where(tuple => commandResult.OptionResult(tuple.OptionName) != null)
             .Select(tuple => tuple.Arch)
             .Aggregate((BundleArch)0, (orSum, next) => orSum | next);
@@ -305,7 +307,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
         {
-            var optionResult = commandResult.OptionResult(VerbosityOption.Name);
+            var optionResult = commandResult.FindResultFor(VerbosityOption);
 
             if (optionResult == null)
             {

@@ -9,6 +9,7 @@ using System.Linq;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using NuGet.Versioning;
+using System.CommandLine.Parsing;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {

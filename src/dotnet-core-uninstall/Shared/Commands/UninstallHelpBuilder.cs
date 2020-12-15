@@ -1,4 +1,6 @@
-﻿using System.CommandLine;
+﻿using System;
+using System.CommandLine;
+using System.CommandLine.Help;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
@@ -12,8 +14,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             base.Write(command);
             if (command.Name.Equals("dry-run") || command.Name.Equals("remove"))
             {
-                Console.Out.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
+                Console.Out.Write(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
                     LocalizableStrings.HelpExplainationParagraphMac);
+                Console.Out.Write(Environment.NewLine);
             }
         }
     }

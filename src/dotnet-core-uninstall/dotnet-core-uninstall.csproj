@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="2.3.2200-develop-g2d3a6646" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0" />
     <PackageReference Include="NuGet.Versioning" Version="5.3.1" />
-    <PackageReference Include="System.CommandLine.Experimental" Version="0.3.0-alpha.19573.2" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
     <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.19573.2" />
     <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
   </ItemGroup>
