@@ -40,6 +40,8 @@ macOS/Linux
 
     $ ./build.sh
 
+Note: If you see the error NETSDK1031 when running the build script, make sure you specify a runtime ID by adding `/p:RID={ id }` (for example, `/p:RID=win-x86`) as a command line argument.
+
 ### Running tests
 
 To build **and** run tests:
