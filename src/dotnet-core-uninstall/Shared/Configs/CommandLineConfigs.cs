@@ -273,13 +273,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             return specifiedOption;
         }
 
-        public static BundleType GetTypeSelection(this CommandResult commandResult)
+        public static BundleType GetTypeSelection(this ParseResult parseResult)
         {
             var supportedBundleTypes = SupportedBundleTypeConfigs.GetSupportedBundleTypes();
 
-            //TODO: fix this, new version accepts alias instead of option name
             var typeSelection = supportedBundleTypes
-                .Where(type => commandResult.OptionResult(type.OptionName) != null)
+                .Where(type => parseResult.ValueForOption<bool>($"--{type.OptionName}"))
                 .Select(type => type.Type)
                 .Aggregate((BundleType)0, (orSum, next) => orSum | next);
 
@@ -288,15 +287,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 typeSelection;
         }
 
-        public static BundleArch GetArchSelection(this CommandResult commandResult)
+        public static BundleArch GetArchSelection(this ParseResult parseResult)
         {
             var archSelection = new[]
             {
                 (OptionName: X64OptionName, Arch: BundleArch.X64),
                 (OptionName: X86OptionName, Arch: BundleArch.X86)
             }
-            // TODO: fix this, new version accepts alias instead of option name
-            .Where(tuple => commandResult.OptionResult(tuple.OptionName) != null)
+            .Where(tuple => parseResult.ValueForOption<bool>($"--{tuple.OptionName}"))
             .Select(tuple => tuple.Arch)
             .Aggregate((BundleArch)0, (orSum, next) => orSum | next);
 

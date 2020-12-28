@@ -72,8 +72,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
 
-            var typeSelection = parseResult.CommandResult.GetTypeSelection();
-            var archSelection = parseResult.CommandResult.GetArchSelection();
+            var typeSelection = parseResult.GetTypeSelection();
+            var archSelection = parseResult.GetArchSelection();
 
             var filteredBundlesByArch = bundles.Where(bundle => archSelection.HasFlag(bundle.Arch));
 

@@ -706,7 +706,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            parseResult.CommandResult.GetTypeSelection()
+            parseResult.GetTypeSelection()
                 .Should().Be(expected);
         }
 
@@ -729,7 +729,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            parseResult.CommandResult.GetTypeSelection()
+            parseResult.GetTypeSelection()
                 .Should().Be(expected);
         }
 
@@ -747,7 +747,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            parseResult.CommandResult.GetTypeSelection()
+            parseResult.GetTypeSelection()
                 .Should().Be(expected);
         }
 
@@ -814,7 +814,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             parseResult.UnparsedTokens.Should().BeEmpty();
             parseResult.UnmatchedTokens.Should().BeEmpty();
 
-            parseResult.CommandResult.OptionResult(CommandLineConfigs.VersionOption.Name)
+            parseResult.CommandResult.FindResultFor(CommandLineConfigs.VersionOption)
                 .Should().NotBeNull();
         }
     }
