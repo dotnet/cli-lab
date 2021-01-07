@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
@@ -42,7 +43,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             var bundles = names
                 .Select(name => uninstalls.OpenSubKey(name))
-                .Where(bundle => IsDotNetCoreBundle(bundle));
+                .Where(bundle => IsNetCoreBundle(bundle));
 
             var wrappedBundles = bundles
               .Select(bundle => WrapRegistryKey(bundle))
@@ -52,36 +53,34 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return wrappedBundles;
         }
 
-        private static bool IsDotNetCoreBundle(RegistryKey registryKey)
+        private static bool IsNetCoreBundle(RegistryKey uninstallKey)
         {
-            return IsDotNetCoreBundleDisplayName(registryKey.GetValue("DisplayName") as string)
-                && IsDotNetCoreBundlePublisher(registryKey.GetValue("Publisher") as string)
-                && IsDotNetCoreBundleUninstaller(registryKey.GetValue("WindowsInstaller") as int?)
-                && IsNotVisualStudioDummyVersion(registryKey.GetValue("DisplayName") as string);
+            if (uninstallKey == null)
+            {
+                return false;
+            }
+
+            return IsNetCoreBundle(uninstallKey.GetValue("DisplayName") as string,
+                uninstallKey.GetValue("DisplayVersion") as string,
+                uninstallKey.GetValue("UninstallString") as string,
+                uninstallKey.GetValue("BundleVersion") as string);
         }
 
-        private static bool IsNotVisualStudioDummyVersion(string displayName)
+        internal static bool IsNetCoreBundle(string displayName, string displayVersion, string uninstallString, string bundleVersion)
         {
-            return !displayName.Contains(" from Visual Studio");
-        }
-
-        private static bool IsDotNetCoreBundleDisplayName(string displayName)
-        {
-            return displayName == null ?
-                false :
-                Regexes.BundleDisplayNameRegex.IsMatch(displayName);
-        }
-
-        private static bool IsDotNetCoreBundlePublisher(string publisher)
-        {
-            return publisher == null ?
-                false :
-                Regexes.BundlePublisherRegex.IsMatch(publisher);
-        }
-
-        private static bool IsDotNetCoreBundleUninstaller(int? windowsInstaller)
-        {
-            return windowsInstaller == null;
+            return (!String.IsNullOrEmpty(displayName)) &&
+                    (displayName.IndexOf("Visual Studio", StringComparison.OrdinalIgnoreCase) < 0) &&
+                    (displayName.IndexOf("VS 2015", StringComparison.OrdinalIgnoreCase) < 0) &&
+                    (displayName.IndexOf("Local Feed", StringComparison.OrdinalIgnoreCase) < 0) &&
+                    ((displayName.IndexOf(".NET Core", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                     (displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                     (displayName.IndexOf(".NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                     (displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0)) &&
+                    (!String.IsNullOrEmpty(uninstallString)) &&
+                    (uninstallString.IndexOf(".exe", StringComparison.OrdinalIgnoreCase) >= 0) &&
+                    (uninstallString.IndexOf("msiexec", StringComparison.OrdinalIgnoreCase) < 0) &&
+                    (!String.IsNullOrEmpty(displayVersion)) &&
+                    (!String.IsNullOrEmpty(bundleVersion));
         }
 
         private static Bundle WrapRegistryKey(RegistryKey registryKey)
@@ -90,7 +89,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
             var bundleCachePath = registryKey.GetValue("BundleCachePath") as string;
 
-            ParseVersionAndArch(registryKey, displayName, bundleCachePath, out var version, out var arch);
+            var version = GetBundleVersion(displayName, uninstallCommand, bundleCachePath);
+            var arch = GetBundleArch(displayName, bundleCachePath);
 
             if (version == null)
             {
@@ -100,41 +100,59 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return Bundle.From(version, arch, uninstallCommand, displayName);
         }
 
-        private static void ParseVersionAndArch(RegistryKey registryKey, string displayName, string bundleCachePath, out BundleVersion version, out BundleArch arch)
+        private static BundleVersion GetBundleVersion(string displayName, string uninstallString, string bundleCachePath)
         {
-            var match = Regexes.BundleDisplayNameRegex.Match(displayName);
+            var versionString = Regexes.VersionDisplayNameRegex.Match(displayName)?.Value ?? string.Empty;
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
-            var archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value ?? string.Empty;
-            var versionFromCachePath = cachePathMatch.Groups[Regexes.VersionGroupName].Value;
-            // Note: ASP.NET Core runtimes do not include version in the cache path, need to get version from registry:
-            var versionFromRegistry = string.Join('.', (registryKey.GetValue("DisplayVersion") as string).Split('.').Take(3));
-            var versionString = string.IsNullOrEmpty(versionFromCachePath) ? versionFromRegistry : versionFromCachePath;
             var hasAuxVersion = cachePathMatch.Groups[Regexes.AuxVersionGroupName].Success;
             var footnote = hasAuxVersion ?
                 string.Format(LocalizableStrings.HostingBundleFootnoteFormat, displayName, versionString) :
                 null;
 
-            if (string.IsNullOrEmpty(displayName) || string.IsNullOrEmpty(versionString))
+            // Classify the bundle type
+            if (displayName.IndexOf("Windows Server", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                version = null;
-                arch = BundleArch.X64 | BundleArch.X86;
-                return;
+                return new HostingBundleVersion(versionString, footnote);
             }
-
-            switch (match.Groups[Regexes.TypeGroupName].Value)
+            else if (displayName.IndexOf("ASP.NET", StringComparison.OrdinalIgnoreCase) >= 0)
             {
-                case "SDK": version = new SdkVersion(versionString); break;
-                case "Runtime": version = new RuntimeVersion(versionString); break;
-                case "ASP.NET": version = new AspNetRuntimeVersion(versionString); break;
-                case "Windows Server Hosting": version = new HostingBundleVersion(versionString, footnote); break;
-                default: throw new ArgumentException();
+                return new AspNetRuntimeVersion(versionString);
+            }
+            else if ((displayName.IndexOf(".NET Core SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    (displayName.IndexOf("Microsoft .NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    uninstallString.IndexOf("dotnet-dev-win") >= 0)
+            {
+                return new SdkVersion(versionString);
+            }
+            else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
+                displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                return new RuntimeVersion(versionString);
+            }
+            else {
+                return null;
+            }
+        }
+
+        private static BundleArch GetBundleArch(string displayName, string bundleCachePath)
+        {
+            const string x64String = "x64";
+            const string x86String = "x86";
+
+            var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
+
+            var archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
+
+            if (string.IsNullOrEmpty(archString))
+            {
+                archString = displayName.Contains(x64String) ? x64String : displayName.Contains(x86String) ? x86String : string.Empty;
             }
 
             switch (archString)
             {
-                case "x64": arch = BundleArch.X64; break;
-                case "x86": arch = BundleArch.X86; break;
-                case "": arch = BundleArch.X64 | BundleArch.X86; break;
+                case x64String: return BundleArch.X64;
+                case x86String: return BundleArch.X86;
+                case "": return BundleArch.X64 | BundleArch.X86;
                 default: throw new ArgumentException();
             }
         }

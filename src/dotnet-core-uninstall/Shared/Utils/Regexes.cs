@@ -22,25 +22,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
             $@"(?<{MajorGroupName}>\d+)\.(?<{MinorGroupName}>\d+)");
         private static readonly Regex _previewVersionNumberRegex = new Regex(
             $@"(\d+(\.\d+)*)?");
-        private static readonly Regex _previewVersionNumberRuntimeDisplayNameRegex = new Regex(
-            $@"(\s\d+(\.\d+)?)?");
         private static readonly Regex _rcVersionNumberRegex = new Regex(
             $@"\d+");
         private static readonly Regex _buildNumberRegex = new Regex(
             $@"(?<{BuildGroupName}>\d+)");
         private static readonly Regex _archRegex = new Regex(
-            $@"(?<{ArchGroupName}>x64|x86)");
+            $@"(?<{ArchGroupName}>\-?x64|x86)");
 
         private static readonly Regex _previewVersionSdkDisplayNameRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\s\-\s(preview{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}))");
-        private static readonly Regex _previewVersionRuntimeDisplayNameRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\s(Preview{_previewVersionNumberRuntimeDisplayNameRegex.ToString()}|Release\sCandidate\s{_rcVersionNumberRegex.ToString()}))");
-        private static readonly Regex _previewVersionAspNetRuntimeDisplayNameRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\s(Preview{_previewVersionNumberRuntimeDisplayNameRegex.ToString()}(\sBuild\s{_buildNumberRegex.ToString()}(\.\d+|\-\d+)?)?|Release\sCandidate\s{_rcVersionNumberRegex.ToString()}))");
-        private static readonly Regex _previewVersionHostingBundleDisplayNameRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\s(Preview{_previewVersionNumberRuntimeDisplayNameRegex.ToString()}(\s(Build\s{_buildNumberRegex.ToString()}(\.\d+|\-\d+)?|Build\spreview{_previewVersionNumberRegex.ToString()}|{_buildNumberRegex.ToString()}(\s{_buildNumberRegex.ToString()})?(\spreview{_previewVersionNumberRegex.ToString()})?))?|Release\sCandidate\s{_rcVersionNumberRegex.ToString()}))");
+            $@"(?<{PreviewGroupName}>\s?\-\s?((preview|alpha)\.?{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}))");
         private static readonly Regex _previewVersionSdkCachePathRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\-(preview{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}(\.\d+)?)\-(?<{BuildGroupName}>\d+))");
+            $@"(?<{PreviewGroupName}>\-((preview|alpha)\.?{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}(\.\d+)?)\-(?<{BuildGroupName}>\d+))");
         private static readonly Regex _previewVersionRuntimeCachePathRegex = new Regex(
             $@"(?<{PreviewGroupName}>\-(preview{_previewVersionNumberRegex.ToString()}\-{_buildNumberRegex.ToString()}\-\d+|rc{_rcVersionNumberRegex.ToString()}))");
         private static readonly Regex _previewVersionAspNetRuntimeCachePathRegex = new Regex(
@@ -56,29 +48,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
             $@"(?<{VersionGroupName}>{_notCapturedRuntimeVersionBasicRegexFormat})";
         private static readonly string _runtimeAuxVersionBasicRegexFormat =
             $@"(?<{AuxVersionGroupName}>{_notCapturedRuntimeVersionBasicRegexFormat})";
-        private static readonly Regex _sdkVersionDisplayNameRegex = new Regex(string.Format(
-            _sdkVersionBasicRegexFormat,
-            _previewVersionSdkDisplayNameRegex.ToString()));
-        private static readonly Regex _runtimeVersionDisplayNameRegex = new Regex(string.Format(
-            _runtimeVersionBasicRegexFormat,
-            _previewVersionRuntimeDisplayNameRegex.ToString()));
-        private static readonly Regex _aspNetRuntimeVersionDisplayNameRegex = new Regex(string.Format(
-            _runtimeVersionBasicRegexFormat,
-            _previewVersionAspNetRuntimeDisplayNameRegex.ToString()));
-        private static readonly Regex _hostingBundleVersionDisplayNameRegex = new Regex(string.Format(
-            _runtimeVersionBasicRegexFormat,
-            _previewVersionHostingBundleDisplayNameRegex.ToString()));
-        private static readonly Regex _hostingBundleAuxVersionDisplayNameRegex = new Regex(string.Format(
-            _runtimeAuxVersionBasicRegexFormat,
-            _previewVersionHostingBundleDisplayNameRegex.ToString()));
-        private static readonly Regex _sdkDisplayNameRegex = new Regex(
-            $@"(\.NET\sCore\s(?<{TypeGroupName}>SDK)\s{_sdkVersionDisplayNameRegex.ToString()}|Microsoft\s\.NET\sCore\s(?<{TypeGroupName}>SDK)\s(\-\s)?{_sdkVersionDisplayNameRegex.ToString()})\s\({_archRegex.ToString()}\)");
-        private static readonly Regex _runtimeDisplayNameRegex = new Regex(
-            $@"(Microsoft\s\.NET\sCore\s(?<{TypeGroupName}>Runtime)\s\-\s{_runtimeVersionDisplayNameRegex.ToString()}|Microsoft\s\.NET\sCore\s{_runtimeVersionDisplayNameRegex.ToString()}\s\-\s(?<{TypeGroupName}>Runtime))\s\({_archRegex.ToString()}\)");
-        private static readonly Regex _aspNetRuntimeDisplayNameRegex = new Regex(
-            $@"Microsoft\s(?<{TypeGroupName}>ASP\.NET)\sCore\s{_aspNetRuntimeVersionDisplayNameRegex.ToString()}\s\-\s(Shared\sFramework|Runtime\sPackage\sStore)");
-        private static readonly Regex _hostingBundleDisplayNameRegex = new Regex(
-            $@"Microsoft\s\.NET\sCore\s(({_hostingBundleAuxVersionDisplayNameRegex.ToString()}\s\&\s)?{_hostingBundleVersionDisplayNameRegex.ToString()}|{_previewVersionHostingBundleDisplayNameRegex.ToString()})\s\-\s(?<{TypeGroupName}>Windows\sServer\sHosting)(\s\-\s{_buildNumberRegex.ToString()})?");
         private static readonly Regex _sdkVersionCachePathRegex = new Regex(string.Format(
             _sdkVersionBasicRegexFormat,
             _previewVersionSdkCachePathRegex.ToString()));
@@ -105,12 +74,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
         private static readonly Regex _hostingBundleCachePathRegex = new Regex(
             $@"\\DotNetCore\.({_hostingBundleAuxVersionCachePathRegex.ToString()}_)?{_hostingBundleVersionCachePathRegex.ToString()}\-(?<{TypeGroupName}>WindowsHosting)\.exe|\\dotnetcore\.{_hostingBundleAuxVersionCachePathRegex.ToString()}_{_hostingBundleVersionCachePathRegex.ToString()}\-(?<{TypeGroupName}>windowshosting)\.exe|\\dotnet\-(?<{TypeGroupName}>hosting)\-{_hostingBundleVersionCachePathRegex.ToString()}\-win\.exe");
 
-        public static readonly Regex BundlePublisherRegex = new Regex(
-            @"^Microsoft\sCorporation$");
+        public static readonly Regex VersionDisplayNameRegex = new Regex(string.Format(
+            _sdkVersionBasicRegexFormat,
+            _previewVersionSdkDisplayNameRegex.ToString()));
         public static readonly Regex BundleMajorMinorRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}$");
-        public static readonly Regex BundleDisplayNameRegex = new Regex(
-            $@"^({_sdkDisplayNameRegex.ToString()}|{_runtimeDisplayNameRegex.ToString()}|{_aspNetRuntimeDisplayNameRegex.ToString()}|{_hostingBundleDisplayNameRegex.ToString()})$");
         public static readonly Regex BundleCachePathRegex = new Regex(
             $@"({_sdkCachePathRegex.ToString()}|{_runtimeCachePathRegex.ToString()}|{_aspNetRuntimeCachePathRegex.ToString()}|{_aspNetSharedFrameworkCachePathRegex.ToString()}|{_hostingBundleCachePathRegex.ToString()})$");
     }
