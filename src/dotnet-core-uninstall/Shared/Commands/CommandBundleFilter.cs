@@ -9,6 +9,7 @@ using System.Linq;
 using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using NuGet.Versioning;
+using System.CommandLine.Parsing;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -37,8 +38,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
 
             var option = parseResult.CommandResult.GetUninstallMainOption();
-            var typeSelection = parseResult.CommandResult.GetTypeSelection();
-            var archSelection = parseResult.CommandResult.GetArchSelection();
+            var typeSelection = parseResult.GetTypeSelection();
+            var archSelection = parseResult.GetArchSelection();
             var bundles = allBundles;
 
             if (option == null)
@@ -64,7 +65,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     archSelection);
             }
 
-            if (parseResult.CommandResult.OptionResult(CommandLineConfigs.ForceOption.Name) == null)
+            if (parseResult.FindResultFor(CommandLineConfigs.ForceOption) == null)
             {
                 bundles = FilterRequiredBundles(allBundles, parseResult.CommandResult.Tokens).Intersect(bundles);
             }
@@ -86,7 +87,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         public static void HandleVersionOption()
         {
-            if (CommandLineConfigs.CommandLineParseResult.CommandResult.OptionResult(CommandLineConfigs.VersionOption.Name) != null)
+            if (CommandLineConfigs.CommandLineParseResult.FindResultFor(CommandLineConfigs.VersionOption) != null)
             {
                 Console.WriteLine(_assemblyVersion.Value);
                 Environment.Exit(0);

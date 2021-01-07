@@ -1,5 +1,6 @@
 ﻿using System.CommandLine;
-using System.CommandLine.Invocation;
+using System.CommandLine.IO;
+using System.CommandLine.Parsing;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Xunit;
