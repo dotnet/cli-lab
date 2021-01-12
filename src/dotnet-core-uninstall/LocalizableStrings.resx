@@ -196,7 +196,7 @@
     <value>VERSION</value>
   </data>
   <data name="UninstallNoOptionDescriptionWindows" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall-docs.</value>
   </data>
   <data name="VerbosityOptionArgumentName" xml:space="preserve">
     <value>LEVEL</value>
@@ -211,7 +211,7 @@
     <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
-    <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall.</value>
+    <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall-docs.</value>
   </data>
   <data name="MoreThanOneVersionSpecifiedExceptionMessageFormat" xml:space="preserve">
     <value>You must specify exactly one version for option: {0}.</value>
@@ -279,7 +279,7 @@ Specified versions:
 {0}
 *** END DRY RUN OUTPUT
 
-To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Run as administrator and use the remove command to uninstall these items.</value>
   </data>
@@ -287,7 +287,7 @@ Run as administrator and use the remove command to uninstall these items.</value
     <value>The following items will be removed:
 {0}
 
-To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Do you want to continue? [y/n] </value>
   </data>
@@ -339,7 +339,7 @@ The versions that can be uninstalled with this tool are:
 </value>
   </data>
   <data name="UninstallNoOptionDescriptionMac" xml:space="preserve">
-    <value>Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall.</value>
+    <value>Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall-docs.</value>
   </data>
   <data name="MacRuntimeRequirementExplainationString" xml:space="preserve">
     <value>Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</value>
@@ -362,7 +362,7 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
     <value>The following items will be removed:
 {0}
 
-To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Do you want to continue? [y/n] </value>
   </data>
@@ -372,7 +372,7 @@ Specified versions:
 {0}
 *** END DRY RUN OUTPUT
 
-To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Run as administrator and use the remove command to uninstall these items.</value>
   </data>

@@ -253,7 +253,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///   Looks up a localized string similar to The following items will be removed:
         ///{0}
         ///
-        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
         ///
         ///Do you want to continue? [y/n] .
         /// </summary>
@@ -269,7 +269,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///{0}
         ///*** END DRY RUN OUTPUT
         ///
-        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
         ///
         ///Run as administrator and use the remove command to uninstall these items..
         /// </summary>
@@ -281,7 +281,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///This tool can not uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
+        ///This tool cannot uninstall versions of the runtime or SDK that are installed using zip/scripts. The versions that can be uninstalled with this tool are:
         ///.
         /// </summary>
         internal static string MacListCommandOutput {
@@ -362,7 +362,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall..
+        ///   Looks up a localized string similar to The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall-docs..
         /// </summary>
         internal static string NotAdminExceptionMessage {
             get {
@@ -569,7 +569,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall..
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall-docs..
         /// </summary>
         internal static string UninstallNoOptionDescriptionMac {
             get {
@@ -578,7 +578,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall..
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. This tool can only uninstall items that were installed using Visual Studio, .NET Core SDK, or Runtime installers. By default, this tool does not uninstall versions that might be needed for Visual Studio. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall-docs..
         /// </summary>
         internal static string UninstallNoOptionDescriptionWindows {
             get {
@@ -698,7 +698,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///   Looks up a localized string similar to The following items will be removed:
         ///{0}
         ///
-        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
         ///
         ///Do you want to continue? [y/n] .
         /// </summary>
@@ -714,7 +714,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///{0}
         ///*** END DRY RUN OUTPUT
         ///
-        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall.
+        ///To avoid breaking Visual Studio or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
         ///
         ///Run as administrator and use the remove command to uninstall these items..
         /// </summary>
@@ -726,7 +726,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         
         /// <summary>
         ///   Looks up a localized string similar to 
-        ///This tool can not uninstall versions of the runtime or SDK that are 
+        ///This tool cannot uninstall versions of the runtime or SDK that are 
         ///    - SDKs installed using Visual Studio 2019 Update 3 or later.
         ///    - SDKs and runtimes installed via zip/scripts.
         ///    - Runtimes installed with SDKs (these should be removed by removing that SDK).
