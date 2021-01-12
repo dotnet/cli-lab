@@ -34,7 +34,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning
             {
                 SemVer = semVer;
             }
-            else
+            else if(value != null && SemanticVersion.TryParse(value.Replace(" ", ""), out var formattedSemVer))
+            {
+                SemVer = formattedSemVer;
+            }
+            else 
             {
                 throw new InvalidInputVersionException(value);
             }
