@@ -36,7 +36,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector);
 
-            if (CommandLineConfigs.CommandLineParseResult.CommandResult.OptionResult(CommandLineConfigs.YesOption.Name) != null)
+            if (CommandLineConfigs.CommandLineParseResult.FindResultFor(CommandLineConfigs.YesOption) != null)
             {
                 if (!IsAdmin())
                 {
