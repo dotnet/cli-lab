@@ -8,11 +8,11 @@ namespace Microsoft.Build.Logging.Query.Ast
 {
     public sealed class TargetNode : ComponentNode<Target, Project>, IEquatable<TargetNode>
     {
-        public TargetNode(List<ConstraintNode<Target>> constraints = null) : base(null, constraints)
+        public TargetNode(List<ConstraintNode<Target, Project>> constraints = null) : base(null, constraints)
         {
         }
 
-        public TargetNode(IAstNode<Target> next, List<ConstraintNode<Target>> constraints = null) :
+        public TargetNode(IAstNode<Target> next, List<ConstraintNode<Target, Project>> constraints = null) :
             base(next ?? throw new ArgumentNullException(), constraints)
         {
         }
@@ -35,9 +35,10 @@ namespace Microsoft.Build.Logging.Query.Ast
         public override IEnumerable<IQueryResult> Filter(IEnumerable<Project> components)
         {
             var targets = components
-                .SelectMany(project => project.OrderedTargets);
+                .SelectMany(project => project.OrderedTargets)
+                .Distinct();
 
-            var filteredTargets = FilterByConstraints(targets);
+            var filteredTargets = FilterByConstraints(targets, components);
 
             return Next?.Filter(filteredTargets) ?? filteredTargets;
         }

@@ -4,18 +4,20 @@ using Microsoft.Build.Logging.Query.Result;
 
 namespace Microsoft.Build.Logging.Query.Ast
 {
-    public abstract class ConstraintNode<TParent> : IAstNode, IFilterable<TParent, TParent>
+    public abstract class ConstraintNode<TParent, TBefore> : IAstNode, IFilterable<TParent, TParent, TBefore>
         where TParent : class, IQueryResult
+        where TBefore : class, IQueryResult
     {
-        public ConstraintNode() : base()
+        public ConstraintNode()
         {
         }
 
-        public abstract IEnumerable<TParent> Filter(IEnumerable<TParent> components);
+        public abstract IEnumerable<TParent> Filter(IEnumerable<TParent> components, IEnumerable<TBefore> previousComponents);
     }
 
-    public abstract class ConstraintNode<TParent, TValue> : ConstraintNode<TParent>
+    public abstract class ConstraintNode<TParent, TValue, TBefore> : ConstraintNode<TParent, TBefore>
         where TParent : class, IQueryResult
+        where TBefore : class, IQueryResult
     {
         public TValue Value { get; }
 
@@ -24,7 +26,7 @@ namespace Microsoft.Build.Logging.Query.Ast
             Value = value;
         }
 
-        protected bool Equals(ConstraintNode<TParent, TValue> other)
+        protected bool Equals(ConstraintNode<TParent, TValue, TBefore> other)
         {
             return other != null &&
                    EqualityComparer<TValue>.Default.Equals(Value, other.Value);

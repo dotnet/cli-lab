@@ -10,13 +10,13 @@ namespace Microsoft.Build.Logging.Query.Ast
         where TThis : class, IQueryResult
         where TBefore : class, IQueryResult
     {
-        public IReadOnlyList<ConstraintNode<TThis>> Constraints => _constraints;
+        public IReadOnlyList<ConstraintNode<TThis, TBefore>> Constraints => _constraints;
 
-        private readonly List<ConstraintNode<TThis>> _constraints;
+        private readonly List<ConstraintNode<TThis, TBefore>> _constraints;
 
-        public AstNodeWithConstraints(List<ConstraintNode<TThis>> constraints = null) : base()
+        public AstNodeWithConstraints(List<ConstraintNode<TThis, TBefore>> constraints = null) : base()
         {
-            _constraints = constraints ?? new List<ConstraintNode<TThis>>();
+            _constraints = constraints ?? new List<ConstraintNode<TThis, TBefore>>();
         }
 
         protected bool Equals(AstNodeWithConstraints<TThis, TBefore> other)
@@ -37,11 +37,11 @@ namespace Microsoft.Build.Logging.Query.Ast
             return hashCode.ToHashCode();
         }
 
-        protected IEnumerable<TThis> FilterByConstraints(IEnumerable<TThis> components)
+        protected IEnumerable<TThis> FilterByConstraints(IEnumerable<TThis> components, IEnumerable<TBefore> previousComponents)
         {
             foreach (var constraint in Constraints)
             {
-                components = constraint.Filter(components);
+                components = constraint.Filter(components, previousComponents);
             }
 
             return components;

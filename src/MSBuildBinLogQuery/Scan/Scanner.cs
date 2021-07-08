@@ -64,17 +64,21 @@ namespace Microsoft.Build.Logging.Query.Scan
                     ReadNextCharacter();
                     Token = new StringToken(ReadNextString());
                     break;
+                case '*':
+                    ReadNextCharacter();
+                    Token = AsteriskToken.Instance;
+                    break;
                 case 'M':
                 case 'm':
-                    ReadNextKeyword("MESSAGE", () => MessageToken.Instance);
+                    ReadNextKeyword("MESSAGE", MessageToken.Instance);
                     break;
                 case 'W':
                 case 'w':
-                    ReadNextKeyword("WARNING", () => WarningToken.Instance);
+                    ReadNextKeyword("WARNING", WarningToken.Instance);
                     break;
                 case 'E':
                 case 'e':
-                    ReadNextKeyword("ERROR", () => ErrorToken.Instance);
+                    ReadNextKeyword("ERROR", ErrorToken.Instance);
                     break;
                 case 'P':
                 case 'p':
@@ -82,11 +86,11 @@ namespace Microsoft.Build.Logging.Query.Scan
 
                     if (char.ToUpper(_char) == 'R')
                     {
-                        ReadNextKeyword("ROJECT", () => ProjectToken.Instance);
+                        ReadNextKeyword("ROJECT", ProjectToken.Instance);
                     }
                     else if (char.ToUpper(_char) == 'A')
                     {
-                        ReadNextKeyword("ATH", () => PathToken.Instance);
+                        ReadNextKeyword("ATH", PathToken.Instance);
                     }
                     else
                     {
@@ -107,11 +111,11 @@ namespace Microsoft.Build.Logging.Query.Scan
 
                     if (char.ToUpper(_char) == 'R')
                     {
-                        ReadNextKeyword("RGET", () => TargetToken.Instance);
+                        ReadNextKeyword("RGET", TargetToken.Instance);
                     }
                     else if (char.ToUpper(_char) == 'S')
                     {
-                        ReadNextKeyword("SK", () => TaskToken.Instance);
+                        ReadNextKeyword("SK", TaskToken.Instance);
                     }
                     else
                     {
@@ -121,11 +125,23 @@ namespace Microsoft.Build.Logging.Query.Scan
                     break;
                 case 'I':
                 case 'i':
-                    ReadNextKeyword("ID", () => IdToken.Instance);
+                    ReadNextKeyword("ID", IdToken.Instance);
                     break;
                 case 'N':
                 case 'n':
-                    ReadNextKeyword("NAME", () => NameToken.Instance);
+                    ReadNextKeyword("NAME", NameToken.Instance);
+                    break;
+                case 'A':
+                case 'a':
+                    ReadNextKeyword("AFTER", AfterToken.Instance);
+                    break;
+                case 'B':
+                case 'b':
+                    ReadNextKeyword("BEFORE", BeforeToken.Instance);
+                    break;
+                case 'D':
+                case 'd':
+                    ReadNextKeyword("DEPENDON", DependOnToken.Instance);
                     break;
                 default:
                     if (char.IsDigit(_char))
@@ -152,7 +168,7 @@ namespace Microsoft.Build.Logging.Query.Scan
             return stringBuilder.ToString();
         }
 
-        private void ReadNextKeyword(string keyword, Func<Token.Token> thunk)
+        private void ReadNextKeyword(string keyword, Token.Token token)
         {
             var stringBuilder = new StringBuilder();
 
@@ -168,7 +184,7 @@ namespace Microsoft.Build.Logging.Query.Scan
                 ReadNextCharacter();
             }
 
-            Token = thunk.Invoke();
+            Token = token;
         }
 
         private int ReadNextInteger()

@@ -471,6 +471,143 @@ namespace Microsoft.Build.Logging.Query.Tests.Scan
                     MessageToken.Instance
                 }
             };
+
+            yield return new object[]
+            {
+                "After",
+                new Token.Token[]
+                {
+                    AfterToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "Before",
+                new Token.Token[]
+                {
+                    BeforeToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "DependOn",
+                new Token.Token[]
+                {
+                    DependOnToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[DependOn=[/Project[Id=1]]]",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    DependOnToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(1),
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[*Before=[/Project[Id=1]]]",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    AsteriskToken.Instance,
+                    BeforeToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(1),
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[*Before=[/Project[*Before=[/Project[Id=1]]]]]",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    AsteriskToken.Instance,
+                    BeforeToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    AsteriskToken.Instance,
+                    BeforeToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    IdToken.Instance,
+                    EqualToken.Instance,
+                    new IntegerToken(1),
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance
+                }
+            };
+
+            yield return new object[]
+            {
+                "/Project[Name=\"Test\"]/Task[After=[/Task[Name=\"Compile\"]]]",
+                new Token.Token[]
+                {
+                    SingleSlashToken.Instance,
+                    ProjectToken.Instance,
+                    LeftBracketToken.Instance,
+                    NameToken.Instance,
+                    EqualToken.Instance,
+                    new StringToken("Test"),
+                    RightBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    TaskToken.Instance,
+                    LeftBracketToken.Instance,
+                    AfterToken.Instance,
+                    EqualToken.Instance,
+                    LeftBracketToken.Instance,
+                    SingleSlashToken.Instance,
+                    TaskToken.Instance,
+                    LeftBracketToken.Instance,
+                    NameToken.Instance,
+                    EqualToken.Instance,
+                    new StringToken("Compile"),
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance,
+                    RightBracketToken.Instance
+                }
+            };
         }
 
         [Theory]
