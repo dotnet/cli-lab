@@ -13,7 +13,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 {
     internal class FileSystemExplorer : IBundleCollector
     {
-        private static readonly string DotNetInstallPath = Path.Combine("/", "usr", "local", "share", "dotnet");
+        private static readonly string DotNetInstallPath = string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DOTNET_INSTALL_DIR")) ?
+            Path.Combine("/", "usr", "local", "share", "dotnet") :
+            Environment.GetEnvironmentVariable("DOTNET_INSTALL_DIR");
         private static readonly string DotNetSdkInstallPath = Path.Combine(DotNetInstallPath, "sdk");
         private static readonly string DotNetRuntimeInstallPath = Path.Combine(DotNetInstallPath, "shared", "Microsoft.NETCore.App");
         private static readonly string DotNetAspAllInstallPath = Path.Combine(DotNetInstallPath, "shared", "Microsoft.AspNetCore.All");
