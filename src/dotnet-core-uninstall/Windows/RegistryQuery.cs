@@ -72,7 +72,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     (displayName.IndexOf("Visual Studio", StringComparison.OrdinalIgnoreCase) < 0) &&
                     (displayName.IndexOf("VS 2015", StringComparison.OrdinalIgnoreCase) < 0) &&
                     (displayName.IndexOf("Local Feed", StringComparison.OrdinalIgnoreCase) < 0) &&
-                    ((displayName.IndexOf(".NET Core", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    ((displayName.IndexOf(".NET", StringComparison.OrdinalIgnoreCase) >= 0) ||
                      (displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0) ||
                      (displayName.IndexOf(".NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
                      (displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0)) &&

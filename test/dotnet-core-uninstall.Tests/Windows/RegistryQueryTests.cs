@@ -44,6 +44,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET Core 3.0.0 Preview 5 Build 19227-01 - Windows Server Hosting")]
         [InlineData("Microsoft .NET Core 3.0.0 Preview 6 Build 19307.2 - Windows Server Hosting")]
         [InlineData("Microsoft .NET Core 3.1.0 Preview 1 Build preview1.19307.20 - Windows Server Hosting")]
+        [InlineData("Microsoft .NET 5.0.9 - Windows Server Hosting")]
         internal void TestIsNetCoreBundleAccept(string input)
         {
             RegistryQuery.IsNetCoreBundle(input, "0.0", "mockuninstall.exe", "0.0")
