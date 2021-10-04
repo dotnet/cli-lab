@@ -30,11 +30,11 @@ jobs:
         # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
         # Will eventually change this to two BYOC pools.
         ${{ if ne(variables['System.TeamProject'], 'internal') }}:
-          name: NetCorePublic-Pool
-          queue: BuildPool.Windows.10.Amd64.VS2019.Open
+          name: NetCore1ESPool-Public
+          demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019.Open
         ${{ if eq(variables['System.TeamProject'], 'internal') }}:
-          name: NetCoreInternal-Pool
-          queue: BuildPool.Windows.10.Amd64.VS2019
+          name: NetCore1ESPool-Internal
+          demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019
       variables:
       - name: _RID
         value: win-x86
