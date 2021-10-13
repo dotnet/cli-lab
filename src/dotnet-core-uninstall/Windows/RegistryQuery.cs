@@ -100,7 +100,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             return Bundle.From(version, arch, uninstallCommand, displayName);
         }
 
-        private static BundleVersion GetBundleVersion(string displayName, string uninstallString, string bundleCachePath)
+        public static BundleVersion GetBundleVersion(string displayName, string uninstallString, string bundleCachePath)
         {
             var versionString = Regexes.VersionDisplayNameRegex.Match(displayName)?.Value ?? string.Empty;
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
@@ -109,27 +109,35 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 string.Format(LocalizableStrings.HostingBundleFootnoteFormat, displayName, versionString) :
                 null;
 
-            // Classify the bundle type
-            if (displayName.IndexOf("Windows Server", StringComparison.OrdinalIgnoreCase) >= 0)
+            try
             {
-                return new HostingBundleVersion(versionString, footnote);
+                // Classify the bundle type
+                if (displayName.IndexOf("Windows Server", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return new HostingBundleVersion(versionString, footnote);
+                }
+                else if (displayName.IndexOf("ASP.NET", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return new AspNetRuntimeVersion(versionString);
+                }
+                else if ((displayName.IndexOf(".NET Core SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                        (displayName.IndexOf("Microsoft .NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                        uninstallString.IndexOf("dotnet-dev-win") >= 0)
+                {
+                    return new SdkVersion(versionString);
+                }
+                else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
+                    displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return new RuntimeVersion(versionString);
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else if (displayName.IndexOf("ASP.NET", StringComparison.OrdinalIgnoreCase) >= 0)
+            catch
             {
-                return new AspNetRuntimeVersion(versionString);
-            }
-            else if ((displayName.IndexOf(".NET Core SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                    (displayName.IndexOf("Microsoft .NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                    uninstallString.IndexOf("dotnet-dev-win") >= 0)
-            {
-                return new SdkVersion(versionString);
-            }
-            else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
-                displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0)
-            {
-                return new RuntimeVersion(versionString);
-            }
-            else {
                 return null;
             }
         }

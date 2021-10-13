@@ -51,5 +51,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
                 .Should()
                 .BeTrue();
         }
+
+        [WindowsOnlyTheory]
+        [InlineData("Microsoft ASP.NET Web Frameworks and Tools VS2015")]
+        [InlineData("Microsoft .NET Core SDK - rc1 (x86)")]
+        internal void TestGetBundleVersionReturnsNullOnInvalidDisplayNames(string displayName)
+        {
+            RegistryQuery.GetBundleVersion(displayName, string.Empty, string.Empty)
+                .Should()
+                .BeNull();
+        }
     }
 }
