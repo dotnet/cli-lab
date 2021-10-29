@@ -146,6 +146,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             const string x64String = "x64";
             const string x86String = "x86";
+            const string arm64String = "arm86";
 
             var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
 
@@ -153,13 +154,24 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             if (string.IsNullOrEmpty(archString))
             {
-                archString = displayName.Contains(x64String) ? x64String : displayName.Contains(x86String) ? x86String : string.Empty;
+                archString = displayName.Contains(x64String) ?
+                    x64String :
+                    displayName.Contains(x86String) ? x86String : string.Empty;
+
+                archString = archString switch
+                {
+                    string a when a.Contains(x64String) => x64String,
+                    string b when b.Contains(x86String) => x86String,
+                    string b when b.Contains(arm64String) => arm64String,
+                    _ => string.Empty
+                };
             }
 
             switch (archString)
             {
                 case x64String: return BundleArch.X64;
                 case x86String: return BundleArch.X86;
+                case arm64String: return BundleArch.Arm64;
                 case "": return BundleArch.X64 | BundleArch.X86;
                 default: throw new ArgumentException();
             }

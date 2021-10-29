@@ -9,6 +9,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     internal enum BundleArch
     {
         X86 = 0x1,
-        X64 = 0x2
+        X64 = 0x2,
+        Arm64 = 0x3
     }
 }
