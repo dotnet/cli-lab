@@ -48,7 +48,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET SDK 5.0.100 (arm64)")]
         internal void TestIsNetCoreBundleAccept(string input)
         {
-            RegistryQuery.IsNetCoreBundle(input, "0.0", "mockuninstall.exe", "0.0")
+            RegistryQuery.IsNetCoreBundle(input, "0.0", "mockuninstall.exe")
                 .Should()
                 .BeTrue();
         }

@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -25,25 +24,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
-            var uninstalls = Registry.LocalMachine
-                .OpenSubKey("SOFTWARE");
-
-            if (RuntimeInformation.ProcessArchitecture == Architecture.X64 || RuntimeInformation.ProcessArchitecture == Architecture.Arm64)
-            {
-                uninstalls = uninstalls.OpenSubKey("WOW6432Node");
-            }
-
-            uninstalls = uninstalls
-                .OpenSubKey("Microsoft")
-                .OpenSubKey("Windows")
-                .OpenSubKey("CurrentVersion")
-                .OpenSubKey("Uninstall");
-
-            var names = uninstalls.GetSubKeyNames();
-
-            var bundles = names
-                .Select(name => uninstalls.OpenSubKey(name))
-                .Where(bundle => IsNetCoreBundle(bundle));
+            var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64));
+            bundles = bundles.Concat(GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)));
 
             var wrappedBundles = bundles
               .Select(bundle => WrapRegistryKey(bundle))
@@ -51,6 +33,30 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
               .ToList();
 
             return wrappedBundles;
+        }
+
+        private IEnumerable<RegistryKey> GetNetCoreBundleKeys(RegistryKey uninstallKey)
+        {
+            try
+            {
+                var uninstalls = uninstallKey
+                    .OpenSubKey("SOFTWARE")
+                    .OpenSubKey("Microsoft")
+                    .OpenSubKey("Windows")
+                    .OpenSubKey("CurrentVersion")
+                    .OpenSubKey("Uninstall");
+
+                var names = uninstalls.GetSubKeyNames();
+
+                return names
+                    .Select(name => uninstalls.OpenSubKey(name))
+                    .Where(bundle => IsNetCoreBundle(bundle));
+            }
+            catch
+            {
+                return Enumerable.Empty<RegistryKey>();
+            }
+
         }
 
         private static bool IsNetCoreBundle(RegistryKey uninstallKey)
@@ -62,11 +68,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             return IsNetCoreBundle(uninstallKey.GetValue("DisplayName") as string,
                 uninstallKey.GetValue("DisplayVersion") as string,
-                uninstallKey.GetValue("UninstallString") as string,
-                uninstallKey.GetValue("BundleVersion") as string);
+                uninstallKey.GetValue("UninstallString") as string);
         }
 
-        internal static bool IsNetCoreBundle(string displayName, string displayVersion, string uninstallString, string bundleVersion)
+        internal static bool IsNetCoreBundle(string displayName, string displayVersion, string uninstallString)
         {
             return (!String.IsNullOrEmpty(displayName)) &&
                     (displayName.IndexOf("Visual Studio", StringComparison.OrdinalIgnoreCase) < 0) &&
@@ -75,18 +80,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     ((displayName.IndexOf(".NET", StringComparison.OrdinalIgnoreCase) >= 0) ||
                      (displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0) ||
                      (displayName.IndexOf(".NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                     (displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0)) &&
+                     (displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                     (displayName.IndexOf("Windows Desktop Runtime", StringComparison.OrdinalIgnoreCase) >= 0)) &&
                     (!String.IsNullOrEmpty(uninstallString)) &&
                     (uninstallString.IndexOf(".exe", StringComparison.OrdinalIgnoreCase) >= 0) &&
                     (uninstallString.IndexOf("msiexec", StringComparison.OrdinalIgnoreCase) < 0) &&
-                    (!String.IsNullOrEmpty(displayVersion)) &&
-                    (!String.IsNullOrEmpty(bundleVersion));
+                    (!String.IsNullOrEmpty(displayVersion));
         }
 
         private static Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;
-            var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string;
+            var uninstallCommand = registryKey.GetValue("QuietUninstallString") as string ?? registryKey.GetValue("UninstallString") as string;
             var bundleCachePath = registryKey.GetValue("BundleCachePath") as string;
 
             var version = GetBundleVersion(displayName, uninstallCommand, bundleCachePath);
@@ -103,11 +108,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         public static BundleVersion GetBundleVersion(string displayName, string uninstallString, string bundleCachePath)
         {
             var versionString = Regexes.VersionDisplayNameRegex.Match(displayName)?.Value ?? string.Empty;
-            var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
-            var hasAuxVersion = cachePathMatch.Groups[Regexes.AuxVersionGroupName].Success;
-            var footnote = hasAuxVersion ?
-                string.Format(LocalizableStrings.HostingBundleFootnoteFormat, displayName, versionString) :
-                null;
+            string footnote = null;
+            if (bundleCachePath != null)
+            {
+                var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
+                var hasAuxVersion = cachePathMatch.Groups[Regexes.AuxVersionGroupName].Success;
+                footnote = hasAuxVersion ?
+                    string.Format(LocalizableStrings.HostingBundleFootnoteFormat, displayName, versionString) :
+                    null;
+            }
 
             try
             {
@@ -148,9 +157,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             const string x86String = "x86";
             const string arm64String = "arm86";
 
-            var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
-
-            var archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
+            string archString = null;
+            if (bundleCachePath != null)
+            {
+                var cachePathMatch = Regexes.BundleCachePathRegex.Match(bundleCachePath);
+                archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
+            }
 
             if (string.IsNullOrEmpty(archString))
             {
