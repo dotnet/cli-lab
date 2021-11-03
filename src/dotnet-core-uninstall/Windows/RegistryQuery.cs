@@ -68,10 +68,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             return IsNetCoreBundle(uninstallKey.GetValue("DisplayName") as string,
                 uninstallKey.GetValue("DisplayVersion") as string,
-                uninstallKey.GetValue("UninstallString") as string);
+                uninstallKey.GetValue("UninstallString") as string,
+                uninstallKey.GetValue("BundleVersion") as string);
         }
 
-        internal static bool IsNetCoreBundle(string displayName, string displayVersion, string uninstallString)
+        internal static bool IsNetCoreBundle(string displayName, string displayVersion, string uninstallString, string bundleVersion)
         {
             return (!String.IsNullOrEmpty(displayName)) &&
                     (displayName.IndexOf("Visual Studio", StringComparison.OrdinalIgnoreCase) < 0) &&
@@ -85,7 +86,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     (!String.IsNullOrEmpty(uninstallString)) &&
                     (uninstallString.IndexOf(".exe", StringComparison.OrdinalIgnoreCase) >= 0) &&
                     (uninstallString.IndexOf("msiexec", StringComparison.OrdinalIgnoreCase) < 0) &&
-                    (!String.IsNullOrEmpty(displayVersion));
+                    (!String.IsNullOrEmpty(displayVersion)) &&
+                    (!String.IsNullOrEmpty(bundleVersion));
         }
 
         private static Bundle WrapRegistryKey(RegistryKey registryKey)
