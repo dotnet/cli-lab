@@ -40,11 +40,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             try
             {
                 var uninstalls = uninstallKey
-                    .OpenSubKey("SOFTWARE")
-                    .OpenSubKey("Microsoft")
-                    .OpenSubKey("Windows")
-                    .OpenSubKey("CurrentVersion")
-                    .OpenSubKey("Uninstall");
+                    .OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
 
                 var names = uninstalls.GetSubKeyNames();
 
@@ -157,7 +153,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
         {
             const string x64String = "x64";
             const string x86String = "x86";
-            const string arm64String = "arm86";
+            const string arm64String = "arm64";
 
             string archString = null;
             if (bundleCachePath != null)
