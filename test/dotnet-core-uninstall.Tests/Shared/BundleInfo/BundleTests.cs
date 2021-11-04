@@ -107,6 +107,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
                 TestUninstallCommand1,
                 TestDisplayName1
             };
+
+            yield return new object[]
+            {
+                TestHostingBundleVersion1,
+                BundleArch.Arm64,
+                TestUninstallCommand1,
+                TestDisplayName1
+            };
         }
 
         [Theory]
@@ -185,6 +193,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.BundleInfo
             {
                 TestRuntimeVersion1,
                 BundleArch.X86
+            };
+
+            yield return new object[]
+            {
+                TestRuntimeVersion1,
+                BundleArch.Arm64
             };
         }
 
