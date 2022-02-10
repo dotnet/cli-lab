@@ -11,6 +11,7 @@
       <ExternalCertificateId Condition="'$(ExternalCertificateId)' == ''">3PartySHA2</ExternalCertificateId>
       <InternalCertificateId Condition="'$(InternalCertificateId)' == ''">Microsoft400</InternalCertificateId>
       <NugetCertificateId Condition="'$(NugetCertificateId)' == ''">NuGet</NugetCertificateId>
+      <ZipCertificateId Condition="'$(ZipCertificateId)' == ''">None</ZipCertificateId>
     </PropertyGroup>
 
 
@@ -76,7 +77,7 @@
   </Target>
 
   <Target Name="SignLayout" Condition="'$(SignCoreDotnetCoreUninstall)' == 'true'" DependsOnTargets="SetSignProps">
-
+    
     <ItemGroup>
       <!-- External files -->
       <LayoutFilesToSign Include="$(DotnetCoreUninstallOutputDirectory)**/Newtonsoft.Json.dll">
@@ -88,6 +89,11 @@
         <CertificateName>$(InternalCertificateId)</CertificateName>
       </LayoutFilesToSign>
 
+      <!-- Zip file in Packages directory -->
+      <LayoutFilesToSign Include="$(ArtifactsShippingPackagesDir)dotnet-core-uninstall.zip"
+                         Condition="'$(RID)' == 'win-x86'">
+        <CertificateName>$(ZipCertificateId)</CertificateName>
+      </LayoutFilesToSign>
 
       <LayoutFileSignInfo Include="@(LayoutFilesToSign->'%(Filename)%(Extension)')">
         <CertificateName>%(CertificateName)</CertificateName>

@@ -82,12 +82,21 @@ jobs:
           /p:RID=$(_RID)
         displayName: Build and Publish
       - task: CopyFiles@2
+        displayName: Copy MSI to Staging Directory
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
           sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
           contents: '*.msi'
           targetFolder: '$(Build.ArtifactStagingDirectory)'
+      - task: CopyFiles@2
+        displayName: Copy ZIP to Staging Directory
+        condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+        inputs:
+          sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
+          contents: '*.zip'
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
       - task: PublishBuildArtifacts@1
+        displayName: Publish Build Artifacts
         condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
         inputs:
           pathtoPublish: '$(Build.ArtifactStagingDirectory)'
