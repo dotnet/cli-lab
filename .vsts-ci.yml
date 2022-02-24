@@ -95,10 +95,10 @@ jobs:
           publishLocation: 'Container'
           parallel: true
 
-    - job: OSX_10_13
-      displayName: 'OSX'
+    - job: OSX_latest
+      displayName: 'Mac OS'
       pool:
-        name: Hosted macOS
+        vmImage: 'macOS-latest'
       strategy:
         matrix:
           ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
