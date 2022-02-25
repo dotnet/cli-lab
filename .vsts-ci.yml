@@ -44,10 +44,15 @@ jobs:
         - group: Publish-Build-Assets
         - name: _OfficialBuildArgs
           value: /p:DotNetSignType=$(_SignType)
+                 /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
+                 /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
+                 /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
+                 /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
+                 /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
                  /p:SignCoreDotnetCoreUninstall=true
                  /p:TeamName=$(_TeamName)
-                 /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
                  /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+                 /p:DotNetPublishUsingPipelines=$(_PublishUsingPipelines)
       # else
       - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
         - name: _OfficialBuildArgs
