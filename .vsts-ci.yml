@@ -48,11 +48,6 @@ stages:
           - group: Publish-Build-Assets
           - name: _OfficialBuildArgs
             value: /p:DotNetSignType=$(_SignType)
-                   /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
-                   /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
-                   /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
-                   /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
-                   /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
                    /p:SignCoreDotnetCoreUninstall=true
                    /p:TeamName=$(_TeamName)
                    /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
@@ -167,7 +162,7 @@ stages:
         -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
         -TsaBugAreaPath $(_TsaBugAreaPath)
         -TsaIterationPath $(_TsaIterationPath)
-        -TsaRepositoryName "Arcade"
-        -TsaCodebaseName "Arcade"
+        -TsaRepositoryName "cli-lab"
+        -TsaCodebaseName "cli-lab"
         -TsaPublish $True
         -PoliCheckAdditionalRunConfigParams @("UserExclusionPath < $(Build.SourcesDirectory)/eng/PoliCheckExclusions.xml")'
