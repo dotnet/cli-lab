@@ -40,10 +40,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 sdks = sdks.Concat(GetInstalledBundles<SdkVersion>(BundleArch.X64, DotNetSdkInstallPath(EmulatedDotNetInstallPath)));
                 runtimes = runtimes.Concat(GetInstalledBundles<RuntimeVersion>(
                     BundleArch.X64,
-                    DotNetRuntimeInstallPath(DotNetInstallPath),
-                    DotNetAspAllInstallPath(DotNetInstallPath),
-                    DotNetAspAppInstallPath(DotNetInstallPath),
-                    DotNetHostFxrInstallPath(DotNetInstallPath)));
+                    DotNetRuntimeInstallPath(EmulatedDotNetInstallPath),
+                    DotNetAspAllInstallPath(EmulatedDotNetInstallPath),
+                    DotNetAspAppInstallPath(EmulatedDotNetInstallPath),
+                    DotNetHostFxrInstallPath(EmulatedDotNetInstallPath)));
             }
 
             return sdks.Concat(runtimes).ToList();
