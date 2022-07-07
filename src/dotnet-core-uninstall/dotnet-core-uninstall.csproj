@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="2.3.2200-develop-g2d3a6646" />
+    <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="$(MicrosoftVisualStudioSetupConfigurationPackageVersion)" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0" />
     <PackageReference Include="NuGet.Versioning" Version="5.3.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
