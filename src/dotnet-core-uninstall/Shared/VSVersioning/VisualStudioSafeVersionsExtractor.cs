@@ -13,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
     internal static class VisualStudioSafeVersionsExtractor
     {
         // The tool should not be used to uninstall any more recent versions of the sdk
-        public static readonly SemanticVersion UpperLimit = new SemanticVersion(7, 0, 0);
+        public static readonly SemanticVersion UpperLimit = new SemanticVersion(8, 0, 0);
 
         // Must keep one of each of these divisions to ensure Visual Studio works. 
         // Pairs are [inclusive, exclusive)
