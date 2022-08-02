@@ -1,4 +1,5 @@
-﻿using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+﻿using System.Runtime.InteropServices;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Xunit;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Tests.Attributes
@@ -7,7 +8,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Attributes
     {
         public WindowsOnlyFact()
         {
-            if (!RuntimeInfo.RunningOnWindows)
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 Skip = "Ignored on non-Windows platforms";
             }

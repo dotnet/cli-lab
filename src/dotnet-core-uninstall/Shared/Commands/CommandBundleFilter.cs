@@ -33,13 +33,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 }
             });
 
-        public static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> allBundles, ParseResult parseResult = null)
+        public static IEnumerable<Bundle> GetFilteredBundles(this ParseResult parseResult, IEnumerable<Bundle> allBundles)
         {
-            if (parseResult == null)
-            {
-                parseResult = CommandLineConfigs.CommandLineParseResult;
-            }
-
             var option = parseResult.CommandResult.GetUninstallMainOption();
             var typeSelection = parseResult.GetTypeSelection();
             var archSelection = parseResult.GetArchSelection();
@@ -79,18 +74,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return bundles;
         }
 
-        public static IDictionary<Bundle, string> GetFilteredWithRequirementStrings(IBundleCollector bundleCollector)
+        public static IDictionary<Bundle, string> GetFilteredWithRequirementStrings(this ParseResult parseResult, IBundleCollector bundleCollector)
         {
             var allBundles = bundleCollector.GetAllInstalledBundles();
-            var filteredBundles = GetFilteredBundles(allBundles);
+            var filteredBundles = parseResult.GetFilteredBundles(allBundles);
             return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles)
                     .Where(pair => filteredBundles.Contains(pair.Key))
                     .ToDictionary(i => i.Key, i => i.Value);
         }
 
-        public static void HandleVersionOption()
+        public static void HandleVersionOption(this ParseResult parseResult)
         {
-            if (CommandLineConfigs.CommandLineParseResult.FindResultFor(CommandLineConfigs.VersionOption) != null)
+            if (parseResult.FindResultFor(CommandLineConfigs.VersionOption) != null)
             {
                 Console.WriteLine(_assemblyVersion.Value);
                 Environment.Exit(0);

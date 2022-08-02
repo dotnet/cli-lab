@@ -4,8 +4,11 @@
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win-x86;osx-x64</RuntimeIdentifiers>
     <SignAssembly>true</SignAssembly>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <RollForward>LatestMajor</RollForward>
+    <!-- <SelfContained>true</SelfContained> -->
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishTrimmed>true</PublishTrimmed>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -15,11 +18,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="$(MicrosoftVisualStudioSetupConfigurationPackageVersion)" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0" />
-    <PackageReference Include="NuGet.Versioning" Version="5.3.1" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
-    <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20574.7" />
-    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="6.0.0-preview.5.21301.5" />
+    <PackageReference Include="NuGet.Versioning" Version="	6.2.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+    <PackageReference Include="System.CommandLine.Rendering" Version="	0.4.0-alpha.22272.1" />
+    <PackageReference Include="System.Resources.Extensions" Version="7.0.0-preview.6.22324.4" />
   </ItemGroup>
 
   <ItemGroup>

@@ -3,20 +3,20 @@
 using System;
 using System.CommandLine;
 using System.CommandLine.Help;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
+using System.Runtime.InteropServices;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     public class UninstallHelpBuilder : HelpBuilder
     {
-        public UninstallHelpBuilder(IConsole console) : base(console) { }
+        public UninstallHelpBuilder(LocalizationResources resources) : base(resources) { }
 
-        public override void Write(ICommand command)
+        public override void Write(HelpContext context)
         {
-            base.Write(command);
-            if (command.Name.Equals("dry-run") || command.Name.Equals("remove"))
+            base.Write(context);
+            if (context.Command.Name.Equals("dry-run") || context.Command.Name.Equals("remove"))
             {
-                Console.Out.Write(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
+                Console.Out.Write(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? LocalizableStrings.HelpExplainationParagraphWindows :
                     LocalizableStrings.HelpExplainationParagraphMac);
                 Console.Out.Write(Environment.NewLine);
             }

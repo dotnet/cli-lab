@@ -9,6 +9,7 @@ using System.CommandLine.Parsing;
 using System.CommandLine.Rendering;
 using System.CommandLine.Rendering.Views;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
@@ -31,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             IEnumerable<Bundle> bundles,
             IEnumerable<BundleTypePrintInfo> supportedBundleTypes)
         {
-            Console.WriteLine(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsListCommandOutput : LocalizableStrings.MacListCommandOutput);
+            Console.WriteLine(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? LocalizableStrings.WindowsListCommandOutput : LocalizableStrings.MacListCommandOutput);
 
             var listCommandParseResult = CommandLineConfigs.ListCommand.Parse(Environment.GetCommandLineArgs());
             var verbose = listCommandParseResult.CommandResult.GetVerbosityLevel().Equals(VerbosityLevel.Detailed) ||

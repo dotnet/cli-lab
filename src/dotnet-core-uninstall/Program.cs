@@ -2,6 +2,8 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.CommandLine.Parsing;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
@@ -10,13 +12,13 @@ namespace Microsoft.DotNet.Tools.Uninstall
 {
     internal class Program
     {
-        internal static int Main(string[] args)
+        internal static async Task<int> Main(string[] args)
         {
-            if (!(RuntimeInfo.RunningOnOSX || RuntimeInfo.RunningOnWindows))
+            if (!(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) || RuntimeInformation.IsOSPlatform(OSPlatform.OSX)))
             {
                 throw new OperatingSystemNotSupportedException();
             }
-            return CommandLineConfigs.UninstallCommandParser.InvokeAsync(args).Result;
+            return await CommandLineConfigs.UninstallCommandParser.InvokeAsync(args);
         }
     }
 }

@@ -46,10 +46,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
 
     internal abstract class ArgFilterer<TArg> : Filterer
     {
-        public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
+
+        public IEnumerable<Bundle> TypedFilter(ParseResult parseResult, Option<TArg> option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
-            var argValue = parseResult.ValueForOption<TArg>(option);
+            var argValue = parseResult.GetValueForOption(option);
             return Filter(argValue, bundles, typeSelection, archSelection);
+        }
+
+        public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection) {
+            if (option is Option<TArg> typedOption) {
+                return TypedFilter(parseResult, typedOption, bundles, typeSelection, archSelection);
+            } else {
+                return Enumerable.Empty<Bundle>();
+            }
         }
 
         public IEnumerable<Bundle> Filter(TArg argValue, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)

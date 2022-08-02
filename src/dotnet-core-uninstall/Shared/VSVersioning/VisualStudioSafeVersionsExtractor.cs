@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
@@ -70,7 +71,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
 
         private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyVersionDivisions(IEnumerable<Bundle> bundles)
         {
-            if (RuntimeInfo.RunningOnWindows)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return ApplyWindowsVersionDivisions(bundles);
             }

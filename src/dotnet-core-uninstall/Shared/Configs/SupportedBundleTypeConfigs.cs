@@ -2,6 +2,7 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 
@@ -11,11 +12,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
     {
         public static IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
         {
-            if (RuntimeInfo.RunningOnWindows)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 return Windows.SupportedBundleTypeConfigs.SupportedBundleTypes;
             }
-            else if (RuntimeInfo.RunningOnOSX)
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
                 return MacOs.SupportedBundleTypeConfigs.SupportedBundleTypes;
             }

@@ -4,6 +4,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -24,17 +26,25 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
-            var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64));
-            bundles = bundles.Concat(GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)));
-
-            var wrappedBundles = bundles
-              .Select(bundle => WrapRegistryKey(bundle))
-              .Where(bundle => bundle != null)
-              .ToList();
-
-            return wrappedBundles;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64));
+                bundles = bundles.Concat(GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)));
+                var wrappedBundles = new List<Bundle>();
+                foreach(var bundle in bundles) {
+                    if (WrapRegistryKey(bundle) is Bundle b) {
+                        wrappedBundles.Add(b);
+                    }
+                }
+                return wrappedBundles;
+            }
+            else
+            {
+                return Enumerable.Empty<Bundle>();
+            }
         }
 
+        [SupportedOSPlatform("windows")]
         private IEnumerable<RegistryKey> GetNetCoreBundleKeys(RegistryKey uninstallKey)
         {
             try
@@ -43,7 +53,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     .OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
 
                 var names = uninstalls.GetSubKeyNames();
-
                 return names
                     .Select(name => uninstalls.OpenSubKey(name))
                     .Where(bundle => IsNetCoreBundle(bundle));
@@ -52,8 +61,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
             {
                 return Enumerable.Empty<RegistryKey>();
             }
-
         }
+
+        [SupportedOSPlatform("windows")]
 
         private static bool IsNetCoreBundle(RegistryKey uninstallKey)
         {
@@ -86,6 +96,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     (!String.IsNullOrEmpty(bundleVersion));
         }
 
+        [SupportedOSPlatform("windows")]
         private static Bundle WrapRegistryKey(RegistryKey registryKey)
         {
             var displayName = registryKey.GetValue("DisplayName") as string;

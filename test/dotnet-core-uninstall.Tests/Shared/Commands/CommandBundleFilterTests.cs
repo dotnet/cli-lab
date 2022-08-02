@@ -5,6 +5,7 @@ using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
@@ -142,7 +143,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
             }
             CheckUpperLimitAlwaysRequired(string.Format(command, "--runtime"), runtimeBundles);
 
-            if (RuntimeInfo.RunningOnWindows)
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 // Hosting bundles are only on windows
                 var otherBundles = new List<Bundle>();
@@ -169,7 +170,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
                 var console = new TestConsole();
                 _ = CommandLineConfigs.UninstallCommandParser.InvokeAsync(command, console).Result;
 
-                console.Out.ToString().Should().Contain(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
+                console.Out.ToString().Should().Contain(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? LocalizableStrings.HelpExplainationParagraphWindows :
                     LocalizableStrings.HelpExplainationParagraphMac);
             }
         }
