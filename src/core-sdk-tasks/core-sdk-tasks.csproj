@@ -10,9 +10,9 @@
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.7.179" />
     <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="2.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
-    <PackageReference Include="NuGet.Versioning" Version="4.3.0" />
+    <PackageReference Include="NuGet.Versioning" Version="5.7.2" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.4.2" />
-    <PackageReference Include="WindowsAzure.Storage" Version="$(WindowsAzureStoragePackageVersion)" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="$(WindowsAzureStoragePackageVersion)" />
   </ItemGroup>
 
 </Project>
