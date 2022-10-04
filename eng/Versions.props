@@ -14,7 +14,7 @@
     <DotNetFinalVersionKind>release</DotNetFinalVersionKind>
 
     <NewtonsoftJsonPackageVersion>13.0.1</NewtonsoftJsonPackageVersion>
-    <MicrosoftVisualStudioSetupConfigurationPackageVersion>3.2.2146</MicrosoftVisualStudioSetupConfigurationPackageVersion>
+    <MicrosoftVisualStudioSetupConfigurationPackageVersion>3.3.2180</MicrosoftVisualStudioSetupConfigurationPackageVersion>
     <WindowsAzureStoragePackageVersion>12.13.1</WindowsAzureStoragePackageVersion>
   </PropertyGroup>
 </Project>
