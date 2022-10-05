@@ -95,14 +95,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         }
 
         [Theory]
-        [InlineData("--all")]
-        [InlineData("--all-lower-patches")]
-        [InlineData("--all-but-latest")]
+        [InlineData("--all", null, true)]
+        [InlineData("--all-lower-patches", null, true)]
+        [InlineData("--all-but-latest", null, true)]
         [InlineData("--all-but", "2.2.300", new[] { "2.2.300" })]
         [InlineData("--all-but", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
         [InlineData("--all-below", "2.2.300", "2.2.300")]
-        [InlineData("--all-previews")]
-        [InlineData("--all-previews-but-latest")]
+        [InlineData("--all-previews", null, true)]
+        [InlineData("--all-previews-but-latest", null, true)]
         [InlineData("--major-minor", "2.2", "2.2")]
         [InlineData("", "2.2.300", new[] { "2.2.300" })] 
         [InlineData("", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
@@ -114,7 +114,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             if (!option.Equals(string.Empty))
             {
-                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option) as OptionResult;
+                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option.TrimStart('-')) as OptionResult;
                 optionResult.Should().NotBeNull();
                 parseResult.GetValueForOption(optionResult.Option).Should().BeEquivalentTo(expected);
             }
@@ -130,26 +130,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         }
 
         [Theory]
-        [InlineData("--all")]
-        [InlineData("--all-lower-patches")]
-        [InlineData("--all-but-latest")]
+        [InlineData("--all", null, true)]
+        [InlineData("--all-lower-patches", null, true)]
+        [InlineData("--all-but-latest", null, true)]
         [InlineData("--all-but", "2.2.300", new[] { "2.2.300" })]
         [InlineData("--all-but", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
         [InlineData("--all-below", "2.2.300", "2.2.300")]
-        [InlineData("--all-previews")]
-        [InlineData("--all-previews-but-latest")]
+        [InlineData("--all-previews", null, true)]
+        [InlineData("--all-previews-but-latest", null, true)]
         [InlineData("--major-minor", "2.2", "2.2")]
         [InlineData("", "2.2.300", new[] { "2.2.300" })]
         [InlineData("", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
         [InlineData("", "--unknown-option", new[] { "--unknown-option" })]
         [InlineData("", "--unknown-option argument", new[] { "--unknown-option", "argument" })]
-        internal void TestDryRunCommandAccept(string option, string argValue = "", object expected = null)
+        internal void TestDryRunCommandAccept(string option, string argValue, object expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse($"dry-run {option} {argValue}");
 
             if (!option.Equals(string.Empty))
             {
-                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option) as OptionResult;
+                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option.TrimStart('-')) as OptionResult;
                 optionResult.Should().NotBeNull();
                 parseResult.GetValueForOption(optionResult.Option).Should().BeEquivalentTo(expected);
             }
@@ -165,14 +165,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         }
 
         [Theory]
-        [InlineData("--all")]
-        [InlineData("--all-lower-patches")]
-        [InlineData("--all-but-latest")]
+        [InlineData("--all", null, true)]
+        [InlineData("--all-lower-patches", null, true)]
+        [InlineData("--all-but-latest", null, true)]
         [InlineData("--all-but", "2.2.300", new[] { "2.2.300" })]
         [InlineData("--all-but", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
         [InlineData("--all-below", "2.2.300", "2.2.300")]
-        [InlineData("--all-previews")]
-        [InlineData("--all-previews-but-latest")]
+        [InlineData("--all-previews", null, true)]
+        [InlineData("--all-previews-but-latest", null, true)]
         [InlineData("--major-minor", "2.2", "2.2")]
         [InlineData("", "2.2.300", new[] { "2.2.300" })]
         [InlineData("", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
@@ -184,7 +184,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             if (!option.Equals(string.Empty))
             {
-                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option) as OptionResult;
+                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option.TrimStart('-')) as OptionResult;
                 optionResult.Should().NotBeNull();
                 parseResult.GetValueForOption(optionResult.Option).Should().BeEquivalentTo(expected);
             }
@@ -425,7 +425,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             } 
             else
             {
-                var optionResult = commandResult.Children.First(c => c is OptionResult o) as OptionResult;
+                var optionResult = commandResult.Children.First(c => c is OptionResult o && o.Option.Name == option.TrimStart('-')) as OptionResult;
                 optionResult.Should().NotBeNull();
                 commandResult.GetUninstallMainOption().Name
                     .Should().Be(optionResult.Option.Name);
@@ -456,7 +456,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             }
             else
             {
-                var optionResult = commandResult.Children.First(c => c is OptionResult o) as OptionResult;
+                var optionResult = commandResult.Children.First(c => c is OptionResult o && o.Option.Name == option.TrimStart('-')) as OptionResult;
                 optionResult.Should().NotBeNull();
                 commandResult.GetUninstallMainOption().Name
                     .Should().Be(optionResult.Option.Name);
@@ -487,7 +487,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             }
             else
             {
-                var optionResult = commandResult.Children.First(c => c is OptionResult o) as OptionResult;
+                var optionResult = commandResult.Children.First(c => c is OptionResult o && o.Option.Name == option.TrimStart('-')) as OptionResult;
                 optionResult.Should().NotBeNull();
                 commandResult.GetUninstallMainOption().Name
                     .Should().Be(optionResult.Option.Name);

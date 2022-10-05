@@ -8,6 +8,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
@@ -63,13 +64,50 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             "--all-but-latest",
             LocalizableStrings.UninstallAllButLatestOptionDescription);
 
-        public static readonly Option<IEnumerable<string>> UninstallAllButOption = new Option<IEnumerable<string>>(
+        public static Regex SemVer = new Regex(@"^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$");
+        public static string CheckTokenIsVersion(ArgumentResult r) {
+            // ideally we'd parse and check a semver here, but not sure we want to take
+            // that dependency
+            var input = r.Tokens[0].Value;
+            if(SemVer.IsMatch(input) || Version.TryParse(input, out _)) {
+                r.OnlyTake(1);
+                return input;
+            } else {
+                r.OnlyTake(0);
+                r.ErrorMessage = $"Version '{input}' is not a valid SemVer version or .NET Version";
+                return null;
+            }
+        }
+
+        public static string[] CheckTokensAreVersion(ArgumentResult r) {
+            // ideally we'd parse and check a semver here, but not sure we want to take
+            // that dependency
+            var parsed = new List<string>();
+            foreach(var token in r.Tokens) {
+                var input = token.Value;
+                if(SemVer.IsMatch(input) || Version.TryParse(input, out _)) {
+                    parsed.Add(input);
+                } else {
+                    r.ErrorMessage = $"Version '{input}' is not a valid SemVer version or .NET Version";
+                    return null;
+                }
+            }
+            r.OnlyTake(parsed.Count);
+            return parsed.ToArray();
+        }
+
+        public static readonly Option<string[]> UninstallAllButOption = new Option<string[]>(
             "--all-but",
-            LocalizableStrings.UninstallAllButOptionDescription);
+            parseArgument: CheckTokensAreVersion,
+            description: LocalizableStrings.UninstallAllButOptionDescription) {
+                AllowMultipleArgumentsPerToken = true
+            };
 
         public static readonly Option<string> UninstallAllBelowOption = new Option<string>(
             "--all-below",
-            LocalizableStrings.UninstallAllBelowOptionDescription);
+            parseArgument: CheckTokenIsVersion,
+            description: LocalizableStrings.UninstallAllBelowOptionDescription
+            );
 
         public static readonly Option<bool> UninstallAllPreviewsOption = new Option<bool>(
             "--all-previews",
@@ -78,10 +116,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly Option<bool> UninstallAllPreviewsButLatestOption = new Option<bool>(
             "--all-previews-but-latest",
             LocalizableStrings.UninstallAllPreviewsButLatestOptionDescription);
+        
+        private static Regex MajorMinor = new Regex(@"^\d+\.\d+$");
+        public static string ParseMajorMinor(ArgumentResult r) {
+            var input = r.Tokens[0].Value;
+            if (MajorMinor.IsMatch(input)) {
+                return input;
+            } else {
+                r.ErrorMessage = $"The version '{input}' is not in the format Major.Minor.";
+                return null;
+            }
+        }
 
         public static readonly Option<string> UninstallMajorMinorOption = new Option<string>(
             "--major-minor",
-            LocalizableStrings.UninstallMajorMinorOptionDescription);
+            parseArgument: ParseMajorMinor,
+            description: LocalizableStrings.UninstallMajorMinorOptionDescription);
 
         public static readonly Option<string> VerbosityOption = new Option<string>(
             new[] { "--verbosity", "-v" },
@@ -95,7 +145,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             $"--{X86OptionName}",
             LocalizableStrings.ListX86OptionDescription);
 
-        public static readonly Option<string> VersionOption = new Option<string>("--version")
+        public static readonly Option<bool> VersionOption = new Option<bool>("--version")
         {
             IsHidden = true
         };
@@ -257,7 +307,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             var supportedBundleTypes = SupportedBundleTypeConfigs.GetSupportedBundleTypes();
 
             var typeSelection = supportedBundleTypes
-                .Where(type => parseResult.CommandResult.Children.FirstOrDefault(c => c is OptionResult o && o.Option.Name == $"--{type.OptionName}" && o.GetValueForOption(o.Option) is bool b && b) is not null)
+                .Where(type => parseResult.CommandResult.Children.FirstOrDefault(c => c is OptionResult o && o.Option.Name == type.OptionName && o.GetValueForOption(o.Option) is bool b && b) is not null)
                 .Select(type => type.Type)
                 .Aggregate((BundleType)0, (orSum, next) => orSum | next);
 
