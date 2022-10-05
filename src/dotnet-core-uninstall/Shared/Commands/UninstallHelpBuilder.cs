@@ -16,9 +16,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             base.Write(context);
             if (context.Command.Name.Equals("dry-run") || context.Command.Name.Equals("remove"))
             {
-                Console.Out.Write(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
+                context.Output.Write(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
                     LocalizableStrings.HelpExplainationParagraphMac);
-                Console.Out.Write(Environment.NewLine);
+                context.Output.Write(Environment.NewLine);
             }
         }
     }
