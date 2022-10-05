@@ -114,8 +114,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             if (!option.Equals(string.Empty))
             {
-                parseResult.CommandResult.OptionResult(option).Should().NotBeNull();
-                parseResult.ValueForOption(option).Should().BeEquivalentTo(expected);
+                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option) as OptionResult;
+                optionResult.Should().NotBeNull();
+                parseResult.GetValueForOption(optionResult.Option).Should().BeEquivalentTo(expected);
             }
             else
             {
@@ -148,8 +149,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             if (!option.Equals(string.Empty))
             {
-                parseResult.CommandResult.OptionResult(option).Should().NotBeNull();
-                parseResult.ValueForOption(option).Should().BeEquivalentTo(expected);
+                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option) as OptionResult;
+                optionResult.Should().NotBeNull();
+                parseResult.GetValueForOption(optionResult.Option).Should().BeEquivalentTo(expected);
             }
             else
             {
@@ -182,8 +184,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
 
             if (!option.Equals(string.Empty))
             {
-                parseResult.CommandResult.OptionResult(option).Should().NotBeNull();
-                parseResult.ValueForOption(option).Should().BeEquivalentTo(expected);
+                var optionResult = parseResult.CommandResult.Children.First(c => c is OptionResult o && o.Option.Name == option) as OptionResult;
+                optionResult.Should().NotBeNull();
+                parseResult.GetValueForOption(optionResult.Option).Should().BeEquivalentTo(expected);
             }
             else
             {
@@ -422,8 +425,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             } 
             else
             {
+                var optionResult = commandResult.Children.First(c => c is OptionResult o) as OptionResult;
+                optionResult.Should().NotBeNull();
                 commandResult.GetUninstallMainOption().Name
-                    .Should().Be(commandResult.OptionResult(option).Option.Name);
+                    .Should().Be(optionResult.Option.Name);
             }
         }
 
@@ -451,8 +456,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             }
             else
             {
+                var optionResult = commandResult.Children.First(c => c is OptionResult o) as OptionResult;
+                optionResult.Should().NotBeNull();
                 commandResult.GetUninstallMainOption().Name
-                    .Should().Be(commandResult.OptionResult(option).Option.Name);
+                    .Should().Be(optionResult.Option.Name);
             }
         }
 
@@ -480,8 +487,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             }
             else
             {
+                var optionResult = commandResult.Children.First(c => c is OptionResult o) as OptionResult;
+                optionResult.Should().NotBeNull();
                 commandResult.GetUninstallMainOption().Name
-                    .Should().Be(commandResult.OptionResult(option).Option.Name);
+                    .Should().Be(optionResult.Option.Name);
             }
         }
 

@@ -9,12 +9,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     public class UninstallHelpBuilder : HelpBuilder
     {
-        public UninstallHelpBuilder(IConsole console) : base(console) { }
+        public UninstallHelpBuilder(LocalizationResources localizationResources, int maxWidth = int.MaxValue) : base(localizationResources, maxWidth) { }
 
-        public override void Write(ICommand command)
+        public override void Write(HelpContext context)
         {
-            base.Write(command);
-            if (command.Name.Equals("dry-run") || command.Name.Equals("remove"))
+            base.Write(context);
+            if (context.Command.Name.Equals("dry-run") || context.Command.Name.Equals("remove"))
             {
                 Console.Out.Write(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplainationParagraphWindows :
                     LocalizableStrings.HelpExplainationParagraphMac);
