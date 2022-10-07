@@ -12,7 +12,6 @@
     <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJsonPackageVersion)" />
     <PackageReference Include="NuGet.Versioning" Version="5.7.2" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.8.1" />
-    <PackageReference Include="Azure.Storage.Blobs" Version="$(WindowsAzureStoragePackageVersion)" />
   </ItemGroup>
 
 </Project>
