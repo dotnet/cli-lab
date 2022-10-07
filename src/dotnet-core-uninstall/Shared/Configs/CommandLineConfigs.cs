@@ -266,7 +266,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 .UseDefaults()
                 .UseHelpBuilder(context => new UninstallHelpBuilder(LocalizationResources.Instance))
                 .Build();
-            CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());
+            CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs().Skip(1).ToList());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)
