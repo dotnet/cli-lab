@@ -54,6 +54,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         {
             return $"{Version.ToString()} ({Arch.ToString().ToLower()})";
         }
+
+        public virtual string ToDebugString()
+        {
+            return $"{Version.ToString()} ({Arch.ToString().ToLower()})";
+        }
     }
 
     internal class Bundle<TBundleVersion> : Bundle, IComparable, IComparable<Bundle>, IEquatable<Bundle<TBundleVersion>>
@@ -103,6 +108,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
         public override int GetHashCode()
         {
             return HashCode.Combine(base.GetHashCode());
+        }
+
+        public override string ToDebugString() {
+            return $"{nameof(TBundleVersion)} {Version.ToString()} ({Arch.ToString().ToLower()}) - {UninstallCommand ?? "n/a"}";
         }
     }
 }
