@@ -6,6 +6,7 @@ using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using System.Linq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
@@ -103,8 +104,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
 
         internal void TestRequiredUninstallableWhenExplicitlyAdded(IEnumerable<Bundle> bundles, string command, string[] expectedUninstallableSdk, string[] expectedUninstallableRuntime)
         {
+            using var scope = new AssertionScope();
+            scope.AddReportable("bundles", () => String.Join(Environment.NewLine, bundles.Select(b => b.ToDebugString())));
+            scope.AddReportable("command", () => command);
+            scope.AddReportable("expectedUninstallableSdk", () => String.Join(Environment.NewLine, expectedUninstallableSdk));
+            scope.AddReportable("expectedUninstallableRuntime", () => String.Join(Environment.NewLine, expectedUninstallableRuntime));
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
             var uninstallableBundles = CommandBundleFilter.GetFilteredBundles(bundles, parseResult);
+            scope.AddReportable("uninstallableBundles", () => String.Join(Environment.NewLine, uninstallableBundles.Select(b => b.ToDebugString())));
 
             var uninstallableSdks = uninstallableBundles.Where(b => b.Version is SdkVersion).Select(b => b.DisplayName);
             var requiredSdks = bundles.Except(uninstallableBundles).Where(b => b.Version is SdkVersion).Select(b => b.DisplayName);
