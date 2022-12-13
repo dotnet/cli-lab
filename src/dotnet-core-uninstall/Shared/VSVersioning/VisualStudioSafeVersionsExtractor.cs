@@ -25,7 +25,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             { (new SemanticVersion(2, 1, 600), new SemanticVersion(2, 1, 900)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
             { (new SemanticVersion(2, 2, 100), new SemanticVersion(2, 2, 200)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017") },
             { (new SemanticVersion(2, 2, 200), new SemanticVersion(2, 2, 500)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
-            { (new SemanticVersion(3, 1, 100), new SemanticVersion(5, 0, 600)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
+            { (new SemanticVersion(3, 0, 100), new SemanticVersion(5, 0, 600)), string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019") },
             { (new SemanticVersion(6, 0, 100), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplainationString, "") }
         };
 
