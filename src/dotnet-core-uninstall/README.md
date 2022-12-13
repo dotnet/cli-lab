@@ -1,6 +1,6 @@
 # dotnet-core-uninstall
 
-This project is a standalone uninstaller for Windows and MacOS.  It exists partially to ensure that a) it's easy to uninstall the SDK and b) SDKs that are required by various VS versions aren't also uninstalled.
+This project is a standalone uninstaller for Windows and MacOS. It exists partially to ensure that a) it's easy to uninstall the SDK and b) SDKs that are required by various VS versions aren't also uninstalled.
 
 # Releasing the tool
 
