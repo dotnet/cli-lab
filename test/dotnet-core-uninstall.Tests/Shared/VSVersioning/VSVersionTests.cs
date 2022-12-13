@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
@@ -25,8 +27,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "2.2.100", "2.2.200" }, new bool[] { false, false })]
         [InlineData(new string[] { "2.2.100", "2.2.200", "2.2.300" }, new bool[] { false, true, false })]
         [InlineData(new string[] { "3.0.0", "3.0.1", "5.0.0" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "5.0.0", "5.0.1", "6.0.1" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "6.0.0", "6.0.1", "7.0.0" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "5.0.0", "5.0.1", "6.0.1" }, new bool[] { true, false, true })]
+        [InlineData(new string[] { "6.0.0", "6.0.1", "7.0.0" }, new bool[] { true, true, false })]
         [InlineData(new string[] { "9.0.0", "9.0.1", "10.100.100" }, new bool[] { false, false, false })]
         internal void TestGetUninstallableWindows(string[] versions, bool[] allowed)
         {
@@ -48,7 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "1.0.0" }, new bool[] { false }, new string[] { "1.0.0" }, new bool[] { false })]
         [InlineData(new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false }, new string[] { "1.0.0", "1.0.1" }, new bool[] { true, false })]
         [InlineData(new string[] { "2.1.0", "1.0.1" }, new bool[] { false, true }, new string[] { "1.0.0", "1.1.0" }, new bool[] { false, false })]
-        [InlineData(new string[] { "3.0.0", "7.0.0" }, new bool[] { false, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new bool[] { true, true, true, false, false })]
+        [InlineData(new string[] { "3.0.0", "7.0.0" }, new bool[] { true, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new bool[] { true, true, true, false, false })]
         [InlineData(new string[] { "3.0.0", "5.0.0" }, new bool[] { true, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.0" }, new bool[] { true, false, false, false })]
         [InlineData(new string[] { "5.0.0", "5.0.1", "10.100.100" }, new bool[] { true, false, false }, new string[] { "5.0.0", "10.0.0" }, new bool[] { false, false })]
         [InlineData(new string[] { "5.0.0", "6.0.0", "6.0.1" }, new bool[] { true, true, false }, new string[] { "5.0.0" }, new bool[] { false })]
@@ -77,7 +79,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new bool[] { false, true, false })]
         [InlineData(new string[] { "2.2.100", "2.2.200", "2.2.300" }, new bool[] { false, true, false })]
         [InlineData(new string[] { "5.0.0", "5.0.1", "10.0.1" }, new bool[] { true, false, false })]
-        [InlineData(new string[] { "5.0.0", "6.0.0", "6.0.1" }, new bool[] { true, true, false })]
+        [InlineData(new string[] { "5.0.0", "6.0.0", "6.0.1" }, new bool[] { false, true, true })]
         [InlineData(new string[] { "9.0.0", "9.0.1", "10.100.100" }, new bool[] { false, false, false })]
         internal void TestGetUninstallableNonSdkVersionsWindows(string[] versions, bool[] allowed)
         {
@@ -113,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         internal void TestGetUninstallableNonSdkVersions(IEnumerable<Bundle> bundles, bool[] sdkAllowed, bool[] runtimeAllowed)
         {
             bundles = bundles.Concat(new List<Bundle>
-            { 
+            {
                 new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion("1.0.0"), new BundleArch(), string.Empty, "AspNetVersion"),
                 new Bundle<AspNetRuntimeVersion>(new AspNetRuntimeVersion("10.0.0"), new BundleArch(), string.Empty, "AspNetVersion"),
                 new Bundle<HostingBundleVersion>(new HostingBundleVersion("1.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion"),
@@ -129,32 +131,35 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             CheckAllowed(bundles, uninstallable, sdkAllowed, runtimeAllowed);
         }
 
-        private void CheckAllowed(IEnumerable<Bundle> bundles, IEnumerable<Bundle> uninstallable, bool[] sdkAllowed, bool[] runtimeAllowed)
+        private void CheckAllowed(IEnumerable<Bundle> allBundles, IEnumerable<Bundle> uninstallableBundles, bool[] sdkAllowed, bool[] runtimeAllowed)
         {
-            var sdkBundles = bundles.Where(bundle => bundle.Version is SdkVersion).ToArray();
-            var runtimeBundles = bundles.Where(bundle => bundle.Version is RuntimeVersion).ToArray();
-            var otherBundles = bundles.Except(sdkBundles).Except(runtimeBundles);
+            using var scope = new AssertionScope();
+            scope.AddReportable("allBundles", () => String.Join(Environment.NewLine, allBundles.Select(b => b.ToDebugString())));
+            scope.AddReportable("uninstallableBundles", () => String.Join(Environment.NewLine, uninstallableBundles.Select(b => b.ToDebugString())));
+            var sdkBundles = allBundles.Where(bundle => bundle.Version is SdkVersion).ToArray();
+            var runtimeBundles = allBundles.Where(bundle => bundle.Version is RuntimeVersion).ToArray();
+            var otherBundles = allBundles.Except(sdkBundles).Except(runtimeBundles);
             for (int i = 0; i < sdkBundles.Count(); i++)
             {
                 if (sdkAllowed[i])
                 {
-                    uninstallable.Should().Contain(sdkBundles[i]);
+                    uninstallableBundles.Should().Contain(sdkBundles[i]);
                 }
                 else
                 {
-                    uninstallable.Should().NotContain(sdkBundles[i]);
+                    uninstallableBundles.Should().NotContain(sdkBundles[i]);
                 }
             }
-            
+
             for (int i = 0; i < runtimeBundles.Count(); i++)
             {
                 if (runtimeAllowed[i])
                 {
-                    uninstallable.Should().Contain(runtimeBundles[i]);
+                    uninstallableBundles.Should().Contain(runtimeBundles[i]);
                 }
                 else
                 {
-                    uninstallable.Should().NotContain(runtimeBundles[i]);
+                    uninstallableBundles.Should().NotContain(runtimeBundles[i]);
                 }
             }
             // Check others are uninstallable unless their version is above the upper limit
@@ -162,11 +167,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             {
                 if (bundle.Version.SemVer > VisualStudioSafeVersionsExtractor.UpperLimit)
                 {
-                    uninstallable.Should().NotContain(bundle);
+                    uninstallableBundles.Should().NotContain(bundle);
                 }
                 else
                 {
-                    uninstallable.Should().Contain(bundle);
+                    uninstallableBundles.Should().Contain(bundle);
                 }
             }
         }
@@ -174,7 +179,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [WindowsOnlyTheory]
         [InlineData(new string[] { }, new string[] { })]
         [InlineData(new string[] { "1.0.1", "1.0.0" }, new string[] { "", "None" })]
-        [InlineData(new string[] { "2.3.0", "2.1.800", "2.1.300" }, new string[] { "", " 2019", " 2017" })]
+        [InlineData(new string[] { "2.3.0", "2.1.800", "2.1.300" }, new string[] { "None", " 2019", " 2017" })]
         [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new string[] { " 2017", "None", " 2019" })]
         [InlineData(new string[] { "2.1.500", "10.0.1", "10.0.0" }, new string[] { " 2017", "UpperLimit", "UpperLimit" })]
         internal void TestGetListCommandUninstallableStringsWindows(string[] versions, string[] expectedStrings)
@@ -262,7 +267,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 { "Runtime", LocalizableStrings.MacRuntimeRequirementExplainationString}
             };
             var output = new string[input.Length];
-            
+
             for (int i = 0; i < input.Length; i++)
             {
                 output[i] = shortHandToFullExpectedString[input[i]];

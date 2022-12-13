@@ -6,6 +6,7 @@ using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using System.Linq;
 using FluentAssertions;
+using FluentAssertions.Execution;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
@@ -19,7 +20,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
 {
     public class CommandBundleFilterTests
     {
-        private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "5.0.0", "7.0.1", "10.10.10" };
+        private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "5.0.0", "7.0.1", "8.0.1", "10.10.10" };
         private Dictionary<string, BundleArch> versionsWithArch = new Dictionary<string, BundleArch>
         {
             { "3.0.0", BundleArch.X64 },
@@ -42,7 +43,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         [InlineData("remove --sdk 1.0.1", new string[] { "1.0.1" })]
         [InlineData("remove --sdk 1.0.0", new string[] { "1.0.0" })]
         [InlineData("remove --sdk 1.0.1 2.1.0 1.0.1", new string[] { "2.1.0", "1.0.1", "1.0.1" })]
-        [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200", 
+        [InlineData("remove --sdk 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200",
             new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200" })]
         internal void TestRequiredUninstallableWhenExplicitlyAddedWindows(string command, string[] expectedUninstallable)
         {
@@ -103,8 +104,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
 
         internal void TestRequiredUninstallableWhenExplicitlyAdded(IEnumerable<Bundle> bundles, string command, string[] expectedUninstallableSdk, string[] expectedUninstallableRuntime)
         {
+            using var scope = new AssertionScope();
+            scope.AddReportable("bundles", () => String.Join(Environment.NewLine, bundles.Select(b => b.ToDebugString())));
+            scope.AddReportable("command", () => command);
+            scope.AddReportable("expectedUninstallableSdk", () => String.Join(Environment.NewLine, expectedUninstallableSdk));
+            scope.AddReportable("expectedUninstallableRuntime", () => String.Join(Environment.NewLine, expectedUninstallableRuntime));
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
             var uninstallableBundles = CommandBundleFilter.GetFilteredBundles(bundles, parseResult);
+            scope.AddReportable("uninstallableBundles", () => String.Join(Environment.NewLine, uninstallableBundles.Select(b => b.ToDebugString())));
 
             var uninstallableSdks = uninstallableBundles.Where(b => b.Version is SdkVersion).Select(b => b.DisplayName);
             var requiredSdks = bundles.Except(uninstallableBundles).Where(b => b.Version is SdkVersion).Select(b => b.DisplayName);
@@ -122,7 +129,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [Theory]
-        [InlineData("remove {0} 7.0.1")]
+        [InlineData("remove {0} 8.0.1")]
         [InlineData("remove {0} 10.10.10")]
         [InlineData("remove {0} --all --force")]
         [InlineData("remove {0} 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 5.0.0 7.0.1 10.10.10")]
@@ -158,13 +165,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
             Action filteringAction = () => CommandBundleFilter.GetFilteredBundles(bundles, parseResult);
-            filteringAction.Should().Throw<UninstallationNotAllowedException>();
+            filteringAction.Should().Throw<UninstallationNotAllowedException>("Expected command '{0}' to fail when the following bundles were installed: {1}", command, String.Join(", ", bundles.Select(b => b.DisplayName).ToList()));
         }
 
         [Fact]
         public void TestHelpOutputContainsExplainationParagraph()
         {
-            foreach (var command in new string[] { "dry-run -h", "whatif -h", "remove -h" }) 
+            foreach (var command in new string[] { "dry-run -h", "whatif -h", "remove -h" })
             {
                 var console = new TestConsole();
                 _ = CommandLineConfigs.UninstallCommandParser.InvokeAsync(command, console).Result;
