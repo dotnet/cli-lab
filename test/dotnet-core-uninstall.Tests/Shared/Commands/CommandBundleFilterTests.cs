@@ -20,7 +20,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
 {
     public class CommandBundleFilterTests
     {
-        private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "5.0.0", "7.0.1", "8.0.1", "10.10.10" };
+        private static readonly string[] versions = { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200", "5.0.0", "7.0.1", "8.0.1", "9.0.1", "10.10.10" };
         private Dictionary<string, BundleArch> versionsWithArch = new Dictionary<string, BundleArch>
         {
             { "3.0.0", BundleArch.X64 },
@@ -36,9 +36,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         };
 
         [WindowsOnlyTheory]
-        [InlineData("remove --all --sdk", new string[] { "1.0.0", "1.0.1" })]
-        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "1.0.1" })]
-        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "1.0.1" })]
+        [InlineData("remove --all --sdk", new string[] { "1.0.0", "1.0.1", "7.0.1" })]
+        [InlineData("dry-run --all --sdk", new string[] { "1.0.0", "1.0.1", "7.0.1" })]
+        [InlineData("whatif --all --sdk", new string[] { "1.0.0", "1.0.1", "7.0.1" })]
         [InlineData("remove --all-below 5.0.0 --sdk --force", new string[] { "1.0.0", "1.0.1", "1.1.0", "2.1.0", "2.1.500", "2.1.600", "2.2.100", "2.2.200" })]
         [InlineData("remove --sdk 1.0.1", new string[] { "1.0.1" })]
         [InlineData("remove --sdk 1.0.0", new string[] { "1.0.0" })]
@@ -129,7 +129,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [Theory]
-        [InlineData("remove {0} 8.0.1")]
+        [InlineData("remove {0} 9.0.1")]
         [InlineData("remove {0} 10.10.10")]
         [InlineData("remove {0} --all --force")]
         [InlineData("remove {0} 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 5.0.0 7.0.1 10.10.10")]
