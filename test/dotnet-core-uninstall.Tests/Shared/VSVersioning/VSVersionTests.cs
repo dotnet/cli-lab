@@ -260,11 +260,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             {
                 { "None", string.Empty },
                 { VisualStudioSafeVersionsExtractor.UpperLimit.ToString(), string.Format(LocalizableStrings.UpperLimitRequirement, VisualStudioSafeVersionsExtractor.UpperLimit) },
-                { string.Empty, string.Format(LocalizableStrings.WindowsRequirementExplainationString, string.Empty)},
-                { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2017")},
-                { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplainationString, " 2019")},
-                { "SDK", LocalizableStrings.MacSDKRequirementExplainationString},
-                { "Runtime", LocalizableStrings.MacRuntimeRequirementExplainationString}
+                { string.Empty, string.Format(LocalizableStrings.WindowsRequirementExplanationString, string.Empty)},
+                { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2017")},
+                { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019")},
+                { "SDK", LocalizableStrings.MacSDKRequirementExplanationString},
+                { "Runtime", LocalizableStrings.MacRuntimeRequirementExplanationString}
             };
             var output = new string[input.Length];
 
