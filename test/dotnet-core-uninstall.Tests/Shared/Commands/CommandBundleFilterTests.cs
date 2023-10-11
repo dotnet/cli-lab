@@ -135,21 +135,21 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         [InlineData("remove {0} 10.10.10")]
         [InlineData("remove {0} --all --force")]
         [InlineData("remove {0} 1.0.0 1.0.1 1.1.0 2.1.0 2.1.500 2.1.600 2.2.100 2.2.200 5.0.100 7.0.100 10.10.10")]
-        internal void TestUpperLimitAlwaysRequired(string command)
+        internal void TestUpperLimitRequiredUnlessForced(string command)
         {
             var sdkBundles = new List<Bundle<SdkVersion>>();
             foreach (string v in versions)
             {
                 sdkBundles.Add(new Bundle<SdkVersion>(new SdkVersion(v), new BundleArch(), string.Empty, v));
             }
-            CheckUpperLimitAlwaysRequired(string.Format(command, "--sdk"), sdkBundles);
+            CheckUpperLimitRequiredUnlessForced(string.Format(command, "--sdk"), sdkBundles);
 
             var runtimeBundles = new List<Bundle<RuntimeVersion>>();
             foreach (string v in versions)
             {
                 runtimeBundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, v));
             }
-            CheckUpperLimitAlwaysRequired(string.Format(command, "--runtime"), runtimeBundles);
+            CheckUpperLimitRequiredUnlessForced(string.Format(command, "--runtime"), runtimeBundles);
 
             if (RuntimeInfo.RunningOnWindows)
             {
@@ -159,15 +159,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
                 {
                     otherBundles.Add(new Bundle<HostingBundleVersion>(new HostingBundleVersion(v), new BundleArch(), string.Empty, v));
                 }
-                CheckUpperLimitAlwaysRequired(string.Format(command, "--hosting-bundle"), otherBundles);
+                CheckUpperLimitRequiredUnlessForced(string.Format(command, "--hosting-bundle"), otherBundles);
             }
         }
 
-        internal void CheckUpperLimitAlwaysRequired(string command, IEnumerable<Bundle> bundles)
+        internal void CheckUpperLimitRequiredUnlessForced(string command, IEnumerable<Bundle> bundles)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
             Action filteringAction = () => CommandBundleFilter.GetFilteredBundles(bundles, parseResult);
-            filteringAction.Should().Throw<UninstallationNotAllowedException>("Expected command '{0}' to fail when the following bundles were installed: {1}", command, String.Join(", ", bundles.Select(b => b.DisplayName).ToList()));
+            if (parseResult.ForceArgumentProvided())
+            {
+                filteringAction.Should().NotThrow<UninstallationNotAllowedException>("Expected command '{0}' to succeed when --force was provided", command);
+            }
+            else
+            {
+                filteringAction.Should().Throw<UninstallationNotAllowedException>("Expected command '{0}' to fail when the following bundles were installed: {1}", command, String.Join(", ", bundles.Select(b => b.DisplayName).ToList()));
+            }
         }
 
         [Fact]

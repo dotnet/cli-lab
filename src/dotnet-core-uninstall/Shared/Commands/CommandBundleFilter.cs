@@ -68,11 +68,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     archSelection);
             }
 
-            if (parseResult.FindResultFor(CommandLineConfigs.ForceOption) == null)
+            if (!parseResult.ForceArgumentProvided())
             {
                 bundles = FilterRequiredBundles(allBundles, parseResult.CommandResult.Tokens).Intersect(bundles);
             }
-            if (bundles.Any(bundle => bundle.Version.SemVer >= VisualStudioSafeVersionsExtractor.UpperLimit))
+
+            if (bundles.Any(bundle => bundle.Version.SemVer >= VisualStudioSafeVersionsExtractor.UpperLimit) && !parseResult.ForceArgumentProvided())
             {
                 throw new UninstallationNotAllowedException();
             }

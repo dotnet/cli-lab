@@ -307,6 +307,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 archSelection;
         }
 
+        public static bool ForceArgumentProvided(this ParseResult parseResult)
+        {
+            return parseResult.FindResultFor(ForceOption) != null;
+        }
+
         public static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
         {
             var optionResult = commandResult.FindResultFor(VerbosityOption);
