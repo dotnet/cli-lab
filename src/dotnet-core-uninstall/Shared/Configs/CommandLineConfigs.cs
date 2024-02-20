@@ -8,6 +8,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
@@ -51,84 +52,109 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly string X64OptionName = "x64";
         public static readonly string X86OptionName = "x86";
 
-        public static readonly Option UninstallAllOption = new Option(
+        public static readonly Option<bool> UninstallAllOption = new Option<bool>(
             "--all",
             LocalizableStrings.UninstallAllOptionDescription);
 
-        public static readonly Option UninstallAllLowerPatchesOption = new Option(
+        public static readonly Option<bool> UninstallAllLowerPatchesOption = new Option<bool>(
             "--all-lower-patches",
             LocalizableStrings.UninstallAllLowerPatchesOptionDescription);
 
-        public static readonly Option UninstallAllButLatestOption = new Option(
+        public static readonly Option<bool> UninstallAllButLatestOption = new Option<bool>(
             "--all-but-latest",
             LocalizableStrings.UninstallAllButLatestOptionDescription);
 
-        public static readonly Option UninstallAllButOption = new Option(
+        public static Regex SemVer = new Regex(@"^([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?(?:\+[0-9A-Za-z-]+)?$");
+        public static string CheckTokenIsVersion(ArgumentResult r) {
+            // ideally we'd parse and check a semver here, but not sure we want to take
+            // that dependency
+            var input = r.Tokens[0].Value;
+            if(SemVer.IsMatch(input) || Version.TryParse(input, out _)) {
+                r.OnlyTake(1);
+                return input;
+            } else {
+                r.OnlyTake(0);
+                r.ErrorMessage = $"Version '{input}' is not a valid SemVer version or .NET Version";
+                return null;
+            }
+        }
+
+        public static string[] CheckTokensAreVersion(ArgumentResult r) {
+            // ideally we'd parse and check a semver here, but not sure we want to take
+            // that dependency
+            var parsed = new List<string>();
+            foreach(var token in r.Tokens) {
+                var input = token.Value;
+                if(SemVer.IsMatch(input) || Version.TryParse(input, out _)) {
+                    parsed.Add(input);
+                } else {
+                    r.ErrorMessage = $"Version '{input}' is not a valid SemVer version or .NET Version";
+                    return null;
+                }
+            }
+            r.OnlyTake(parsed.Count);
+            return parsed.ToArray();
+        }
+
+        public static readonly Option<string[]> UninstallAllButOption = new Option<string[]>(
             "--all-but",
-            LocalizableStrings.UninstallAllButOptionDescription)
-        {
-            Argument = new Argument<IEnumerable<string>>
-            {
-                Name = LocalizableStrings.UninstallAllButOptionArgumentName
-            }
-        };
+            parseArgument: CheckTokensAreVersion,
+            description: LocalizableStrings.UninstallAllButOptionDescription) {
+                AllowMultipleArgumentsPerToken = true
+            };
 
-        public static readonly Option UninstallAllBelowOption = new Option(
+        public static readonly Option<string> UninstallAllBelowOption = new Option<string>(
             "--all-below",
-            LocalizableStrings.UninstallAllBelowOptionDescription)
-        {
-            Argument = new Argument<string>
-            {
-                Name = LocalizableStrings.UninstallAllBelowOptionArgumentName
-            }
-        };
+            parseArgument: CheckTokenIsVersion,
+            description: LocalizableStrings.UninstallAllBelowOptionDescription
+            );
 
-        public static readonly Option UninstallAllPreviewsOption = new Option(
+        public static readonly Option<bool> UninstallAllPreviewsOption = new Option<bool>(
             "--all-previews",
             LocalizableStrings.UninstallAllPreviewsOptionDescription);
 
-        public static readonly Option UninstallAllPreviewsButLatestOption = new Option(
+        public static readonly Option<bool> UninstallAllPreviewsButLatestOption = new Option<bool>(
             "--all-previews-but-latest",
             LocalizableStrings.UninstallAllPreviewsButLatestOptionDescription);
+        
+        private static Regex MajorMinor = new Regex(@"^\d+\.\d+$");
+        public static string ParseMajorMinor(ArgumentResult r) {
+            var input = r.Tokens[0].Value;
+            if (MajorMinor.IsMatch(input)) {
+                return input;
+            } else {
+                r.ErrorMessage = $"The version '{input}' is not in the format Major.Minor.";
+                return null;
+            }
+        }
 
-        public static readonly Option UninstallMajorMinorOption = new Option(
+        public static readonly Option<string> UninstallMajorMinorOption = new Option<string>(
             "--major-minor",
-            LocalizableStrings.UninstallMajorMinorOptionDescription)
-        {
-            Argument = new Argument<string>
-            {
-                Name = LocalizableStrings.UninstallMajorMinorOptionArgumentName
-            }
-        };
+            parseArgument: ParseMajorMinor,
+            description: LocalizableStrings.UninstallMajorMinorOptionDescription);
 
-        public static readonly Option VerbosityOption = new Option(
+        public static readonly Option<string> VerbosityOption = new Option<string>(
             new[] { "--verbosity", "-v" },
-            LocalizableStrings.VerbosityOptionDescription)
-        {
-            Argument = new Argument<string>
-            {
-                Name = LocalizableStrings.VerbosityOptionArgumentName
-            }
-        };
+            LocalizableStrings.VerbosityOptionDescription);
 
-        public static readonly Option ListX64Option = new Option(
+        public static readonly Option<bool> ListX64Option = new Option<bool>(
             $"--{X64OptionName}",
             LocalizableStrings.ListX64OptionDescription);
 
-        public static readonly Option ListX86Option = new Option(
+        public static readonly Option<bool> ListX86Option = new Option<bool>(
             $"--{X86OptionName}",
             LocalizableStrings.ListX86OptionDescription);
 
-        public static readonly Option VersionOption = new Option("--version")
+        public static readonly Option<bool> VersionOption = new Option<bool>("--version")
         {
             IsHidden = true
         };
 
-        public static readonly Option YesOption = new Option(
+        public static readonly Option<bool> YesOption = new Option<bool>(
             new[] { "--yes", "-y" },
             LocalizableStrings.YesOptionDescription);
 
-        public static readonly Option ForceOption = new Option(
+        public static readonly Option<bool> ForceOption = new Option<bool>(
             "--force",
             RuntimeInfo.RunningOnWindows ? LocalizableStrings.ForceOptionDescriptionWindows
             : LocalizableStrings.ForceOptionDescriptionMac);
@@ -145,26 +171,26 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallMajorMinorOption
         };
 
-        public static readonly Option[] ListBundleTypeOptions = new Option[]
+        public static readonly Option[] ListBundleTypeOptions = new Option<bool>[]
         {
-            new Option($"--{SdkOptionName}", LocalizableStrings.ListSdkOptionDescription),
-            new Option($"--{RuntimeOptionName}", LocalizableStrings.ListRuntimeOptionDescription),
-            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.ListAspNetRuntimeOptionDescription),
-            new Option($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription)
+            new Option<bool>($"--{SdkOptionName}", LocalizableStrings.ListSdkOptionDescription),
+            new Option<bool>($"--{RuntimeOptionName}", LocalizableStrings.ListRuntimeOptionDescription),
+            new Option<bool>($"--{AspNetRuntimeOptionName}", LocalizableStrings.ListAspNetRuntimeOptionDescription),
+            new Option<bool>($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription)
         };
 
-        public static readonly Option[] UninstallBundleTypeOptions = new Option[]
+        public static readonly Option[] UninstallBundleTypeOptions = new Option<bool>[]
         {
-            new Option($"--{SdkOptionName}", LocalizableStrings.UninstallSdkOptionDescription),
-            new Option($"--{RuntimeOptionName}", LocalizableStrings.UninstallRuntimeOptionDescription),
-            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.UninstallAspNetRuntimeOptionDescription),
-            new Option($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription)
+            new Option<bool>($"--{SdkOptionName}", LocalizableStrings.UninstallSdkOptionDescription),
+            new Option<bool>($"--{RuntimeOptionName}", LocalizableStrings.UninstallRuntimeOptionDescription),
+            new Option<bool>($"--{AspNetRuntimeOptionName}", LocalizableStrings.UninstallAspNetRuntimeOptionDescription),
+            new Option<bool>($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription)
         };
 
-        public static readonly Option[] ArchUninstallOptions = new Option[]
+        public static readonly Option<bool>[] ArchUninstallOptions = new Option<bool>[]
         {
-            new Option($"--{X64OptionName}", LocalizableStrings.UninstallX64OptionDescription),
-            new Option($"--{X86OptionName}", LocalizableStrings.UninstallX86OptionDescription)
+            new Option<bool>($"--{X64OptionName}", LocalizableStrings.UninstallX64OptionDescription),
+            new Option<bool>($"--{X86OptionName}", LocalizableStrings.UninstallX86OptionDescription)
         };
 
         public static readonly Option[] AdditionalUninstallOptions = new Option[]
@@ -232,15 +258,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             AssignOptionsToCommand(ListCommand, ListAuxOptions);
 
             var bundleCollector = RuntimeInfo.RunningOnWindows ? new RegistryQuery() as IBundleCollector : new FileSystemExplorer() as IBundleCollector;
-            ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute(bundleCollector)));
-            DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute(bundleCollector)));
-            RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute(bundleCollector)));
+            ListCommand.SetHandler(_ => ExceptionHandler.HandleException(() => ListCommandExec.Execute(bundleCollector)));
+            DryRunCommand.SetHandler(_ => ExceptionHandler.HandleException(() => DryRunCommandExec.Execute(bundleCollector)));
+            RemoveCommand.SetHandler(_ => ExceptionHandler.HandleException(() => UninstallCommandExec.Execute(bundleCollector)));
 
             UninstallCommandParser = new CommandLineBuilder(UninstallRootCommand)
                 .UseDefaults()
-                .UseHelpBuilder(context => new UninstallHelpBuilder(context.Console))
+                .UseHelpBuilder(context => new UninstallHelpBuilder(LocalizationResources.Instance))
                 .Build();
-            CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs());
+            CommandLineParseResult = UninstallCommandParser.Parse(Environment.GetCommandLineArgs().Skip(1).ToList());
         }
 
         public static Option GetUninstallMainOption(this CommandResult commandResult)
@@ -281,7 +307,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             var supportedBundleTypes = SupportedBundleTypeConfigs.GetSupportedBundleTypes();
 
             var typeSelection = supportedBundleTypes
-                .Where(type => parseResult.ValueForOption<bool>($"--{type.OptionName}"))
+                .Where(type => parseResult.CommandResult.Children.FirstOrDefault(c => c is OptionResult o && o.Option.Name == type.OptionName && o.GetValueForOption(o.Option) is bool b && b) is not null)
                 .Select(type => type.Type)
                 .Aggregate((BundleType)0, (orSum, next) => orSum | next);
 
@@ -294,10 +320,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         {
             var archSelection = new[]
             {
-                (OptionName: X64OptionName, Arch: BundleArch.X64),
-                (OptionName: X86OptionName, Arch: BundleArch.X86)
+                (Option: ListX64Option, Arch: BundleArch.X64),
+                (Option: ListX86Option, Arch: BundleArch.X86)
             }
-            .Where(tuple => parseResult.ValueForOption<bool>($"--{tuple.OptionName}"))
+            .Where(tuple => parseResult.GetValueForOption(tuple.Option))
             .Select(tuple => tuple.Arch)
             .Aggregate((BundleArch)0, (orSum, next) => orSum | next);
 

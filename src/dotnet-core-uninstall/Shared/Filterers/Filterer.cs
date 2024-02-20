@@ -48,7 +48,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
     {
         public override IEnumerable<Bundle> Filter(ParseResult parseResult, Option option, IEnumerable<Bundle> bundles, BundleType typeSelection, BundleArch archSelection)
         {
-            var argValue = parseResult.ValueForOption<TArg>(option);
+            var argValue = parseResult.GetValueForOption<TArg>(option as Option<TArg>);
             return Filter(argValue, bundles, typeSelection, archSelection);
         }
 
