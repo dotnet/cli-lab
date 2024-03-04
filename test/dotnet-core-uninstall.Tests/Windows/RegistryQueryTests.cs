@@ -1,6 +1,7 @@
 ﻿// Copyright (c) .NET Foundation and contributors. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+using System;
 using FluentAssertions;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
@@ -48,9 +49,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET SDK 5.0.100 (arm64)")]
         internal void TestIsNetCoreBundleAccept(string input)
         {
-            RegistryQuery.IsNetCoreBundle(input, "0.0", "mockuninstall.exe", "0.0")
-                .Should()
-                .BeTrue();
+            if (OperatingSystem.IsWindows())
+            {
+                RegistryQuery.IsNetCoreBundle(input, "0.0", "mockuninstall.exe", "0.0")
+                    .Should()
+                    .BeTrue();
+            }
         }
 
         [WindowsOnlyTheory]
@@ -58,9 +62,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET Core SDK - rc1 (x86)")]
         internal void TestGetBundleVersionReturnsNullOnInvalidDisplayNames(string displayName)
         {
-            RegistryQuery.GetBundleVersion(displayName, string.Empty, string.Empty)
+            if (OperatingSystem.IsWindows())
+            {
+                RegistryQuery.GetBundleVersion(displayName, string.Empty, string.Empty)
                 .Should()
                 .BeNull();
+            }
         }
     }
 }

@@ -133,13 +133,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             try
             {
-                if (RuntimeInfo.RunningOnWindows)
+                if (OperatingSystem.IsWindows())
                 {
                     var identity = WindowsIdentity.GetCurrent();
                     var principal = new WindowsPrincipal(identity);
                     return principal.IsInRole(WindowsBuiltInRole.Administrator);
                 }
-                else if (RuntimeInfo.RunningOnOSX)
+                else if (OperatingSystem.IsMacOS())
                 {
                     return getuid() == 0;
                 }
