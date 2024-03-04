@@ -8,6 +8,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Commands;
@@ -231,7 +232,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             }
             AssignOptionsToCommand(ListCommand, ListAuxOptions);
 
-            var bundleCollector = RuntimeInfo.RunningOnWindows ? new RegistryQuery() as IBundleCollector : new FileSystemExplorer() as IBundleCollector;
+            var bundleCollector = OperatingSystem.IsWindows() ? new RegistryQuery() as IBundleCollector : new FileSystemExplorer() as IBundleCollector;
             ListCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => ListCommandExec.Execute(bundleCollector)));
             DryRunCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => DryRunCommandExec.Execute(bundleCollector)));
             RemoveCommand.Handler = CommandHandler.Create(ExceptionHandler.HandleException(() => UninstallCommandExec.Execute(bundleCollector)));

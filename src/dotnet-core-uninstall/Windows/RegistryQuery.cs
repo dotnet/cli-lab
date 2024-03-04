@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text.RegularExpressions;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -15,6 +16,7 @@ using Microsoft.Win32;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Windows
 {
+    [SupportedOSPlatform("windows")]
     internal class RegistryQuery : IBundleCollector
     {
         public IEnumerable<Bundle> GetInstalledBundles()
