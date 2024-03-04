@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win-x86;osx-x64</RuntimeIdentifiers>
     <SignAssembly>true</SignAssembly>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
 
@@ -15,11 +15,11 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="$(MicrosoftVisualStudioSetupConfigurationPackageVersion)" />
-    <PackageReference Include="Microsoft.Win32.Registry" Version="4.6.0" />
-    <PackageReference Include="NuGet.Versioning" Version="5.3.1" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />
+    <PackageReference Include="NuGet.Versioning" Version="6.9.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
     <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20574.7" />
-    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
