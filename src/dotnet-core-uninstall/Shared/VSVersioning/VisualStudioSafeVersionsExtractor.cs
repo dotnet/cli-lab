@@ -25,9 +25,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             { (new SemanticVersion(2, 1, 600), new SemanticVersion(2, 1, 900)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
             { (new SemanticVersion(2, 2, 100), new SemanticVersion(2, 2, 200)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2017") },
             { (new SemanticVersion(2, 2, 200), new SemanticVersion(2, 2, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
-            { (new SemanticVersion(3, 0, 100), new SemanticVersion(5, 0, 600)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
-            { (new SemanticVersion(5, 0, 600), new SemanticVersion(6, 0, 600)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
-            { (new SemanticVersion(6, 0, 600), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, "") }
+            { (new SemanticVersion(3, 0, 100), new SemanticVersion(3, 1, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
+            { (new SemanticVersion(5, 0, 100), new SemanticVersion(5, 0, 600)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
+            { (new SemanticVersion(6, 0, 100), new SemanticVersion(6, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
+            { (new SemanticVersion(7, 0, 100), new SemanticVersion(7, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
+            { (new SemanticVersion(8, 0, 100), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, "") }
         };
 
         private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyWindowsVersionDivisions(IEnumerable<Bundle> bundleList)

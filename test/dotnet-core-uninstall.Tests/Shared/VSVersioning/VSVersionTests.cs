@@ -26,9 +26,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new bool[] { false, true, false })]
         [InlineData(new string[] { "2.2.100", "2.2.200" }, new bool[] { false, false })]
         [InlineData(new string[] { "2.2.100", "2.2.200", "2.2.300" }, new bool[] { false, true, false })]
-        [InlineData(new string[] { "3.0.0", "3.0.1", "5.0.0" }, new bool[] { true, true, false })]
-        [InlineData(new string[] { "6.0.0", "6.0.1", "7.0.1" }, new bool[] { true, false, false })]
-        [InlineData(new string[] { "7.0.0", "7.0.1", "8.0.0" }, new bool[] { true, true, false })]
+        [InlineData(new string[] { "3.0.0", "3.0.1", "5.0.0" }, new bool[] { true, true, true })]
+        [InlineData(new string[] { "6.0.0", "6.0.1", "7.0.1" }, new bool[] { true, true, true })]
+        [InlineData(new string[] { "7.0.0", "7.0.1", "8.0.0" }, new bool[] { true, true, true })]
         [InlineData(new string[] { "9.0.0", "9.0.1", "10.100.100" }, new bool[] { false, false, false })]
         internal void TestGetUninstallableWindows(string[] versions, bool[] allowed)
         {
@@ -78,8 +78,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "1.0.0", "1.0.1", "1.0.2" }, new bool[] { true, true, false })]
         [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new bool[] { false, true, false })]
         [InlineData(new string[] { "2.2.100", "2.2.200", "2.2.300" }, new bool[] { false, true, false })]
-        [InlineData(new string[] { "5.0.0", "5.0.1", "10.0.1" }, new bool[] { true, false, false })]
-        [InlineData(new string[] { "6.0.0", "7.0.0", "7.0.1" }, new bool[] { false, true, false })]
+        [InlineData(new string[] { "5.0.0", "5.0.1", "10.0.1" }, new bool[] { true, true, false })]
+        [InlineData(new string[] { "6.0.0", "7.0.0", "7.0.1" }, new bool[] { false, true, true })]
         [InlineData(new string[] { "9.0.0", "9.0.1", "10.100.100" }, new bool[] { false, false, false })]
         internal void TestGetUninstallableNonSdkVersionsWindows(string[] versions, bool[] allowed)
         {
