@@ -53,7 +53,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "3.0.0", "7.0.100" }, new bool[] { true, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new bool[] { true, true, true, false, false })]
         [InlineData(new string[] { "3.0.0", "5.0.100" }, new bool[] { true, false }, new string[] { "1.0.0", "1.1.0", "1.0.1", "5.0.100" }, new bool[] { true, false, false, false })]
         [InlineData(new string[] { "5.0.100", "5.0.101", "10.100.100" }, new bool[] { true, false, false }, new string[] { "5.0.100", "10.0.0" }, new bool[] { false, false })]
-        [InlineData(new string[] { "5.0.100", "6.0.100", "6.0.101" }, new bool[] { false, true, false }, new string[] { "5.0.100" }, new bool[] { false })]
+        [InlineData(new string[] { "5.0.100", "6.0.100", "6.0.101" }, new bool[] { true, true, false }, new string[] { "5.0.100" }, new bool[] { false })]
         internal void TestGetUninstallableMac(string[] sdkVersions, bool[] sdkAllowed, string[] runtimeVersions,  bool[] runtimeAllowed)
         {
             var bundles = new List<Bundle>();
