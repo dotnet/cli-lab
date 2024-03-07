@@ -117,18 +117,18 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         /// <summary>
         ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
         /// </summary>
-        internal static string HelpExplainationParagraphMac {
+        internal static string HelpExplanationParagraphMac {
             get {
-                return ResourceManager.GetString("HelpExplainationParagraphMac", resourceCulture);
+                return ResourceManager.GetString("HelpExplanationParagraphMac", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
         /// </summary>
-        internal static string HelpExplainationParagraphWindows {
+        internal static string HelpExplanationParagraphWindows {
             get {
-                return ResourceManager.GetString("HelpExplainationParagraphWindows", resourceCulture);
+                return ResourceManager.GetString("HelpExplanationParagraphWindows", resourceCulture);
             }
         }
         
@@ -328,18 +328,18 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         /// <summary>
         ///   Looks up a localized string similar to Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove.
         /// </summary>
-        internal static string MacRuntimeRequirementExplainationString {
+        internal static string MacRuntimeRequirementExplanationString {
             get {
-                return ResourceManager.GetString("MacRuntimeRequirementExplainationString", resourceCulture);
+                return ResourceManager.GetString("MacRuntimeRequirementExplanationString", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Used by Visual Studio for Mac. Specify individually or use —-force to remove.
         /// </summary>
-        internal static string MacSDKRequirementExplainationString {
+        internal static string MacSDKRequirementExplanationString {
             get {
-                return ResourceManager.GetString("MacSDKRequirementExplainationString", resourceCulture);
+                return ResourceManager.GetString("MacSDKRequirementExplanationString", resourceCulture);
             }
         }
         
@@ -768,9 +768,9 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         /// <summary>
         ///   Looks up a localized string similar to Used by Visual Studio{0}. Specify individually or use —-force to remove.
         /// </summary>
-        internal static string WindowsRequirementExplainationString {
+        internal static string WindowsRequirementExplanationString {
             get {
-                return ResourceManager.GetString("WindowsRequirementExplainationString", resourceCulture);
+                return ResourceManager.GetString("WindowsRequirementExplanationString", resourceCulture);
             }
         }
         

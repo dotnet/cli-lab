@@ -32,12 +32,12 @@
         <target state="new">Force removal of versions that might be used by Visual Studio.</target>
         <note />
       </trans-unit>
-      <trans-unit id="HelpExplainationParagraphMac">
+      <trans-unit id="HelpExplanationParagraphMac">
         <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
         <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
         <note />
       </trans-unit>
-      <trans-unit id="HelpExplainationParagraphWindows">
+      <trans-unit id="HelpExplanationParagraphWindows">
         <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
         <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
         <note />
@@ -181,12 +181,12 @@ Uninstalling this item will cause Visual Studio for to break.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="MacRuntimeRequirementExplainationString">
+      <trans-unit id="MacRuntimeRequirementExplanationString">
         <source>Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</source>
         <target state="new">Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
-      <trans-unit id="MacSDKRequirementExplainationString">
+      <trans-unit id="MacSDKRequirementExplanationString">
         <source>Used by Visual Studio for Mac. Specify individually or use —-force to remove</source>
         <target state="new">Used by Visual Studio for Mac. Specify individually or use —-force to remove</target>
         <note />
@@ -463,7 +463,7 @@ Uninstalling this item will cause Visual Studio to break.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="WindowsRequirementExplainationString">
+      <trans-unit id="WindowsRequirementExplanationString">
         <source>Used by Visual Studio{0}. Specify individually or use —-force to remove</source>
         <target state="new">Used by Visual Studio{0}. Specify individually or use —-force to remove</target>
         <note />
