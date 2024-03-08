@@ -7,7 +7,7 @@
   <!-- Repo Version Information -->
   <PropertyGroup>
     <VersionMajor>1</VersionMajor>
-    <VersionMinor>6</VersionMinor>
+    <VersionMinor>7</VersionMinor>
     <VersionPatch>0</VersionPatch>
     <VersionPrefix>$(VersionMajor).$(VersionMinor).$(VersionPatch)</VersionPrefix>
     <AutoGenerateAssemblyVersion>true</AutoGenerateAssemblyVersion>
