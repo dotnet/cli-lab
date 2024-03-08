@@ -36,7 +36,7 @@
       The certificate can be overriden using the StrongNameSignInfo or the FileSignInfo item group.
     -->
       <FileExtensionSignInfo Include=".jar" CertificateName="MicrosoftJAR" />
-      <FileExtensionSignInfo Include=".js;.ps1;.psd1;.psm1;.psc1;.py" CertificateName="Microsoft400" />
+      <FileExtensionSignInfo Include=".msi;.js;.ps1;.psd1;.psm1;.psc1;.py" CertificateName="Microsoft400" />
       <FileExtensionSignInfo Include=".dll;.exe" CertificateName="Microsoft400" />
       <FileExtensionSignInfo Include=".nupkg" CertificateName="NuGet" />
       <FileExtensionSignInfo Include=".vsix" CertificateName="VsixSHA2" />
