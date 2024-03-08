@@ -84,6 +84,7 @@
       </LayoutFilesToSign>
       <!-- Built binaries -->
       <LayoutFilesToSign Include="$(DotnetCoreUninstallOutputDirectory)**/dotnet-core-uninstall.dll;
+                            $(DotnetCoreUninstallOutputDirectory)**/dotnet-core-uninstall.resources.dll;
                             $(DotnetCoreUninstallOutputDirectory)**/dotnet-core-uninstall.exe">
         <CertificateName>$(InternalCertificateId)</CertificateName>
       </LayoutFilesToSign>
