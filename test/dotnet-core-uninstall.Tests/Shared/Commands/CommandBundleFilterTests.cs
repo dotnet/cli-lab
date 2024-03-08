@@ -171,12 +171,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [Fact]
-        public void TestHelpOutputContainsExplanationParagraph()
+        public async void TestHelpOutputContainsExplanationParagraph()
         {
             foreach (var command in new string[] { "dry-run -h", "whatif -h", "remove -h" })
             {
                 var console = new TestConsole();
-                _ = CommandLineConfigs.UninstallCommandParser.InvokeAsync(command, console).Result;
+                _ = await CommandLineConfigs.UninstallCommandParser.InvokeAsync(command, console);
 
                 console.Out.ToString().Should().Contain(RuntimeInfo.RunningOnWindows ? LocalizableStrings.HelpExplanationParagraphWindows :
                     LocalizableStrings.HelpExplanationParagraphMac);
