@@ -20,14 +20,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class ListCommandExec
     {
-        public static int Execute(IBundleCollector bundleCollector)
+        public static void Execute(IBundleCollector bundleCollector)
         {
-            return Execute(
+            Execute(
                 bundleCollector.GetAllInstalledBundles(),
                 bundleCollector.GetSupportedBundleTypes());
         }
 
-        private static int Execute(
+        private static void Execute(
             IEnumerable<Bundle> bundles,
             IEnumerable<BundleTypePrintInfo> supportedBundleTypes)
         {
@@ -66,8 +66,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             stackView.Render(
                 new ConsoleRenderer(new SystemConsole()),
                 new Region(0, 0, int.MaxValue, int.MaxValue));
-
-            return 0;
         }
 
         public static Dictionary<BundleTypePrintInfo, Dictionary<Bundle, string>> GetFilteredBundlesWithRequirements(
