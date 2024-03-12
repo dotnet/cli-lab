@@ -20,14 +20,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class ListCommandExec
     {
-        public static void Execute(IBundleCollector bundleCollector)
+        public static int Execute(IBundleCollector bundleCollector)
         {
-            Execute(
+            return Execute(
                 bundleCollector.GetAllInstalledBundles(),
                 bundleCollector.GetSupportedBundleTypes());
         }
 
-        private static void Execute(
+        private static int Execute(
             IEnumerable<Bundle> bundles,
             IEnumerable<BundleTypePrintInfo> supportedBundleTypes)
         {
@@ -66,11 +66,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             stackView.Render(
                 new ConsoleRenderer(new SystemConsole()),
                 new Region(0, 0, int.MaxValue, int.MaxValue));
+
+            return 0;
         }
 
         public static Dictionary<BundleTypePrintInfo, Dictionary<Bundle, string>> GetFilteredBundlesWithRequirements(
             IEnumerable<Bundle> bundles,
-            IEnumerable<BundleTypePrintInfo> supportedBundleTypes, 
+            IEnumerable<BundleTypePrintInfo> supportedBundleTypes,
             ParseResult parseResult)
         {
             var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
