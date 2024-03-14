@@ -40,7 +40,7 @@ extends:
           enableMicrobuild: true
           enablePublishUsingPipelines: true
           enablePublishBuildArtifacts: true
-          enablePublishTestResults: true
+          enablePublishTestResults: false
           enableTelemetry: true
           helixRepo: dotnet/cli-lab
           timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
@@ -50,11 +50,13 @@ extends:
               # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
               # Will eventually change this to two BYOC pools.
               ${{ if ne(variables['System.TeamProject'], 'internal') }}:
-                name: NetCore-Public
-                demands: ImageOverride -equals windows.vs2019.amd64.open
+                name: $(DncEngPublicBuildPool)
+                image: 1es-windows-2022-open
+                os: windows
               ${{ if eq(variables['System.TeamProject'], 'internal') }}:
                 name: $(DncEngInternalBuildPool)
-                demands: ImageOverride -equals windows.vs2019.amd64
+                image: 1es-windows-2022
+                os: windows
             variables:
             - name: _RID
               value: win-x86
