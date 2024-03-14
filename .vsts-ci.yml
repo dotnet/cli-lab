@@ -1,6 +1,7 @@
 variables:
-  - name: _TeamName
-    value: DotNetCore
+- name: _TeamName
+  value: DotNetCore
+- template: /eng/common/templates-official/variables/pool-providers.yml@self
 
 # CI and PR triggers
 trigger:
@@ -15,154 +16,163 @@ pr:
     include:
     - '*'
 
-stages:
-- stage: build
-  displayName: Build
-  jobs:
-  - template: /eng/common/templates/jobs/jobs.yml
-    parameters:
-      enableMicrobuild: true
-      enablePublishUsingPipelines: true
-      enablePublishBuildArtifacts: true
-      enablePublishTestResults: true
-      enableTelemetry: true
-      helixRepo: dotnet/cli-lab
-      timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
+resources:
+  repositories:
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+extends:
+  template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
+  parameters:
+    pool:
+      name: $(DncEngInternalBuildPool)
+      image: 1es-windows-2022
+      os: windows
+    customBuildTags:
+    - ES365AIMigrationTooling
+    stages:
+    - stage: build
+      displayName: Build
       jobs:
-      - job: Windows
-        pool:
-          # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
-          # Will eventually change this to two BYOC pools.
-          ${{ if ne(variables['System.TeamProject'], 'internal') }}:
-            name: NetCore-Public
-            demands: ImageOverride -equals windows.vs2019.amd64.open
-          ${{ if eq(variables['System.TeamProject'], 'internal') }}:
-            name: NetCore1ESPool-Internal
-            demands: ImageOverride -equals windows.vs2019.amd64
-        variables:
-        - name: _RID
-          value: win-x86
-        # Only enable publishing in official builds.
-        - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-          # Publish-Build-Assets provides: MaestroAccessToken, BotAccount-dotnet-maestro-bot-PAT
-          - group: Publish-Build-Assets
-          - name: _OfficialBuildArgs
-            value: /p:DotNetSignType=$(_SignType)
-                   /p:SignCoreDotnetCoreUninstall=true
-                   /p:TeamName=$(_TeamName)
-                   /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-                   /p:DotNetPublishUsingPipelines=true
-        # else
-        - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
-          - name: _OfficialBuildArgs
-            value: ''
-        strategy:
-          matrix:
-            ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
-              Debug:
-                _BuildConfig: Debug
-                _SignType: test
-                _DotNetPublishToBlobFeed: false
-                _BuildArgs:
-  
-            Release:
-              _BuildConfig: Release
-              # PRs or external builds are not signed.
-              ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
-                _SignType: test
-                _DotNetPublishToBlobFeed: false
-                _BuildArgs:
-              ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-                _SignType: real
-                _DotNetPublishToBlobFeed: false
-                _BuildArgs: $(_OfficialBuildArgs)
-        steps:
-        - checkout: self
-          clean: true
-        - script: eng\common\cibuild.cmd
-            -configuration $(_BuildConfig)
-            -prepareMachine
-            $(_BuildArgs)
-            /p:RID=$(_RID)
-          displayName: Build and Publish
-        - task: CopyFiles@2
-          condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-          inputs:
-            sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
-            contents: '*.msi'
-            targetFolder: '$(Build.ArtifactStagingDirectory)'
-        - task: PublishBuildArtifacts@1
-          condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-          inputs:
-            pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            artifactName: 'drop-windows'
-            publishLocation: 'Container'
-            parallel: true
-  
-      - job: OSX_latest
-        displayName: 'Mac OS'
-        pool:
-          vmImage: 'macOS-latest'
-        strategy:
-          matrix:
-            ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
-              Debug:
-                _BuildConfig: Debug
-                _SignType: none
-                _DotNetPublishToBlobFeed : false
-            Release:
-              _BuildConfig: Release
-              _SignType: none
-              _DotNetPublishToBlobFeed : false
-        variables:
-        - name: _RID
-          value: osx-x64
-        steps:
-        - checkout: self
-          clean: true
-        - script: eng/common/cibuild.sh
-            --configuration $(_BuildConfig)
-            --prepareMachine
-            /p:RID=$(_RID)
-          displayName: Build
-        - task: ArchiveFiles@2
-          condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-          inputs:
-            rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
-            includeRootFolder: false
-            archiveType: 'tar'
-            tarCompression: 'gz'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
-            replaceExistingArchive: true
-        - task: PublishBuildArtifacts@1
-          condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-          inputs:
-            pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            artifactName: 'drop-osx'
-            publishLocation: 'Container'
-            parallel: true
+      - template: /eng/common/templates-official/jobs/jobs.yml@self
+        parameters:
+          enableMicrobuild: true
+          enablePublishUsingPipelines: true
+          enablePublishBuildArtifacts: true
+          enablePublishTestResults: false
+          enableTelemetry: true
+          helixRepo: dotnet/cli-lab
+          timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
+          jobs:
+          - job: Windows
+            pool:
+              # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
+              # Will eventually change this to two BYOC pools.
+              ${{ if ne(variables['System.TeamProject'], 'internal') }}:
+                name: $(DncEngPublicBuildPool)
+                image: 1es-windows-2022-open
+                os: windows
+              ${{ if eq(variables['System.TeamProject'], 'internal') }}:
+                name: $(DncEngInternalBuildPool)
+                image: 1es-windows-2022
+                os: windows
+            variables:
+            - name: _RID
+              value: win-x86
+            - name: _BuildConfig
+              value: Release
+            - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+              - name: _SignType
+                value: test
+              - name: _DotNetPublishToBlobFeed
+                value: false
+              - name: _BuildArgs
+                value: ''
+            - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+              - name: _SignType
+                value: real
+              - name: _DotNetPublishToBlobFeed
+                value: false
+              - name: _BuildArgs
+                value: $(_OfficialBuildArgs)
+            # Only enable publishing in official builds.
+            - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+              # Publish-Build-Assets provides: MaestroAccessToken, BotAccount-dotnet-maestro-bot-PAT
+              - group: Publish-Build-Assets
+              - name: _OfficialBuildArgs
+                value: /p:DotNetSignType=$(_SignType)
+                      /p:SignCoreDotnetCoreUninstall=true
+                      /p:TeamName=$(_TeamName)
+                      /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+                      /p:DotNetPublishUsingPipelines=true
+            # else
+            - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+              - name: _OfficialBuildArgs
+                value: ''
+            steps:
+            - checkout: self
+              clean: true
+            - script: eng\common\cibuild.cmd
+                -configuration $(_BuildConfig)
+                -prepareMachine
+                $(_BuildArgs)
+                /p:RID=$(_RID)
+              displayName: Build and Publish
+            - task: CopyFiles@2
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
+                contents: '*.msi'
+                targetFolder: '$(Build.ArtifactStagingDirectory)'
+            - task: 1ES.PublishBuildArtifacts@1
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                artifactName: 'drop-windows'
+                publishLocation: 'Container'
+                parallel: true
+          - job: OSX_latest
+            displayName: 'Mac OS'
+            pool:
+              name: Azure Pipelines
+              image: 'macOS-latest'
+              os: macOS
+            variables:
+            - name: _RID
+              value: osx-x64
+            - name: _BuildConfig
+              value: Release
+            - name: _SignType
+              value: none
+            - name: _DotNetPublishToBlobFeed
+              value: false
+            steps:
+            - checkout: self
+              clean: true
+            - script: eng/common/cibuild.sh
+                --configuration $(_BuildConfig)
+                --prepareMachine
+                /p:RID=$(_RID)
+              displayName: Build
+            - task: ArchiveFiles@2
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
+                includeRootFolder: false
+                archiveType: 'tar'
+                tarCompression: 'gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+                replaceExistingArchive: true
+            - task: 1ES.PublishBuildArtifacts@1
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                artifactName: 'drop-osx'
+                publishLocation: 'Container'
+                parallel: true
 
-- ${{ if eq(variables._RunAsInternal, True) }}:
-  - template: eng\common\templates\post-build\post-build.yml
-    parameters:
-      publishingInfraVersion: 3
-      # signing validation will not run, even if the below value is 'true', if the 'PostBuildSign' variable is set to 'true'
-      enableSigningValidation: false      
-      enableSourceLinkValidation: false
-      publishDependsOn:
-      - build
-      # This is to enable SDL runs part of Post-Build Validation Stage
-      SDLValidationParameters:
-        enable: true
-        continueOnError: false
-        params: ' -SourceToolsList @("policheck","credscan")
-        -TsaInstanceURL $(_TsaInstanceURL)
-        -TsaProjectName $(_TsaProjectName)
-        -TsaNotificationEmail $(_TsaNotificationEmail)
-        -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
-        -TsaBugAreaPath $(_TsaBugAreaPath)
-        -TsaIterationPath $(_TsaIterationPath)
-        -TsaRepositoryName "cli-lab"
-        -TsaCodebaseName "cli-lab"
-        -TsaPublish $True
-        -PoliCheckAdditionalRunConfigParams @("UserExclusionPath < $(Build.SourcesDirectory)/eng/PoliCheckExclusions.xml")'
+    - ${{ if eq(variables._RunAsInternal, True) }}:
+      - template: eng\common\templates-official\post-build\post-build.yml@self
+        parameters:
+          publishingInfraVersion: 3
+          # signing validation will not run, even if the below value is 'true', if the 'PostBuildSign' variable is set to 'true'
+          enableSigningValidation: false      
+          enableSourceLinkValidation: false
+          publishDependsOn:
+          - build
+          # This is to enable SDL runs part of Post-Build Validation Stage
+          SDLValidationParameters:
+            enable: true
+            continueOnError: false
+            params: ' -SourceToolsList @("policheck","credscan")
+            -TsaInstanceURL $(_TsaInstanceURL)
+            -TsaProjectName $(_TsaProjectName)
+            -TsaNotificationEmail $(_TsaNotificationEmail)
+            -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
+            -TsaBugAreaPath $(_TsaBugAreaPath)
+            -TsaIterationPath $(_TsaIterationPath)
+            -TsaRepositoryName "cli-lab"
+            -TsaCodebaseName "cli-lab"
+            -TsaPublish $True
+            -PoliCheckAdditionalRunConfigParams @("UserExclusionPath < $(Build.SourcesDirectory)/eng/PoliCheckExclusions.xml")'
