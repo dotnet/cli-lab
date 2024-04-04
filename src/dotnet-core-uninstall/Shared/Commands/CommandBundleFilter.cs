@@ -18,28 +18,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
     internal static class CommandBundleFilter
     {
-        private static readonly Lazy<string> _assemblyVersion =
-            new Lazy<string>(() =>
-            {
-                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-                var assemblyVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                if (assemblyVersionAttribute == null)
-                {
-                    return assembly.GetName().Version.ToString();
-                }
-                else
-                {
-                    return assemblyVersionAttribute.InformationalVersion;
-                }
-            });
-
-        public static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> allBundles, ParseResult parseResult = null)
+        public static IEnumerable<Bundle> GetFilteredBundles(IEnumerable<Bundle> allBundles, ParseResult parseResult)
         {
-            if (parseResult == null)
-            {
-                parseResult = CommandLineConfigs.CommandLineParseResult;
-            }
-
             var option = parseResult.CommandResult.GetUninstallMainOption();
             var typeSelection = parseResult.GetTypeSelection();
             var archSelection = parseResult.GetArchSelection();
@@ -52,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     throw new RequiredArgMissingForUninstallCommandException();
                 }
 
-                bundles = OptionFilterers.UninstallNoOptionFilterer.Filter( 
+                bundles = OptionFilterers.UninstallNoOptionFilterer.Filter(
                     parseResult.CommandResult.Tokens.Select(t => t.Value),
                     bundles,
                     typeSelection,
@@ -79,22 +59,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             return bundles;
         }
 
-        public static IDictionary<Bundle, string> GetFilteredWithRequirementStrings(IBundleCollector bundleCollector)
+        public static IDictionary<Bundle, string> GetFilteredWithRequirementStrings(IBundleCollector bundleCollector, ParseResult parseResult)
         {
             var allBundles = bundleCollector.GetAllInstalledBundles();
-            var filteredBundles = GetFilteredBundles(allBundles);
+            var filteredBundles = GetFilteredBundles(allBundles, parseResult);
             return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles)
                     .Where(pair => filteredBundles.Contains(pair.Key))
                     .ToDictionary(i => i.Key, i => i.Value);
-        }
-
-        public static void HandleVersionOption()
-        {
-            if (CommandLineConfigs.CommandLineParseResult.FindResultFor(CommandLineConfigs.VersionOption) != null)
-            {
-                Console.WriteLine(_assemblyVersion.Value);
-                Environment.Exit(0);
-            }
         }
 
         private static IEnumerable<Bundle> FilterRequiredBundles(IEnumerable<Bundle> allBundles, IEnumerable<Token> tokens)

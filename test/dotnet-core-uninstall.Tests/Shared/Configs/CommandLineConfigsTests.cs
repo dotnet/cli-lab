@@ -104,7 +104,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-previews")]
         [InlineData("--all-previews-but-latest")]
         [InlineData("--major-minor", "2.2", "2.2")]
-        [InlineData("", "2.2.300", new[] { "2.2.300" })] 
+        [InlineData("", "2.2.300", new[] { "2.2.300" })]
         [InlineData("", "2.2.300 3.0.100", new[] { "2.2.300", "3.0.100" })]
         [InlineData("", "--unknown-option", new[] { "--unknown-option" })]
         [InlineData("", "--unknown-option argument", new[] { "--unknown-option", "argument" })]
@@ -408,7 +408,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         [InlineData("--all-previews")]
         [InlineData("--all-previews-but-latest")]
         [InlineData("--major-minor", "2.2")]
-        [InlineData("", "2.2.300")] 
+        [InlineData("", "2.2.300")]
         [InlineData("", "2.2.300 3.0.100")]
         [InlineData("", "--unknown-option")]
         [InlineData("", "--unknown-option argument")]
@@ -419,7 +419,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             if (option.Equals(string.Empty))
             {
                 commandResult.GetUninstallMainOption().Should().BeNull();
-            } 
+            }
             else
             {
                 commandResult.GetUninstallMainOption().Name
@@ -795,27 +795,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
             Action action = () => parseResult.CommandResult.GetVerbosityLevel();
 
             action.Should().Throw<VerbosityLevelInvalidException>(LocalizableStrings.VerbosityLevelInvalidExceptionMessage);
-        }
-
-        [Theory]
-        [InlineData("remove --version")]
-        [InlineData("remove --all --sdk --version")]
-        [InlineData("remove 2.2.300 --runtime --version")]
-        [InlineData("remove --version 2.2.300 --runtime")]
-        [InlineData("remove --version --major-minor 2.1")]
-        [InlineData("remove --version --all-but 2.2.300 2.1.700")]
-        [InlineData("remove 2.2.5 --runtime -y --version")]
-        [InlineData("remove --version --sdk 2.2.300 2.1.700 --yes")]
-        internal void TestVersionOption(string command)
-        {
-            var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);
-
-            parseResult.Errors.Should().BeEmpty();
-            parseResult.UnparsedTokens.Should().BeEmpty();
-            parseResult.UnmatchedTokens.Should().BeEmpty();
-
-            parseResult.CommandResult.FindResultFor(CommandLineConfigs.VersionOption)
-                .Should().NotBeNull();
         }
     }
 }

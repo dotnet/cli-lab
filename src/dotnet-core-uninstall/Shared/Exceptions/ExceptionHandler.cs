@@ -7,13 +7,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
 {
     internal static class ExceptionHandler
     {
-        public static Action HandleException(Action action)
+        public static Action<T> HandleException<T>(Action<T> action)
         {
-            return () =>
+            return (x) =>
             {
                 try
                 {
-                    action.Invoke();
+                    action.Invoke(x);
                 }
                 catch (DotNetUninstallException e)
                 {

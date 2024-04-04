@@ -15,6 +15,7 @@ using System.Security.Principal;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
 using Microsoft.DotNet.Tools.Uninstall.MacOs;
+using System.CommandLine.Parsing;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -30,20 +31,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             [MarshalAs(UnmanagedType.LPWStr)] string lpCmdLine,
             out int pNumArgs);
 
-        public static void Execute(IBundleCollector bundleCollector)
+        public static void Execute(IBundleCollector bundleCollector, ParseResult parseResult)
         {
-            CommandBundleFilter.HandleVersionOption();
+            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector, parseResult);
+            var verbosity = parseResult.CommandResult.GetVerbosityLevel();
 
-            var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector);
-
-            if (CommandLineConfigs.CommandLineParseResult.FindResultFor(CommandLineConfigs.YesOption) != null)
+            if (parseResult.FindResultFor(CommandLineConfigs.YesOption) != null)
             {
                 if (!IsAdmin())
                 {
                     throw new NotAdminException();
                 }
 
-                DoIt(filtered.Keys);
+                DoIt(filtered.Keys, verbosity);
             }
             else
             {
@@ -56,15 +56,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 {
                     if (AskWithWarningsForRequiredBundles(filtered))
                     {
-                        DoIt(filtered.Keys);
+                        DoIt(filtered.Keys, verbosity);
                     }
                 }
             }
         }
 
-        private static void DoIt(IEnumerable<Bundle> bundles)
+        private static void DoIt(IEnumerable<Bundle> bundles, VerbosityLevel verbosityLevel)
         {
-            var verbosityLevel = CommandLineConfigs.CommandLineParseResult.CommandResult.GetVerbosityLevel();
             var verbosityLogger = new VerbosityLogger(verbosityLevel);
 
             var canceled = false;
@@ -214,7 +213,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         public static bool AskItAndReturnUserAnswer(IDictionary<Bundle, string> bundles, string userResponse = null)
         {
             var displayNames = string.Join("\n", bundles.Select(bundle => $"  {bundle.Key.DisplayName}"));
-            Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat : 
+            Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat :
                 LocalizableStrings.MacConfirmationPromptOutputFormat, displayNames));
 
             var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
@@ -233,19 +232,19 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             }
         }
 
-        public static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles, string userResponse = null) 
+        public static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles, string userResponse = null)
         {
             var requiredBundles = bundles.Where(b => !b.Value.Equals(string.Empty));
             foreach (var pair in requiredBundles)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptOutputFormat : 
+                Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptOutputFormat :
                     LocalizableStrings.MacRequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
                 var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
                 if (response.Equals("N"))
                 {
-                    return false ;
+                    return false;
                 }
                 else if (!(response.Equals("Y") || response.Equals("YES")))
                 {

@@ -70,7 +70,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         public static Dictionary<BundleTypePrintInfo, Dictionary<Bundle, string>> GetFilteredBundlesWithRequirements(
             IEnumerable<Bundle> bundles,
-            IEnumerable<BundleTypePrintInfo> supportedBundleTypes, 
+            IEnumerable<BundleTypePrintInfo> supportedBundleTypes,
             ParseResult parseResult)
         {
             var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
