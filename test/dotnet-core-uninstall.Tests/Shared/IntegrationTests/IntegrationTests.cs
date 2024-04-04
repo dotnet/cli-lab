@@ -10,11 +10,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.IntegrationTests
     public class IntegrationTests
     {
         [Fact]
-        internal void VersionCommandOutputsVersionInfo()
+        internal async void VersionCommandOutputsVersionInfo()
         {
             var console = new TestConsole();
-            var output = CommandLineConfigs.UninstallCommandParser.InvokeAsync(new string[1] { "--version" }, console);
-            output.Result.Should().Be(0);
+            var output = await CommandLineConfigs.UninstallCommandParser.InvokeAsync(new string[1] { "--version" }, console);
+            output.Should().Be(0);
             console.Out.ToString().Should().NotBeNullOrEmpty();
         }
     }
