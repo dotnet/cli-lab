@@ -322,8 +322,8 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallNotAllowedExceptionFormat">
-        <source>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</source>
-        <target state="new">Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</target>
+        <source>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above. Use --force to ignore this restriction.</source>
+        <target state="new">Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above. Use --force to ignore this restriction.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallRuntimeOptionDescription">
@@ -357,8 +357,8 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="UpperLimitRequirement">
-        <source>Cannot uninstall version {0} and above</source>
-        <target state="new">Cannot uninstall version {0} and above</target>
+        <source>Cannot uninstall version {0} and above. Use —-force to remove</source>
+        <target state="new">Cannot uninstall version {0} and above. Use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="VerbosityLevelInvalidExceptionMessage">

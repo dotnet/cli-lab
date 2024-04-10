@@ -298,7 +298,7 @@ Do you want to continue? [y/n] </value>
     <value>Remove the specified .NET Core SDKs or Runtimes.</value>
   </data>
   <data name="UninstallNotAllowedExceptionFormat" xml:space="preserve">
-    <value>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above.</value>
+    <value>Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above. Use --force to ignore this restriction.</value>
   </data>
   <data name="WindowsRequiredBundleConfirmationPromptOutputFormat" xml:space="preserve">
     <value>
@@ -318,7 +318,7 @@ Uninstalling this item will cause Visual Studio to break.
     <value>Display .NET Core Uninstall Tool version information.</value>
   </data>
   <data name="UpperLimitRequirement" xml:space="preserve">
-    <value>Cannot uninstall version {0} and above</value>
+    <value>Cannot uninstall version {0} and above. Use —-force to remove</value>
   </data>
   <data name="WindowsRequirementExplanationString" xml:space="preserve">
     <value>Used by Visual Studio{0}. Specify individually or use —-force to remove</value>
