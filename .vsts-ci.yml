@@ -25,6 +25,12 @@ resources:
 extends:
   template: v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates
   parameters:
+    sdl:
+      policheck:
+        enabled: true
+      tsa:
+        enabled: true
+        configFile: '$(Build.SourcesDirectory)/.config/tsaoptions.json'
     pool:
       name: $(DncEngInternalBuildPool)
       image: 1es-windows-2022
@@ -152,27 +158,3 @@ extends:
                 publishLocation: 'Container'
                 parallel: true
 
-    - ${{ if eq(variables._RunAsInternal, True) }}:
-      - template: eng\common\templates-official\post-build\post-build.yml@self
-        parameters:
-          publishingInfraVersion: 3
-          # signing validation will not run, even if the below value is 'true', if the 'PostBuildSign' variable is set to 'true'
-          enableSigningValidation: false      
-          enableSourceLinkValidation: false
-          publishDependsOn:
-          - build
-          # This is to enable SDL runs part of Post-Build Validation Stage
-          SDLValidationParameters:
-            enable: true
-            continueOnError: false
-            params: ' -SourceToolsList @("policheck","credscan")
-            -TsaInstanceURL $(_TsaInstanceURL)
-            -TsaProjectName $(_TsaProjectName)
-            -TsaNotificationEmail $(_TsaNotificationEmail)
-            -TsaCodebaseAdmin $(_TsaCodebaseAdmin)
-            -TsaBugAreaPath $(_TsaBugAreaPath)
-            -TsaIterationPath $(_TsaIterationPath)
-            -TsaRepositoryName "cli-lab"
-            -TsaCodebaseName "cli-lab"
-            -TsaPublish $True
-            -PoliCheckAdditionalRunConfigParams @("UserExclusionPath < $(Build.SourcesDirectory)/eng/PoliCheckExclusions.xml")'
