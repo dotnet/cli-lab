@@ -30,7 +30,6 @@ extends:
         enabled: true
       tsa:
         enabled: true
-        configFile: '$(Build.SourcesDirectory)/.config/tsaoptions.json'
     pool:
       name: $(DncEngInternalBuildPool)
       image: 1es-windows-2022
