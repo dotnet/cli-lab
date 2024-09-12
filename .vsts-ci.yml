@@ -54,9 +54,9 @@ extends:
           - job: Windows
             templateContext:
               outputs:
-                -output: pipelineArtifact
-                targetPath: $(Build.SourcesDirectory)/artifacts/bin/dotnet-core-uninstall
-                artifactName: UninstallTool
+                - output: pipelineArtifact
+                  targetPath: $(Build.SourcesDirectory)/artifacts/bin/dotnet-core-uninstall
+                  artifactName: UninstallTool
             pool:
               # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
               # Will eventually change this to two BYOC pools.
