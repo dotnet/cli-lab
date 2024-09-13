@@ -30,6 +30,8 @@ extends:
         enabled: true
       tsa:
         enabled: true
+      binskim:
+        analyzeTargetGlob: $(Build.SourcesDirectory)/artifacts/bin/**.dll;$(Build.SourcesDirectory)/artifacts/bin/**.exe;
     pool:
       name: $(DncEngInternalBuildPool)
       image: 1es-windows-2022
@@ -51,11 +53,6 @@ extends:
           timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
           jobs:
           - job: Windows
-            templateContext:
-              outputs:
-                - output: pipelineArtifact
-                  targetPath: $(Build.SourcesDirectory)/artifacts/bin/dotnet-core-uninstall
-                  artifactName: UninstallTool
             pool:
               # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
               # Will eventually change this to two BYOC pools.
