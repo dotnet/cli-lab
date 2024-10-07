@@ -13,7 +13,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
     internal static class VisualStudioSafeVersionsExtractor
     {
         // The tool should not be used to uninstall any more recent versions of the sdk
-        public static readonly SemanticVersion UpperLimit = new SemanticVersion(9, 0, 0);
+        public static readonly SemanticVersion UpperLimit = new SemanticVersion(10, 0, 0);
 
         // Must keep one of each of these divisions to ensure Visual Studio works. 
         // Pairs are [inclusive, exclusive)
@@ -29,7 +29,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             { (new SemanticVersion(5, 0, 100), new SemanticVersion(5, 0, 600)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019") },
             { (new SemanticVersion(6, 0, 100), new SemanticVersion(6, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
             { (new SemanticVersion(7, 0, 100), new SemanticVersion(7, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
-            { (new SemanticVersion(8, 0, 100), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, "") }
+            { (new SemanticVersion(8, 0, 100), new SemanticVersion(8, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
+            { (new SemanticVersion(9, 0, 100), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, "") }
         };
 
         private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyWindowsVersionDivisions(IEnumerable<Bundle> bundleList)
