@@ -5,6 +5,7 @@ using System.CommandLine.Invocation;
 using System.CommandLine.IO;
 using System.CommandLine.Parsing;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
@@ -171,7 +172,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [Fact]
-        public async void TestHelpOutputContainsExplanationParagraph()
+        public async Task TestHelpOutputContainsExplanationParagraph()
         {
             foreach (var command in new string[] { "dry-run -h", "whatif -h", "remove -h" })
             {
