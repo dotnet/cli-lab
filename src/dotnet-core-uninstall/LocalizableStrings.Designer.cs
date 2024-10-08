@@ -596,7 +596,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above..
+        ///   Looks up a localized string similar to Uninstallation not allowed. This tool cannot uninstall .NET Core SDKs with version {0} or above. Use --force to ignore this restriction..
         /// </summary>
         internal static string UninstallNotAllowedExceptionFormat {
             get {
@@ -641,7 +641,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot uninstall version {0} and above.
+        ///   Looks up a localized string similar to Cannot uninstall version {0} and above. Use —-force to remove.
         /// </summary>
         internal static string UpperLimitRequirement {
             get {
