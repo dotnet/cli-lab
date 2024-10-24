@@ -42,14 +42,14 @@
       <_RidSpecificBuild Include="$(MSBuildThisFile)" AdditionalProperties="RuntimeIdentifier=%(_Rids.Identity);PublishSingleFile=true;Configuration=Release" />
     </ItemGroup>
 
-    <MSBuild Projects="@(_RidSpecificBuild)" BuildInParallel="true" Targets="Publish">
+    <MSBuild Projects="@(_RidSpecificBuild)" BuildInParallel="true" Targets="Publish;PublishItemsOutputGroup">
      <Output TaskParameter="TargetOutputs" ItemName="_RidSpecificSingleFile" />
     </MSBuild>
     <PropertyGroup>
-      <_LipoOuputPath>$(PublishDir)/osx-universal/$(AssemblyName)</_LipoOuputPath>
+      <_LipoOuputPath>$(PublishDir)\osx-universal\$(AssemblyName)</_LipoOuputPath>
     </PropertyGroup>
 
-    <Exec Command="lipo @(_RidSpecificSingleFile, ' ') -create -output $(_LipoOuputPath)" />
+    <Exec Command="lipo @(_RidSpecificSingleFile, ' ') -create -output $(_LipoOuputPath)" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
   </Target>
 
 </Project>
