@@ -39,7 +39,7 @@
   <Target Name="PublishMacOSUniversalBinary">
     <ItemGroup>
       <_Rids Include="osx-x64;osx-arm64" />
-      <_RidSpecificBuild Include="$(MSBuildThisFile)" AdditionalProperties="RuntimeIdentifier=%(_Rids.Identity);PublishSingleFile=true;Configuration=Release" />
+      <_RidSpecificBuild Include="$(MSBuildThisFile)" AdditionalProperties="RuntimeIdentifier=%(_Rids.Identity);PublishSingleFile=true;Configuration=Release;PublishSelfContained=true;" />
     </ItemGroup>
 
     <MSBuild Projects="@(_RidSpecificBuild)" BuildInParallel="true" Targets="Publish;PublishItemsOutputGroup">
