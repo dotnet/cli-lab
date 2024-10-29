@@ -46,10 +46,13 @@
      <Output TaskParameter="TargetOutputs" ItemName="_RidSpecificSingleFile" />
     </MSBuild>
     <PropertyGroup>
-      <_LipoOuputPath>$(PublishDir)\osx-universal\$(AssemblyName)</_LipoOuputPath>
+      <_LipoOutputDir>$(PublishDir)\osx-universal\</_LipoOutputDir>
+      <_LipoOutputPath>$(_LipoOutputDir)$(AssemblyName)</_LipoOutputPath>
     </PropertyGroup>
 
-    <Exec Command="lipo @(_RidSpecificSingleFile, ' ') -create -output $(_LipoOuputPath)" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+    <MakeDir Directories="$(_LipoOutputDir)" />
+
+    <Exec Command="lipo @(_RidSpecificSingleFile, ' ') -create -output $(_LipoOutputPath)" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
   </Target>
 
 </Project>
