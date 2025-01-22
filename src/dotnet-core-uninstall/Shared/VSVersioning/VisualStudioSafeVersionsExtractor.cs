@@ -61,14 +61,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
                 .Select(pair => (pair as IEnumerable<Bundle>, LocalizableStrings.MacRuntimeRequirementExplanationString))
                 .ToDictionary(key => key.Item1, value => value.Item2); 
 
-            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion);
-            if (sdks != null && sdks.Count() > 0)
-            {
-                dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplanationString);
-            }
-
             var remainingBundles = bundleList
-                .Where(bundle => !(bundle.Version is RuntimeVersion || bundle.Version is SdkVersion))
+                .Where(bundle => bundle.Version is not RuntimeVersion)
                 .Concat(bundlesAboveLimit);
             return (dividedBundles, remainingBundles);
         }
@@ -87,17 +81,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
 
         public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
         {
-            var required = new List<Bundle>();
+            var protectedBundles = new List<Bundle>();
             var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(bundles);
 
             foreach (IEnumerable<Bundle> band in bundlesByDivisions.Keys)
             {
-                required.Add(band.Max());
+                protectedBundles.Add(band.Max());
             }
 
-            required = required.Concat(remainingBundles.Where(bundle => bundle.Version.SemVer >= UpperLimit)).ToList();
+            protectedBundles = protectedBundles.Concat(remainingBundles.Where(bundle => bundle.Version.SemVer >= UpperLimit)).ToList();
 
-            return bundles.Where(b => !required.Contains(b));
+            // Return all bundles that are not protectedBundles
+            return bundles.Except(protectedBundles);
         }
 
         public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles)

@@ -335,15 +335,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used by Visual Studio for Mac. Specify individually or use —-force to remove.
-        /// </summary>
-        internal static string MacSDKRequirementExplanationString {
-            get {
-                return ResourceManager.GetString("MacSDKRequirementExplanationString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You must specify exactly one version for option: {0}..
         /// </summary>
         internal static string MoreThanOneVersionSpecifiedExceptionMessageFormat {
