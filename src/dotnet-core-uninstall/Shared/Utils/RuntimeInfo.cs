@@ -7,8 +7,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
 {
     internal static class RuntimeInfo
     {
-        public static readonly bool RunningOnWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
-        public static readonly bool RunningOnOSX = RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
+        public static readonly bool RunningOnWindows = false /*TODO@edvilme: Remove*/ && RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+        public static readonly bool RunningOnOSX = true /*TODO@edvilme: Remove*/ || RuntimeInformation.IsOSPlatform(OSPlatform.OSX);
         public static readonly bool RunningOnLinux = RuntimeInformation.IsOSPlatform(OSPlatform.Linux);
     }
 }

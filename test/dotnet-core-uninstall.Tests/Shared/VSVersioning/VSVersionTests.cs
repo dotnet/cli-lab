@@ -5,6 +5,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
@@ -147,7 +148,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 {
                     uninstallableBundles.Should().Contain(sdkBundles[i]);
                 }
-                else
+                else if (!RuntimeInfo.RunningOnOSX)
                 {
                     uninstallableBundles.Should().NotContain(sdkBundles[i]);
                 }
@@ -236,6 +237,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             });
 
             var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+
             strings.Count().Should().Be(bundles.Count());
 
             var sdkBundles = strings.Where(pair => pair.Key.Version is SdkVersion).ToArray();
@@ -265,7 +267,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 { string.Empty, string.Format(LocalizableStrings.WindowsRequirementExplanationString, string.Empty)},
                 { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2017")},
                 { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019")},
-                { "SDK", LocalizableStrings.MacSDKRequirementExplanationString},
+                { "SDK", string.Empty}, // Don't need to check for SDKs on Mac
                 { "Runtime", LocalizableStrings.MacRuntimeRequirementExplanationString}
             };
             var output = new string[input.Length];
