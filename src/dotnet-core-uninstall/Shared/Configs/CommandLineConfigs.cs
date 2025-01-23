@@ -141,7 +141,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             : LocalizableStrings.ForceOptionDescriptionMac);
 
         public static readonly Option MacOSPreserveVSSdksOption = new Option(
-            "--preserve-mac-vs-sdks", 
+            "--preserve-vs-for-mac-sdks", 
             LocalizableStrings.MacOSPreserveVSSdksOptionDescription);
 
         public static readonly Option[] UninstallFilterBundlesOptions = new Option[]
