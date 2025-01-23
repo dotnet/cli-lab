@@ -141,7 +141,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             : LocalizableStrings.ForceOptionDescriptionMac);
 
         public static readonly Option MacOSPreserveVSSdksOption = new Option(
-            "--preserve-vs-sdks", 
+            "--preserve-mac-vs-sdks", 
             LocalizableStrings.MacOSPreserveVSSdksOptionDescription);
 
         public static readonly Option[] UninstallFilterBundlesOptions = new Option[]
@@ -225,7 +225,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
             if (RuntimeInfo.RunningOnOSX)
             {
-                UninstallRootCommand.AddOption(MacOSPreserveVSSdksOption);
+                ListCommand.AddOption(MacOSPreserveVSSdksOption);
+                RemoveCommand.AddOption(MacOSPreserveVSSdksOption);
             }
 
             var supportedBundleTypeNames = SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => type.OptionName);
