@@ -73,7 +73,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             IEnumerable<BundleTypePrintInfo> supportedBundleTypes,
             ParseResult parseResult)
         {
-            var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            bool macOSPreserveVSSdks = parseResult.ValueForOption<bool>(CommandLineConfigs.MacOSPreserveVSSdksOption);
+
+            var uninstallMap = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles, macOSPreserveVSSdks);
 
             var typeSelection = parseResult.GetTypeSelection();
             var archSelection = parseResult.GetArchSelection();

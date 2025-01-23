@@ -13,6 +13,7 @@ using System.CommandLine;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using NuGet.Versioning;
 using System.CommandLine.Parsing;
+using System.CommandLine.Binding;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 {
@@ -23,6 +24,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             var option = parseResult.CommandResult.GetUninstallMainOption();
             var typeSelection = parseResult.GetTypeSelection();
             var archSelection = parseResult.GetArchSelection();
+            var macOSPreserveVSSdks = parseResult.ValueForOption<bool>(CommandLineConfigs.MacOSPreserveVSSdksOption);
             var bundles = allBundles;
 
             if (option == null)
@@ -50,7 +52,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
             if (parseResult.FindResultFor(CommandLineConfigs.ForceOption) == null)
             {
-                bundles = FilterRequiredBundles(allBundles, parseResult.CommandResult.Tokens).Intersect(bundles);
+                bundles = FilterRequiredBundles(allBundles, parseResult.CommandResult.Tokens, macOSPreserveVSSdks).Intersect(bundles);
             }
             if (bundles.Any(bundle => bundle.Version.SemVer >= VisualStudioSafeVersionsExtractor.UpperLimit))
             {
@@ -63,17 +65,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
         {
             var allBundles = bundleCollector.GetAllInstalledBundles();
             var filteredBundles = GetFilteredBundles(allBundles, parseResult);
-            return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles)
+            var macOSPreserveVSSdks = parseResult.ValueForOption<bool>(CommandLineConfigs.MacOSPreserveVSSdksOption);
+            return VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(allBundles, macOSPreserveVSSdks)
                     .Where(pair => filteredBundles.Contains(pair.Key))
                     .ToDictionary(i => i.Key, i => i.Value);
         }
 
-        private static IEnumerable<Bundle> FilterRequiredBundles(IEnumerable<Bundle> allBundles, IEnumerable<Token> tokens)
+        private static IEnumerable<Bundle> FilterRequiredBundles(IEnumerable<Bundle> allBundles, IEnumerable<Token> tokens, bool macOSPreserveVSSdks)
         {
             var explicitlyListedBundles = tokens
                 .Where(token => SemanticVersion.TryParse(token.Value, out SemanticVersion semVerOut))
                 .Select(token => SemanticVersion.Parse(token.Value));
-            return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(allBundles)
+            return VisualStudioSafeVersionsExtractor.GetUninstallableBundles(allBundles, macOSPreserveVSSdks)
                 .Concat(allBundles.Where(b => explicitlyListedBundles.Contains(b.Version.SemVer)))
                 .Distinct()
                 .ToList();
