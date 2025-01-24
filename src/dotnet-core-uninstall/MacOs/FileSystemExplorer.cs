@@ -77,7 +77,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                     group.First().Version,
                     group.First().Arch,
                     GetUninstallCommand(group.Select(tuple => tuple.Path)),
-                    string.Format(LocalizableStrings.MacOsBundleDisplayNameFormat, bundleTypeString, group.First().Version.ToString())));
+                    string.Format(LocalizableStrings.MacOsBundleDisplayNameFormat, bundleTypeString, group.First().Version.ToString(), group.First().Arch.ToString())));
         }
 
         private static IEnumerable<(TBundleVersion Version, string Path, BundleArch Arch)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)

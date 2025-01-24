@@ -151,8 +151,8 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
         <note />
       </trans-unit>
       <trans-unit id="MacOsBundleDisplayNameFormat">
-        <source>Microsoft .NET Core {0} {1} (x64)</source>
-        <target state="new">Microsoft .NET Core {0} {1} (x64)</target>
+        <source>Microsoft .NET Core {0} {1} ({2})</source>
+        <target state="new">Microsoft .NET Core {0} {1} ({2})</target>
         <note />
       </trans-unit>
       <trans-unit id="MacRequiredBundleConfirmationPromptOutputFormat">
