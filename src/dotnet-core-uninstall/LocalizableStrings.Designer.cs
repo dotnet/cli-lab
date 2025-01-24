@@ -344,7 +344,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by SDKs. Specify individually or use —-force to remove.
         /// </summary>
         internal static string MacRuntimeRequirementExplanationString {
             get {

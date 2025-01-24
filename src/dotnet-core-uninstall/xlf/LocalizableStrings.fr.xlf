@@ -192,8 +192,8 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="MacRuntimeRequirementExplanationString">
-        <source>Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</source>
-        <target state="new">Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove</target>
+        <source>Used by SDKs. Specify individually or use —-force to remove</source>
+        <target state="new">Used by SDKs. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="MacSDKRequirementExplanationString">
