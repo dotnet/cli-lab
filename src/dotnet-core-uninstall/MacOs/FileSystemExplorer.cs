@@ -26,7 +26,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 
         public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
-            // var nativeArch = IsMacx64Installation(DotNetInstallPath) ? BundleArch.X64 : BundleArch.Arm64;
             var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath(DotNetInstallPath));
             var runtimes = GetInstalledBundles<RuntimeVersion>(
                 DotNetRuntimeInstallPath(DotNetInstallPath),
@@ -38,13 +37,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             {
                 sdks = sdks.Concat(GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath(EmulatedDotNetInstallPath)));
                 runtimes = runtimes.Concat(GetInstalledBundles<RuntimeVersion>(
-                    DotNetRuntimeInstallPath(DotNetInstallPath),
-                    DotNetAspAllInstallPath(DotNetInstallPath),
-                    DotNetAspAppInstallPath(DotNetInstallPath),
-                    DotNetHostFxrInstallPath(DotNetInstallPath)));
+                    DotNetRuntimeInstallPath(EmulatedDotNetInstallPath),
+                    DotNetAspAllInstallPath(EmulatedDotNetInstallPath),
+                    DotNetAspAppInstallPath(EmulatedDotNetInstallPath),
+                    DotNetHostFxrInstallPath(EmulatedDotNetInstallPath)));
             }
 
-            return sdks.Concat(runtimes).ToList();
+            return [..sdks, ..runtimes];
         }
 
         private static bool IsMacx64Installation(string sdkVersionPath)
