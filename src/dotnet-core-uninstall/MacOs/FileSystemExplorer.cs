@@ -51,7 +51,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             try
             {
                 var rids = File.ReadAllText(Path.Combine(sdkVersionPath, "NETCoreSdkRuntimeIdentifierChain.txt"));
-                return !rids.Contains("arm64");
+                return !rids.Contains("osx-arm64");
             }
             catch
             {
