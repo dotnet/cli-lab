@@ -52,6 +52,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly string HostingBundleOptionName = "hosting-bundle";
         public static readonly string X64OptionName = "x64";
         public static readonly string X86OptionName = "x86";
+        public static readonly string Arm64OptionName = "arm64";
 
         public static readonly Option UninstallAllOption = new Option(
             "--all",
@@ -314,7 +315,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             var archSelection = new[]
             {
                 (OptionName: X64OptionName, Arch: BundleArch.X64),
-                (OptionName: X86OptionName, Arch: BundleArch.X86)
+                (OptionName: X86OptionName, Arch: BundleArch.X86),
+                (OptionName: Arm64OptionName, Arch: BundleArch.Arm64)
             }
             .Where(tuple => parseResult.ValueForOption<bool>($"--{tuple.OptionName}"))
             .Select(tuple => tuple.Arch)

@@ -26,10 +26,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 
         public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
-            var nativeArch = IsMacx64Installation(DotNetInstallPath) ? BundleArch.X64 : BundleArch.Arm64;
-            var sdks = GetInstalledBundles<SdkVersion>(nativeArch, DotNetSdkInstallPath(DotNetInstallPath));
+            var sdks = GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath(DotNetInstallPath));
             var runtimes = GetInstalledBundles<RuntimeVersion>(
-                nativeArch,
                 DotNetRuntimeInstallPath(DotNetInstallPath),
                 DotNetAspAllInstallPath(DotNetInstallPath),
                 DotNetAspAppInstallPath(DotNetInstallPath),
@@ -37,25 +35,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
 
             if (Directory.Exists(EmulatedDotNetInstallPath))
             {
-                sdks = sdks.Concat(GetInstalledBundles<SdkVersion>(BundleArch.X64, DotNetSdkInstallPath(EmulatedDotNetInstallPath)));
+                sdks = sdks.Concat(GetInstalledBundles<SdkVersion>(DotNetSdkInstallPath(EmulatedDotNetInstallPath)));
                 runtimes = runtimes.Concat(GetInstalledBundles<RuntimeVersion>(
-                    BundleArch.X64,
-                    DotNetRuntimeInstallPath(DotNetInstallPath),
-                    DotNetAspAllInstallPath(DotNetInstallPath),
-                    DotNetAspAppInstallPath(DotNetInstallPath),
-                    DotNetHostFxrInstallPath(DotNetInstallPath)));
+                    DotNetRuntimeInstallPath(EmulatedDotNetInstallPath),
+                    DotNetAspAllInstallPath(EmulatedDotNetInstallPath),
+                    DotNetAspAppInstallPath(EmulatedDotNetInstallPath),
+                    DotNetHostFxrInstallPath(EmulatedDotNetInstallPath)));
             }
 
-            return sdks.Concat(runtimes).ToList();
+            return [..sdks, ..runtimes];
         }
 
-        private static bool IsMacx64Installation(string path)
+        private static bool IsMacx64Installation(string sdkVersionPath)
         {
             try
             {
-                var versionDirs = Directory.GetDirectories(Path.Combine(path, "sdk"));
-                var rids = File.ReadAllText(Path.Combine(versionDirs[0], "NETCoreSdkRuntimeIdentifierChain.txt"));
-                return !rids.Contains("arm64");
+                var rids = File.ReadAllText(Path.Combine(sdkVersionPath, "NETCoreSdkRuntimeIdentifierChain.txt"));
+                return !rids.Contains("osx-arm64");
             }
             catch
             {
@@ -63,7 +59,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             }
         }
 
-        private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(BundleArch arch, params string[] paths)
+        private static IEnumerable<Bundle> GetInstalledBundles<TBundleVersion>(params string[] paths)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
             string bundleTypeString;
@@ -79,12 +75,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                 .GroupBy(tuple => tuple.Version)
                 .Select(group => Bundle.From(
                     group.First().Version,
-                    arch,
+                    group.First().Arch,
                     GetUninstallCommand(group.Select(tuple => tuple.Path)),
-                    string.Format(LocalizableStrings.MacOsBundleDisplayNameFormat, bundleTypeString, group.First().Version.ToString())));
+                    string.Format(LocalizableStrings.MacOsBundleDisplayNameFormat, bundleTypeString, group.First().Version.ToString(), group.First().Arch.ToString().ToLowerInvariant())));
         }
 
-        private static IEnumerable<(TBundleVersion Version, string Path)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
+        private static IEnumerable<(TBundleVersion Version, string Path, BundleArch Arch)> GetInstalledVersionsAndUninstallCommands<TBundleVersion>(string path)
             where TBundleVersion : BundleVersion, IComparable<TBundleVersion>, new()
         {
             return Directory.Exists(path) ?
@@ -93,11 +89,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                     .Select(dirInfo =>
                     {
                         var success = BundleVersion.TryFromInput<TBundleVersion>(dirInfo.Name, out var version);
-                        return (Success: success, Version: version, Path: dirInfo.FullName);
+                        var arch = IsMacx64Installation(dirInfo.FullName) ? BundleArch.X64 : BundleArch.Arm64;
+                        return (Success: success, Version: version, Path: dirInfo.FullName, Arch: arch);
                     })
                     .Where(tuple => tuple.Success)
-                    .Select(tuple => (tuple.Version, tuple.Path)) :
-                new List<(TBundleVersion Version, string Path)>();
+                    .Select(tuple => (tuple.Version, tuple.Path, tuple.Arch)) :
+                new List<(TBundleVersion Version, string Path, BundleArch Arch)>();
         }
 
         private static string GetUninstallCommand(IEnumerable<string> paths)
