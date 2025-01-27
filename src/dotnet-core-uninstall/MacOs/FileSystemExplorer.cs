@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
 using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
@@ -46,12 +47,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
             return [..sdks, ..runtimes];
         }
 
-        private static bool IsMacx64Installation(string sdkVersionPath)
+        private static bool IsMacx64Installation(string bundlePath, bool isSdk)
         {
             try
             {
-                var rids = File.ReadAllText(Path.Combine(sdkVersionPath, "NETCoreSdkRuntimeIdentifierChain.txt"));
-                return !rids.Contains("osx-arm64");
+                if (isSdk)
+                {
+                    var rids = File.ReadAllText(Path.Combine(bundlePath, "NETCoreSdkRuntimeIdentifierChain.txt"));
+                    return !rids.Contains("osx-arm64");
+                }
+                else
+                {
+                    var depsJsonFile = Directory.EnumerateFiles(bundlePath, "Microsoft.*.deps.json", SearchOption.TopDirectoryOnly).FirstOrDefault();
+                    var targets = JsonSerializer.Deserialize<Dictionary<string, object>>(File.ReadAllText(depsJsonFile));
+                    var runtimeTarget = (JsonElement)targets["runtimeTarget"];
+                    return !runtimeTarget.GetProperty("name").ToString().Contains("osx-arm64");
+                }
             }
             catch
             {
@@ -89,7 +100,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.MacOs
                     .Select(dirInfo =>
                     {
                         var success = BundleVersion.TryFromInput<TBundleVersion>(dirInfo.Name, out var version);
-                        var arch = IsMacx64Installation(dirInfo.FullName) ? BundleArch.X64 : BundleArch.Arm64;
+                        var arch = IsMacx64Installation(dirInfo.FullName, version is SdkVersion) ? BundleArch.X64 : BundleArch.Arm64;
                         return (Success: success, Version: version, Path: dirInfo.FullName, Arch: arch);
                     })
                     .Where(tuple => tuple.Success)
