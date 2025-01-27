@@ -116,7 +116,7 @@ stages:
               _DotNetPublishToBlobFeed : false
         variables:
         - name: _RID
-          value: arm64
+          value: osx-x64
         steps:
         - checkout: self
           clean: true
