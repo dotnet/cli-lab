@@ -309,7 +309,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep SDKs required for Visual Studio for Mac (no longer supported).
+        ///   Looks up a localized string similar to Keep SDKs required for Visual Studio for Mac (Visual Studio for Mac is no longer supported).
         /// </summary>
         internal static string MacOSPreserveVSSdksOptionDescription {
             get {
@@ -353,7 +353,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used by Visual Studio for Mac. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by Visual Studio for Mac (Visual Studio for Mac is no longer supported). Specify individually or use —-force to remove.
         /// </summary>
         internal static string MacSDKRequirementExplanationString {
             get {
