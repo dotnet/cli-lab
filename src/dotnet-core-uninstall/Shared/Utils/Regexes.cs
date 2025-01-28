@@ -30,7 +30,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
             $@"(?<{ArchGroupName}>\-?x64|x86)");
 
         private static readonly Regex _previewVersionSdkDisplayNameRegex = new Regex(
-            $@"(?<{PreviewGroupName}>\s?\-\s?((preview|alpha)\.?{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}))");
+            $@"(?<{PreviewGroupName}>.*((preview|alpha)[\.\-\s]?{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}))");
         private static readonly Regex _previewVersionSdkCachePathRegex = new Regex(
             $@"(?<{PreviewGroupName}>\-((preview|alpha)\.?{_previewVersionNumberRegex.ToString()}|rc{_rcVersionNumberRegex.ToString()}(\.\d+)?)\-(?<{BuildGroupName}>\d+))");
         private static readonly Regex _previewVersionRuntimeCachePathRegex = new Regex(
@@ -41,7 +41,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
             $@"(?<{PreviewGroupName}>\-(preview{_previewVersionNumberRegex.ToString()}(\.{_buildNumberRegex.ToString()}\.\d+|\-(final|{_buildNumberRegex.ToString()}(\-\d+)?))|rc{_rcVersionNumberRegex.ToString()}\-final))");
 
         private static readonly string _sdkVersionBasicRegexFormat =
-            $@"(?<{VersionGroupName}>{_majorMinorRegex.ToString()}\.((?<{SdkMinorGroupName}>\d+)(?<{PatchGroupName}>\d{{{{2}}}})|(?<{PatchGroupName}>\d{{{{1,2}}}}))({{0}})?)";
+            $@"(?<{VersionGroupName}>{_majorMinorRegex.ToString()}\.((?<{SdkMinorGroupName}>\d+)(?<{PatchGroupName}>\d{{{{0,2}}}}))({{0}})?)";
         private static readonly string _notCapturedRuntimeVersionBasicRegexFormat =
             $@"{_majorMinorRegex.ToString()}\.(?<{PatchGroupName}>\d+)({{0}})?";
         private static readonly string _runtimeVersionBasicRegexFormat =
@@ -76,7 +76,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Utils
 
         public static readonly Regex VersionDisplayNameRegex = new Regex(string.Format(
             _sdkVersionBasicRegexFormat,
-            _previewVersionSdkDisplayNameRegex.ToString()));
+            _previewVersionSdkDisplayNameRegex.ToString()), RegexOptions.IgnoreCase);
         public static readonly Regex BundleMajorMinorRegex = new Regex(
             $@"^{_majorMinorRegex.ToString()}$");
         public static readonly Regex BundleCachePathRegex = new Regex(
