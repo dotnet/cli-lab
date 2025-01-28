@@ -102,7 +102,7 @@ stages:
       - job: OSX_latest
         displayName: 'Mac OS'
         pool:
-          vmImage: 'macOS-14-arm64'
+          vmImage: 'macOS-latest'
         strategy:
           matrix:
             ${{ if in(variables['Build.Reason'], 'PullRequest') }}:

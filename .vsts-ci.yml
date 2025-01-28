@@ -123,7 +123,7 @@ extends:
             displayName: 'Mac OS'
             pool:
               name: Azure Pipelines
-              image: 'macOS-14-arm64'
+              image: 'macOS-latest'
               os: macOS
             variables:
             - name: _RID
