@@ -130,12 +130,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     return new AspNetRuntimeVersion(versionString);
                 }
                 else if ((displayName.IndexOf(".NET Core SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                        (displayName.IndexOf("Microsoft .NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
-                        uninstallString.IndexOf("dotnet-dev-win") >= 0)
+                    (displayName.IndexOf("Microsoft .NET SDK", StringComparison.OrdinalIgnoreCase) >= 0) ||
+                    uninstallString.IndexOf("dotnet-dev-win") >= 0)
                 {
                     return new SdkVersion(versionString);
                 }
-                else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
+                else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || 
+                    Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
                     displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     return new RuntimeVersion(versionString);
