@@ -102,7 +102,7 @@ stages:
       - job: OSX_latest
         displayName: 'Mac OS'
         pool:
-          vmImage: 'macOS-latest'
+          vmImage: 'macOS-14-arm64'
         strategy:
           matrix:
             ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
@@ -116,7 +116,7 @@ stages:
               _DotNetPublishToBlobFeed : false
         variables:
         - name: _RID
-          value: osx-x64
+          value: osx-arm64
         steps:
         - checkout: self
           clean: true
