@@ -113,13 +113,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             foreach (var division in bundlesByDivisions)
             {
                 var requiredBundle = division.Key.Max();
-                requirementStringResults = requirementStringResults.Append((requiredBundle, division.Value));
-                requirementStringResults = requirementStringResults.Concat(division.Key
-                    .Where(bundle => !bundle.Equals(requiredBundle))
-                    .Select(bundle => (bundle, string.Empty)));
+                requirementStringResults = requirementStringResults.Concat([
+                    (requiredBundle, division.Value),
+                    ..division.Key
+                        .Where(bundle => !bundle.Equals(requiredBundle))
+                        .Select(bundle => (bundle, string.Empty))
+                ]);
             }
 
             return requirementStringResults
+                .GroupBy(pair => pair.bundle)
+                .Select(group => group.First()) // Remove duplicates
                 .OrderByDescending(pair => pair.bundle.DisplayName)
                 .ToDictionary(i => i.bundle, i => i.Item2);
         }
