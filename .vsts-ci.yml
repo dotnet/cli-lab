@@ -120,7 +120,7 @@ extends:
                 publishLocation: 'Container'
                 parallel: true
 
-          - {{ each _RID in ['x64', 'arm64'] }}:
+          - ${{ each _RID in ['x64', 'arm64'] }}:
             - job: OSX_latest_${{ _RID }}
               displayName: 'Mac OS (${{ _RID }})'
               pool:
