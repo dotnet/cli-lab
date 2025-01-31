@@ -16,6 +16,13 @@ pr:
     include:
     - '*'
 
+parameters:
+- name: MacOSArchitectures
+  type: object
+  default:
+  - arm64
+  - x64
+
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
@@ -120,16 +127,16 @@ extends:
                 publishLocation: 'Container'
                 parallel: true
 
-          - ${{ each _RID in ['x64', 'arm64'] }}:
-            - job: OSX_latest_${{ _RID }}
-              displayName: 'Mac OS (${{ _RID }})'
+          - ${{ each arch in parameters.MacOSArchitectures }}:
+            - job: OSX_latest_${{ arch }}
+              displayName: 'Mac OS (${{ arch }})'
               pool:
                 name: Azure Pipelines
                 image: 'macOS-latest'
                 os: macOS
               variables:
               - name: _RID
-                value: osx-${{ _RID }})'
+                value: osx-${{ arch }})'
               - name: _BuildConfig
                 value: Release
               - name: _SignType
@@ -157,6 +164,6 @@ extends:
                 condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
                 inputs:
                   PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                  artifactName: 'drop-osx-${{ _RID }})'
+                  artifactName: 'drop-osx-${{ arch }}'
                   publishLocation: 'Container'
                   parallel: true

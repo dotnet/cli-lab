@@ -15,6 +15,13 @@ pr:
     include:
     - '*'
 
+parameters:
+- name: MacOSArchitectures
+  type: object
+  default:
+  - arm64
+  - x64
+
 stages:
 - stage: build
   displayName: Build
@@ -98,9 +105,9 @@ stages:
             artifactName: 'drop-windows'
             publishLocation: 'Container'
             parallel: true
-      - {{ each _RID in ['x64', 'arm64'] }}:
-        - job: OSX_latest_${{ _RID }}
-          displayName: 'Mac OS (${{ _RID }})'
+      - ${{ each arch in parameters.MacOSArchitectures }}:
+        - job: OSX_latest_${{ arch }}
+          displayName: 'Mac OS (${{ arch }})'
           pool:
             vmImage: 'macOS-latest'
           strategy:
@@ -116,7 +123,7 @@ stages:
                 _DotNetPublishToBlobFeed : false
           variables:
           - name: _RID
-            value: osx-${{ _RID }}
+            value: osx-${{ arch }}
           steps:
           - checkout: self
             clean: true
@@ -138,7 +145,7 @@ stages:
             condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
             inputs:
               pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              artifactName: 'drop-osx-${{ _RID }}'
+              artifactName: 'drop-osx-${{ arch }}'
               publishLocation: 'Container'
               parallel: true
 
