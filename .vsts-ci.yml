@@ -119,8 +119,8 @@ extends:
                 artifactName: 'drop-windows'
                 publishLocation: 'Container'
                 parallel: true
-          - job: OSX_latest
-            displayName: 'Mac OS'
+          - job: OSX_latest_x64
+            displayName: 'Mac OS (x64)'
             pool:
               name: Azure Pipelines
               image: 'macOS-latest'
@@ -128,6 +128,45 @@ extends:
             variables:
             - name: _RID
               value: osx-x64
+            - name: _BuildConfig
+              value: Release
+            - name: _SignType
+              value: none
+            - name: _DotNetPublishToBlobFeed
+              value: false
+            steps:
+            - checkout: self
+              clean: true
+            - script: eng/common/cibuild.sh
+                --configuration $(_BuildConfig)
+                --prepareMachine
+                /p:RID=$(_RID)
+              displayName: Build
+            - task: ArchiveFiles@2
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
+                includeRootFolder: false
+                archiveType: 'tar'
+                tarCompression: 'gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+                replaceExistingArchive: true
+            - task: 1ES.PublishBuildArtifacts@1
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                artifactName: 'drop-osx'
+                publishLocation: 'Container'
+                parallel: true
+          - job: OSX_latest_arm64
+            displayName: 'Mac OS (arm64)'
+            pool:
+              name: Azure Pipelines
+              image: 'macOS-latest'
+              os: macOS
+            variables:
+            - name: _RID
+              value: osx-arm64
             - name: _BuildConfig
               value: Release
             - name: _SignType

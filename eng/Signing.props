@@ -7,7 +7,7 @@
     <AllowEmptySignList>true</AllowEmptySignList>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(RID)' == 'osx-x64'">
+  <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
     <ItemsToSign Include="$(ArtifactsBinDir)/layout/dotnet-core-uninstall/dotnet-core-uninstall" />
   </ItemGroup>
 </Project>
