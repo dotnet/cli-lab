@@ -146,7 +146,7 @@ stages:
           condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
           inputs:
             pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-            artifactName: 'drop-osx'
+            artifactName: 'drop-$(_RID)'
             publishLocation: 'Container'
             parallel: true
 

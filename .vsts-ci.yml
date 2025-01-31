@@ -158,7 +158,7 @@ extends:
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
                 PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                artifactName: 'drop-osx'
+                artifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
 
