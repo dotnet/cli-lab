@@ -15,13 +15,6 @@ pr:
     include:
     - '*'
 
-parameters:
-- name: MacOSArchitectures
-  type: object
-  default:
-  - arm64
-  - x64
-
 stages:
 - stage: build
   displayName: Build
@@ -105,49 +98,57 @@ stages:
             artifactName: 'drop-windows'
             publishLocation: 'Container'
             parallel: true
-      - ${{ each arch in parameters.MacOSArchitectures }}:
-        - job: OSX_latest_${{ arch }}
-          displayName: 'Mac OS (${{ arch }})'
-          pool:
-            vmImage: 'macOS-latest'
-          strategy:
-            matrix:
-              ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
-                Debug:
-                  _BuildConfig: Debug
-                  _SignType: none
-                  _DotNetPublishToBlobFeed : false
-              Release:
-                _BuildConfig: Release
+      - job: OSX_latest
+        displayName: 'Mac OS'
+        pool:
+          vmImage: 'macOS-latest'
+        strategy:
+          matrix:
+            ${{ if in(variables['Build.Reason'], 'PullRequest') }}:
+              Debug_arm64:
+                _BuildConfig: Debug
                 _SignType: none
                 _DotNetPublishToBlobFeed : false
-          variables:
-          - name: _RID
-            value: osx-${{ arch }}
-          steps:
-          - checkout: self
-            clean: true
-          - script: eng/common/cibuild.sh
-              --configuration $(_BuildConfig)
-              --prepareMachine
-              /p:RID=$(_RID)
-            displayName: Build
-          - task: ArchiveFiles@2
-            condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-            inputs:
-              rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
-              includeRootFolder: false
-              archiveType: 'tar'
-              tarCompression: 'gz'
-              archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
-              replaceExistingArchive: true
-          - task: PublishBuildArtifacts@1
-            condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-            inputs:
-              pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              artifactName: 'drop-osx-${{ arch }}'
-              publishLocation: 'Container'
-              parallel: true
+                _RID: osx-arm64
+              Debug_x64:
+                _BuildConfig: Debug
+                _SignType: none
+                _DotNetPublishToBlobFeed : false
+                _RID: osx-x64
+            Release_arm64:
+              _BuildConfig: Release
+              _SignType: none
+              _DotNetPublishToBlobFeed : false
+              _RID: osx-arm64
+            Release_x64:
+              _BuildConfig: Release
+              _SignType: none
+              _DotNetPublishToBlobFeed : false
+              _RID: osx-x64
+        steps:
+        - checkout: self
+          clean: true
+        - script: eng/common/cibuild.sh
+            --configuration $(_BuildConfig)
+            --prepareMachine
+            /p:RID=$(_RID)
+          displayName: Build
+        - task: ArchiveFiles@2
+          condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+          inputs:
+            rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
+            includeRootFolder: false
+            archiveType: 'tar'
+            tarCompression: 'gz'
+            archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+            replaceExistingArchive: true
+        - task: PublishBuildArtifacts@1
+          condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+          inputs:
+            pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+            artifactName: 'drop-osx'
+            publishLocation: 'Container'
+            parallel: true
 
 - ${{ if eq(variables._RunAsInternal, True) }}:
   - template: eng\common\templates\post-build\post-build.yml

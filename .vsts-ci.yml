@@ -16,13 +16,6 @@ pr:
     include:
     - '*'
 
-parameters:
-- name: MacOSArchitectures
-  type: object
-  default:
-  - arm64
-  - x64
-
 resources:
   repositories:
   - repository: 1ESPipelineTemplates
@@ -126,44 +119,46 @@ extends:
                 artifactName: 'drop-windows'
                 publishLocation: 'Container'
                 parallel: true
+          - job: OSX_latest
+            displayName: 'Mac OS'
+            pool:
+              name: Azure Pipelines
+              image: 'macOS-latest'
+              os: macOS
+            strategy:
+              matrix:
+                - ARM64:
+                    _RID: osx-arm64
+                    _BuildConfig: Release
+                    _SignType: none
+                    _DotNetPublishToBlobFeed: false
+                  X64:
+                    _RID: osx-x64
+                    _BuildConfig: Release
+                    _SignType: none
+                    _DotNetPublishToBlobFeed: false
+            steps:
+            - checkout: self
+              clean: true
+            - script: eng/common/cibuild.sh
+                --configuration $(_BuildConfig)
+                --prepareMachine
+                /p:RID=$(_RID)
+              displayName: Build
+            - task: ArchiveFiles@2
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
+                includeRootFolder: false
+                archiveType: 'tar'
+                tarCompression: 'gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+                replaceExistingArchive: true
+            - task: 1ES.PublishBuildArtifacts@1
+              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              inputs:
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                artifactName: 'drop-osx'
+                publishLocation: 'Container'
+                parallel: true
 
-          - ${{ each arch in parameters.MacOSArchitectures }}:
-            - job: OSX_latest_${{ arch }}
-              displayName: 'Mac OS (${{ arch }})'
-              pool:
-                name: Azure Pipelines
-                image: 'macOS-latest'
-                os: macOS
-              variables:
-              - name: _RID
-                value: osx-${{ arch }})'
-              - name: _BuildConfig
-                value: Release
-              - name: _SignType
-                value: none
-              - name: _DotNetPublishToBlobFeed
-                value: false
-              steps:
-              - checkout: self
-                clean: true
-              - script: eng/common/cibuild.sh
-                  --configuration $(_BuildConfig)
-                  --prepareMachine
-                  /p:RID=$(_RID)
-                displayName: Build
-              - task: ArchiveFiles@2
-                condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-                inputs:
-                  rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
-                  includeRootFolder: false
-                  archiveType: 'tar'
-                  tarCompression: 'gz'
-                  archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
-                  replaceExistingArchive: true
-              - task: 1ES.PublishBuildArtifacts@1
-                condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
-                inputs:
-                  PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                  artifactName: 'drop-osx-${{ arch }}'
-                  publishLocation: 'Container'
-                  parallel: true
