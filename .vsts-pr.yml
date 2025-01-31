@@ -98,9 +98,9 @@ stages:
             artifactName: 'drop-windows'
             publishLocation: 'Container'
             parallel: true
-      - {{ each _RID in ['x64', 'arm64'] }}
-        - job: OSX_latest_${_RID}
-          displayName: 'Mac OS (${_RID})'
+      - {{ each _RID in ['x64', 'arm64'] }}:
+        - job: OSX_latest_${{ _RID }}
+          displayName: 'Mac OS (${{ _RID }})'
           pool:
             vmImage: 'macOS-latest'
           strategy:
@@ -116,7 +116,7 @@ stages:
                 _DotNetPublishToBlobFeed : false
           variables:
           - name: _RID
-            value: osx-${_RID}
+            value: osx-${{ _RID }}
           steps:
           - checkout: self
             clean: true
@@ -138,7 +138,7 @@ stages:
             condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
             inputs:
               pathtoPublish: '$(Build.ArtifactStagingDirectory)'
-              artifactName: 'drop-osx-${_RID}'
+              artifactName: 'drop-osx-${{ _RID }}'
               publishLocation: 'Container'
               parallel: true
 
