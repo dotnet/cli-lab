@@ -127,16 +127,16 @@ extends:
               os: macOS
             strategy:
               matrix:
-                - ARM64:
-                    _RID: osx-arm64
-                    _BuildConfig: Release
-                    _SignType: none
-                    _DotNetPublishToBlobFeed: false
-                  X64:
-                    _RID: osx-x64
-                    _BuildConfig: Release
-                    _SignType: none
-                    _DotNetPublishToBlobFeed: false
+                ARM64:
+                  _RID: osx-arm64
+                  _BuildConfig: Release
+                  _SignType: none
+                  _DotNetPublishToBlobFeed: false
+                X64:
+                  _RID: osx-x64
+                  _BuildConfig: Release
+                  _SignType: none
+                  _DotNetPublishToBlobFeed: false
             steps:
             - checkout: self
               clean: true
