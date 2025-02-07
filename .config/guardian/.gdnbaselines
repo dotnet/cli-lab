@@ -1,0 +1,155 @@
+{
+  "properties": {
+    "helpUri": "https://eng.ms/docs/microsoft-security/security/azure-security/cloudai-security-fundamentals-engineering/security-integration/guardian-wiki/microsoft-guardian/general/baselines"
+  },
+  "version": "1.0.0",
+  "baselines": {
+    "default": {
+      "name": "default",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "lastUpdatedDate": "2024-04-05 17:53:53Z"
+    }
+  },
+  "results": {
+    "789cf67c8d4cd2fdd206bfba5058f673deec8f09557f1ecbcb9753e02a6f81ab": {
+      "signature": "789cf67c8d4cd2fdd206bfba5058f673deec8f09557f1ecbcb9753e02a6f81ab",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/nuget.config",
+      "line": 9,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0060",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "d53e0926c71c90172942edd165284e747846e11a2bee3ca8fd8f32575b224593": {
+      "signature": "d53e0926c71c90172942edd165284e747846e11a2bee3ca8fd8f32575b224593",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/dlabnugetcert.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "e170f3a23081e920943abc701a4e54324b4eff5e17ed7a51646395dbe94f59c1": {
+      "signature": "e170f3a23081e920943abc701a4e54324b4eff5e17ed7a51646395dbe94f59c1",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/dynamicsha1.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "c511df2a1a3a5294c36c9805c10256d91671f8d33ac076318fc469e6e5775e5d": {
+      "signature": "c511df2a1a3a5294c36c9805c10256d91671f8d33ac076318fc469e6e5775e5d",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/dynamicsha2.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "9df8e8b00de1638f97776824f2713a352462001308d07c0bd764f6f4dde90c14": {
+      "signature": "9df8e8b00de1638f97776824f2713a352462001308d07c0bd764f6f4dde90c14",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/testdlab.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "5120fcb93cf4277f3cbae37ae1a6d800d31c413c726e6e0269240184039a941e": {
+      "signature": "5120fcb93cf4277f3cbae37ae1a6d800d31c413c726e6e0269240184039a941e",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/testdlabsha2.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "cebbc96c2a6f1edc3afcb167aa55fd6a9f89b62af067057d9582ea217dd2a75a": {
+      "signature": "cebbc96c2a6f1edc3afcb167aa55fd6a9f89b62af067057d9582ea217dd2a75a",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/vsmsappx.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "f4ffffdcce609b0409d6c3fec1d0eaadbb63f6088303ababf340993b84ebe2b4": {
+      "signature": "f4ffffdcce609b0409d6c3fec1d0eaadbb63f6088303ababf340993b84ebe2b4",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/WinBlue.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "3441729f19f1d38832fe6e5cc5823f19db219c0e15349fe4f74f1f54d0d22bde": {
+      "signature": "3441729f19f1d38832fe6e5cc5823f19db219c0e15349fe4f74f1f54d0d22bde",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/WP223.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    },
+    "f6b2f8d6491d6f464bf00e2dbc9129558473ed1f541a017eda0f926e2e2f10d1": {
+      "signature": "f6b2f8d6491d6f464bf00e2dbc9129558473ed1f541a017eda0f926e2e2f10d1",
+      "alternativeSignatures": [],
+      "target": "MicroBuild/Plugins/MicroBuild.Plugins.Signing.1.1.913/build/tools/MobileTools/7Sign/tcb.pfx",
+      "line": 1,
+      "memberOf": [
+        "default"
+      ],
+      "tool": "credscan",
+      "ruleId": "CSCAN-GENERAL0020",
+      "createdDate": "2024-04-05 17:53:53Z",
+      "expirationDate": "2024-09-22 17:57:29Z",
+      "justification": "This error is baselined with an expiration date of 180 days from 2024-04-05 17:57:29Z"
+    }
+  }
+}
