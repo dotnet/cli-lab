@@ -1,13 +1,20 @@
 <Project>
   <PropertyGroup>
-    <!--
-      Signing of shipping artifacts (layout, msi, bundle) are handled separately.
-      It is therefore expected that above removal can yield an empty set.
-    -->
-    <AllowEmptySignList>true</AllowEmptySignList>
+    <UseDotNetCertificate>true</UseDotNetCertificate>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FileExtensionSignInfo Include=".msi" CertificateName="MicrosoftDotNet500" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(RID)' == 'win-x86'">
+    <ItemsToSign Include="$(ArtifactsDir)layout\**\dotnet-core-uninstall.dll;
+      $(ArtifactsDir)layout\**\dotnet-core-uninstall.resources.dll;
+      $(ArtifactsDir)layout\**\dotnet-core-uninstall.exe;
+      $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi" />
+  </ItemGroup>
+
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-    <ItemsToSign Include="$(ArtifactsBinDir)/layout/dotnet-core-uninstall/dotnet-core-uninstall" />
+    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall" />
   </ItemGroup>
 </Project>
