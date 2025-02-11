@@ -1,5 +1,5 @@
 variables:
-- name: _TeamName
+- name: TeamName
   value: DotNetCore
 - template: /eng/common/templates-official/variables/pool-providers.yml@self
 
@@ -91,7 +91,7 @@ extends:
               - name: _OfficialBuildArgs
                 value: /p:DotNetSignType=$(_SignType)
                       /p:SignCoreDotnetCoreUninstall=true
-                      /p:TeamName=$(_TeamName)
+                      /p:TeamName=$(TeamName)
                       /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
                       /p:DotNetPublishUsingPipelines=true
             # else
@@ -147,7 +147,7 @@ extends:
                 /p:RID=$(_RID)
                 /p:DotNetSignType=$(_SignType)
                 /p:SignCoreDotnetCoreUninstall=true
-                /p:TeamName=$(_TeamName)
+                /p:TeamName=$(TeamName)
                 /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
                 /p:DotNetPublishUsingPipelines=true
               displayName: Build
