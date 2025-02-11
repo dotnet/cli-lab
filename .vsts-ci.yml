@@ -144,12 +144,12 @@ extends:
             - script: eng/common/cibuild.sh
                 --configuration $(_BuildConfig)
                 --prepareMachine
-                /p:RID=$(_RID)
-                /p:DotNetSignType=$(_SignType)
-                /p:SignCoreDotnetCoreUninstall=true
-                /p:TeamName=$(TeamName)
-                /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-                /p:DotNetPublishUsingPipelines=true
+                -p:RID=$(_RID)
+                -p:DotNetSignType=$(_SignType)
+                -p:SignCoreDotnetCoreUninstall=true
+                -p:TeamName=$(TeamName)
+                -p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+                -p:DotNetPublishUsingPipelines=true
               displayName: Build
             - task: ArchiveFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
