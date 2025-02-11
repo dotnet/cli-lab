@@ -45,6 +45,7 @@ extends:
       - template: /eng/common/templates-official/jobs/jobs.yml@self
         parameters:
           enableMicrobuild: true
+          enableMicrobuildForMacAndLinux: true
           enablePublishUsingPipelines: true
           enablePublishBuildArtifacts: true
           enablePublishTestResults: false
@@ -130,12 +131,12 @@ extends:
                 ARM64:
                   _RID: osx-arm64
                   _BuildConfig: Release
-                  _SignType: none
+                  _SignType: real
                   _DotNetPublishToBlobFeed: false
                 X64:
                   _RID: osx-x64
                   _BuildConfig: Release
-                  _SignType: none
+                  _SignType: real
                   _DotNetPublishToBlobFeed: false
             steps:
             - checkout: self
@@ -144,6 +145,11 @@ extends:
                 --configuration $(_BuildConfig)
                 --prepareMachine
                 /p:RID=$(_RID)
+                /p:DotNetSignType=$(_SignType)
+                /p:SignCoreDotnetCoreUninstall=true
+                /p:TeamName=$(_TeamName)
+                /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
+                /p:DotNetPublishUsingPipelines=true
               displayName: Build
             - task: ArchiveFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
