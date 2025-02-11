@@ -117,7 +117,7 @@ extends:
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
                 PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                artifactName: 'drop-windows'
+                ArtifactName: 'drop-windows'
                 publishLocation: 'Container'
                 parallel: true
           - job: OSX_latest
@@ -164,7 +164,7 @@ extends:
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
                 PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                artifactName: 'drop-$(_RID)'
+                ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
 
