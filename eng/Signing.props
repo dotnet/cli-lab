@@ -16,6 +16,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-    <ItemsToSign Include="$(ArtifactsDir)layout/**/dotnet-core-uninstall" />
+    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/*" />
   </ItemGroup>
 </Project>
