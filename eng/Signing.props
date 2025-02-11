@@ -5,7 +5,7 @@
 
   <ItemGroup>
     <FileExtensionSignInfo Include=".msi" CertificateName="MicrosoftDotNet500" />
-    <FileSignInfo Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Include="$(ArtifactsDir)layout/**/dotnet-core-uninstall" CertificateName="MicrosoftDotNet500" />
+    <FileSignInfo Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Include="dotnet-core-uninstall" CertificateName="MicrosoftDotNet500" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'win-x86'">
