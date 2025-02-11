@@ -50,7 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             return (dividedBundles, bundleList);
         }
 
-        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList)
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList, bool macOSPreserveVSSdks = false)
         {
             var bundlesAboveLimit = bundleList.Where(bundle => bundle.Version.SemVer >= UpperLimit);
             bundleList = bundleList.Except(bundlesAboveLimit);
@@ -61,19 +61,22 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
                 .Select(pair => (pair as IEnumerable<Bundle>, LocalizableStrings.MacRuntimeRequirementExplanationString))
                 .ToDictionary(key => key.Item1, value => value.Item2); 
 
-            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion);
-            if (sdks != null && sdks.Count() > 0)
+            if (macOSPreserveVSSdks)
             {
-                dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplanationString);
+                var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion) ?? [];
+                if (sdks.Any())
+                {
+                    dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplanationString);
+                }
             }
 
             var remainingBundles = bundleList
-                .Where(bundle => !(bundle.Version is RuntimeVersion || bundle.Version is SdkVersion))
+                .Where(bundle => bundle.Version is not RuntimeVersion && !(bundle.Version is SdkVersion && macOSPreserveVSSdks))
                 .Concat(bundlesAboveLimit);
             return (dividedBundles, remainingBundles);
         }
 
-        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyVersionDivisions(IEnumerable<Bundle> bundles)
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyVersionDivisions(IEnumerable<Bundle> bundles, bool macOSPreserveVSSdks = false)
         {
             if (RuntimeInfo.RunningOnWindows)
             {
@@ -81,28 +84,29 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             }
             else
             {
-                return ApplyMacVersionDivisions(bundles);
+                return ApplyMacVersionDivisions(bundles, macOSPreserveVSSdks);
             }
         }
 
-        public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles)
+        public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles, bool macOSPreserveVSSdks = false)
         {
-            var required = new List<Bundle>();
-            var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(bundles);
+            var protectedBundles = new List<Bundle>();
+            var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(bundles, macOSPreserveVSSdks);
 
             foreach (IEnumerable<Bundle> band in bundlesByDivisions.Keys)
             {
-                required.Add(band.Max());
+                protectedBundles.Add(band.Max());
             }
 
-            required = required.Concat(remainingBundles.Where(bundle => bundle.Version.SemVer >= UpperLimit)).ToList();
+            protectedBundles = protectedBundles.Concat(remainingBundles.Where(bundle => bundle.Version.SemVer >= UpperLimit)).ToList();
 
-            return bundles.Where(b => !required.Contains(b));
+            // Return all bundles that are not protectedBundles
+            return bundles.Except(protectedBundles);
         }
 
-        public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles)
+        public static Dictionary<Bundle, string> GetReasonRequiredStrings(IEnumerable<Bundle> allBundles, bool macOSPreserveVSSdks = false)
         {
-            var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(allBundles);
+            var (bundlesByDivisions, remainingBundles) = ApplyVersionDivisions(allBundles, macOSPreserveVSSdks);
 
             var bundlesAboveUpperLimit = remainingBundles.Where(bundle => bundle.Version.SemVer >= UpperLimit);
             var requirementStringResults = remainingBundles.Except(bundlesAboveUpperLimit)
