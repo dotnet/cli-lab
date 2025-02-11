@@ -145,11 +145,7 @@ extends:
                 --configuration $(_BuildConfig)
                 --prepareMachine
                 -p:RID=$(_RID)
-                -p:DotNetSignType=$(_SignType)
-                -p:SignCoreDotnetCoreUninstall=true
-                -p:TeamName=$(TeamName)
-                -p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-                -p:DotNetPublishUsingPipelines=true
+                --sign /p:DotNetSignType=real /p:TeamName=$(_TeamName) /p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - task: ArchiveFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
