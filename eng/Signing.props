@@ -15,9 +15,6 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/*">
-      <Authenticode>MacDeveloper</Authenticode>
-      <Zip>true</Zip>
-    </ItemsToSign>
+    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/*" CertificateName="MacDeveloperHarden" />
   </ItemGroup>
 </Project>
