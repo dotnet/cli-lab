@@ -3,11 +3,8 @@
     <UseDotNetCertificate>true</UseDotNetCertificate>
   </PropertyGroup>
 
-  <ItemGroup>
-    <FileExtensionSignInfo Include=".msi" CertificateName="MicrosoftDotNet500" />
-  </ItemGroup>
-
   <ItemGroup Condition="'$(RID)' == 'win-x86'">
+    <FileExtensionSignInfo Include=".msi" CertificateName="MicrosoftDotNet500" />
     <ItemsToSign Include="$(ArtifactsDir)layout\**\dotnet-core-uninstall.dll;
       $(ArtifactsDir)layout\**\dotnet-core-uninstall.resources.dll;
       $(ArtifactsDir)layout\**\dotnet-core-uninstall.exe;
@@ -15,7 +12,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall" CertificateName="MicrosoftDotNet500" />
-    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall.pdb" CertificateName="MicrosoftDotNet500" />
+  <FileSignInfo Include="dotnet-core-uninstall" CertificateName="MicrosoftDotNet500" />
+  <FileSignInfo Include="dotnet-core-uninstall.pdb" CertificateName="MicrosoftDotNet500" />
+    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/*" CertificateName="MicrosoftDotNet500" />
   </ItemGroup>
 </Project>
