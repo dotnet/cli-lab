@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall" CertificateName="MacDeveloperHarden" />
-    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall.pdb" CertificateName="MacDeveloperHarden" />
+    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall" CertificateName="MicrosoftDotNet500" />
+    <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall.pdb" CertificateName="MicrosoftDotNet500" />
   </ItemGroup>
 </Project>
