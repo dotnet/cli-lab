@@ -1,5 +1,5 @@
 variables:
-- name: _TeamName
+- name: TeamName
   value: DotNetCore
 - template: /eng/common/templates-official/variables/pool-providers.yml@self
 
@@ -45,6 +45,7 @@ extends:
       - template: /eng/common/templates-official/jobs/jobs.yml@self
         parameters:
           enableMicrobuild: true
+          enableMicrobuildForMacAndLinux: true
           enablePublishUsingPipelines: true
           enablePublishBuildArtifacts: true
           enablePublishTestResults: false
@@ -90,7 +91,7 @@ extends:
               - name: _OfficialBuildArgs
                 value: /p:DotNetSignType=$(_SignType)
                       /p:SignCoreDotnetCoreUninstall=true
-                      /p:TeamName=$(_TeamName)
+                      /p:TeamName=$(TeamName)
                       /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
                       /p:DotNetPublishUsingPipelines=true
             # else
@@ -116,7 +117,7 @@ extends:
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
                 PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                artifactName: 'drop-windows'
+                ArtifactName: 'drop-windows'
                 publishLocation: 'Container'
                 parallel: true
           - job: OSX_latest
@@ -130,20 +131,21 @@ extends:
                 ARM64:
                   _RID: osx-arm64
                   _BuildConfig: Release
-                  _SignType: none
+                  _SignType: real
                   _DotNetPublishToBlobFeed: false
                 X64:
                   _RID: osx-x64
                   _BuildConfig: Release
-                  _SignType: none
+                  _SignType: real
                   _DotNetPublishToBlobFeed: false
             steps:
             - checkout: self
               clean: true
             - script: eng/common/cibuild.sh
+                -sign 
                 --configuration $(_BuildConfig)
                 --prepareMachine
-                /p:RID=$(_RID)
+                -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - task: ArchiveFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
@@ -158,7 +160,7 @@ extends:
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
                 PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-                artifactName: 'drop-$(_RID)'
+                ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
 
