@@ -75,7 +75,13 @@
           Inputs="$(DotnetCoreUninstallOutputDirectory)**/*;
                     $(DotnetCoreUninstallGenerateMsiPowershellScript)"
           Outputs="$(DotnetCoreUninstallMSIInstallerFile)">
-
+    <PropertyGroup>
+      <SdkPkgSourcesRootDirectory>$(MSBuildThisFileDirectory)../packaging/windows</SdkPkgSourcesRootDirectory>
+      <!-- Temp directory for light command layouts -->
+      <LightCommandObjDir>$(ArtifactsObjDir)/LightCommandPackages</LightCommandObjDir>
+      <!-- Directory for the zipped up light command package -->
+      <LightCommandPackagesDir>$(ArtifactsNonShippingPackagesDir)</LightCommandPackagesDir>
+    </PropertyGroup>
     <Exec Command="powershell -NoProfile -NoLogo $(DotnetCoreUninstallGenerateMsiPowershellScript) ^
                       '$(DotnetCoreUninstallOutputDirectory.TrimEnd('\'))' ^
                       '$(DotnetCoreUninstallMSIInstallerFile)' ^
@@ -85,6 +91,14 @@
                       '$(DotnetCoreUninstallInstallerUpgradeCode)' ^
                       '$(Architecture)' ^
                       -InformationAction Continue" />
+    <CreateLightCommandPackageDrop
+      LightCommandWorkingDir="$(LightCommandObjDir)"
+      OutputFolder="$(LightCommandPackagesDir)"
+      NoLogo="true"
+      WixExtensions="WixUIExtension;WixDependencyExtension;WixUtilExtension"
+      Cultures="en-us" >
+      <Output TaskParameter="OutputFile" PropertyName="_LightCommandPackageNameOutput" />
+    </CreateLightCommandPackageDrop>
   </Target>
 
 </Project>
