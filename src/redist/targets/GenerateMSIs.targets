@@ -88,7 +88,7 @@
       <!-- Temp directory for light command layouts -->
       <LightCommandObjDir>$(ArtifactsObjDir)/LightCommandPackages</LightCommandObjDir>
       <!-- Directory for the zipped up light command package -->
-      <LightCommandPackagesDir>$(ArtifactsNonShippingPackagesDir)</LightCommandPackagesDir>
+      <LightCommandPackagesDir>$(ArtifactsShippingPackagesDir)</LightCommandPackagesDir>
     </PropertyGroup>
     <ItemGroup>
         <UninstallerMsiWixSrcFiles Include="$(WixRoot)\*.wixobj" />
