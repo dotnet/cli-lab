@@ -96,7 +96,7 @@
     <CreateLightCommandPackageDrop
       LightCommandWorkingDir="$(LightCommandObjDir)"
       OutputFolder="$(LightCommandPackagesDir)"
-      AdditionalBasePaths="$(DotnetCoreUninstallOutputDirectory)"
+      AdditionalBasePaths="$(MSBuildThisFileDirectory)/packaging/windows/dotnetCoreUninstall"
       Cultures="en-us" 
       InstallerFile="$(DotnetCoreUninstallMSIInstallerFile)"
       WixExtensions="WixUIExtension;WixDependencyExtension;WixUtilExtension"
