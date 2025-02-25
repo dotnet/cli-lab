@@ -4,16 +4,14 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(RID)' == 'win-x86'">
-    <FileExtensionSignInfo Include=".msi" CertificateName="MicrosoftDotNet500" />
-    <ItemsToSign Include="$(ArtifactsDir)layout\**\dotnet-core-uninstall.dll;
-      $(ArtifactsDir)layout\**\dotnet-core-uninstall.resources.dll;
-      $(ArtifactsDir)layout\**\dotnet-core-uninstall.exe;
-      $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi" />
+    <FileExtensionSignInfo Include=".msi;.wixpdb" CertificateName="MicrosoftDotNet500" />
+    <ItemsToSign Include="$(ArtifactsShippingPackagesDir)**\*.wixpack.zip;
+      $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi;" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-  <FileSignInfo Include="dotnet-core-uninstall" CertificateName="MacDeveloperHarden" />
-  <FileSignInfo Include="dotnet-core-uninstall.pdb" CertificateName="MacDeveloperHarden" />
+    <FileSignInfo Include="dotnet-core-uninstall" CertificateName="MacDeveloperHarden" />
+    <FileSignInfo Include="dotnet-core-uninstall.pdb" CertificateName="MacDeveloperHarden" />
     <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/*" />
   </ItemGroup>
 </Project>

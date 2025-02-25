@@ -32,10 +32,10 @@
   <Target Name="MsiTargetsSetupInputOutputs"
           DependsOnTargets="GenerateLayout;SetupWixProperties;GetDotnetCoreUninstallGitCommitInfo">
 
-    <GenerateMsiVersion CommitCount="$(GitCommitCount)"
-                        VersionMajor="$(VersionMajor)"
-                        VersionMinor="$(VersionMinor)"
-                        VersionPatch="$(VersionPatch)">
+    <GenerateMsiVersion BuildNumber="$(GitCommitCount)"
+                        Major="$(VersionMajor)"
+                        Minor="$(VersionMinor)"
+                        Patch="$(VersionPatch)">
       <Output TaskParameter="MsiVersion" PropertyName="MsiVersion" />
     </GenerateMsiVersion>
 
@@ -75,7 +75,6 @@
           Inputs="$(DotnetCoreUninstallOutputDirectory)**/*;
                     $(DotnetCoreUninstallGenerateMsiPowershellScript)"
           Outputs="$(DotnetCoreUninstallMSIInstallerFile)">
-
     <Exec Command="powershell -NoProfile -NoLogo $(DotnetCoreUninstallGenerateMsiPowershellScript) ^
                       '$(DotnetCoreUninstallOutputDirectory.TrimEnd('\'))' ^
                       '$(DotnetCoreUninstallMSIInstallerFile)' ^
@@ -85,6 +84,25 @@
                       '$(DotnetCoreUninstallInstallerUpgradeCode)' ^
                       '$(Architecture)' ^
                       -InformationAction Continue" />
+    <PropertyGroup>
+      <!-- Temp directory for light command layouts -->
+      <LightCommandObjDir>$(ArtifactsObjDir)/LightCommandPackages</LightCommandObjDir>
+      <!-- Directory for the zipped up light command package -->
+      <LightCommandPackagesDir>$(ArtifactsShippingPackagesDir)</LightCommandPackagesDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <UninstallerMsiWixSrcFiles Include="$(WixRoot)\*.wixobj" />
+    </ItemGroup>
+    <CreateLightCommandPackageDrop
+      LightCommandWorkingDir="$(LightCommandObjDir)"
+      OutputFolder="$(LightCommandPackagesDir)"
+      AdditionalBasePaths="$(MSBuildThisFileDirectory)/packaging/windows/dotnetCoreUninstall"
+      Cultures="en-us" 
+      InstallerFile="$(DotnetCoreUninstallMSIInstallerFile)"
+      WixExtensions="WixUIExtension;WixDependencyExtension;WixUtilExtension"
+      WixSrcFiles="@(UninstallerMsiWixSrcFiles)">
+      <Output TaskParameter="OutputFile" PropertyName="_LightCommandPackageNameOutput" />
+    </CreateLightCommandPackageDrop>
   </Target>
 
 </Project>
