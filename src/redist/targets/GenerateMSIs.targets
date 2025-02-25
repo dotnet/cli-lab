@@ -91,17 +91,16 @@
       <LightCommandPackagesDir>$(ArtifactsNonShippingPackagesDir)</LightCommandPackagesDir>
     </PropertyGroup>
     <ItemGroup>
-        <SdkMsiWixSrcFiles Include="$(WixRoot)\*.wixobj" />
+        <UninstallerMsiWixSrcFiles Include="$(WixRoot)\*.wixobj" />
     </ItemGroup>
     <CreateLightCommandPackageDrop
       LightCommandWorkingDir="$(LightCommandObjDir)"
       OutputFolder="$(LightCommandPackagesDir)"
       AdditionalBasePaths="$(DotnetCoreUninstallOutputDirectory)"
-      NoLogo="true"
       Cultures="en-us" 
       InstallerFile="$(DotnetCoreUninstallMSIInstallerFile)"
       WixExtensions="WixUIExtension;WixDependencyExtension;WixUtilExtension"
-      WixSrcFiles="@(SdkMsiWixSrcFiles)">
+      WixSrcFiles="@(UninstallerMsiWixSrcFiles)">
       <Output TaskParameter="OutputFile" PropertyName="_LightCommandPackageNameOutput" />
     </CreateLightCommandPackageDrop>
   </Target>
