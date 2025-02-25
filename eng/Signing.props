@@ -5,7 +5,10 @@
 
   <ItemGroup Condition="'$(RID)' == 'win-x86'">
     <FileExtensionSignInfo Include=".msi;.wixpdb" CertificateName="MicrosoftDotNet500" />
-    <ItemsToSign Include="$(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi;
+    <ItemsToSign Include="$(ArtifactsDir)layout\**\dotnet-core-uninstall.dll;
+      $(ArtifactsDir)layout\**\dotnet-core-uninstall.resources.dll;
+      $(ArtifactsDir)layout\**\dotnet-core-uninstall.exe;
+      $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi;
       $(ArtifactsDir)packages\**\dotnet-core-uninstall*.wixpdb" />
   </ItemGroup>
 
