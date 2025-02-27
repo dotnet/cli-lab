@@ -33,32 +33,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
 
         public static void Execute(IBundleCollector bundleCollector, ParseResult parseResult)
         {
+            if (!IsAdmin())
+            {
+                throw new NotAdminException();
+            }
             var filtered = CommandBundleFilter.GetFilteredWithRequirementStrings(bundleCollector, parseResult);
             var verbosity = parseResult.CommandResult.GetVerbosityLevel();
 
-            if (parseResult.FindResultFor(CommandLineConfigs.YesOption) != null)
+            if (parseResult.FindResultFor(CommandLineConfigs.YesOption) != null || (AskItAndReturnUserAnswer(filtered) && AskWithWarningsForRequiredBundles(filtered)))
             {
-                if (!IsAdmin())
-                {
-                    throw new NotAdminException();
-                }
-
                 DoIt(filtered.Keys, verbosity);
-            }
-            else
-            {
-                if (!IsAdmin())
-                {
-                    throw new NotAdminException();
-                }
-
-                if (AskItAndReturnUserAnswer(filtered))
-                {
-                    if (AskWithWarningsForRequiredBundles(filtered))
-                    {
-                        DoIt(filtered.Keys, verbosity);
-                    }
-                }
             }
         }
 
