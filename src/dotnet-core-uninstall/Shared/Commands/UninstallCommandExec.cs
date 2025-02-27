@@ -122,14 +122,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     var principal = new WindowsPrincipal(identity);
                     return principal.IsInRole(WindowsBuiltInRole.Administrator);
                 }
-                else if (OperatingSystem.IsMacOS())
+                if (OperatingSystem.IsMacOS())
                 {
                     return getuid() == 0;
                 }
-                else
-                {
-                    throw new OperatingSystemNotSupportedException();
-                }
+                throw new OperatingSystemNotSupportedException();
             }
             catch
             {
@@ -142,7 +139,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             if (RuntimeInfo.RunningOnWindows)
             {
                 var args = ParseCommandToArgs(command);
-
                 return new ProcessStartInfo
                 {
                     FileName = args.First(),
@@ -151,19 +147,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     Verb = "runas"
                 };
             }
-            else if (RuntimeInfo.RunningOnOSX)
+            if (RuntimeInfo.RunningOnOSX)
             {
                 return new ProcessStartInfo
                 {
-                    FileName = "sudo",
-                    Arguments = $"rm -rf {command}",
+                    FileName = "rm",
+                    Arguments = $"-rf {command}",
                     UseShellExecute = true
                 };
             }
-            else
-            {
-                throw new OperatingSystemNotSupportedException();
-            }
+            throw new OperatingSystemNotSupportedException();
         }
 
         private static IEnumerable<string> ParseCommandToArgs(string command)
@@ -200,20 +193,17 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat :
                 LocalizableStrings.MacConfirmationPromptOutputFormat, displayNames));
 
-            var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
+            var response = userResponse?.ToUpper() ?? Console.ReadLine().Trim().ToUpper();
 
             if (response.Equals("Y") || response.Equals("YES"))
             {
                 return true;
             }
-            else if (response.Equals("N"))
+            if (response.Equals("N"))
             {
                 return false;
             }
-            else
-            {
-                throw new ConfirmationPromptInvalidException();
-            }
+            throw new ConfirmationPromptInvalidException();
         }
 
         public static bool AskWithWarningsForRequiredBundles(IDictionary<Bundle, string> bundles, string userResponse = null)
@@ -225,17 +215,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                 Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsRequiredBundleConfirmationPromptOutputFormat :
                     LocalizableStrings.MacRequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
-                var response = userResponse == null ? Console.ReadLine().Trim().ToUpper() : userResponse.ToUpper();
+                
+                var response = userResponse?.ToUpper() ?? Console.ReadLine().Trim().ToUpper();
+
                 if (response.Equals("N"))
                 {
                     return false;
                 }
-                else if (!(response.Equals("Y") || response.Equals("YES")))
+                if (!(response.Equals("Y") || response.Equals("YES")))
                 {
                     throw new ConfirmationPromptInvalidException();
                 }
             }
-
             return true;
         }
     }
