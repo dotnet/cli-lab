@@ -79,8 +79,6 @@ stages:
         steps:
         - checkout: self
           clean: true
-        - script: dotnet test 
-          displayName: 'Test'
         - script: eng\common\cibuild.cmd
             -configuration $(_BuildConfig)
             -prepareMachine
@@ -130,8 +128,6 @@ stages:
         steps:
         - checkout: self
           clean: true
-        - script: dotnet test 
-          displayName: 'Test'
         - script: eng/common/cibuild.sh
             --configuration $(_BuildConfig)
             --prepareMachine
@@ -153,6 +149,38 @@ stages:
             artifactName: 'drop-$(_RID)'
             publishLocation: 'Container'
             parallel: true
+            
+- stage: test
+  displayName: Test
+  jobs:
+  - template: /eng/common/templates/jobs/jobs.yml
+    jobs:
+    - job: Windows
+      displayName: Windows
+      pool:
+        ${{ if ne(variables['System.TeamProject'], 'internal') }}:
+          name: NetCore-Public
+          demands: ImageOverride -equals windows.vs2019.amd64.open
+        ${{ if eq(variables['System.TeamProject'], 'internal') }}:
+          name: NetCore1ESPool-Internal
+          demands: ImageOverride -equals windows.vs2019.amd64
+      steps:
+      - script: dotnet test
+        displayName: Test
+    - job: OSX_arm64
+      displayName: 'Mac OS (arm64)'
+      pool:
+        vmImage: 'macOS-latest'
+      steps:
+      - script: dotnet test
+        displayName: Test
+    - job: OSX_x64
+      displayName: 'Mac OS (x64)'
+      pool:
+        vmImage: 'macOS-latest'
+      steps:
+      - script: dotnet test
+        displayName: Test
 
 - ${{ if eq(variables._RunAsInternal, True) }}:
   - template: eng\common\templates\post-build\post-build.yml
