@@ -155,8 +155,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             {
                 return new ProcessStartInfo
                 {
-                    FileName = "rm",
-                    Arguments = $"-rf {command}",
+                    FileName = "sudo",
+                    Arguments = $"rm -rf {command}",
                     UseShellExecute = true
                 };
             }
