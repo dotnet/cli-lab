@@ -50,7 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             return (dividedBundles, bundleList);
         }
 
-        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList, bool macOSPreserveVSSdks = false)
+        private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyMacVersionDivisions(IEnumerable<Bundle> bundleList)
         {
             var bundlesAboveLimit = bundleList.Where(bundle => bundle.Version.SemVer >= UpperLimit);
             bundleList = bundleList.Except(bundlesAboveLimit);
@@ -61,17 +61,14 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
                 .Select(pair => (pair as IEnumerable<Bundle>, LocalizableStrings.MacRuntimeRequirementExplanationString))
                 .ToDictionary(key => key.Item1, value => value.Item2); 
 
-            if (macOSPreserveVSSdks)
+            var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion) ?? [];
+            if (sdks.Any())
             {
-                var sdks = bundleList.Where(bundle => bundle.Version is SdkVersion) ?? [];
-                if (sdks.Any())
-                {
-                    dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplanationString);
-                }
+                dividedBundles.Add(sdks, LocalizableStrings.MacSDKRequirementExplanationString);
             }
 
             var remainingBundles = bundleList
-                .Where(bundle => bundle.Version is not RuntimeVersion && !(bundle.Version is SdkVersion && macOSPreserveVSSdks))
+                .Where(bundle => bundle.Version is not RuntimeVersion && bundle.Version is not SdkVersion)
                 .Concat(bundlesAboveLimit);
             return (dividedBundles, remainingBundles);
         }
@@ -82,10 +79,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             {
                 return ApplyWindowsVersionDivisions(bundles);
             }
-            else
+            else if (RuntimeInfo.RunningOnOSX && macOSPreserveVSSdks)
             {
-                return ApplyMacVersionDivisions(bundles, macOSPreserveVSSdks);
+                return ApplyMacVersionDivisions(bundles);
             }
+            return (new Dictionary<IEnumerable<Bundle>, string>(), bundles);
         }
 
         public static IEnumerable<Bundle> GetUninstallableBundles(IEnumerable<Bundle> bundles, bool macOSPreserveVSSdks = false)
