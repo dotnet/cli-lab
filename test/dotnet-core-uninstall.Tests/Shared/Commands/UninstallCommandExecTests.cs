@@ -18,9 +18,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
 
         [Theory]
         [InlineData("Y", Results.Success)]
-        [InlineData("YES", Results.Success)]
-        [InlineData("yes", Results.Success)]
+        [InlineData("YES", Results.Error)]
+        [InlineData("yes", Results.Error)]
         [InlineData("n", Results.Reject)]
+        [InlineData("no", Results.Error)]
         [InlineData("", Results.Error)]
         [InlineData("foo", Results.Error)]
         internal void UserInputIsInterpretedCorrectly(string userResponse, Results expectedResult)
