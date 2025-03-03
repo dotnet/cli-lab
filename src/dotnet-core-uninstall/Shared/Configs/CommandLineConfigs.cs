@@ -355,14 +355,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 command.AddOption(option);
             }
-            
-            // Arguments
-            command.AddArgument(new Argument<IEnumerable<string>>
+            if (command.Name != ListCommandName)
             {
-                Name = "TARGET",
-                Description = "The type of bundle you want to uninstall. (--sdk, --runtime)"
-            });
-
+                // Arguments
+                command.AddArgument(new Argument<IEnumerable<string>>
+                {
+                    Name = "TARGET",
+                    Description = "The type of bundle you want to uninstall. (--sdk, --runtime)"
+                });
+            }
+            
             if (addVersionArgument)
             {
                 command.AddArgument(new Argument<IEnumerable<string>>
