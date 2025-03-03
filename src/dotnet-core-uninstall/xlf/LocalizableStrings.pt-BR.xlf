@@ -262,8 +262,8 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllOptionDescription">
-        <source>Remove all .NET Core SDKs or Runtimes. (Must specify one of: --aspnet-runtime, --hosting-bundle, --runtime, --sdk). (*)</source>
-        <target state="new">Remove all .NET Core SDKs or Runtimes. (Must specify one of: --aspnet-runtime, --hosting-bundle, --runtime, --sdk). (*)</target>
+        <source>Remove all .NET Core SDKs or Runtimes. (*)</source>
+        <target state="new">Remove all .NET Core SDKs or Runtimes. (*)</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAllPreviewsButLatestOptionDescription">
