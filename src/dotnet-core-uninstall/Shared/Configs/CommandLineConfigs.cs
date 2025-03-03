@@ -363,6 +363,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                     Description = LocalizableStrings.UninstallNoOptionArgumentDescription
                 });
             }
+            // TODO: Check
+            command.AddArgument(new Argument<IEnumerable<string>>
+            {
+                Name = "TARGET",
+                Description = "The type you want to uninstall"
+            });
         }
     }
 }
