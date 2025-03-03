@@ -623,6 +623,24 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The type of bundle you want to uninstall. (--sdk, --runtime).
+        /// </summary>
+        internal static string UninstallTargetArgumentDescription {
+            get {
+                return ResourceManager.GetString("UninstallTargetArgumentDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TARGET.
+        /// </summary>
+        internal static string UninstallTargetArgumentName {
+            get {
+                return ResourceManager.GetString("UninstallTargetArgumentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove x64..
         /// </summary>
         internal static string UninstallX64OptionDescription {

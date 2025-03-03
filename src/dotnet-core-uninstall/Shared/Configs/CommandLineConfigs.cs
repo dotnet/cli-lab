@@ -360,8 +360,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 // Arguments
                 command.AddArgument(new Argument<IEnumerable<string>>
                 {
-                    Name = "TARGET",
-                    Description = "The type of bundle you want to uninstall. (--sdk, --runtime)"
+                    Name = LocalizableStrings.UninstallTargetArgumentName,
+                    Description = LocalizableStrings.UninstallTargetArgumentDescription,
                 });
             }
             

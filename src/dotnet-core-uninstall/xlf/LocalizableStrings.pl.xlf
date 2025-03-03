@@ -336,6 +336,16 @@ Uninstalling this item will cause Visual Studio for to break.
         <target state="new">Remove .NET Core SDKs only.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UninstallTargetArgumentDescription">
+        <source>The type of bundle you want to uninstall. (--sdk, --runtime)</source>
+        <target state="new">The type of bundle you want to uninstall. (--sdk, --runtime)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallTargetArgumentName">
+        <source>TARGET</source>
+        <target state="new">TARGET</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UninstallX64OptionDescription">
         <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</source>
         <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</target>
