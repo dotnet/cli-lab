@@ -470,7 +470,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove all .NET Core SDKs or Runtimes. (*).
+        ///   Looks up a localized string similar to Remove all .NET Core SDKs or Runtimes. (Must specify one of: --aspnet-runtime, --hosting-bundle, --runtime, --sdk). (*).
         /// </summary>
         internal static string UninstallAllOptionDescription {
             get {
