@@ -115,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphMac {
             get {
@@ -124,7 +124,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphWindows {
             get {
