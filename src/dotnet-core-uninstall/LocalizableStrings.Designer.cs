@@ -151,6 +151,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to List arm64 .NET Core SDKs or Runtimes..
+        /// </summary>
+        internal static string ListArm64OptionDescription {
+            get {
+                return ResourceManager.GetString("ListArm64OptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to List ASP.NET Core Runtimes..
         /// </summary>
         internal static string ListAspNetRuntimeOptionDescription {
@@ -493,6 +502,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallAllPreviewsOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallAllPreviewsOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64..
+        /// </summary>
+        internal static string UninstallArm64OptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallArm64OptionDescription", resourceCulture);
             }
         }
         

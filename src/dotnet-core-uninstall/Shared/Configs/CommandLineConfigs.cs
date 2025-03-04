@@ -122,6 +122,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             $"--{X86OptionName}",
             LocalizableStrings.ListX86OptionDescription);
 
+        public static readonly Option ListArm64Option = new Option(
+            $"--{Arm64OptionName}",
+            LocalizableStrings.ListArm64OptionDescription);
+
         public static readonly Command VersionSubcommand = new Command("--version")
         {
             IsHidden = true
@@ -167,7 +171,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly Option[] ArchUninstallOptions = new Option[]
         {
             new Option($"--{X64OptionName}", LocalizableStrings.UninstallX64OptionDescription),
-            new Option($"--{X86OptionName}", LocalizableStrings.UninstallX86OptionDescription)
+            new Option($"--{X86OptionName}", LocalizableStrings.UninstallX86OptionDescription),
+            new Option($"--{Arm64OptionName}", LocalizableStrings.UninstallArm64OptionDescription)
         };
 
         public static readonly Option[] AdditionalUninstallOptions = new Option[]
@@ -244,7 +249,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 ListAuxOptions = ListAuxOptions
                     .Append(ListX64Option)
-                    .Append(ListX86Option);
+                    .Append(ListX86Option)
+                    .Append(ListArm64Option);
             }
             AssignOptionsToCommand(ListCommand, ListAuxOptions);
 

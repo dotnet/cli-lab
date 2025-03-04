@@ -390,4 +390,10 @@ Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio for to break.
 </value>
   </data>
+  <data name="ListArm64OptionDescription" xml:space="preserve">
+    <value>List arm64 .NET Core SDKs or Runtimes.</value>
+  </data>
+  <data name="UninstallArm64OptionDescription" xml:space="preserve">
+    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</value>
+  </data>
 </root>
