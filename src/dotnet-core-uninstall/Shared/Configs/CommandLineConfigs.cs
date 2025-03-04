@@ -361,7 +361,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 command.AddArgument(new Argument<IEnumerable<string>>
                 {
                     Name = LocalizableStrings.UninstallTargetArgumentName,
-                    Description = LocalizableStrings.UninstallTargetArgumentDescription,
+                    Description = string.Format(
+                        LocalizableStrings.UninstallTargetArgumentDescription,
+                        string.Join(", ", SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => $"--{type.OptionName}"))
+                    )
                 });
             }
             

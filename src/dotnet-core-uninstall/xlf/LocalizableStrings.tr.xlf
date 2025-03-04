@@ -337,8 +337,8 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallTargetArgumentDescription">
-        <source>The type of bundle you want to uninstall. (--sdk, --runtime)</source>
-        <target state="new">The type of bundle you want to uninstall. (--sdk, --runtime)</target>
+        <source>The type of bundle you want to uninstall. ({0})</source>
+        <target state="new">The type of bundle you want to uninstall. ({0})</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallTargetArgumentName">

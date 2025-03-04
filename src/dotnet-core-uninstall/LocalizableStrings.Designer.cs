@@ -623,7 +623,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The type of bundle you want to uninstall. (--sdk, --runtime).
+        ///   Looks up a localized string similar to The type of bundle you want to uninstall. ({0}).
         /// </summary>
         internal static string UninstallTargetArgumentDescription {
             get {
