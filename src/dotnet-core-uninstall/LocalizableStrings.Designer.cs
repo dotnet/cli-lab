@@ -115,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphMac {
             get {
@@ -124,7 +124,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphWindows {
             get {
@@ -147,6 +147,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string InvalidInputVersionExceptionMessageFormat {
             get {
                 return ResourceManager.GetString("InvalidInputVersionExceptionMessageFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List arm64 .NET Core SDKs or Runtimes..
+        /// </summary>
+        internal static string ListArm64OptionDescription {
+            get {
+                return ResourceManager.GetString("ListArm64OptionDescription", resourceCulture);
             }
         }
         
@@ -493,6 +502,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string UninstallAllPreviewsOptionDescription {
             get {
                 return ResourceManager.GetString("UninstallAllPreviewsOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64..
+        /// </summary>
+        internal static string UninstallArm64OptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallArm64OptionDescription", resourceCulture);
             }
         }
         

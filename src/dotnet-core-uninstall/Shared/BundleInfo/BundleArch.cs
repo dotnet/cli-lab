@@ -10,6 +10,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo
     {
         X86 = 0x1,
         X64 = 0x2,
-        Arm64 = 0x3
+        Arm64 = 0x4
     }
 }

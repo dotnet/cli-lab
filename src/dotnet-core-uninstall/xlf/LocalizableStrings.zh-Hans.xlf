@@ -33,13 +33,13 @@
         <note />
       </trans-unit>
       <trans-unit id="HelpExplanationParagraphMac">
-        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
-        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
+        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpExplanationParagraphWindows">
-        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</source>
-        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</target>
+        <source>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</target>
         <note />
       </trans-unit>
       <trans-unit id="HostingBundleFootnoteFormat">
@@ -50,6 +50,11 @@
       <trans-unit id="InvalidInputVersionExceptionMessageFormat">
         <source>The specified version is not valid: "{0}".</source>
         <target state="new">The specified version is not valid: "{0}".</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListArm64OptionDescription">
+        <source>List arm64 .NET Core SDKs or Runtimes.</source>
+        <target state="new">List arm64 .NET Core SDKs or Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListAspNetRuntimeOptionDescription">
@@ -274,6 +279,11 @@ Uninstalling this item will cause Visual Studio for to break.
       <trans-unit id="UninstallAllPreviewsOptionDescription">
         <source>Remove .NET Core SDKs or Runtimes marked as previews. (*)</source>
         <target state="new">Remove .NET Core SDKs or Runtimes marked as previews. (*)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallArm64OptionDescription">
+        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</source>
+        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAspNetRuntimeOptionDescription">

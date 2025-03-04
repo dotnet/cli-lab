@@ -353,10 +353,10 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
 </value>
   </data>
   <data name="HelpExplanationParagraphMac" xml:space="preserve">
-    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</value>
+    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
   </data>
   <data name="HelpExplanationParagraphWindows" xml:space="preserve">
-    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at aka.ms/dotnet-core-download.</value>
+    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
   </data>
   <data name="MacConfirmationPromptOutputFormat" xml:space="preserve">
     <value>The following items will be removed:
@@ -389,5 +389,11 @@ Are you sure you want to continue? [y/n] </value>
 Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio for to break.
 </value>
+  </data>
+  <data name="ListArm64OptionDescription" xml:space="preserve">
+    <value>List arm64 .NET Core SDKs or Runtimes.</value>
+  </data>
+  <data name="UninstallArm64OptionDescription" xml:space="preserve">
+    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</value>
   </data>
 </root>
