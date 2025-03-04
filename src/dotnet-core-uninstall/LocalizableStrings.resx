@@ -390,10 +390,4 @@ Warning: {0}: {1}
 Uninstalling this item will cause Visual Studio for to break.
 </value>
   </data>
-  <data name="UninstallTargetArgumentName" xml:space="preserve">
-    <value>TARGET</value>
-  </data>
-  <data name="UninstallTargetArgumentDescription" xml:space="preserve">
-    <value>The type of bundle you want to uninstall. ({0})</value>
-  </data>
 </root>

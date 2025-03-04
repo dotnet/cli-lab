@@ -150,18 +150,18 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly Option[] ListBundleTypeOptions = new Option[]
         {
-            new Option($"--{SdkOptionName}", LocalizableStrings.ListSdkOptionDescription) { IsHidden = true },
-            new Option($"--{RuntimeOptionName}", LocalizableStrings.ListRuntimeOptionDescription) { IsHidden = true },
-            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.ListAspNetRuntimeOptionDescription) { IsHidden = true },
-            new Option($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription) { IsHidden = true }
+            new Option($"--{SdkOptionName}", LocalizableStrings.ListSdkOptionDescription),
+            new Option($"--{RuntimeOptionName}", LocalizableStrings.ListRuntimeOptionDescription),
+            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.ListAspNetRuntimeOptionDescription),
+            new Option($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription)
         };
 
         public static readonly Option[] UninstallBundleTypeOptions = new Option[]
         {
-            new Option($"--{SdkOptionName}", LocalizableStrings.UninstallSdkOptionDescription) { IsHidden = true },
-            new Option($"--{RuntimeOptionName}", LocalizableStrings.UninstallRuntimeOptionDescription) { IsHidden = true },
-            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.UninstallAspNetRuntimeOptionDescription) { IsHidden = true },
-            new Option($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription) { IsHidden = true }
+            new Option($"--{SdkOptionName}", LocalizableStrings.UninstallSdkOptionDescription),
+            new Option($"--{RuntimeOptionName}", LocalizableStrings.UninstallRuntimeOptionDescription),
+            new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.UninstallAspNetRuntimeOptionDescription),
+            new Option($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription)
         };
 
         public static readonly Option[] ArchUninstallOptions = new Option[]
@@ -355,19 +355,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 command.AddOption(option);
             }
-            if (command.Name != ListCommandName)
-            {
-                // Arguments
-                command.AddArgument(new Argument<IEnumerable<string>>
-                {
-                    Name = LocalizableStrings.UninstallTargetArgumentName,
-                    Description = string.Format(
-                        LocalizableStrings.UninstallTargetArgumentDescription,
-                        string.Join(", ", SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => $"--{type.OptionName}"))
-                    )
-                });
-            }
-            
             if (addVersionArgument)
             {
                 command.AddArgument(new Argument<IEnumerable<string>>
