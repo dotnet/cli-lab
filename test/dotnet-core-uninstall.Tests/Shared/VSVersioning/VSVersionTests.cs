@@ -125,7 +125,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 new Bundle<HostingBundleVersion>(new HostingBundleVersion("11.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion")
             });
 
-            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
+            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles, true);
 
             // Check that we still have all of the non-sdk bundles
             uninstallable.Where(b => b.Version is AspNetRuntimeVersion).Should().HaveCount(1);
