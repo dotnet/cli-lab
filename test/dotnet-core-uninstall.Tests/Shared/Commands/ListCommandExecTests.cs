@@ -37,8 +37,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [MacOsOnlyTheory]
-        [InlineData("sdk", "", new string[] { "3.1.0" }, new string[] { "3.0.0", "3.0.0-preview", "1.0.0", "3.0.1", "3.0.2", "3.0.2-preview1", "3.0.2-preview2", "2.1.1", "1.0.1" })]
-        [InlineData("runtime", "", new string[] { "3.1.0", "3.0.2", "2.1.1", "1.0.1" }, new string[] { "3.0.0", "3.0.0-preview", "1.0.0", "3.0.1", "3.0.2-preview1", "3.0.2-preview2" })]
+        [InlineData("sdk", "", new string[] {}, new string[] { "3.0.0", "3.0.0-preview", "1.0.0", "3.0.1", "3.0.2", "3.0.2-preview1", "3.0.2-preview2", "2.1.1", "1.0.1", "3.1.0" })]
+        [InlineData("runtime", "", new string[] {}, new string[] { "3.1.0", "3.0.2-preview2", "3.0.2-preview1", "3.0.2", "3.0.1", "3.0.0-preview", "3.0.0", "2.1.1", "1.0.1", "1.0.0" })]
         internal void ListCommandFilteringIsCorrectOnMac(string bundleType, string options, string[] expectedProtected, string[] expectedUninstallable)
         {
             ListCommandFilteringIsCorrect(bundleType, options, expectedProtected, expectedUninstallable);

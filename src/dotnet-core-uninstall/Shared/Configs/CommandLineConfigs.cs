@@ -140,6 +140,10 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             RuntimeInfo.RunningOnWindows ? LocalizableStrings.ForceOptionDescriptionWindows
             : LocalizableStrings.ForceOptionDescriptionMac);
 
+        public static readonly Option MacOSPreserveVSSdksOption = new Option(
+            "--preserve-vs-for-mac-sdks", 
+            LocalizableStrings.MacOSPreserveVSSdksOptionDescription);
+
         public static readonly Option[] UninstallFilterBundlesOptions = new Option[]
         {
             UninstallAllOption,
@@ -218,6 +222,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallRootCommand.AddCommand(DryRunCommand);
             UninstallRootCommand.AddCommand(RemoveCommand);
             UninstallRootCommand.AddCommand(VersionSubcommand);
+
+            if (RuntimeInfo.RunningOnOSX)
+            {
+                ListCommand.AddOption(MacOSPreserveVSSdksOption);
+                RemoveCommand.AddOption(MacOSPreserveVSSdksOption);
+            }
 
             var supportedBundleTypeNames = SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => type.OptionName);
 

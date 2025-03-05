@@ -309,6 +309,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep SDKs required for Visual Studio for Mac (Visual Studio for Mac is no longer supported).
+        /// </summary>
+        internal static string MacOSPreserveVSSdksOptionDescription {
+            get {
+                return ResourceManager.GetString("MacOSPreserveVSSdksOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///{0}: {1}
         ///
@@ -335,7 +344,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used by Visual Studio for Mac or SDKs. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by SDKs. Specify individually or use —-force to remove.
         /// </summary>
         internal static string MacRuntimeRequirementExplanationString {
             get {
@@ -344,7 +353,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Used by Visual Studio for Mac. Specify individually or use —-force to remove.
+        ///   Looks up a localized string similar to Used by Visual Studio for Mac (Visual Studio for Mac is no longer supported). Specify individually or use —-force to remove.
         /// </summary>
         internal static string MacSDKRequirementExplanationString {
             get {
@@ -587,7 +596,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for Visual Studio for Mac or SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall-docs..
+        ///   Looks up a localized string similar to Remove specified .NET Core SDKs or Runtimes. By default, this tool does not uninstall versions that might be needed for SDKs. Read the documentation for the .NET Core Uninstall Tool at https://aka.ms/dotnet-core-uninstall-docs..
         /// </summary>
         internal static string UninstallNoOptionDescriptionMac {
             get {

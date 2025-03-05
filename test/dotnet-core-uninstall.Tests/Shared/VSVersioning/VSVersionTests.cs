@@ -5,6 +5,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo;
 using Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.Versioning;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Utils;
 using Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning;
 using Microsoft.DotNet.Tools.Uninstall.Tests.Attributes;
 using Microsoft.DotNet.Tools.Uninstall.Windows;
@@ -67,7 +68,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 bundles.Add(new Bundle<RuntimeVersion>(new RuntimeVersion(v), new BundleArch(), string.Empty, string.Empty));
             }
 
-            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
+            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles, true);
 
             CheckAllowed(bundles, uninstallable, sdkAllowed, runtimeAllowed);
         }
@@ -124,7 +125,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 new Bundle<HostingBundleVersion>(new HostingBundleVersion("11.0.0"), new BundleArch(), string.Empty, "HostingBundleVersion")
             });
 
-            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
+            var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles, true);
 
             // Check that we still have all of the non-sdk bundles
             uninstallable.Where(b => b.Version is AspNetRuntimeVersion).Should().HaveCount(1);
@@ -147,7 +148,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 {
                     uninstallableBundles.Should().Contain(sdkBundles[i]);
                 }
-                else
+                else if (!RuntimeInfo.RunningOnOSX)
                 {
                     uninstallableBundles.Should().NotContain(sdkBundles[i]);
                 }
@@ -207,7 +208,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "3.0.100", "5.0.100" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new string[] { "None", "None", "None", "Runtime", "Runtime" })]
         [InlineData(new string[] { "3.0.100", "5.0.100" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "10.0.100" }, new string[] { "None", "Runtime", "Runtime", "UpperLimit" })]
         [InlineData(new string[] { "5.0.100", "5.0.101", "11.100.100" }, new string[] { "None", "SDK", "UpperLimit" }, new string[] { "5.0.100", "11.0.0" }, new string[] { "Runtime", "UpperLimit" })]
-        internal void TestGetListCommandUninstallableStringsMac(string[] sdkVersions, string[] sdkExpected, string[] runtimeVersions, string[] runtimeExpected)
+        internal void 
+        StringsMac(string[] sdkVersions, string[] sdkExpected, string[] runtimeVersions, string[] runtimeExpected)
         {
             sdkExpected = sdkExpected.Select(s => s.Equals("UpperLimit") ? VisualStudioSafeVersionsExtractor.UpperLimit.ToNormalizedString() : s).ToArray();
             runtimeExpected = runtimeExpected.Select(s => s.Equals("UpperLimit") ? VisualStudioSafeVersionsExtractor.UpperLimit.ToNormalizedString() : s).ToArray();
@@ -236,6 +238,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             });
 
             var strings = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+
             strings.Count().Should().Be(bundles.Count());
 
             var sdkBundles = strings.Where(pair => pair.Key.Version is SdkVersion).ToArray();
@@ -265,8 +268,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 { string.Empty, string.Format(LocalizableStrings.WindowsRequirementExplanationString, string.Empty)},
                 { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2017")},
                 { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019")},
-                { "SDK", LocalizableStrings.MacSDKRequirementExplanationString},
-                { "Runtime", LocalizableStrings.MacRuntimeRequirementExplanationString}
+                { "SDK", string.Empty}, // Don't need to check for SDKs on Mac
+                { "Runtime", string.Empty}
             };
             var output = new string[input.Length];
 
