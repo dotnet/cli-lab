@@ -269,7 +269,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
                 { " 2017", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2017")},
                 { " 2019", string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2019")},
                 { "SDK", string.Empty}, // Don't need to check for SDKs on Mac
-                { "Runtime", LocalizableStrings.MacRuntimeRequirementExplanationString}
+                { "Runtime", string.Empty}
             };
             var output = new string[input.Length];
 
