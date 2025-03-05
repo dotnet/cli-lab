@@ -155,11 +155,6 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="MacOSPreserveVSSdksOptionDescription">
-        <source>Keep SDKs required for Visual Studio for Mac (Visual Studio for Mac is no longer supported)</source>
-        <target state="new">Keep SDKs required for Visual Studio for Mac (Visual Studio for Mac is no longer supported)</target>
-        <note />
-      </trans-unit>
       <trans-unit id="MacOsBundleDisplayNameFormat">
         <source>Microsoft .NET Core {0} {1} ({2})</source>
         <target state="new">Microsoft .NET Core {0} {1} ({2})</target>
@@ -194,11 +189,6 @@ Uninstalling this item will cause Visual Studio for to break.
       <trans-unit id="MacRuntimeRequirementExplanationString">
         <source>Used by SDKs. Specify individually or use —-force to remove</source>
         <target state="new">Used by SDKs. Specify individually or use —-force to remove</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="MacSDKRequirementExplanationString">
-        <source>Used by Visual Studio for Mac (Visual Studio for Mac is no longer supported). Specify individually or use —-force to remove</source>
-        <target state="new">Used by Visual Studio for Mac (Visual Studio for Mac is no longer supported). Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
