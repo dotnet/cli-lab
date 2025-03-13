@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
@@ -136,9 +136,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
 
         private void CheckAllowed(IEnumerable<Bundle> allBundles, IEnumerable<Bundle> uninstallableBundles, bool[] sdkAllowed, bool[] runtimeAllowed)
         {
-            using var scope = new AssertionScope();
-            scope.AddReportable("allBundles", () => String.Join(Environment.NewLine, allBundles.Select(b => b.ToDebugString())));
-            scope.AddReportable("uninstallableBundles", () => String.Join(Environment.NewLine, uninstallableBundles.Select(b => b.ToDebugString())));
+            var chain = AssertionChain.GetOrCreate();
+            chain.AddReportable("allBundles", () => String.Join(Environment.NewLine, allBundles.Select(b => b.ToDebugString())));
+            chain.AddReportable("uninstallableBundles", () => String.Join(Environment.NewLine, uninstallableBundles.Select(b => b.ToDebugString())));
             var sdkBundles = allBundles.Where(bundle => bundle.Version is SdkVersion).ToArray();
             var runtimeBundles = allBundles.Where(bundle => bundle.Version is RuntimeVersion).ToArray();
             var otherBundles = allBundles.Except(sdkBundles).Except(runtimeBundles);
