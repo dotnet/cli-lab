@@ -193,7 +193,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
             Console.Write(string.Format(RuntimeInfo.RunningOnWindows ? LocalizableStrings.WindowsConfirmationPromptOutputFormat :
                 LocalizableStrings.MacConfirmationPromptOutputFormat, displayNames));
 
-            var response = userResponse?.ToUpper() ?? Console.ReadKey().KeyChar.ToString().ToUpper();
+            var response = (userResponse ?? Console.ReadLine()).ToUpper();
 
             if (response.Equals("Y"))
             {
@@ -216,13 +216,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Commands
                     LocalizableStrings.MacRequiredBundleConfirmationPromptOutputFormat, pair.Key.DisplayName, pair.Value));
                 Console.ResetColor();
                 
-                var response = userResponse?.ToUpper() ?? Console.ReadKey().KeyChar.ToString().ToUpper();
+                var response = (userResponse ?? Console.ReadLine()).ToUpper();
 
                 if (response.Equals("N"))
                 {
                     return false;
                 }
-                if (!(response.Equals("Y") || response.Equals("YES")))
+                if (!response.Equals("Y"))
                 {
                     throw new ConfirmationPromptInvalidException();
                 }
