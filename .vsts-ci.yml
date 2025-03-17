@@ -142,7 +142,6 @@ extends:
             - checkout: self
               clean: true
             - script: eng/common/cibuild.sh
-                -sign 
                 --configuration $(_BuildConfig)
                 --prepareMachine
                 -p:RID=$(_RID) -p:DotNetSignType=test -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
