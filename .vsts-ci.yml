@@ -145,7 +145,6 @@ extends:
                 --sign
                 --configuration $(_BuildConfig)
                 --prepareMachine
-                --entitlements eng/entitlements.plist
                 -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - task: ArchiveFiles@2
