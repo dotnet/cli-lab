@@ -142,9 +142,11 @@ extends:
             - checkout: self
               clean: true
             - script: eng/common/cibuild.sh
+                --sign
                 --configuration $(_BuildConfig)
                 --prepareMachine
-                -p:RID=$(_RID) -p:DotNetSignType=test -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
+                --entitlements eng/entitlements.plist
+                -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - task: ArchiveFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
