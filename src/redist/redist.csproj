@@ -19,4 +19,8 @@
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\FileExtensions.targets" />
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\GenerateMSIs.targets" />
   <Target Condition="'$(RID)' == 'win-x86'" Name="GenerateMSIs" AfterTargets="Build" DependsOnTargets="GenerateLayout;GenerateDotnetCoreUninstallMsi" />
+
+  <Target Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Name="AddEntitlements" AfterTargets="GenerateLayout">
+    <Exec Command="codesign -s - -f --entitlements $(MSBuildThisFileDirectory)entitlements.plist $(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall" />
+  </Target>
 </Project>

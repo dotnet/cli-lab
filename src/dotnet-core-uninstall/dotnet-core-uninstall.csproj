@@ -6,7 +6,6 @@
     <SignAssembly>true</SignAssembly>
     <TargetFramework>net8.0</TargetFramework>
     <RollForward>LatestMajor</RollForward>
-    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
   </PropertyGroup>
 
   <PropertyGroup>
