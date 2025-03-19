@@ -148,12 +148,12 @@ extends:
                 includeRootFolder: false
                 archiveType: 'tar'
                 tarCompression: 'gz'
-                archiveFile: '$(Build.ArtifactStagingDirectory)/$(_RID)/dotnet-core-uninstall.tar.gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
                 replaceExistingArchive: true
             - task: 1ES.PublishBuildArtifacts@1
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(_RID)'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
