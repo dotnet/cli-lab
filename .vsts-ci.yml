@@ -130,10 +130,8 @@ extends:
               matrix:
                 ARM64:
                   _RID: osx-arm64
-                  _DotNetPublishToBlobFeed: false
                 X64:
                   _RID: osx-x64
-                  _DotNetPublishToBlobFeed: false
             steps:
             - checkout: self
               clean: true
@@ -144,18 +142,18 @@ extends:
                 -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - task: ArchiveFiles@2
-              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
                 rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
                 includeRootFolder: false
                 archiveType: 'tar'
                 tarCompression: 'gz'
-                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/$(_RID)/dotnet-core-uninstall.tar.gz'
                 replaceExistingArchive: true
             - task: 1ES.PublishBuildArtifacts@1
-              condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+              condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(_RID)'
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
