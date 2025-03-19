@@ -163,4 +163,5 @@ extends:
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
-
+            - script: artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall -h
+              displayName: Run
