@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnet-core-uninstall\dotnet-core-uninstall.csproj" />
-    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="10.0.0-beta.25124.4"/>
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="10.0.0-beta.25124.4" Condition="'$(RID)' == 'win-x86'"/>
   </ItemGroup>
 
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\Versions.targets" />
@@ -19,4 +19,8 @@
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\FileExtensions.targets" />
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\GenerateMSIs.targets" />
   <Target Condition="'$(RID)' == 'win-x86'" Name="GenerateMSIs" AfterTargets="Build" DependsOnTargets="GenerateLayout;GenerateDotnetCoreUninstallMsi" />
+
+  <!-- Entitlements are needed but not automatically added for macOS. See https://github.com/dotnet/runtime/issues/113707 -->
+  <Import Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Project="targets\MacEntitlements\AddMacEntitlements.targets" />
+  
 </Project>
