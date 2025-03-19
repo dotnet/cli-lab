@@ -1,5 +1,6 @@
 <Project>
-    <!-- This is needed as Arcade signing does not add entitlements. This generates an ad-hoc signature with entitlements that would later be replaced by the actual signature. -->
+    <!-- Entitlements are needed but not automatically added for macOS. See https://github.com/dotnet/runtime/issues/113707 -->
+    <!-- This generates an ad-hoc signature that will later be resigned, but keeps the entitlements. -->
     <Target Name="AddEntitlements" AfterTargets="GenerateLayout">
         <Exec Command="codesign -s - -f --entitlements $(MSBuildThisFileDirectory)entitlements.plist $(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall" />
     </Target>
