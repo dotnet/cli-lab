@@ -167,9 +167,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
             if (string.IsNullOrEmpty(archString))
             {
-                archString = displayName.Contains(x64String) ?
-                    x64String :
-                    displayName.Contains(x86String) ? x86String : string.Empty;
+                archString = 
+                    displayName.Contains(x64String) ? x64String :
+                    displayName.Contains(x86String) ? x86String : 
+                    displayName.Contains(arm64String) ? arm64String : 
+                    string.Empty;
 
                 archString = archString switch
                 {
