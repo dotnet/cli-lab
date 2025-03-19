@@ -19,6 +19,6 @@
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\FileExtensions.targets" />
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\GenerateMSIs.targets" />
   <Target Condition="'$(RID)' == 'win-x86'" Name="GenerateMSIs" AfterTargets="Build" DependsOnTargets="GenerateLayout;GenerateDotnetCoreUninstallMsi" />
-  <Import Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Project="targets\AddMacEntitlements.targets" />
+  <Import Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Project="targets\MacEntitlements\AddMacEntitlements.targets" />
   
 </Project>
