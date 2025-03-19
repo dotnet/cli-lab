@@ -165,31 +165,13 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
             }
 
-            if (string.IsNullOrEmpty(archString))
+            return archString switch
             {
-                archString = 
-                    displayName.Contains(x64String) ? x64String :
-                    displayName.Contains(x86String) ? x86String : 
-                    displayName.Contains(arm64String) ? arm64String : 
-                    string.Empty;
-
-                archString = archString switch
-                {
-                    string a when a.Contains(x64String) => x64String,
-                    string b when b.Contains(x86String) => x86String,
-                    string b when b.Contains(arm64String) => arm64String,
-                    _ => string.Empty
-                };
-            }
-
-            switch (archString)
-            {
-                case x64String: return BundleArch.X64;
-                case x86String: return BundleArch.X86;
-                case arm64String: return BundleArch.Arm64;
-                case "": return BundleArch.X64 | BundleArch.X86;
-                default: throw new ArgumentException();
-            }
+                string a when a.Contains(x64String) => BundleArch.X64,
+                string b when b.Contains(x86String) => BundleArch.X86,
+                string c when c.Contains(arm64String) => BundleArch.Arm64,
+                _ => BundleArch.X64 | BundleArch.X86
+            };
         }
 
         public IEnumerable<BundleTypePrintInfo> GetSupportedBundleTypes()
