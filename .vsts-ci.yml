@@ -130,20 +130,16 @@ extends:
               matrix:
                 ARM64:
                   _RID: osx-arm64
-                  _BuildConfig: Release
-                  _SignType: real
                   _DotNetPublishToBlobFeed: false
                 X64:
                   _RID: osx-x64
-                  _BuildConfig: Release
-                  _SignType: real
                   _DotNetPublishToBlobFeed: false
             steps:
             - checkout: self
               clean: true
             - script: eng/common/cibuild.sh
                 --sign
-                --configuration $(_BuildConfig)
+                --configuration Release
                 --prepareMachine
                 -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
@@ -163,5 +159,3 @@ extends:
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
-            - script: artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall -h
-              displayName: Run
