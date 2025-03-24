@@ -350,7 +350,7 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
 </value>
   </data>
   <data name="HelpExplanationParagraphMac" xml:space="preserve">
-    <value>(*) By default Runtimes that have a high probability of being used by SDKs are not removed. To remove these, specify them individually or use --force. To avoid issues with Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) use ----preserve-vs-for-mac-sdks, SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
+    <value>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
   </data>
   <data name="HelpExplanationParagraphWindows" xml:space="preserve">
     <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>

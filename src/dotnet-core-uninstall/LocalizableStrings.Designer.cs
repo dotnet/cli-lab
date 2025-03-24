@@ -115,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default Runtimes that have a high probability of being used by SDKs are not removed. To remove these, specify them individually or use --force. To avoid issues with Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) use ----preserve-vs-for-mac-sdks, SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) Use --preserve-vs-for-mac-sdks to prevent removal of SDs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphMac {
             get {
