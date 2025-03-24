@@ -350,7 +350,7 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
 </value>
   </data>
   <data name="HelpExplanationParagraphMac" xml:space="preserve">
-    <value>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
+    <value>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported). If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair.” SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
   </data>
   <data name="HelpExplanationParagraphWindows" xml:space="preserve">
     <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
@@ -359,7 +359,7 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
     <value>The following items will be removed:
 {0}
 
-for any problems, read https://aka.ms/dotnet-core-uninstall-docs.
+For any problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Do you want to continue? [y/n] </value>
   </data>
@@ -394,7 +394,7 @@ Uninstalling this item will cause Visual Studio for to break.
     <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</value>
   </data>
   <data name="MacOSPreserveVSSdksOptionDescription" xml:space="preserve">
-    <value>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studuio for Mac (Note: Visual Studio for Mac is now unsupported).</value>
+    <value>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported).</value>
   </data>
   <data name="MacSDKRequirementExplanationString" xml:space="preserve">
     <value>Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).</value>
