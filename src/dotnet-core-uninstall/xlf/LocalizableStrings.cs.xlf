@@ -196,6 +196,11 @@ Uninstalling this item will cause Visual Studio for to break.
         <target state="new">Used by SDKs. Specify individually or use —-force to remove</target>
         <note />
       </trans-unit>
+      <trans-unit id="MacSDKRequirementExplanationString">
+        <source>Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).</source>
+        <target state="new">Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MoreThanOneVersionSpecifiedExceptionMessageFormat">
         <source>You must specify exactly one version for option: {0}.</source>
         <target state="new">You must specify exactly one version for option: {0}.</target>

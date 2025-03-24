@@ -396,4 +396,7 @@ Uninstalling this item will cause Visual Studio for to break.
   <data name="MacOSPreserveVSSdksOptionDescription" xml:space="preserve">
     <value>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studuio for Mac (Note: Visual Studio for Mac is now unsupported).</value>
   </data>
+  <data name="MacSDKRequirementExplanationString" xml:space="preserve">
+    <value>Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).</value>
+  </data>
 </root>

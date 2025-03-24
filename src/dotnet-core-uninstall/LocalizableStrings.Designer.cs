@@ -353,6 +353,15 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported)..
+        /// </summary>
+        internal static string MacSDKRequirementExplanationString {
+            get {
+                return ResourceManager.GetString("MacSDKRequirementExplanationString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You must specify exactly one version for option: {0}..
         /// </summary>
         internal static string MoreThanOneVersionSpecifiedExceptionMessageFormat {
