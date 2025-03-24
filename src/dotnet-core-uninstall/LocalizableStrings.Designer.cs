@@ -115,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is out of support) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphMac {
             get {
@@ -309,7 +309,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported)..
+        ///   Looks up a localized string similar to Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is out of support)..
         /// </summary>
         internal static string MacOSPreserveVSSdksOptionDescription {
             get {
@@ -321,7 +321,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///   Looks up a localized string similar to 
         ///{0}: {1}
         ///
-        ///Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).
+        ///Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is out of support).
         ///
         ///Are you sure you want to continue? [y/n] .
         /// </summary>
@@ -353,7 +353,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported)..
+        ///   Looks up a localized string similar to Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is out of support)..
         /// </summary>
         internal static string MacSDKRequirementExplanationString {
             get {
