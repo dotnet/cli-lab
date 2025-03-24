@@ -33,8 +33,8 @@
         <note />
       </trans-unit>
       <trans-unit id="HelpExplanationParagraphMac">
-        <source>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</source>
-        <target state="new">(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</target>
+        <source>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported). If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair.” SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported). If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair.” SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpExplanationParagraphWindows">
@@ -116,13 +116,13 @@
         <source>The following items will be removed:
 {0}
 
-for any problems, read https://aka.ms/dotnet-core-uninstall-docs.
+For any problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Do you want to continue? [y/n] </source>
         <target state="new">The following items will be removed:
 {0}
 
-for any problems, read https://aka.ms/dotnet-core-uninstall-docs.
+For any problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Do you want to continue? [y/n] </target>
         <note />
@@ -156,8 +156,8 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
         <note />
       </trans-unit>
       <trans-unit id="MacOSPreserveVSSdksOptionDescription">
-        <source>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studuio for Mac (Note: Visual Studio for Mac is now unsupported).</source>
-        <target state="new">Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studuio for Mac (Note: Visual Studio for Mac is now unsupported).</target>
+        <source>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported).</source>
+        <target state="new">Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported).</target>
         <note />
       </trans-unit>
       <trans-unit id="MacOsBundleDisplayNameFormat">
