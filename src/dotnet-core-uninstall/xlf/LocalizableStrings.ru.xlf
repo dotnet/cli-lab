@@ -33,8 +33,8 @@
         <note />
       </trans-unit>
       <trans-unit id="HelpExplanationParagraphMac">
-        <source>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported). If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair.” SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</source>
-        <target state="new">(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported). If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair.” SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</target>
+        <source>(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</source>
+        <target state="new">(*) Use --preserve-vs-for-mac-sdks to prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) or SDKs. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</target>
         <note />
       </trans-unit>
       <trans-unit id="HelpExplanationParagraphWindows">
