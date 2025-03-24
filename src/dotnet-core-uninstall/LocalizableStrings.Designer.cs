@@ -115,7 +115,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to (*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
+        ///   Looks up a localized string similar to (*) By default Runtimes that have a high probability of being used by SDKs are not removed. To remove these, specify them individually or use --force. To avoid issues with Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) use ----preserve-vs-for-mac-sdks, SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download..
         /// </summary>
         internal static string HelpExplanationParagraphMac {
             get {
@@ -262,7 +262,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///   Looks up a localized string similar to The following items will be removed:
         ///{0}
         ///
-        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
+        ///for any problems, read https://aka.ms/dotnet-core-uninstall-docs.
         ///
         ///Do you want to continue? [y/n] .
         /// </summary>
@@ -278,7 +278,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///{0}
         ///*** END DRY RUN OUTPUT
         ///
-        ///To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
+        ///For any problems, read https://aka.ms/dotnet-core-uninstall-docs.
         ///
         ///Run as administrator and use the remove command to uninstall these items..
         /// </summary>
@@ -309,7 +309,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Keep SDKs required for Visual Studio for Mac (Visual Studio for Mac is no longer supported).
+        ///   Looks up a localized string similar to Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studuio for Mac (Note: Visual Studio for Mac is now unsupported)..
         /// </summary>
         internal static string MacOSPreserveVSSdksOptionDescription {
             get {
@@ -321,7 +321,7 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         ///   Looks up a localized string similar to 
         ///{0}: {1}
         ///
-        ///Uninstalling this item will cause Visual Studio for Mac to break.
+        ///Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).
         ///
         ///Are you sure you want to continue? [y/n] .
         /// </summary>
@@ -349,15 +349,6 @@ namespace Microsoft.DotNet.Tools.Uninstall {
         internal static string MacRuntimeRequirementExplanationString {
             get {
                 return ResourceManager.GetString("MacRuntimeRequirementExplanationString", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Used by Visual Studio for Mac (Visual Studio for Mac is no longer supported). Specify individually or use —-force to remove.
-        /// </summary>
-        internal static string MacSDKRequirementExplanationString {
-            get {
-                return ResourceManager.GetString("MacSDKRequirementExplanationString", resourceCulture);
             }
         }
         

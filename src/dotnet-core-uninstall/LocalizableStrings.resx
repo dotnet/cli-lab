@@ -350,7 +350,7 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
 </value>
   </data>
   <data name="HelpExplanationParagraphMac" xml:space="preserve">
-    <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac or SDKs are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio for Mac, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
+    <value>(*) By default Runtimes that have a high probability of being used by SDKs are not removed. To remove these, specify them individually or use --force. To avoid issues with Visual Studio for Mac (Note: Visual Studio for Mac is now unsupported) use ----preserve-vs-for-mac-sdks, SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
   </data>
   <data name="HelpExplanationParagraphWindows" xml:space="preserve">
     <value>(*) By default, SDKs and Runtimes that have a high probability of being used by Visual Studio are not removed. To remove these, specify them individually or use --force. If removing SDKs or Runtimes causes issues with your installation of Visual Studio, run “Repair”. SDKs and Runtimes are available for download at https://aka.ms/dotnet-core-download.</value>
@@ -359,7 +359,7 @@ This tool cannot uninstall versions of the runtime or SDK that are installed usi
     <value>The following items will be removed:
 {0}
 
-To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
+for any problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Do you want to continue? [y/n] </value>
   </data>
@@ -369,7 +369,7 @@ Specified versions:
 {0}
 *** END DRY RUN OUTPUT
 
-To avoid breaking Visual Studio for Mac or other problems, read https://aka.ms/dotnet-core-uninstall-docs.
+For any problems, read https://aka.ms/dotnet-core-uninstall-docs.
 
 Run as administrator and use the remove command to uninstall these items.</value>
   </data>
@@ -377,7 +377,7 @@ Run as administrator and use the remove command to uninstall these items.</value
     <value>
 {0}: {1}
 
-Uninstalling this item will cause Visual Studio for Mac to break.
+Uninstalling this item will cause Visual Studio for Mac to break. (Note: Visual Studio for Mac is now unsupported).
 
 Are you sure you want to continue? [y/n] </value>
   </data>
@@ -392,5 +392,8 @@ Uninstalling this item will cause Visual Studio for to break.
   </data>
   <data name="UninstallArm64OptionDescription" xml:space="preserve">
     <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</value>
+  </data>
+  <data name="MacOSPreserveVSSdksOptionDescription" xml:space="preserve">
+    <value>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studuio for Mac (Note: Visual Studio for Mac is now unsupported).</value>
   </data>
 </root>
