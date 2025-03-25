@@ -3,6 +3,14 @@
 
 using System.CommandLine.Parsing;
 
-namespace Microsoft.DotNet.Bootstrapper;
-
-Console.WriteLine("Hello World!");
+namespace Microsoft.DotNet.Bootstrapper
+{
+    public class Program
+    {
+        public static int Main(string[] args)
+        {
+            Console.WriteLine("Hello World!");
+            return 0;
+        }
+    }
+}
