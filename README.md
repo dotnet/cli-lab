@@ -19,6 +19,3 @@ This project has adopted the code of conduct defined by the [Contributor Covenan
 
 ## License
 .NET Core (including this repo) is licensed under the MIT license.
-
-# MSBuildBinLogQuery
-Work in progress
