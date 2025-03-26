@@ -126,10 +126,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             $"--{Arm64OptionName}",
             LocalizableStrings.ListArm64OptionDescription);
 
-        public static readonly Command VersionSubcommand = new Command("--version")
-        {
-            IsHidden = true
-        };
+        public static readonly Command VersionSubcommand = new Command("--version");
 
         public static readonly Option YesOption = new Option(
             new[] { "--yes", "-y" },
