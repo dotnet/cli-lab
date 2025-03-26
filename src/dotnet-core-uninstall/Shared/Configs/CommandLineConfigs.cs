@@ -227,6 +227,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 ListCommand.AddOption(MacOSPreserveVSSdksOption);
                 RemoveCommand.AddOption(MacOSPreserveVSSdksOption);
+                DryRunCommand.AddOption(MacOSPreserveVSSdksOption);
             }
 
             var supportedBundleTypeNames = SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => type.OptionName);
