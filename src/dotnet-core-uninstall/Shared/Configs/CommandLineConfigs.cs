@@ -128,9 +128,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 
         public static readonly Command VersionSubcommand = new Command("--version")
         {
-            IsHidden = true
+            Description = LocalizableStrings.VersionOptionDescription
         };
-
         public static readonly Option YesOption = new Option(
             new[] { "--yes", "-y" },
             LocalizableStrings.YesOptionDescription);
@@ -227,6 +226,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             {
                 ListCommand.AddOption(MacOSPreserveVSSdksOption);
                 RemoveCommand.AddOption(MacOSPreserveVSSdksOption);
+                DryRunCommand.AddOption(MacOSPreserveVSSdksOption);
             }
 
             var supportedBundleTypeNames = SupportedBundleTypeConfigs.GetSupportedBundleTypes().Select(type => type.OptionName);
