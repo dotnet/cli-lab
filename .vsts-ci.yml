@@ -132,6 +132,9 @@ extends:
                   _RID: osx-arm64
                 X64:
                   _RID: osx-x64
+            variables:
+            - name: _BuildConfig
+              value: Release
             steps:
             - checkout: self
               clean: true
