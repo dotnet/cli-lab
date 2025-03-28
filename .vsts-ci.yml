@@ -146,12 +146,12 @@ extends:
                 -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - script: |
-                codesign -dv --verbose=4 $(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall
+                codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
               displayName: Verify Code Signing
             - task: ArchiveFiles@2
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                rootFolderOrFile: '$(ArtifactsDir)layout/dotnet-core-uninstall/'
+                rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
                 includeRootFolder: false
                 archiveType: 'tar'
                 tarCompression: 'gz'
