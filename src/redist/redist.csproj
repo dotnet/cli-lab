@@ -21,6 +21,6 @@
   <Target Condition="'$(RID)' == 'win-x86'" Name="GenerateMSIs" AfterTargets="Build" DependsOnTargets="GenerateLayout;GenerateDotnetCoreUninstallMsi" />
 
   <!-- Entitlements are needed but not automatically added for macOS. See https://github.com/dotnet/runtime/issues/113707 -->
-  <Import Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Project="targets\MacEntitlements\AddMacEntitlements.targets" />
+  <!-- <Import Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'" Project="targets\MacEntitlements\AddMacEntitlements.targets" /> -->
   
 </Project>
