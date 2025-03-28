@@ -5,6 +5,6 @@
     <Target Name="AddMacEntitlements" 
         BeforeTargets="SignFiles" 
         AfterTargets="AfterBuild">
-        <Exec Command="codesign -vvvv -f -s - --options runtime --entitlements &quot;$(MSBuildThisFileDirectory)entitlements.plist&quot; &quot;$(ArtifactsDir)layout/dotnet-core-uninstall/*&quot;" />
+        <Exec Command="codesign -vvvv -f -s - --options runtime --entitlements &quot;$(MSBuildThisFileDirectory)entitlements.plist&quot; &quot;$(ArtifactsDir)layout/dotnet-core-uninstall/dotnet-core-uninstall&quot;" />
     </Target>
 </Project>

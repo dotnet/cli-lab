@@ -147,8 +147,7 @@ extends:
               displayName: Build
             - script: |
                 codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
-              name: VerifySignature
-              displayName: Verify Signature
+              displayName: Verify Code Signing
             - task: ArchiveFiles@2
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
