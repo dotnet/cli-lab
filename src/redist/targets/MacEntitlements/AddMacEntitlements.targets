@@ -2,7 +2,9 @@
     <!-- Entitlements are needed but not automatically added for macOS. See https://github.com/dotnet/runtime/issues/113707 -->
     <!-- This generates an ad-hoc signature that will later be resigned, but keeps the entitlements. -->
     <!-- https://dev.azure.com/devdiv/DevDiv/_wiki/wikis/DevDiv.wiki/19841/Additional-Requirements-for-Signing-or-Notarizing-Mac-Files -->
-    <Target Name="AddMacEntitlements" AfterTargets="GenerateLayout">
-        <Exec Command="codesign -s - -f --entitlements &quot;$(MSBuildThisFileDirectory)entitlements.plist&quot; &quot;$(ArtifactsDir)layout/dotnet-core-uninstall/*&quot;" />
+    <Target Name="AddMacEntitlements" 
+        BeforeTargets="SignFiles" 
+        AfterTargets="AfterBuild">
+        <Exec Command="codesign -vvvv -f -s - --options runtime --entitlements &quot;$(MSBuildThisFileDirectory)entitlements.plist&quot; &quot;$(ArtifactsDir)layout/dotnet-core-uninstall/*&quot;" />
     </Target>
 </Project>
