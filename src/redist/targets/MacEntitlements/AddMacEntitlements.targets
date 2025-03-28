@@ -1,4 +1,6 @@
 <Project>
+    <Import Project="$(MicroBuildOverridePluginDirectory)\**\build\MicroBuild.Plugins.Signing.props" Condition="'$(MicroBuildOverridePluginDirectory)' != ''" />
+    <Import Project="$(MicroBuildOverridePluginDirectory)\**\build\MicroBuild.Plugins.Signing.targets" Condition="'$(MicroBuildOverridePluginDirectory)' != ''" />
     <ItemGroup>
         <PackageReference Include="Microsoft.VisualStudioEng.MicroBuild.Core" Version="$(MicrosoftVisualStudioEngMicroBuildCoreVersion)" />
     </ItemGroup>
