@@ -4,7 +4,7 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(RID)' == 'win-x86'">
-    <FileExtensionSignInfo Include=".msi;.wixpdb" CertificateName="MicrosoftDotNet500" />
+    <FileExtensionSignInfo Include=".wixpdb" CertificateName="MicrosoftDotNet500" />
     <ItemsToSign Include="$(ArtifactsShippingPackagesDir)**\*.wixpack.zip;
       $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi;" />
   </ItemGroup>
