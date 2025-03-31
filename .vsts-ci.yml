@@ -33,7 +33,6 @@ extends:
       binskim:
         analyzeTargetGlob: $(Build.SourcesDirectory)/artifacts/bin/**.dll;$(Build.SourcesDirectory)/artifacts/bin/**.exe;
     pool:
-      pool:
       name: $(DncEngInternalBuildPool)
       image: 1es-windows-2022
       os: windows
