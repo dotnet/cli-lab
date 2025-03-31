@@ -114,8 +114,8 @@ extends:
             - task: MicroBuildCodesignVerify@3
               inputs:
                 TargetFolders: '$(Build.ArtifactStagingDirectory)\artifacts'
-                ExcludeFolders: '.git MicroBuild .cab'
                 ExcludeSNVerify: true
+                ApprovalListPathForCerts: eng\SignVerifyIgnore.txt
             - task: 1ES.PublishBuildArtifacts@1
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
