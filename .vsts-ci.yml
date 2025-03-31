@@ -110,14 +110,15 @@ extends:
               inputs:
                 sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
                 contents: '*.msi'
-                targetFolder: '$(Build.ArtifactStagingDirectory)'
+                targetFolder: '$(Build.ArtifactStagingDirectory)\artifacts'
             - task: MicroBuildCodesignVerify@3
               inputs:
-                TargetFolders: '$(Build.ArtifactStagingDirectory)'
+                TargetFolders: '$(Build.ArtifactStagingDirectory)\artifacts'
+                ExcludeFolders: '.git MicroBuild'
             - task: 1ES.PublishBuildArtifacts@1
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
-                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)\artifacts'
                 ArtifactName: 'drop-windows'
                 publishLocation: 'Container'
                 parallel: true
@@ -154,12 +155,12 @@ extends:
                 includeRootFolder: false
                 archiveType: 'tar'
                 tarCompression: 'gz'
-                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/artifacts/dotnet-core-uninstall.tar.gz'
                 replaceExistingArchive: true
             - task: 1ES.PublishBuildArtifacts@1
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
