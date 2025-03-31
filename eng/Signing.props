@@ -11,19 +11,8 @@
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
-    <!--
-      This is intended to hold information about the certificates used for signing.
-    -->
-    <CertificatesSignInfo Include="3PartyDual" DualSigningAllowed="true" />
-    <CertificatesSignInfo Include="3PartySHA2" DualSigningAllowed="true" />
-    <!-- This signing information indicates certificates that represent a sign and notarize operation. -->
-    <CertificatesSignInfo Include="MacDeveloperHardenWithNotarization" MacCertificate="MacDeveloperHarden" MacNotarizationAppName="dotnet" />
-    <CertificatesSignInfo Include="MacDeveloperWithNotarization" MacCertificate="MacDeveloper" MacNotarizationAppName="dotnet" />
-    <CertificatesSignInfo Include="MacDeveloperVNextWithNotarization" MacCertificate="MacDeveloperVNext" MacNotarizationAppName="dotnet" />
-    <CertificatesSignInfo Include="MacDeveloperVNextHardenWithNotarization" MacCertificate="MacDeveloperVNextHarden" MacNotarizationAppName="dotnet" />
-
-    <FileSignInfo Include="dotnet-core-uninstall" CertificateName="MacDeveloperHardenWithNotarization" />
-    <FileSignInfo Include="dotnet-core-uninstall.pdb" CertificateName="MacDeveloperHardenWithNotarization" />
+    <FileSignInfo Include="dotnet-core-uninstall" CertificateName="MacDeveloperHarden" />
+    <FileSignInfo Include="dotnet-core-uninstall.pdb" CertificateName="MacDeveloperHarden" />
     <ItemsToSign Include="$(ArtifactsDir)layout/dotnet-core-uninstall/*" />
   </ItemGroup>
 </Project>
