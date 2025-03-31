@@ -6,8 +6,9 @@
 
   <ItemGroup Condition="'$(RID)' == 'win-x86'">
     <FileExtensionSignInfo Include=".wixpdb;.cab" CertificateName="MicrosoftDotNet500" />
+    <FileSignInfo Include="cab1.cab" CertificateName="MicrosoftDotNet500" />
     <ItemsToSign Include="$(ArtifactsShippingPackagesDir)**\*.wixpack.zip;
-      $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi;" />
+      $(ArtifactsDir)packages\**\dotnet-core-uninstall*.msi" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
