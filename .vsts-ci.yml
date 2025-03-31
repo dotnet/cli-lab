@@ -115,6 +115,7 @@ extends:
               inputs:
                 TargetFolders: '$(Build.ArtifactStagingDirectory)\artifacts'
                 ExcludeFolders: '.git MicroBuild'
+                ExcludeSNVerify: true
             - task: 1ES.PublishBuildArtifacts@1
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
@@ -139,7 +140,7 @@ extends:
               value: Release
             steps:
             - script: eng/common/cibuild.sh
-                --sign
+                -sign
                 --configuration Release
                 --prepareMachine
                 -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
