@@ -107,6 +107,10 @@ extends:
                 $(_BuildArgs)
                 /p:RID=$(_RID)
               displayName: Build and Publish
+            - script: |
+                # Verify the signature of the MSI
+                signtool verify /pa /v artifacts/packages/$(_BuildConfig)/Shipping/dotnet-core-uninstall-$(_RID).msi
+              name: Verify Signature
             - task: CopyFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
@@ -141,6 +145,9 @@ extends:
                 --prepareMachine
                 -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
+            - script: |
+                codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
+              name: Verify Signature
             - task: ArchiveFiles@2
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
