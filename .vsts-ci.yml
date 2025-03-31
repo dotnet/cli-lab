@@ -105,15 +105,15 @@ extends:
                 $(_BuildArgs)
                 /p:RID=$(_RID)
               displayName: Build and Publish
-            - task: MicroBuildCodesignVerify@3
-              inputs:
-                TargetFolders: 'artifacts/packages/$(_BuildConfig)/Shipping'
             - task: CopyFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
                 sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
                 contents: '*.msi'
                 targetFolder: '$(Build.ArtifactStagingDirectory)'
+            - task: MicroBuildCodesignVerify@3
+              inputs:
+                TargetFolders: '$(Build.ArtifactStagingDirectory)'
             - task: 1ES.PublishBuildArtifacts@1
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
