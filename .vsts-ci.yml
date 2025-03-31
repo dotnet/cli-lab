@@ -107,7 +107,7 @@ extends:
               displayName: Build and Publish
             - task: MicroBuildCodesignVerify@3
               inputs:
-                TargetFolders: 'artifacts/packages/$(_BuildConfig)/Shipping/'
+                TargetFolders: 'artifacts/packages/$(_BuildConfig)/Shipping/*.msi'
             - task: CopyFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
