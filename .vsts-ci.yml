@@ -138,6 +138,9 @@ extends:
             variables:
             - name: _BuildConfig
               value: Release
+            parameters:
+              enableMicrobuild: true
+              enableMicrobuildForMacAndLinux: true
             steps:
             - script: eng/common/cibuild.sh
                 -sign
