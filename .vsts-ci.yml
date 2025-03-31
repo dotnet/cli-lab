@@ -99,8 +99,6 @@ extends:
               - name: _OfficialBuildArgs
                 value: ''
             steps:
-            - checkout: self
-              clean: true
             - script: eng\common\cibuild.cmd
                 -configuration $(_BuildConfig)
                 -prepareMachine
@@ -110,7 +108,8 @@ extends:
             - script: |
                 # Verify the signature of the MSI
                 signtool verify /pa /v artifacts/packages/$(_BuildConfig)/Shipping/dotnet-core-uninstall-$(_RID).msi
-              name: Verify Signature
+              name: VerifySignature
+              displayName: Verify Signature
             - task: CopyFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
@@ -137,8 +136,6 @@ extends:
                 X64:
                   _RID: osx-x64
             steps:
-            - checkout: self
-              clean: true
             - script: eng/common/cibuild.sh
                 --sign
                 --configuration Release
@@ -147,7 +144,8 @@ extends:
               displayName: Build
             - script: |
                 codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
-              name: Verify Signature
+              name: VerifySignature
+              displayName: Verify Signature
             - task: ArchiveFiles@2
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
