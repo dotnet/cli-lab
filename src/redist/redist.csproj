@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnet-core-uninstall\dotnet-core-uninstall.csproj" />
-    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="10.0.0-beta.25124.4" Condition="'$(RID)' == 'win-x86'"/>
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="10.0.0-beta.25124.4" />
   </ItemGroup>
 
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\Versions.targets" />
