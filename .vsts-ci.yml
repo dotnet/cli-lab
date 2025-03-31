@@ -106,7 +106,9 @@ extends:
                 /p:RID=$(_RID)
               displayName: Build and Publish
             - script: |
-                certutil -verify -urlfetch artifacts/packages/$(_BuildConfig)/Shipping/dotnet-core-uninstall.msi
+                - script: |
+                  $msiFile = Get-ChildItem -Path "artifacts/packages/$(_BuildConfig)/Shipping" -Filter "*.msi" | Select-Object -First 1
+                  certutil -verify -urlfetch $msiFile.FullName
               name: VerifySignature
               displayName: Verify Signature
             - task: CopyFiles@2
