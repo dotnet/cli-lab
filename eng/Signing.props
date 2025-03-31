@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <DotNetCertificateName>MicrosoftDotNet500</DotNetCertificateName>
     <UseDotNetCertificate>true</UseDotNetCertificate>
   </PropertyGroup>
 
