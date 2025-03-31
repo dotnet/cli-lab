@@ -136,15 +136,12 @@ extends:
               value: Release
             - name: _SignType
               value: real
-            parameters:
-              enableMicrobuild: true
-              enableMicrobuildForMacAndLinux: true
             steps:
             - script: eng/common/cibuild.sh
                 -sign
-                --configuration Release
+                --configuration $(_BuildConfig)
                 --prepareMachine
-                -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
+                -p:RID=$(_RID) -p:DotNetSignType=$(_SignType) -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
             - script: |
                 codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
