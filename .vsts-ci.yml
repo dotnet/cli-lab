@@ -105,11 +105,9 @@ extends:
                 $(_BuildArgs)
                 /p:RID=$(_RID)
               displayName: Build and Publish
-            - script: |
-                $msiFile = Get-ChildItem -Path "artifacts/packages/$(_BuildConfig)/Shipping" -Filter "*.msi" | Select-Object -First 1
-                certutil -verify -urlfetch $msiFile.FullName
-              name: VerifySignature
-              displayName: Verify Signature
+            - task: MicroBuildCodesignVerify@3
+              inputs:
+                TargetFolders: 'artifacts/packages/$(_BuildConfig)/Shipping/'
             - task: CopyFiles@2
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
