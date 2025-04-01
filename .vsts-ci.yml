@@ -41,6 +41,7 @@ extends:
     stages:
     - stage: build
       displayName: Build
+
       jobs:
       - template: /eng/common/templates-official/jobs/jobs.yml@self
         parameters:
@@ -99,8 +100,6 @@ extends:
               - name: _OfficialBuildArgs
                 value: ''
             steps:
-            - checkout: self
-              clean: true
             - script: eng\common\cibuild.cmd
                 -configuration $(_BuildConfig)
                 -prepareMachine
@@ -112,11 +111,16 @@ extends:
               inputs:
                 sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
                 contents: '*.msi'
-                targetFolder: '$(Build.ArtifactStagingDirectory)'
+                targetFolder: '$(Build.ArtifactStagingDirectory)\artifacts'
+            - task: MicroBuildCodesignVerify@3
+              inputs:
+                TargetFolders: '$(Build.ArtifactStagingDirectory)\artifacts'
+                ExcludeSNVerify: true
+                ApprovalListPathForCerts: eng\SignVerifyIgnore.txt
             - task: 1ES.PublishBuildArtifacts@1
               condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
               inputs:
-                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)\artifacts'
                 ArtifactName: 'drop-windows'
                 publishLocation: 'Container'
                 parallel: true
@@ -132,15 +136,22 @@ extends:
                   _RID: osx-arm64
                 X64:
                   _RID: osx-x64
+            variables:
+            - name: _BuildConfig
+              value: Release
+            - name: _SignType
+              value: real
             steps:
-            - checkout: self
-              clean: true
             - script: eng/common/cibuild.sh
-                --sign
-                --configuration Release
+                -sign
+                --configuration $(_BuildConfig)
                 --prepareMachine
-                -p:RID=$(_RID) -p:DotNetSignType=real -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
+                -p:RID=$(_RID) -p:DotNetSignType=$(_SignType) -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
+            - script: |
+                codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
+              name: VerifySignature
+              displayName: Verify Signature
             - task: ArchiveFiles@2
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
@@ -148,12 +159,12 @@ extends:
                 includeRootFolder: false
                 archiveType: 'tar'
                 tarCompression: 'gz'
-                archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/artifacts/dotnet-core-uninstall.tar.gz'
                 replaceExistingArchive: true
             - task: 1ES.PublishBuildArtifacts@1
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
