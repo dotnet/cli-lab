@@ -24,7 +24,7 @@
     </PropertyGroup>
 
     <PropertyGroup>
-      <ArtifactNameWithVersionDotnetCoreUninstall>dotnet-core-uninstall-$(Version)</ArtifactNameWithVersionDotnetCoreUninstall>
+      <ArtifactNameWithVersionDotnetCoreUninstall>dotnet-core-uninstall</ArtifactNameWithVersionDotnetCoreUninstall>
       <DotnetCoreUninstallMSIInstallerFile>$(ArtifactsShippingPackagesDir)$(ArtifactNameWithVersionDotnetCoreUninstall)$(InstallerExtension)</DotnetCoreUninstallMSIInstallerFile>
     </PropertyGroup>
   </Target>
