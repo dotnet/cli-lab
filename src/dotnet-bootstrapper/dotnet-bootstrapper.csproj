@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AssemblyName>dotnet-bootstrapper</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <SelfContained>true</SelfContained>
+    <SignAssembly>true</SignAssembly>
+    <TargetFramework>net9.0</TargetFramework>
+    <RunAOTCompilation>true</RunAOTCompilation>
+    <PublishTrimmed>true</PublishTrimmed>
+    <IsPackable>false</IsPackable>
+    <PublishSingleFile>true</PublishSingleFile>
+    <PublishAot>true</PublishAot>
+    <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
+    <RollForward>LatestMajor</RollForward>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <LangVersion>preview</LangVersion>
+    <RootNamespace>Microsoft.DotNet.Tools.Bootstrapper</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="$(MicrosoftVisualStudioSetupConfigurationPackageVersion)" />
+    <PackageReference Include="NuGet.Versioning" Version="6.9.1" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
+    <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20574.7" />
+    <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="LocalizableStrings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LocalizableStrings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="LocalizableStrings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>LocalizableStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>
