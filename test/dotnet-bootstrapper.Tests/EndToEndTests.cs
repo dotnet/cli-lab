@@ -14,7 +14,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
     public class EndToEndBootstrapperTest
     {
         private readonly static string artifactsDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "..", "artifacts"));
-        private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", TestUtilities.GetConfiguration(), TestUtilities.GetTargetFramework(), , "dotnet-bootstrapper.exe");
+        private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", TestUtilities.GetConfiguration(), TestUtilities.GetTargetFramework(), "dotnet-bootstrapper.exe");
 
         [Fact]
         internal void ItReturnsZeroOnExit()
@@ -36,7 +36,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
 
             process.Start();
             process.WaitForExit();
-            process.ExitCode.Should().Be(0, "The process should exit with a code of 0.");
+            process.ExitCode.Should().Be(0, "The bootstrapper should exit with a code of 0.");
         }
 
     }
