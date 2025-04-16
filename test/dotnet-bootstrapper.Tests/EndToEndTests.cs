@@ -14,7 +14,8 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
     public class EndToEndBootstrapperTest
     {
         private readonly static string artifactsDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "..", "artifacts"));
-        private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", TestUtilities.GetConfiguration(), TestUtilities.GetTargetFramework(), TestUtilities.GetRuntimeIdentifier(), "dotnet-bootstrapper.exe");
+        private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", TestUtilities.GetConfiguration(), TestUtilities.GetTargetFramework(), TestUtilities.GetRuntimeIdentifier(),
+            RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "dotnet-bootstrapper.exe" : "dotnet-bootstrapper");
 
         [Fact]
         internal void ItReturnsZeroOnExit()
