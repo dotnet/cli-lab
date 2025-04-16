@@ -13,16 +13,14 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
 {
     public class EndToEndBootstrapperTest
     {
-        private readonly static string TargetFramework = TestUtilities.GetTargetFramework();
-        private readonly static string RuntimeIdentifier = TestUtilities.GetRuntimeIdentifier();
         private readonly static string artifactsDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "..", "artifacts"));
-        private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", "Debug", TargetFramework, RuntimeInformation.RuntimeIdentifier, "dotnet-bootstrapper.exe");
+        private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", TestUtilities.GetConfiguration(), TestUtilities.GetTargetFramework(), , "dotnet-bootstrapper.exe");
 
         [Fact]
         internal void ItReturnsZeroOnExit()
         {
-            File.Exists(executablePath).Should().BeTrue($"Expected the executable to exist at {executablePath}. RuntimeIdentifier: {RuntimeInformation.RuntimeIdentifier}." +
-                $"Files in directory: ${String.Join(", ", Directory.GetFileSystemEntries(Directory.GetParent(Directory.GetParent(Directory.GetParent(executablePath).ToString()).ToString()).ToString()))}");
+            File.Exists(executablePath).Should().BeTrue($"Expected the executable to exist at {executablePath}" +
+                $"Files in directory: ${String.Join(", ", Directory.GetFileSystemEntries(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(executablePath).ToString()).ToString()).ToString()).ToString()))}");
 
             var process = new Process
             {

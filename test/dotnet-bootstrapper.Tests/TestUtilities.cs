@@ -12,41 +12,21 @@ namespace Microsoft.DotNet.Tools.Bootstrapper.Tests
         {
             return "net8.0";
         }
+        
+        public static string GetConfiguration()
+        {
+#if DEBUG
+            return "Debug";
+#elif RELEASE
+            return "Release";
+#else
+            return "Custom";
+#endif
+        }
 
         public static string GetRuntimeIdentifier()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                return RuntimeInformation.OSArchitecture switch
-                {
-                    Architecture.X64 => "win-x64",
-                    Architecture.X86 => "win-x86",
-                    Architecture.Arm => "win-arm",
-                    Architecture.Arm64 => "win-arm64",
-                    _ => throw new NotSupportedException("Unsupported architecture on Windows")
-                };
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
-            {
-                return RuntimeInformation.OSArchitecture switch
-                {
-                    Architecture.X64 => "linux-x64",
-                    Architecture.Arm => "linux-arm",
-                    Architecture.Arm64 => "linux-arm64",
-                    _ => throw new NotSupportedException("Unsupported architecture on Linux")
-                };
-            }
-            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-            {
-                return RuntimeInformation.OSArchitecture switch
-                {
-                    Architecture.X64 => "osx-x64",
-                    Architecture.Arm64 => "osx-arm64",
-                    _ => throw new NotSupportedException("Unsupported architecture on macOS")
-                };
-            }
-
-            throw new NotSupportedException("Unsupported operating system");
+            return RuntimeInformation.RuntimeIdentifier;
         }
     }
 }
