@@ -1,0 +1,49 @@
+parameters:
+  pool: ''
+
+jobs:
+- job: ${{ parameters.pool.os }}_Build
+  pool:
+    ${{ if eq(parameters.useOneEngineeringPool, 'true') }}:
+        ${{ parameters.pool }}
+    ${{ else }}:
+        vmImage: ${{ parameters.pool.vmImage }}
+
+  displayName: '${{ parameters.pool.emoji }} ${{ parameters.pool.os }} Build and Test'
+  templateContext:
+  steps:
+  - checkout: self
+    clean: true
+  - script: eng\common\cibuild.cmd
+      -configuration $(_BuildConfig)
+      -prepareMachine
+      $(_BuildArgs)
+      /p:RID=${{ parameters.pool.rid }}
+    displayName: 🔨 Build and Publish
+  - ${{ if eq(parameters.pool.os, 'windows') }}:
+    - task: CopyFiles@2
+      displayName: 🗒️ Copy MSI
+      condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+      inputs:
+        sourceFolder: 'artifacts/packages/$(_BuildConfig)/Shipping/'
+        contents: '*.msi'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+  - ${{ if or(eq(parameters.pool.os, 'macOS'), eq(parameters.pool.os, 'linux')) }}:
+    - task: ArchiveFiles@2
+      displayName: 📦 Copy tar.gz
+      condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+      inputs:
+        rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
+        includeRootFolder: false
+        archiveType: 'tar'
+        tarCompression: 'gz'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
+        replaceExistingArchive: true"
+  - task: PublishBuildArtifacts@1
+    displayName: 🐋 Publish Container
+    condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'drop-${{ parameters.pool.os }}'
+      publishLocation: 'Container'
+      parallel: true
