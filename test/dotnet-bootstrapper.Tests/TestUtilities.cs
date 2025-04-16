@@ -8,6 +8,11 @@ namespace Microsoft.DotNet.Tools.Bootstrapper.Tests
 {
     static class TestUtilities
     {
+        public static string GetTargetFramework()
+        {
+            return "net8.0";
+        }
+
         public static string GetRuntimeIdentifier()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))

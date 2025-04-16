@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
 {
     public class EndToEndBootstrapperTest
     {
-        private const string TargetFramework = "net9.0";
+        private readonly static string TargetFramework = TestUtilities.GetTargetFramework();
         private readonly static string RuntimeIdentifier = TestUtilities.GetRuntimeIdentifier();
         private readonly static string artifactsDirectory = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "..", "..", "artifacts"));
         private readonly static string executablePath = Path.Combine(artifactsDirectory, "bin", "dotnet-bootstrapper", "Debug", TargetFramework, RuntimeIdentifier, "dotnet-bootstrapper.exe");

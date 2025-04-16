@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <SelfContained>true</SelfContained>
     <SignAssembly>true</SignAssembly>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <RunAOTCompilation>true</RunAOTCompilation>
     <PublishTrimmed>true</PublishTrimmed>
     <IsPackable>false</IsPackable>
