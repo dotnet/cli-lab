@@ -20,7 +20,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
         internal void ItReturnsZeroOnExit()
         {
             File.Exists(executablePath).Should().BeTrue($"Expected the executable to exist at {executablePath}" +
-                $"Files in directory: ${String.Join(", ", Directory.GetFileSystemEntries(Directory.GetParent(Directory.GetParent(Directory.GetParent(Directory.GetParent(executablePath).ToString()).ToString()).ToString()).ToString()))}");
+                $"\nFiles in directory: ${String.Join("\n", Directory.GetDirectories(Directory.GetParent(Directory.GetParent(Directory.GetParent(executablePath).ToString()).ToString()).ToString(), "*", SearchOption.AllDirectories))}");
 
             var process = new Process
             {
