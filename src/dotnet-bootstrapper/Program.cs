@@ -12,19 +12,6 @@ class Program
 {
     static int Main(string[] args)
     {
-        var rootCommand = new RootCommand("dotnet bootstrapper");
-
-        var installCommand = new Command("install", "Install the specified version of the .NET SDK.")
-        {
-            new Argument<string>("version")
-            {
-                Description = "The version of the .NET SDK to install.",
-                Arity = ArgumentArity.ExactlyOne
-            }
-        };
-
-        rootCommand.AddCommand(installCommand);
-
-        return rootCommand.Invoke(args);
+        return BootstrapperCommandParser.BootstrapParser.InvokeAsync(args).Result;
     }
 }

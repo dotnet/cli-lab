@@ -31,7 +31,8 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     UseShellExecute = false,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
+                    Arguments = "--version"
                 }
             };
 
