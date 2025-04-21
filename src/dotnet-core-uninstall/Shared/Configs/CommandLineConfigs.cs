@@ -28,6 +28,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         private static readonly string DryRunCommandName = "dry-run";
         private static readonly string WhatIfCommandName = "whatif";
         private static readonly string RemoveCommandName = "remove";
+        private static readonly string UninstallCommandName = "uninstall";
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
             RuntimeInfo.RunningOnWindows ? LocalizableStrings.UninstallNoOptionDescriptionWindows
@@ -220,6 +221,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallRootCommand.AddCommand(ListCommand);
             UninstallRootCommand.AddCommand(DryRunCommand);
             UninstallRootCommand.AddCommand(RemoveCommand);
+            RemoveCommand.Aliases.Add(UninstallCommandName); // The verbiage that makes the most sense from the bootstrapper would be 'uninstall', so just adding an alias permits more code sharing
             UninstallRootCommand.AddCommand(VersionSubcommand);
 
             if (RuntimeInfo.RunningOnOSX)

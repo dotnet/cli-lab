@@ -7,6 +7,7 @@ using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
 using System.Reflection;
+using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 
 namespace Microsoft.DotNet.Tools.Bootstrapper
 {
@@ -15,30 +16,17 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
         public static Parser BootstrapParser;
 
         public static RootCommand BootstrapperRootCommand = new RootCommand("dotnet bootstrapper");
-
-        public static readonly Command VersionCommand = new Command("--version");
-
-        private static readonly Lazy<string> _assemblyVersion =
-            new Lazy<string>(() =>
-            {
-                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-                var assemblyVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                if (assemblyVersionAttribute == null)
-                {
-                    return assembly.GetName().Version.ToString();
-                }
-                else
-                {
-                    return assemblyVersionAttribute.InformationalVersion;
-                }
-            });
+        public static readonly Command HelpCommand = new("--help");
 
         static BootstrapperCommandParser()
         {
-            BootstrapperRootCommand.AddCommand(VersionCommand);
+            BootstrapperRootCommand.AddCommand(CommandLineConfigs.VersionSubcommand);
+            BootstrapperRootCommand.AddCommand(CommandLineConfigs.ListCommand);
+            BootstrapperRootCommand.AddCommand(CommandLineConfigs.RemoveCommand);
+            BootstrapperRootCommand.AddCommand(HelpCommand);
             VersionCommand.Handler = CommandHandler.Create(() =>
             {
-                Console.WriteLine(_assemblyVersion.Value);
+                Console.WriteLine(LocalizableStrings.BootstrapperHelp);
             });
 
             BootstrapParser = new CommandLineBuilder(BootstrapperRootCommand)
