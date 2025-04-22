@@ -24,7 +24,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             BootstrapperRootCommand.AddCommand(CommandLineConfigs.ListCommand);
             BootstrapperRootCommand.AddCommand(CommandLineConfigs.RemoveCommand);
             BootstrapperRootCommand.AddCommand(HelpCommand);
-            VersionCommand.Handler = CommandHandler.Create(() =>
+            HelpCommand.Handler = CommandHandler.Create(() =>
             {
                 Console.WriteLine(LocalizableStrings.BootstrapperHelp);
             });
