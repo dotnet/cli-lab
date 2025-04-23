@@ -22,9 +22,11 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Setup.Configuration.Interop" Version="$(MicrosoftVisualStudioSetupConfigurationPackageVersion)" />
     <PackageReference Include="NuGet.Versioning" Version="6.9.1" />
+    <PackageReference Include="Spectre.Console" Version="0.49.1" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20574.7" />
     <PackageReference Include="System.CommandLine.Rendering" Version="0.3.0-alpha.20574.7" />
     <PackageReference Include="System.Resources.Extensions" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Deployment.DotNet.Releases" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
