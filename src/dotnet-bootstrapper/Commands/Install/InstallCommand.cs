@@ -14,13 +14,15 @@ internal class InstallCommand(
 {
     private string _channel = parseResult.ValueForArgument(InstallCommandParser.ChannelArgument);
     private string _rid = BootstrapperUtilities.GetRID();
+    private bool _allowPreviews = parseResult.ValueForOption(InstallCommandParser.AllowPreviews);
+
 
     public override int Execute()
     {
         // If no channel is specified, use the default channel.
         if (string.IsNullOrEmpty(_channel))
         {
-            _channel = BootstrapperUtilities.GetVersionToInstallInDirectory(
+            _channel = BootstrapperUtilities.GetMajorVersionToInstallInDirectory(
                 Environment.CurrentDirectory);
         }
 
@@ -35,7 +37,7 @@ internal class InstallCommand(
         }
 
         ProductRelease latestRelease = product.GetReleasesAsync().Result
-            .Where(release => !release.IsPreview)
+            .Where(release => !release.IsPreview || _allowPreviews)
             .OrderByDescending(release => release.ReleaseDate)
             .FirstOrDefault();
 

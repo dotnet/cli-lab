@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Microsoft.Deployment.DotNet.Releases;
 
 namespace Microsoft.DotNet.Tools.Bootstrapper
 {
@@ -27,7 +29,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
                 Architecture.Arm64 => "arm64",
                 _ => null
             };
-            
+
             if (operatingSystem == null || architecture == null)
             {
                 throw new PlatformNotSupportedException("Unsupported OS or architecture.");
@@ -36,18 +38,35 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             return $"{operatingSystem}-{architecture}";
         }
 
-        public static string GetVersionToInstallInDirectory(string directoryPath)
+        public static string GetMajorVersionToInstallInDirectory(string basePath)
         {
-            // Add heuristic to determine the version to install based on project, environment, etc.
-            // For now, return a hardcoded version.
-            return "9.0";
+            // Get the nearest global.json file.
+            JsonElement globalJson = GlobalJsonUtilities.GetNearestGlobalJson(basePath);
+            string sdkVersion = globalJson
+                .GetProperty("tools")
+                .GetProperty("dotnet")
+                .ToString();
+
+            ReleaseVersion version = ReleaseVersion.Parse(sdkVersion);
+            Console.WriteLine($"Found version {version.Major}.0 in global.json");
+            return $"{version.Major}.0";
         }
+
         public static string GetInstallationDirectoryPath()
         {
-            // Add heuristic to determine the installation directory based on project, environment, etc.
-            return Path.Join(
-                Environment.CurrentDirectory,
-                ".dotnet.test");
+            string globalJsonPath = GlobalJsonUtilities.GetNearestGlobalJsonPath(Environment.CurrentDirectory);
+            if (globalJsonPath == null)
+            {
+                throw new FileNotFoundException("No global.json file found in the directory tree.");
+            }
+            string directoryPath = Path.GetDirectoryName(globalJsonPath);
+            if (directoryPath == null)
+            {
+                throw new DirectoryNotFoundException("Directory path is null.");
+            }
+
+            // TODO: Replace with the actual installation directory.
+            return Path.Combine(directoryPath, ".dotnet.test");
         }
     }
 }
