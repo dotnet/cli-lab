@@ -59,16 +59,7 @@ internal class InstallCommand(
 
             Console.WriteLine($"Downloaded {component.Name} {component.DisplayVersion} to {path}");
 
-            // Execute the installer files
-            if (releaseFile.IsExecutable)
-            {
-                Console.WriteLine($"Executing {path}...");
-                // System.Diagnostics.Process.Start(path)?.WaitForExit();
-            }
-            else
-            {
-                Console.WriteLine($"File {path} is not executable.");
-            }
+            // Perform installation steps here
         }
 
         return 0;
