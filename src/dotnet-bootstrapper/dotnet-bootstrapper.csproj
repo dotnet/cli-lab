@@ -17,6 +17,7 @@
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <RootNamespace>Microsoft.DotNet.Tools.Bootstrapper</RootNamespace>
+    <NoWarn>$(NoWarn);CS8002</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
