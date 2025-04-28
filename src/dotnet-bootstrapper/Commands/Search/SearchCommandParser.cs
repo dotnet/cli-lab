@@ -13,9 +13,7 @@ internal class SearchCommandParser
         Arity = ArgumentArity.ZeroOrOne
     };
 
-    internal static Option<bool> AllowPreviews = new Option<bool>(
-        "--allow-previews",
-        description: "Allow preview releases to be listed.");
+    internal static Option<bool> AllowPreviewsOption = Common.AllowPreviewsOptions;
 
     private static readonly Command Command = ConstructCommand();
     public static Command GetCommand() => Command;
@@ -23,7 +21,7 @@ internal class SearchCommandParser
     {
         Command command = new("search", "Search for SDKs available for installation.");
         command.AddArgument(ChannelArgument);
-        command.AddOption(AllowPreviews);
+        command.AddOption(AllowPreviewsOption);
 
         command.Handler = CommandHandler.Create((ParseResult parseResult) =>
         {

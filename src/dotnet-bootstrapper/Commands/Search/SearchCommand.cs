@@ -13,7 +13,7 @@ internal class SearchCommand(
     ParseResult parseResult) : CommandBase(parseResult)
 {
     private string _channel = parseResult.ValueForArgument(SearchCommandParser.ChannelArgument);
-    private bool _allowPreviews = parseResult.ValueForOption(SearchCommandParser.AllowPreviews);
+    private bool _allowPreviews = parseResult.ValueForOption(SearchCommandParser.AllowPreviewsOption);
     public override int Execute()
     {
         List<Product> productCollection = [.. ProductCollection.GetAsync().Result];

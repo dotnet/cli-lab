@@ -15,12 +15,10 @@ internal class InstallCommandParser
         name: "version",
         description: "SDK version to install. If not specified, It will take the latest.")
     {
-        Arity = ArgumentArity.ZeroOrOne
+        Arity = ArgumentArity.ZeroOrOne,
     };
 
-    internal static Option<bool> AllowPreviews = new Option<bool>(
-        "--allow-previews",
-        description: "Allow preview releases to be installed.");
+    internal static Option<bool> AllowPreviewsOption = Common.AllowPreviewsOptions;
 
     private static readonly Command Command = ConstructCommand();
 
@@ -32,7 +30,7 @@ internal class InstallCommandParser
 
         command.AddArgument(VersionArgument);
 
-        command.AddOption(AllowPreviews);
+        command.AddOption(AllowPreviewsOption);
 
         command.Handler = CommandHandler.Create((ParseResult parseResult) =>
         {

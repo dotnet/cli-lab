@@ -66,7 +66,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             }
 
             // TODO: Replace with the actual installation directory.
-            return Path.Combine(directoryPath, ".dotnet.test");
+            return Path.Combine(directoryPath, ".dotnet.local");
         }
     }
 }
