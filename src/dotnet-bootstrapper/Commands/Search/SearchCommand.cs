@@ -46,7 +46,7 @@ internal class SearchCommand(
                 productMetadataTable.AddRow(
                     release.Version.ToString(), 
                     release.ReleaseDate.ToString("yyyy-MM-dd"), 
-                    release.Sdks.FirstOrDefault()?.DisplayVersion ?? "N/A",
+                    release.Sdks.LastOrDefault().DisplayVersion ?? "N/A",
                     release.Runtime?.DisplayVersion ?? "N/A", 
                     release.AspNetCoreRuntime?.DisplayVersion ?? "N/A", 
                     release.WindowsDesktopRuntime?.DisplayVersion ?? "N/A");
