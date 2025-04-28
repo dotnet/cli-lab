@@ -12,7 +12,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper.Commands.Install;
 internal class InstallCommand(
     ParseResult parseResult) : CommandBase(parseResult)
 {
-    private string _channel = parseResult.ValueForArgument(InstallCommandParser.ChannelArgument);
+    private string _channel = parseResult.ValueForArgument(InstallCommandParser.VersionArgument);
     private string _rid = BootstrapperUtilities.GetRID();
     private bool _allowPreviews = parseResult.ValueForOption(InstallCommandParser.AllowPreviews);
 

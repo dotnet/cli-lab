@@ -11,9 +11,9 @@ namespace Microsoft.DotNet.Tools.Bootstrapper.Commands.Install;
 
 internal class InstallCommandParser
 {
-    internal static Argument<string> ChannelArgument = new Argument<string>(
-        name: "channel",
-        description: "The channel to install sdks for. If not specified, It will take the latest.")
+    internal static Argument<string> VersionArgument = new Argument<string>(
+        name: "version",
+        description: "SDK version to install. If not specified, It will take the latest.")
     {
         Arity = ArgumentArity.ZeroOrOne
     };
@@ -30,7 +30,7 @@ internal class InstallCommandParser
     {
         Command command = new("install", "Install SDKs available for installation.");
 
-        command.AddArgument(ChannelArgument);
+        command.AddArgument(VersionArgument);
 
         command.AddOption(AllowPreviews);
 

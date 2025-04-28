@@ -22,11 +22,12 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
 
         static BootstrapperCommandParser()
         {
-            BootstrapperRootCommand.AddCommand(CommandLineConfigs.VersionSubcommand);
             BootstrapperRootCommand.AddCommand(SearchCommandParser.GetCommand());
             BootstrapperRootCommand.AddCommand(InstallCommandParser.GetCommand());
             BootstrapperRootCommand.AddCommand(CommandLineConfigs.RemoveCommand);
+            BootstrapperRootCommand.AddCommand(CommandLineConfigs.VersionSubcommand);
             BootstrapperRootCommand.AddCommand(HelpCommand);
+
             HelpCommand.Handler = CommandHandler.Create(() =>
             {
                 Console.WriteLine(LocalizableStrings.BootstrapperHelp);

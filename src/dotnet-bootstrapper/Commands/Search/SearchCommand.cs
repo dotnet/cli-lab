@@ -33,7 +33,7 @@ internal class SearchCommand(
             Table productMetadataTable = new Table()
                 .AddColumn("Version")
                 .AddColumn("Release Date")
-                .AddColumn("SDK")
+                .AddColumn("Latest SDK")
                 .AddColumn("Runtime")
                 .AddColumn("ASP.NET Runtime")
                 .AddColumn("Windows Desktop Runtime");
@@ -43,10 +43,15 @@ internal class SearchCommand(
 
             foreach (ProductRelease release in releases)
             {
+                // Get release.Sdks latest version
+                var latestSdk = release.Sdks
+                    .OrderByDescending(sdk => sdk.Version)
+                    .FirstOrDefault();
+
                 productMetadataTable.AddRow(
                     release.Version.ToString(), 
                     release.ReleaseDate.ToString("yyyy-MM-dd"), 
-                    release.Sdks.LastOrDefault().DisplayVersion ?? "N/A",
+                    latestSdk?.DisplayVersion ?? "N/A",
                     release.Runtime?.DisplayVersion ?? "N/A", 
                     release.AspNetCoreRuntime?.DisplayVersion ?? "N/A", 
                     release.WindowsDesktopRuntime?.DisplayVersion ?? "N/A");
