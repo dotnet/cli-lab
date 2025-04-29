@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.CommandLine.Parsing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -50,7 +51,7 @@ internal class SearchCommand(
 
                 productMetadataTable.AddRow(
                     release.Version.ToString(), 
-                    release.ReleaseDate.ToString("yyyy-MM-dd"), 
+                    release.ReleaseDate.ToString("d", CultureInfo.CurrentUICulture), 
                     latestSdk?.DisplayVersion ?? "N/A",
                     release.Runtime?.DisplayVersion ?? "N/A", 
                     release.AspNetCoreRuntime?.DisplayVersion ?? "N/A", 
