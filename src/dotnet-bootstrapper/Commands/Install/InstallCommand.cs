@@ -4,6 +4,7 @@ using System.CommandLine.Parsing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Deployment.DotNet.Releases;
@@ -14,7 +15,6 @@ internal class InstallCommand(
     ParseResult parseResult) : CommandBase(parseResult)
 {
     private string _version = parseResult.ValueForArgument(InstallCommandParser.VersionArgument);
-    private string _rid = BootstrapperUtilities.GetRID();
     private bool _allowPreviews = parseResult.ValueForOption(InstallCommandParser.AllowPreviewsOption);
 
 
@@ -69,7 +69,7 @@ internal class InstallCommand(
         }
 
         ReleaseFile releaseFile = component.Files.FirstOrDefault(file =>
-            file.Rid.Equals(BootstrapperUtilities.GetRID(), StringComparison.OrdinalIgnoreCase) && (file.Name.EndsWith(".zip") || file.Name.EndsWith(".tar.gz")));
+            file.Rid.Equals(RuntimeInformation.RuntimeIdentifier, StringComparison.OrdinalIgnoreCase) && (file.Name.EndsWith(".zip") || file.Name.EndsWith(".tar.gz")));
 
         if (string.IsNullOrEmpty(releaseFile?.FileName))
         {
