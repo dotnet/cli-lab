@@ -9,11 +9,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Exceptions
     {
         public static Action<T> HandleException<T>(Action<T> action)
         {
-            return (x) =>
+            return x =>
             {
                 try
                 {
-                    action.Invoke(x);
+                    action(x);
                 }
                 catch (DotNetUninstallException e)
                 {
