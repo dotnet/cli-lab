@@ -7,6 +7,16 @@
         <target state="new">Bootstrapper help text</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListCommandDescription">
+        <source>List out all currently installed SDKs.</source>
+        <target state="new">List out all currently installed SDKs.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="UninstallCommandDescription">
+        <source>Uninstall the specified SDK.</source>
+        <target state="new">Uninstall the specified SDK.</target>
+        <note />
+      </trans-unit>
     </body>
   </file>
 </xliff>
