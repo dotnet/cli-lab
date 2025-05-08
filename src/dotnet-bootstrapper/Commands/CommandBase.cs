@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Microsoft.DotNet.Tools.Bootstrapper
+namespace Microsoft.DotNet.Tools.Bootstrapper.Commands
 {
     public abstract class CommandBase
     {

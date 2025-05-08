@@ -6,10 +6,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Reflection;
-using Microsoft.DotNet.Tools.Uninstall.Shared.Configs;
 using Microsoft.DotNet.Tools.Bootstrapper.Commands.Search;
-using Microsoft.DotNet.Tools.Bootstrapper.Commands.Install;
 
 namespace Microsoft.DotNet.Tools.Bootstrapper
 {
@@ -23,9 +20,6 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
         static BootstrapperCommandParser()
         {
             BootstrapperRootCommand.AddCommand(SearchCommandParser.GetCommand());
-            BootstrapperRootCommand.AddCommand(InstallCommandParser.GetCommand());
-            BootstrapperRootCommand.AddCommand(CommandLineConfigs.RemoveCommand);
-            BootstrapperRootCommand.AddCommand(CommandLineConfigs.VersionSubcommand);
             BootstrapperRootCommand.AddCommand(HelpCommand);
 
             HelpCommand.Handler = CommandHandler.Create(() =>

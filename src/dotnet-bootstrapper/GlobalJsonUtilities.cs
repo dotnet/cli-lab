@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Text.Json;
+using Microsoft.Deployment.DotNet.Releases;
 
 namespace Microsoft.DotNet.Tools.Bootstrapper
 {
@@ -56,6 +57,38 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             }
 
             return JsonDocument.Parse(File.ReadAllText(globalJsonPath)).RootElement;
+        }
+        /// <summary>  
+        /// Retrieves the major and minor version of the .NET SDK specified in the nearest global.json file  
+        /// within the given base path.  
+        /// </summary>  
+        /// <param name="basePath">The base directory path to search for the global.json file.</param>  
+        /// <returns>  
+        /// A string representing the major and minor version (e.g., "6.0") of the .NET SDK specified  
+        /// in the global.json file.  
+        /// </returns>  
+        /// <exception cref="KeyNotFoundException">  
+        /// Thrown when the required keys ("tools" or "dotnet") are not found in the global.json file.  
+        /// </exception>  
+        public static string GetMajorVersionToInstallInDirectory(string basePath)
+        {
+            try
+            {
+                // Get the nearest global.json file.  
+                JsonElement globalJson = GlobalJsonUtilities.GetNearestGlobalJson(basePath);
+                string sdkVersion = globalJson
+                    .GetProperty("tools")
+                    .GetProperty("dotnet")
+                    .ToString();
+
+                ReleaseVersion version = ReleaseVersion.Parse(sdkVersion);
+                Console.WriteLine($"Found version {version.Major}.{version.Minor} in global.json");
+                return $"{version.Major}.{version.Minor}";
+            }
+            catch (KeyNotFoundException e)
+            {
+                throw new KeyNotFoundException("The specified key was not found in the global.json", e);
+            }
         }
     }
 }
