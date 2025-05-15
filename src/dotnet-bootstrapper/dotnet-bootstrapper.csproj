@@ -3,12 +3,11 @@
     <AssemblyName>dotnet-bootstrapper</AssemblyName>
     <OutputType>Exe</OutputType>
     <SelfContained>true</SelfContained>
+    <RuntimeIdentifiers>win-x86;osx-x64;osx-arm64</RuntimeIdentifiers>
     <SignAssembly>true</SignAssembly>
     <TargetFramework>net8.0</TargetFramework>
     <RunAOTCompilation>true</RunAOTCompilation>
     <PublishTrimmed>true</PublishTrimmed>
-    <IsPackable>false</IsPackable>
-    <PublishSingleFile>true</PublishSingleFile>
     <PublishAot>true</PublishAot>
     <WasmStripILAfterAOT>true</WasmStripILAfterAOT>
     <RollForward>LatestMajor</RollForward>
@@ -17,6 +16,7 @@
   <PropertyGroup>
     <LangVersion>preview</LangVersion>
     <RootNamespace>Microsoft.DotNet.Tools.Bootstrapper</RootNamespace>
+    <CustomToolNamespace>Microsoft.DotNet.Tools.Bootstrapper</CustomToolNamespace>
   </PropertyGroup>
 
   <ItemGroup>
