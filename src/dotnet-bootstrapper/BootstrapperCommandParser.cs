@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 namespace Microsoft.DotNet.Tools.Bootstrapper
 {
@@ -41,9 +42,9 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
 
         public static readonly Command ListCommand = new("list", LocalizableStrings.ListCommandDescription)
         {
-            Handler = CommandHandler.Create(() =>
+            Handler = CommandHandler.Create((ParseResult parseResult) =>
             {
-                string dotnetDir = FindLocalDotnet();
+                string dotnetDir = FindLocalDotnet(parseResult.ValueForOption(DotnetPath));
                 if (dotnetDir is null)
                 {
                     Console.WriteLine("dotnet executable not found. Ensure you execute this command from a directory with it.");
@@ -61,7 +62,7 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
         {
             Handler = CommandHandler.Create((ParseResult parseResult) =>
             {
-                string dotnetDir = FindLocalDotnet();
+                string dotnetDir = FindLocalDotnet(parseResult.ValueForOption(DotnetPath));
                 if (dotnetDir is null)
                 {
                     Console.WriteLine("dotnet executable not found. Ensure you execute this command from a directory with it.");
@@ -86,11 +87,25 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             })            
         };
 
+        public static readonly Command InstallCommand = new("install", LocalizableStrings.InstallCommandDescription)
+        {
+            Handler = CommandHandler.Create((ParseResult parseResult) =>
+            {
+                string dotnetDir = FindLocalDotnet(parseResult.ValueForOption(DotnetPath));
+                if (dotnetDir is null)
+                {
+                    // install dotnet.exe
+                }
+            })
+        };
+
         public static readonly Argument<string> UninstallArgument = new()
         {
             Name = "uninstall",
             Arity = ArgumentArity.ExactlyOne
         };
+
+        public static readonly Option<string> DotnetPath = new("--dotnetPath", getDefaultValue: () => null);
 
         internal enum hostfxr_resolve_sdk2_result_key_t
         {
@@ -121,9 +136,27 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             }
         }
 
-        private static string FindLocalDotnet()
+        private static string FindLocalDotnet(string pathFromSwitch)
         {
+            if (pathFromSwitch is not null)
+            {
+                string pathToDotnet = CheckFile(pathFromSwitch) ?? pathFromSwitch;
+                if (!File.Exists(pathToDotnet))
+                {
+                    throw new ArgumentException($"Path {pathFromSwitch} does not lead to the dotnet executable.");
+                }
+
+                return pathToDotnet;
+            }
+
             string currentDirectory = Directory.GetCurrentDirectory();
+
+            string path = FindAndParseGlobalJson(currentDirectory);
+            if (path is not null)
+            {
+                return path;
+            }
+
             return CheckFile(currentDirectory) ??
                 CheckFile(Path.GetDirectoryName(currentDirectory)) ??
                 Directory.GetDirectories(currentDirectory).SelectMany(subdirectory =>
@@ -135,6 +168,25 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
 
                     return Directory.GetDirectories(subdirectory).Select(CheckFile);
                 }).FirstOrDefault(path => path is not null);
+        }
+
+        private static string FindAndParseGlobalJson(string startingDirectory)
+        {
+            string currentDirectory = startingDirectory;
+            string globalJsonPath = Path.Combine(currentDirectory, "global.json");
+            while (!File.Exists(globalJsonPath))
+            {
+                startingDirectory = Path.GetDirectoryName(startingDirectory);
+                if (startingDirectory is null)
+                {
+                    return null;
+                }
+
+                globalJsonPath = Path.Combine(currentDirectory, "global.json");
+            }
+
+            JsonDocument jsonDocument = JsonDocument.Parse(globalJsonPath);
+            jsonDocument.RootElement.
         }
 
         private static string CheckFile(string directory)
@@ -149,6 +201,11 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
             BootstrapperRootCommand.AddCommand(HelpCommand);
             BootstrapperRootCommand.AddCommand(ListCommand);
             BootstrapperRootCommand.AddCommand(UninstallCommand);
+            BootstrapperRootCommand.AddCommand(InstallCommand);
+
+            ListCommand.AddOption(DotnetPath);
+            UninstallCommand.AddOption(DotnetPath);
+            InstallCommand.AddOption(DotnetPath);
 
             UninstallCommand.AddArgument(UninstallArgument);
 
