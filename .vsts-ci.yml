@@ -100,9 +100,10 @@ extends:
               - name: _OfficialBuildArgs
                 value: ''
             steps:
-            - script: eng\common\cibuild.cmd
+            - script: eng\common\build.cmd
                 -configuration $(_BuildConfig)
                 -prepareMachine
+                -restore -build -test -sign -pack -ci
                 $(_BuildArgs)
                 /p:RID=$(_RID)
               displayName: Build and Publish
