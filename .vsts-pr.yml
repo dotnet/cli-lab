@@ -129,8 +129,9 @@ stages:
         steps:
         - checkout: self
           clean: true
-        - script: eng/common/cibuild.sh
+        - script: eng/common/build.sh
             --configuration $(_BuildConfig)
+            --restore --build --test --pack --ci
             --prepareMachine
             /p:RID=$(_RID)
           displayName: Build
