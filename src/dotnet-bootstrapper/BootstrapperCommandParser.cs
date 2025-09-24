@@ -1,4 +1,4 @@
-// Copyright (c) .NET Foundation and contributors. All rights reserved.
+﻿// Copyright (c) .NET Foundation and contributors. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
@@ -6,7 +6,7 @@ using System.CommandLine;
 using System.CommandLine.Builder;
 using System.CommandLine.Invocation;
 using System.CommandLine.Parsing;
-using System.Reflection;
+using Microsoft.DotNet.Tools.Bootstrapper.Commands.Search;
 
 namespace Microsoft.DotNet.Tools.Bootstrapper
 {
@@ -15,30 +15,16 @@ namespace Microsoft.DotNet.Tools.Bootstrapper
         public static Parser BootstrapParser;
 
         public static RootCommand BootstrapperRootCommand = new RootCommand("dotnet bootstrapper");
-
-        public static readonly Command VersionCommand = new Command("--version");
-
-        private static readonly Lazy<string> _assemblyVersion =
-            new Lazy<string>(() =>
-            {
-                var assembly = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
-                var assemblyVersionAttribute = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                if (assemblyVersionAttribute == null)
-                {
-                    return assembly.GetName().Version.ToString();
-                }
-                else
-                {
-                    return assemblyVersionAttribute.InformationalVersion;
-                }
-            });
+        public static readonly Command HelpCommand = new("--help");
 
         static BootstrapperCommandParser()
         {
-            BootstrapperRootCommand.AddCommand(VersionCommand);
-            VersionCommand.Handler = CommandHandler.Create(() =>
+            BootstrapperRootCommand.AddCommand(SearchCommandParser.GetCommand());
+            BootstrapperRootCommand.AddCommand(HelpCommand);
+
+            HelpCommand.Handler = CommandHandler.Create(() =>
             {
-                Console.WriteLine(_assemblyVersion.Value);
+                Console.WriteLine(LocalizableStrings.BootstrapperHelp);
             });
 
             BootstrapParser = new CommandLineBuilder(BootstrapperRootCommand)
