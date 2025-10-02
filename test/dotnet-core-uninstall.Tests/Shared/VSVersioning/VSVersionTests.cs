@@ -31,7 +31,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "6.0.100", "6.0.101", "7.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "7.0.100", "7.0.101", "8.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "8.0.100", "8.0.101", "9.0.100" }, new bool[] { true, false, false })]
-        [InlineData(new string[] { "10.0.100", "10.0.101", "11.100.100" }, new bool[] { false, false, false })]
+        [InlineData(new string[] { "9.0.100", "9.0.101", "10.0.100" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "10.0.100", "10.0.101", "11.100.100" }, new bool[] { true, false, false })]
         internal void TestGetUninstallableWindows(string[] versions, bool[] allowed)
         {
             var bundles = new List<Bundle>();
@@ -83,7 +84,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "5.0.100", "5.0.101", "10.0.1" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "6.0.100", "7.0.100", "7.0.101" }, new bool[] { false, true, false })]
         [InlineData(new string[] { "9.0.100", "9.0.101", "10.100.100" }, new bool[] { true, false, false })]
-        [InlineData(new string[] { "10.0.100", "10.0.101", "11.100.100" }, new bool[] { false, false, false })]
+        [InlineData(new string[] { "10.0.100", "10.0.101", "11.100.100" }, new bool[] { true, false, false })]
         internal void TestGetUninstallableNonSdkVersionsWindows(string[] versions, bool[] allowed)
         {
             var bundles = new List<Bundle>();
@@ -184,7 +185,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "1.0.1", "1.0.0" }, new string[] { "", "None" })]
         [InlineData(new string[] { "2.3.0", "2.1.800", "2.1.300" }, new string[] { "None", " 2019", " 2017" })]
         [InlineData(new string[] { "2.1.500", "2.1.400", "2.1.600" }, new string[] { " 2017", "None", " 2019" })]
-        [InlineData(new string[] { "2.1.500", "10.0.1", "10.0.0" }, new string[] { " 2017", "UpperLimit", "UpperLimit" })]
+        [InlineData(new string[] { "2.1.500", "10.0.1", "10.0.0" }, new string[] { " 2017", "", "None" })]
         internal void TestGetListCommandUninstallableStringsWindows(string[] versions, string[] expectedStrings)
         {
             expectedStrings = expectedStrings.Select(s => s.Equals("UpperLimit") ? VisualStudioSafeVersionsExtractor.UpperLimit.ToNormalizedString() : s).ToArray();
@@ -206,7 +207,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.0.1" }, new string[] { "None", "Runtime" })]
         [InlineData(new string[] { "2.1.0", "1.0.1" }, new string[] { "SDK", "None" }, new string[] { "2.0.0", "1.1.0" }, new string[] { "Runtime", "Runtime" })]
         [InlineData(new string[] { "3.0.100", "5.0.100" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "1.0.2", "1.1.3" }, new string[] { "None", "None", "None", "Runtime", "Runtime" })]
-        [InlineData(new string[] { "3.0.100", "5.0.100" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "10.0.100" }, new string[] { "None", "Runtime", "Runtime", "UpperLimit" })]
+        [InlineData(new string[] { "3.0.100", "5.0.100" }, new string[] { "None", "SDK" }, new string[] { "1.0.0", "1.1.0", "1.0.1", "10.0.100" }, new string[] { "None", "Runtime", "Runtime", "Runtime" })]
         [InlineData(new string[] { "5.0.100", "5.0.101", "11.100.100" }, new string[] { "None", "SDK", "UpperLimit" }, new string[] { "5.0.100", "11.0.0" }, new string[] { "Runtime", "UpperLimit" })]
         internal void 
         StringsMac(string[] sdkVersions, string[] sdkExpected, string[] runtimeVersions, string[] runtimeExpected)
