@@ -169,7 +169,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             // Check others are uninstallable unless their version is above the upper limit
             foreach (Bundle bundle in otherBundles)
             {
-                if (bundle.Version.SemVer > VisualStudioSafeVersionsExtractor.UpperLimit)
+                if (bundle.Version.SemVer >= VisualStudioSafeVersionsExtractor.UpperLimit)
                 {
                     uninstallableBundles.Should().NotContain(bundle);
                 }
