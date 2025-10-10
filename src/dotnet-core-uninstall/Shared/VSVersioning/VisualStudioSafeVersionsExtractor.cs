@@ -30,8 +30,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             { (new SemanticVersion(6, 0, 100), new SemanticVersion(6, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
             { (new SemanticVersion(7, 0, 100), new SemanticVersion(7, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
             { (new SemanticVersion(8, 0, 100), new SemanticVersion(8, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
-            { (new SemanticVersion(9, 0, 100), new SemanticVersion(10, 0, 0)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, "") },
-            { (new SemanticVersion(10, 0, 0), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, "") }
+            { (new SemanticVersion(9, 0, 100), new SemanticVersion(9, 0, 400)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
+            { (new SemanticVersion(10, 0, 100), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026") }
         };
 
         private static (IDictionary<IEnumerable<Bundle>, string>, IEnumerable<Bundle>) ApplyWindowsVersionDivisions(IEnumerable<Bundle> bundleList)
