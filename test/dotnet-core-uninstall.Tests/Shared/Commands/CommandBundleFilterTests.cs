@@ -132,7 +132,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Commands
         }
 
         [Theory]
-        [InlineData("remove {0} 10.0.100")]
         [InlineData("remove {0} 11.0.100")]
         [InlineData("remove {0} 11.11.11")]
         [InlineData("remove {0} --all --force")]
