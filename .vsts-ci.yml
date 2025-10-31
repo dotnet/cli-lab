@@ -150,6 +150,8 @@ extends:
                 --prepareMachine
                 -p:RID=$(_RID) -p:DotNetSignType=$(_SignType) -p:TeamName=$(TeamName) -p:OfficialBuildId=$(Build.BuildNumber)
               displayName: Build
+              env:
+                SYSTEM_ACCESSTOKEN: $(System.AccessToken)
             - script: |
                 codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
               name: VerifySignature
