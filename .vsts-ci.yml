@@ -156,10 +156,16 @@ extends:
                 codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
               name: VerifySignature
               displayName: Verify Signature
+            - task: CopyFiles@2
+              condition: eq(variables['system.pullrequest.isfork'], false)
+              inputs:
+                sourceFolder: 'artifacts/layout/'
+                contents: '*.tar.gz'
+                targetFolder: '$(Build.ArtifactStagingDirectory)/artifacts'
             - task: 1ES.PublishBuildArtifacts@1
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                PathtoPublish: 'artifacts/layout/dotnet-core-uninstall-$(_RID).tar.gz'
+                PathtoPublish: '$(Build.ArtifactStagingDirectory)/artifacts'
                 ArtifactName: 'drop-$(_RID)'
                 publishLocation: 'Container'
                 parallel: true
