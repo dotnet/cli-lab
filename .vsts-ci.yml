@@ -156,15 +156,12 @@ extends:
                 codesign -dv --verbose=4 artifacts/layout/dotnet-core-uninstall/dotnet-core-uninstall
               name: VerifySignature
               displayName: Verify Signature
-            - task: ArchiveFiles@2
+            - task: CopyFiles@2
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:
-                rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
-                includeRootFolder: false
-                archiveType: 'tar'
-                tarCompression: 'gz'
-                archiveFile: '$(Build.ArtifactStagingDirectory)/artifacts/dotnet-core-uninstall-$(_RID).tar.gz'
-                replaceExistingArchive: true
+                sourceFolder: 'artifacts/layout/'
+                contents: '*.tar.gz'
+                targetFolder: '$(Build.ArtifactStagingDirectory)/artifacts'
             - task: 1ES.PublishBuildArtifacts@1
               condition: eq(variables['system.pullrequest.isfork'], false)
               inputs:

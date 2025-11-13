@@ -135,15 +135,12 @@ stages:
             --prepareMachine
             /p:RID=$(_RID)
           displayName: Build
-        - task: ArchiveFiles@2
+        - task: CopyFiles@2
           condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
           inputs:
-            rootFolderOrFile: 'artifacts/layout/dotnet-core-uninstall/'
-            includeRootFolder: false
-            archiveType: 'tar'
-            tarCompression: 'gz'
-            archiveFile: '$(Build.ArtifactStagingDirectory)/dotnet-core-uninstall.tar.gz'
-            replaceExistingArchive: true
+            sourceFolder: 'artifacts/layout/'
+            contents: '*.tar.gz'
+            targetFolder: '$(Build.ArtifactStagingDirectory)/artifacts'
         - task: PublishBuildArtifacts@1
           condition: and(eq(variables['system.pullrequest.isfork'], false), eq(variables['_BuildConfig'], 'Release'))
           inputs:
