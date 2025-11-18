@@ -135,6 +135,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 {
                     return new SdkVersion(versionString);
                 }
+                else if (displayName.IndexOf("Windows Desktop Runtime", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    displayName.IndexOf("WindowsDesktop", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return new WindowsDesktopRuntimeVersion(versionString);
+                }
                 else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || 
                     Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
                     displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0)
