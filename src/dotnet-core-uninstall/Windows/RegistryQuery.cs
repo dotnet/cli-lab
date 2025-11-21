@@ -171,9 +171,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
             }
 
-            archString ??= displayName.Contains(x64String) ? x64String :
-                displayName.Contains(x86String) ? x86String :
-                displayName.Contains(arm64String) ? arm64String : null;
+            if (string.IsNullOrEmpty(archString))
+            {
+                archString = displayName.Contains(x64String) ? x64String :
+                    displayName.Contains(x86String) ? x86String :
+                    displayName.Contains(arm64String) ? arm64String : null;
+            }
 
             return archString switch
             {
