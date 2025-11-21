@@ -47,6 +47,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
         [InlineData("Microsoft .NET Core 3.1.0 Preview 1 Build preview1.19307.20 - Windows Server Hosting")]
         [InlineData("Microsoft .NET 5.0.9 - Windows Server Hosting")]
         [InlineData("Microsoft .NET SDK 5.0.100 (arm64)")]
+        [InlineData("Microsoft Windows Desktop Runtime - 3.1.8 (x64)")]
+        [InlineData("Microsoft Windows Desktop Runtime - 5.0.4 (x86)")]
+        [InlineData("Microsoft Windows Desktop Runtime - 6.0.5 (x64)")]
+        [InlineData("Microsoft Windows Desktop Runtime - 7.0.2 (arm64)")]
+        [InlineData("Dotnet Shared Framework for Windows Desktop 3.1.32 (x64)")]
         internal void TestIsNetCoreBundleAccept(string input)
         {
             if (OperatingSystem.IsWindows())
@@ -67,6 +72,23 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Windows
                 RegistryQuery.GetBundleVersion(displayName, string.Empty, string.Empty)
                 .Should()
                 .BeNull();
+            }
+        }
+
+        [WindowsOnlyTheory]
+        [InlineData("Microsoft Windows Desktop Runtime - 3.1.8 (x64)", "3.1.8")]
+        [InlineData("Microsoft Windows Desktop Runtime - 5.0.4 (x86)", "5.0.4")]
+        [InlineData("Microsoft Windows Desktop Runtime - 6.0.5 (x64)", "6.0.5")]
+        [InlineData("Microsoft Windows Desktop Runtime - 7.0.2 (arm64)", "7.0.2")]
+        [InlineData("Dotnet Shared Framework for Windows Desktop 3.1.32 (x64)", "3.1.32")]
+        internal void TestGetBundleVersionDetectsWindowsDesktopRuntime(string displayName, string expectedVersion)
+        {
+            if (OperatingSystem.IsWindows())
+            {
+                var version = RegistryQuery.GetBundleVersion(displayName, string.Empty, string.Empty);
+                version.Should().NotBeNull();
+                version.Type.Should().Be(Microsoft.DotNet.Tools.Uninstall.Shared.BundleInfo.BundleType.WindowsDesktopRuntime);
+                version.ToString().Should().Be(expectedVersion);
             }
         }
     }
