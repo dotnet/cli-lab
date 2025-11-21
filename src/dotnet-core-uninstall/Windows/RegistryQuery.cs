@@ -26,8 +26,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
-            var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64));
-            bundles = bundles.Concat(GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)));
+            // The bundles are all 32bit so we only need to query one view of the registry
+            var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32));
 
             var wrappedBundles = bundles
               .Select(bundle => WrapRegistryKey(bundle))
