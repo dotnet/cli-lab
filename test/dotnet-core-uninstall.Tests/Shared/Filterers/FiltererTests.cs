@@ -110,9 +110,9 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
 
         [Theory]
         [InlineData((BundleType)0)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle) + 1)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle) + 2)]
-        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle) + 10)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime) + 1)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime) + 2)]
+        [InlineData((BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime) + 10)]
         internal void TestFiltererArgumentOutOfRangeException(BundleType typeSelection)
         {
             TestFiltererException<ArgumentOutOfRangeException>(DefaultTestBundles, DefaultTestArgValue, typeSelection, DefaultTestArchSelection);
@@ -126,7 +126,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Filterers
                 DefaultTestArgValue,
                 BundleType.Sdk | BundleType.Runtime,
                 DefaultTestArchSelection,
-                string.Format(LocalizableStrings.BundleTypeMissingExceptionMessage, "--aspnet-runtime, --hosting-bundle, --runtime, --sdk"));
+                string.Format(LocalizableStrings.BundleTypeMissingExceptionMessage, "--aspnet-runtime, --hosting-bundle, --runtime, --sdk, --windows-desktop-runtime"));
         }
 
         [MacOsOnlyFact]
