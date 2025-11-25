@@ -809,5 +809,32 @@ namespace Microsoft.DotNet.Tools.Uninstall {
                 return ResourceManager.GetString("YesOptionDescription", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Windows Desktop Runtimes:.
+        /// </summary>
+        internal static string ListCommandWindowsDesktopRuntimeHeader {
+            get {
+                return ResourceManager.GetString("ListCommandWindowsDesktopRuntimeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to List Windows Desktop Runtimes..
+        /// </summary>
+        internal static string ListWindowsDesktopRuntimeOptionDescription {
+            get {
+                return ResourceManager.GetString("ListWindowsDesktopRuntimeOptionDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Windows Desktop Runtimes only..
+        /// </summary>
+        internal static string UninstallWindowsDesktopRuntimeOptionDescription {
+            get {
+                return ResourceManager.GetString("UninstallWindowsDesktopRuntimeOptionDescription", resourceCulture);
+            }
+        }
     }
 }

@@ -711,16 +711,16 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.Configs
         }
 
         [WindowsOnlyTheory]
-        [InlineData("remove", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
-        [InlineData("remove -v q", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
-        [InlineData("remove --all", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [InlineData("remove", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime)]
+        [InlineData("remove -v q", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime)]
+        [InlineData("remove --all", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime)]
         [InlineData("remove --aspnet-runtime", BundleType.AspNetRuntime)]
         [InlineData("remove --sdk --aspnet-runtime --all-but 2.2.3", BundleType.Sdk | BundleType.AspNetRuntime)]
         [InlineData("remove --sdk --runtime --aspnet-runtime", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime)]
         [InlineData("remove --hosting-bundle --aspnet-runtime", BundleType.AspNetRuntime | BundleType.HostingBundle)]
         [InlineData("remove --hosting-bundle --sdk --all", BundleType.Sdk | BundleType.HostingBundle)]
-        [InlineData("remove --yes", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
-        [InlineData("remove -y", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle)]
+        [InlineData("remove --yes", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime)]
+        [InlineData("remove -y", BundleType.Sdk | BundleType.Runtime | BundleType.AspNetRuntime | BundleType.HostingBundle | BundleType.WindowsDesktopRuntime)]
         internal void TestGetTypeSelectionRootCommandWindows(string command, BundleType expected)
         {
             var parseResult = CommandLineConfigs.UninstallRootCommand.Parse(command);

@@ -71,7 +71,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 new BundleTypePrintInfo<HostingBundleVersion>(
                     LocalizableStrings.ListCommandHostingBundleHeader,
                     _gridViewGeneratorWithoutArch,
-                    CommandLineConfigs.HostingBundleOptionName)
+                    CommandLineConfigs.HostingBundleOptionName),
+
+                new BundleTypePrintInfo<WindowsDesktopRuntimeVersion>(
+                    LocalizableStrings.ListCommandWindowsDesktopRuntimeHeader,
+                    _gridViewGeneratorWithArch,
+                    CommandLineConfigs.WindowsDesktopRuntimeOptionName)
             };
     }
 }

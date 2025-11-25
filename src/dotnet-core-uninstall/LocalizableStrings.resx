@@ -205,10 +205,10 @@
     <value>Set the verbosity level. Allowed values are q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].</value>
   </data>
   <data name="UninstallX64OptionDescription" xml:space="preserve">
-    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</value>
+    <value>Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove x64.</value>
   </data>
   <data name="UninstallX86OptionDescription" xml:space="preserve">
-    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</value>
+    <value>Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove x86.</value>
   </data>
   <data name="NotAdminExceptionMessage" xml:space="preserve">
     <value>The current user does not have adequate privileges. See https://aka.ms/dotnet-core-uninstall-docs.</value>
@@ -248,6 +248,15 @@
   </data>
   <data name="HostingBundleFootnoteFormat" xml:space="preserve">
     <value>"{0}" is treated as a version {1} in this tool.</value>
+  </data>
+  <data name="UninstallWindowsDesktopRuntimeOptionDescription" xml:space="preserve">
+    <value>Remove Windows Desktop Runtimes only.</value>
+  </data>
+  <data name="ListCommandWindowsDesktopRuntimeHeader" xml:space="preserve">
+    <value>Windows Desktop Runtimes:</value>
+  </data>
+  <data name="ListWindowsDesktopRuntimeOptionDescription" xml:space="preserve">
+    <value>List Windows Desktop Runtimes.</value>
   </data>
   <data name="ListAspNetRuntimeOptionDescription" xml:space="preserve">
     <value>List ASP.NET Core Runtimes.</value>
@@ -391,7 +400,7 @@ Uninstalling this item will cause Visual Studio for to break.
     <value>List arm64 .NET Core SDKs or Runtimes.</value>
   </data>
   <data name="UninstallArm64OptionDescription" xml:space="preserve">
-    <value>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</value>
+    <value>Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove arm64.</value>
   </data>
   <data name="MacOSPreserveVSSdksOptionDescription" xml:space="preserve">
     <value>Prevent removal of SDKs and Runtimes that have a high probability of being used by Visual Studio for Mac (Note: Visual Studio for Mac is out of support).</value>
