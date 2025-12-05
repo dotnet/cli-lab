@@ -136,7 +136,6 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                     return new SdkVersion(versionString);
                 }
                 else if (displayName.IndexOf("Windows Desktop Runtime", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                    displayName.IndexOf("WindowsDesktop", StringComparison.OrdinalIgnoreCase) >= 0 ||
                     displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0)
                 {
                     return new WindowsDesktopRuntimeVersion(versionString);
