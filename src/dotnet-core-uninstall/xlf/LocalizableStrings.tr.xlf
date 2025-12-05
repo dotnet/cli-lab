@@ -87,6 +87,11 @@
         <target state="new">.NET Core SDKs:</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListCommandWindowsDesktopRuntimeHeader">
+        <source>Windows Desktop Runtimes:</source>
+        <target state="new">Windows Desktop Runtimes:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListHostingBundleOptionDescription">
         <source>List .NET Core Runtime &amp; Hosting Bundles.</source>
         <target state="new">List .NET Core Runtime &amp; Hosting Bundles.</target>
@@ -100,6 +105,11 @@
       <trans-unit id="ListSdkOptionDescription">
         <source>List .NET Core SDKs that can be uninstalled.</source>
         <target state="new">List .NET Core SDKs that can be uninstalled.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListWindowsDesktopRuntimeOptionDescription">
+        <source>List Windows Desktop Runtimes.</source>
+        <target state="new">List Windows Desktop Runtimes.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListX64OptionDescription">
@@ -287,8 +297,8 @@ Uninstalling this item will cause Visual Studio for to break.
         <note />
       </trans-unit>
       <trans-unit id="UninstallArm64OptionDescription">
-        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</source>
-        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove arm64.</target>
+        <source>Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove arm64.</source>
+        <target state="new">Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove arm64.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallAspNetRuntimeOptionDescription">
@@ -351,14 +361,19 @@ Uninstalling this item will cause Visual Studio for to break.
         <target state="new">Remove .NET Core SDKs only.</target>
         <note />
       </trans-unit>
+      <trans-unit id="UninstallWindowsDesktopRuntimeOptionDescription">
+        <source>Remove Windows Desktop Runtimes only.</source>
+        <target state="new">Remove Windows Desktop Runtimes only.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="UninstallX64OptionDescription">
-        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</source>
-        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x64.</target>
+        <source>Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove x64.</source>
+        <target state="new">Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove x64.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallX86OptionDescription">
-        <source>Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</source>
-        <target state="new">Can be used with --sdk, --runtime and --aspnet-runtime to remove x86.</target>
+        <source>Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove x86.</source>
+        <target state="new">Can be used with --sdk, --runtime, --aspnet-runtime and --windows-desktop-runtime to remove x86.</target>
         <note />
       </trans-unit>
       <trans-unit id="UninstallationFailedExceptionMessageFormat">

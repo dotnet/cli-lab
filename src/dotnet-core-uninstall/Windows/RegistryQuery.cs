@@ -26,8 +26,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
 
         public virtual IEnumerable<Bundle> GetAllInstalledBundles()
         {
-            var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64));
-            bundles = bundles.Concat(GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32)));
+            // The bundles are all 32bit so we only need to query one view of the registry
+            var bundles = GetNetCoreBundleKeys(RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32));
 
             var wrappedBundles = bundles
               .Select(bundle => WrapRegistryKey(bundle))
@@ -135,6 +135,11 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 {
                     return new SdkVersion(versionString);
                 }
+                else if (displayName.IndexOf("Windows Desktop Runtime", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    displayName.IndexOf("Dotnet Shared Framework for Windows Desktop", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    return new WindowsDesktopRuntimeVersion(versionString);
+                }
                 else if (displayName.IndexOf(".NET Core Runtime", StringComparison.OrdinalIgnoreCase) >= 0 || 
                     Regex.IsMatch(displayName, @".*\.NET Core.*Runtime") ||
                     displayName.IndexOf(".NET Runtime", StringComparison.OrdinalIgnoreCase) >= 0)
@@ -165,9 +170,12 @@ namespace Microsoft.DotNet.Tools.Uninstall.Windows
                 archString = cachePathMatch.Groups[Regexes.ArchGroupName].Value;
             }
 
-            archString ??= displayName.Contains(x64String) ? x64String :
-                displayName.Contains(x86String) ? x86String :
-                displayName.Contains(arm64String) ? arm64String : null;
+            if (string.IsNullOrEmpty(archString))
+            {
+                archString = displayName.Contains(x64String) ? x64String :
+                    displayName.Contains(x86String) ? x86String :
+                    displayName.Contains(arm64String) ? arm64String : null;
+            }
 
             return archString switch
             {
