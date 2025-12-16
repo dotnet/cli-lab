@@ -75,34 +75,14 @@
           Inputs="$(DotnetCoreUninstallOutputDirectory)**/*;
                     $(DotnetCoreUninstallGenerateMsiPowershellScript)"
           Outputs="$(DotnetCoreUninstallMSIInstallerFile)">
-    <Exec Command="powershell -NoProfile -NoLogo $(DotnetCoreUninstallGenerateMsiPowershellScript) ^
-                      '$(DotnetCoreUninstallOutputDirectory.TrimEnd('\'))' ^
-                      '$(DotnetCoreUninstallMSIInstallerFile)' ^
-                      '$(WixRoot)' ^
-                      '$(DotnetCoreUninstallBrandName)' ^
-                      '$(MsiVersion)' ^
-                      '$(DotnetCoreUninstallInstallerUpgradeCode)' ^
-                      '$(Architecture)' ^
-                      -InformationAction Continue" />
-    <PropertyGroup>
-      <!-- Temp directory for light command layouts -->
-      <LightCommandObjDir>$(ArtifactsObjDir)/LightCommandPackages</LightCommandObjDir>
-      <!-- Directory for the zipped up light command package -->
-      <LightCommandPackagesDir>$(ArtifactsShippingPackagesDir)</LightCommandPackagesDir>
-    </PropertyGroup>
-    <ItemGroup>
-        <UninstallerMsiWixSrcFiles Include="$(WixRoot)\*.wixobj" />
-    </ItemGroup>
-    <CreateLightCommandPackageDrop
-      LightCommandWorkingDir="$(LightCommandObjDir)"
-      OutputFolder="$(LightCommandPackagesDir)"
-      AdditionalBasePaths="$(MSBuildThisFileDirectory)/packaging/windows/dotnetCoreUninstall"
-      Cultures="en-us" 
-      InstallerFile="$(DotnetCoreUninstallMSIInstallerFile)"
-      WixExtensions="WixUIExtension;WixDependencyExtension;WixUtilExtension"
-      WixSrcFiles="@(UninstallerMsiWixSrcFiles)">
-      <Output TaskParameter="OutputFile" PropertyName="_LightCommandPackageNameOutput" />
-    </CreateLightCommandPackageDrop>
+    <MSBuild Projects="$(RepoRoot)src\redist\targets\packaging\windows\dotnetCoreUninstall\uninstall-tool.wixproj"
+             Properties="InstallerPath=$(DotnetCoreUninstallMSIInstallerFile);
+                         DotnetMsiVersion=$(MsiVersion);
+                         ProductMoniker=$(DotnetCoreUninstallBrandName);
+                         UpgradeCode=$(DotnetCoreUninstallInstallerUpgradeCode);
+                         OutputPath=$([System.IO.Path]::GetDirectoryName($(DotnetCoreUninstallMSIInstallerFile)));
+                         OutputName=$([System.IO.Path]::GetFileNameWithoutExtension($(DotnetCoreUninstallMSIInstallerFile)));
+                         DotnetSrc=$(DotnetCoreUninstallOutputDirectory.TrimEnd('\'))" />
   </Target>
 
 </Project>
