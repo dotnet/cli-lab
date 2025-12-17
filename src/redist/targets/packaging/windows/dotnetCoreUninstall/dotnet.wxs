@@ -2,7 +2,6 @@
   <?include "Variables.wxi" ?>
   <Package Name="$(var.ProductName)" Language="$(var.ProductLanguage)" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.UpgradeCode)" InstallerVersion="200">
     
-
     <MajorUpgrade DowngradeErrorMessage="$(var.DowngradeErrorMessage)" Schedule="afterInstallInitialize" />
     <WixVariable Id="WixUIBannerBmp" Value="images/dotnetbanner.png" />
     <WixVariable Id="WixUIDialogBmp" Value="images/dotnetbackground.png" />
@@ -17,9 +16,11 @@
       <ComponentGroupRef Id="InstallFiles" />
       <ComponentGroupRef Id="InstallSharedHostandDetectionKeys" />
     </Feature>
+
     <Feature Id="Provider" AllowAdvertise="no" Description="Used for Ref Counting" Display="hidden" Level="1" InstallDefault="local" Title="RefCounting" TypicalDefault="install" AllowAbsent="no">
       <ComponentRef Id="$(var.DependencyKeyId)" />
     </Feature>
+
     <Property Id="ProductFamily" Value="$(var.ProductFamily)" />
     <Property Id="ProductEdition" Value="$(var.ProductEdition)" />
     <Property Id="ProductCPU" Value="$(var.InstallerPlatform)" />
@@ -27,7 +28,9 @@
     <Property Id="MSIFASTINSTALL" Value="7" />
 
   </Package>
-  <Fragment><ComponentGroup Id="InstallSharedHostandDetectionKeys">
+
+  <Fragment>
+    <ComponentGroup Id="InstallSharedHostandDetectionKeys">
       <Component Id="cmpCoreHost" Directory="DOTNETDOTNETCOREUNINSTALLHOME" Guid="{97A5B877-FA59-4031-9E61-0ED30BBC00B1}">
         <CreateFolder />
         <Environment Id="E_PATH" Name="PATH" Value="[DOTNETDOTNETCOREUNINSTALLHOME]" Part="last" Action="set" System="yes" />
@@ -85,8 +88,9 @@
 
     <UIRef Id="WixUI_Common" />
   
-      <StandardDirectory Id="ProgramFiles6432Folder">
-        <Directory Id="DOTNETDOTNETCOREUNINSTALLHOME" Name="dotnet-core-uninstall" />
-      </StandardDirectory>
-    </Fragment>
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="DOTNETDOTNETCOREUNINSTALLHOME" Name="dotnet-core-uninstall" />
+    </StandardDirectory>
+  </Fragment>
+
 </Wix>
