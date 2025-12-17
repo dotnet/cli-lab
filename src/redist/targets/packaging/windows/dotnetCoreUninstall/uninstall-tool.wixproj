@@ -36,6 +36,8 @@
       <InstallerPlatform Condition="'$(InstallerPlatform)' == ''">$(TargetArchitecture)</InstallerPlatform>
       <Platform>$(InstallerPlatform)</Platform>
       <PlatformName>$(InstallerPlatform)</PlatformName>
+      <!-- Turn off ICE validation. CodeIntegrity and AppLocker block ICE checks that require elevation, even when running as administator. -->
+      <SuppressValidation>true</SuppressValidation>
     </PropertyGroup>
   </Target>
 
