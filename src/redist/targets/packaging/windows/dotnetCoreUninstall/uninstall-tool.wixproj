@@ -1,0 +1,68 @@
+<Project Sdk="Microsoft.WixToolset.Sdk">
+
+  <ItemGroup>
+    <HarvestDirectory Include="$(DotnetSrc)"
+                      ComponentGroupName="InstallFiles"
+                      DirectoryRefId="DOTNETDOTNETCOREUNINSTALLHOME"
+                      PreprocessorVariable="DotnetSrc"
+                      SuppressRegistry="true"
+                      SuppressRootDirectory="true" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WixToolset.Heat" Version="$(MicrosoftWixToolsetSdkVersion)" />
+    <PackageReference Include="Microsoft.WixToolset.Util.wixext" Version="$(MicrosoftWixToolsetSdkVersion)" />
+    <PackageReference Include="Microsoft.WixToolset.UI.wixext" Version="$(MicrosoftWixToolsetSdkVersion)" />
+    <PackageReference Include="Microsoft.WixToolset.Dependency.wixext" Version="$(MicrosoftWixToolsetSdkVersion)" />
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="$(MicrosoftDotNetBuildTasksInstallersPackageVersion)" />
+  </ItemGroup>
+
+  <Target Name="SetInstallerInfo" BeforeTargets="CoreCompile">
+    <PropertyGroup>
+      <DefineConstants>$(DefineConstants);DependencyKeyName=Dotnet_Uninstall_Tool</DefineConstants>
+      <DefineConstants>$(DefineConstants);DotnetSrc=$(DotnetSrc)</DefineConstants>
+      <DefineConstants>$(DefineConstants);BuildVersion=$(DotnetMSIVersion)</DefineConstants>
+      <DefineConstants>$(DefineConstants);ProductMoniker=$(ProductMoniker)</DefineConstants>
+      <DefineConstants>$(DefineConstants);UpgradeCode=$(UpgradeCode)</DefineConstants>
+      <DefineConstants>$(DefineConstants);TargetArchitecture=$(TargetArchitecture)</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup>
+      <!-- Currently, WiX only supports 'full' for the -pdbType option. This affects both bundle and package projects. -->
+      <DebugType>full</DebugType>
+      <!-- .wixproj defaults to AnyCPU which eventually defaults to x86. InstallerPlatform determines the bitness of
+           the installer and should always match for MSIs. For bundles, we have to remain on x86. -->
+      <InstallerPlatform Condition="'$(InstallerPlatform)' == ''">$(TargetArchitecture)</InstallerPlatform>
+      <Platform>$(InstallerPlatform)</Platform>
+      <PlatformName>$(InstallerPlatform)</PlatformName>
+      <!-- Turn off ICE validation. CodeIntegrity and AppLocker block ICE checks that require elevation, even when running as administator. -->
+      <SuppressValidation>true</SuppressValidation>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="GenerateWixpackPackage" AfterTargets="CoreCompile">
+    <PropertyGroup>
+      <WixpackWorkingDir>$(IntermediateOutputPath)wixpack</WixpackWorkingDir>
+      <WixpackOutputDir>$(ArtifactsNonShippingPackagesDir)</WixpackOutputDir>
+    </PropertyGroup>
+
+    <CreateWixBuildWixpack
+      AdditionalOptions="$(CompilerAdditionalOptions) $(LinkerAdditionalOptions)"
+      BindTrackingFile="$(IntermediateOutputPath)$(BindTrackingFilePrefix)%(CultureGroup.OutputSuffix)$(BindTrackingFileExtension)"
+      Cultures="%(CultureGroup.Identity)"
+      DefineConstants="$(DefineConstants);$(SolutionDefineConstants);$(ProjectDefineConstants);$(ProjectReferenceDefineConstants)"
+      Extensions="@(_ResolvedWixExtensionPaths)"
+      InstallerPlatform="$(InstallerPlatform)"
+      InstallerFile="$(InstallerPath)"
+      IntermediateDirectory="$(IntermediateOutputPath)%(CultureGroup.OutputFolder)"
+      OutputFolder="$(WixpackOutputDir)"
+      OutputType="$(OutputType)"
+      PdbFile="$(IntermediateOutputPath)%(CultureGroup.OutputFolder)$(TargetPdbFileName)"
+      PdbType="$(DebugType)"
+      SourceFiles="@(Compile)"
+      WixpackWorkingDir="$(WixpackWorkingDir)">
+      <Output TaskParameter="OutputFile" PropertyName="_WixBuildCommandPackageNameOutput" />
+    </CreateWixBuildWixpack>
+  </Target>
+
+</Project>

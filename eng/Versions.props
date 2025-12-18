@@ -15,5 +15,7 @@
     <NewtonsoftJsonPackageVersion>13.0.1</NewtonsoftJsonPackageVersion>
     <MicrosoftVisualStudioSetupConfigurationPackageVersion>3.2.2146</MicrosoftVisualStudioSetupConfigurationPackageVersion>
     <WindowsAzureStoragePackageVersion>9.3.3</WindowsAzureStoragePackageVersion>
+    <MicrosoftDotNetBuildTasksInstallersPackageVersion>11.0.0-beta.25578.1</MicrosoftDotNetBuildTasksInstallersPackageVersion>
+    <MicrosoftWixToolsetSdkVersion>5.0.2-dotnet.2811440</MicrosoftWixToolsetSdkVersion>
   </PropertyGroup>
 </Project>

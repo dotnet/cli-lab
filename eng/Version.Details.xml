@@ -7,5 +7,9 @@
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>65e09c040143048211dcf6b2bd69336cbf27eec6</Sha>
     </Dependency>
+    <Dependency Name="Microsoft.DotNet.Build.Tasks.Installers" Version="11.0.0-beta.25578.1">
+      <Uri>https://github.com/dotnet/dotnet</Uri>
+      <Sha>846929727a388f2b1fd3ccf21f67694f44b91b4d</Sha>
+    </Dependency>
   </ToolsetDependencies>
 </Dependencies>
