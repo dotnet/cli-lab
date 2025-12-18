@@ -127,7 +127,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             return requirementStringResults
                 .GroupBy(pair => pair.bundle)
                 .Select(group => group.First()) // Remove duplicates
-                .OrderByDescending(pair => pair.bundle.DisplayName)
+                .OrderByDescending(pair => pair.bundle)
                 .ToDictionary(i => i.bundle, i => i.Item2);
         }
     }
