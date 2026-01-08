@@ -20,7 +20,7 @@ using Microsoft.DotNet.Tools.Uninstall.Windows;
 
 namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
 {
-    internal static class CommandLineConfigs
+    public static class CommandLineConfigs
     {
         public static Parser UninstallCommandParser;
 
@@ -28,6 +28,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         private static readonly string DryRunCommandName = "dry-run";
         private static readonly string WhatIfCommandName = "whatif";
         private static readonly string RemoveCommandName = "remove";
+        private static readonly string UninstallCommandName = "uninstall";
 
         public static readonly RootCommand UninstallRootCommand = new RootCommand(
             RuntimeInfo.RunningOnWindows ? LocalizableStrings.UninstallNoOptionDescriptionWindows
@@ -187,7 +188,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             ForceOption
         };
 
-        public static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel>
+        internal static readonly Dictionary<string, VerbosityLevel> VerbosityLevels = new Dictionary<string, VerbosityLevel>
         {
             { "q", VerbosityLevel.Quiet }, { "quiet", VerbosityLevel.Quiet },
             { "m", VerbosityLevel.Minimal }, { "minimal", VerbosityLevel.Minimal },
@@ -223,6 +224,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             UninstallRootCommand.AddCommand(ListCommand);
             UninstallRootCommand.AddCommand(DryRunCommand);
             UninstallRootCommand.AddCommand(RemoveCommand);
+            RemoveCommand.AddAlias(UninstallCommandName); // The verbiage that makes the most sense from the bootstrapper would be 'uninstall', so just adding an alias permits more code sharing
             UninstallRootCommand.AddCommand(VersionSubcommand);
 
             if (RuntimeInfo.RunningOnOSX)
@@ -315,7 +317,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             return specifiedOption;
         }
 
-        public static BundleType GetTypeSelection(this ParseResult parseResult)
+        internal static BundleType GetTypeSelection(this ParseResult parseResult)
         {
             var supportedBundleTypes = SupportedBundleTypeConfigs.GetSupportedBundleTypes();
 
@@ -329,7 +331,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 typeSelection;
         }
 
-        public static BundleArch GetArchSelection(this ParseResult parseResult)
+        internal static BundleArch GetArchSelection(this ParseResult parseResult)
         {
             var archSelection = new[]
             {
@@ -346,7 +348,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
                 archSelection;
         }
 
-        public static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
+        internal static VerbosityLevel GetVerbosityLevel(this CommandResult commandResult)
         {
             var optionResult = commandResult.FindResultFor(VerbosityOption);
 
