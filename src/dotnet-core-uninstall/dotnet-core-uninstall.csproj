@@ -36,4 +36,23 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <Target Name="PublishMacOSUniversalBinary">
+    <ItemGroup>
+      <_Rids Include="osx-x64;osx-arm64" />
+      <_RidSpecificBuild Include="$(MSBuildThisFile)" AdditionalProperties="RuntimeIdentifier=%(_Rids.Identity);PublishSingleFile=true;Configuration=Release;PublishSelfContained=true;" />
+    </ItemGroup>
+
+    <MSBuild Projects="@(_RidSpecificBuild)" BuildInParallel="true" Targets="Publish;PublishItemsOutputGroup">
+     <Output TaskParameter="TargetOutputs" ItemName="_RidSpecificSingleFile" />
+    </MSBuild>
+    <PropertyGroup>
+      <_LipoOutputDir>$(PublishDir)\osx-universal\</_LipoOutputDir>
+      <_LipoOutputPath>$(_LipoOutputDir)$(AssemblyName)</_LipoOutputPath>
+    </PropertyGroup>
+
+    <MakeDir Directories="$(_LipoOutputDir)" />
+
+    <Exec Command="lipo @(_RidSpecificSingleFile, ' ') -create -output $(_LipoOutputPath)" Condition="$([MSBuild]::IsOSPlatform('OSX'))" />
+  </Target>
+
 </Project>
