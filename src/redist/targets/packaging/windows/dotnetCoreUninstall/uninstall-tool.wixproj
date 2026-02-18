@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.WixToolset.Sdk">
 
+  <PropertyGroup>
+    <HarvestDirectorySuppressSpecificWarnings>5149</HarvestDirectorySuppressSpecificWarnings>
+  </PropertyGroup>
+
   <ItemGroup>
     <HarvestDirectory Include="$(DotnetSrc)"
                       ComponentGroupName="InstallFiles"
