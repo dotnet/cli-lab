@@ -9,7 +9,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\dotnet-core-uninstall\dotnet-core-uninstall.csproj" />
-    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="10.0.0-beta.25124.4" Condition="'$(RID)' == 'win-x86'"/>
+    <PackageReference Include="Microsoft.DotNet.Build.Tasks.Installers" Version="$(MicrosoftDotNetBuildTasksInstallersPackageVersion)" Condition="'$(RID)' == 'win-x86'"/>
+  </ItemGroup>
+
+  <!-- These P2Ps ensure that package references for WiX extensions are correctly restored. The MSBuildRestoreSessionId condition makes sure that these
+       projects are only restored. They get built later when computed properties are available. These properties do not exist when projects are evaluated. -->
+  <ItemGroup Condition="'$(OS)' == 'Windows_NT' and '$(MSBuildRestoreSessionId)' != ''">
+    <ProjectReference Include="targets\packaging\windows\dotnetCoreUninstall\uninstall-tool.wixproj" ReferenceOutputAssembly="false" SkipGetTargetFrameworkProperties="true" />
   </ItemGroup>
 
   <Import Condition="'$(RID)' == 'win-x86'" Project="targets\Versions.targets" />

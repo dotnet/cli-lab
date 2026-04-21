@@ -14,21 +14,18 @@
   <?define LCID  = "$(var.ProductLanguage)"?>
   <?define DowngradeErrorMessage  = "A newer version is already installed; please uninstall it and re-run setup."?>
 
-  <?define Platform   =   "$(sys.BUILDARCH)" ?>
-  <?if $(var.Platform)=x86?>
+  <?if $(var.InstallerPlatform)=x86?>
   <?define PlatformToken="X86"?>
   <?define WixQuietExec="WixQuietExec"?>
-  <?define Program_Files="ProgramFilesFolder"?>
   <?define Win64AttributeValue=no?>
-  <?elseif $(var.Platform)=x64?>
+  <?elseif $(var.InstallerPlatform)=x64?>
   <?define PlatformToken="X64"?>
   <?define WixQuietExec="WixQuietExec64"?>
-  <?define Program_Files="ProgramFiles64Folder"?>
   <?define Win64AttributeValue=yes?>
   <?else?>
-  <?error Invalid Platform ($(var.Platform))?>
+  <?error Invalid Platform ($(var.InstallerPlatform))?>
   <?endif?>
 
-  <?define DependencyKey   = "dotnet_core_uninstall_$(var.BuildVersion)_$(var.Platform)"?>
+  <?define DependencyKey   = "dotnet_core_uninstall_$(var.BuildVersion)_$(var.InstallerPlatform)"?>
   <?define DependencyKeyId = "$(var.DependencyKey)" ?>
 </Include>
