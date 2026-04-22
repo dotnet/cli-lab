@@ -47,14 +47,16 @@ extends:
         parameters:
           enableMicrobuild: true
           enableMicrobuildForMacAndLinux: true
-          enablePublishUsingPipelines: true
           enablePublishBuildArtifacts: true
+          enablePublishBuildAssets: true
+          publishingVersion: 4
           enablePublishTestResults: false
           enableTelemetry: true
           helixRepo: dotnet/cli-lab
           timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
           jobs:
           - job: Windows
+            enablePublishing: ${{ and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}
             pool:
               # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
               # Will eventually change this to two BYOC pools.
@@ -94,7 +96,6 @@ extends:
                       /p:SignCoreDotnetCoreUninstall=true
                       /p:TeamName=$(TeamName)
                       /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-                      /p:DotNetPublishUsingPipelines=true
             # else
             - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
               - name: _OfficialBuildArgs
