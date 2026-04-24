@@ -47,7 +47,8 @@ extends:
         parameters:
           enableMicrobuild: true
           enableMicrobuildForMacAndLinux: true
-          enablePublishUsingPipelines: true
+          enablePublishBuildAssets: true
+          publishingVersion: 4
           enablePublishBuildArtifacts: true
           enablePublishTestResults: false
           enableTelemetry: true
@@ -55,6 +56,7 @@ extends:
           timeoutInMinutes: 180 # increase timeout since BAR publishing might wait a long time
           jobs:
           - job: Windows
+            enablePublishing: true
             pool:
               # For public or PR jobs, use the hosted pool.  For internal jobs use the internal pool.
               # Will eventually change this to two BYOC pools.
@@ -94,7 +96,6 @@ extends:
                       /p:SignCoreDotnetCoreUninstall=true
                       /p:TeamName=$(TeamName)
                       /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-                      /p:DotNetPublishUsingPipelines=true
             # else
             - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
               - name: _OfficialBuildArgs
@@ -103,7 +104,7 @@ extends:
             - script: eng\common\build.cmd
                 -configuration $(_BuildConfig)
                 -prepareMachine
-                -restore -build -test -sign -pack -ci
+                -restore -build -test -sign -pack -publish -ci
                 $(_BuildArgs)
                 /p:RID=$(_RID)
               displayName: Build and Publish

@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <RuntimeIdentifiers>win-x86;osx-x64;osx-arm64</RuntimeIdentifiers>
     <SignAssembly>true</SignAssembly>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <RollForward>LatestMajor</RollForward>
   </PropertyGroup>
 

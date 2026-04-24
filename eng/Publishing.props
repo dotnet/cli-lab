@@ -2,6 +2,16 @@
 <!-- Copyright (c) .NET Foundation and contributors. All rights reserved. Licensed under the MIT license. See License.txt in the project root for full license information. -->
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <PublishingVersion>3</PublishingVersion>
+    <PublishingVersion>4</PublishingVersion>
+    <!-- Repo produces MSI installers, not NuGet packages.
+         Disable default artifact discovery (which only looks for .nupkg files)
+         and declare the MSI explicitly below. -->
+    <EnableDefaultArtifacts>false</EnableDefaultArtifacts>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Artifact Include="$(ArtifactsShippingPackagesDir)*.msi"
+              Kind="Blob"
+              RelativeBlobPath="installers/$(Version)/%(Filename)%(Extension)" />
+  </ItemGroup>
 </Project>

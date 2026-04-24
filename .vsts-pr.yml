@@ -22,7 +22,6 @@ stages:
   - template: /eng/common/templates/jobs/jobs.yml
     parameters:
       enableMicrobuild: true
-      enablePublishUsingPipelines: true
       enablePublishBuildArtifacts: true
       enablePublishTestResults: true
       enableTelemetry: true
@@ -51,7 +50,6 @@ stages:
                    /p:SignCoreDotnetCoreUninstall=true
                    /p:TeamName=$(_TeamName)
                    /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-                   /p:DotNetPublishUsingPipelines=true
         # else
         - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
           - name: _OfficialBuildArgs
@@ -152,7 +150,7 @@ stages:
 - ${{ if eq(variables._RunAsInternal, True) }}:
   - template: eng\common\templates\post-build\post-build.yml
     parameters:
-      publishingInfraVersion: 3
+      publishingInfraVersion: 4
       # signing validation will not run, even if the below value is 'true', if the 'PostBuildSign' variable is set to 'true'
       enableSigningValidation: false      
       enableSourceLinkValidation: false
