@@ -9,16 +9,16 @@ namespace Microsoft.DotNet.Cli.Build
     public class GenerateMsiVersion : Task
     {
         [Required]
-        public int CommitCount { get; set; }
+        public int BuildNumber { get; set; }
 
         [Required]
-        public int VersionMajor { get; set; }
+        public int Major { get; set; }
 
         [Required]
-        public int VersionMinor { get; set; }
+        public int Minor { get; set; }
 
         [Required]
-        public int VersionPatch { get; set; }
+        public int Patch { get; set; }
 
         [Output]
         public string MsiVersion { get; set; }
@@ -27,10 +27,10 @@ namespace Microsoft.DotNet.Cli.Build
         {
             var buildVersion = new Version()
             {
-                Major = VersionMajor,
-                Minor = VersionMinor,
-                Patch = VersionPatch,
-                CommitCount = CommitCount
+                Major = Major,
+                Minor = Minor,
+                Patch = Patch,
+                CommitCount = BuildNumber
             };
 
             MsiVersion = buildVersion.GenerateMsiVersion();
