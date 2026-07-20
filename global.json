@@ -8,7 +8,7 @@
     }
   },
   "msbuild-sdks": {
-    "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.26360.7",
+    "Microsoft.DotNet.Arcade.Sdk": "11.0.0-beta.26369.1",
     "Microsoft.WixToolset.Sdk": "6.0.3-dotnet.3"
   }
 }
