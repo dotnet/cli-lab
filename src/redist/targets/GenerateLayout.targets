@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <DotnetCoreUninstallOutputDirectory>$(ArtifactsDir)layout\dotnet-core-uninstall\</DotnetCoreUninstallOutputDirectory>
+    <DotnetCoreUninstallTarballPath>$(ArtifactsDir)layout\dotnet-core-uninstall-$(RID).tar.gz</DotnetCoreUninstallTarballPath>
     <DownloadsFolder>$(IntermediateOutputPath)downloads\</DownloadsFolder>
     <_PublishSingleFileForRid>true</_PublishSingleFileForRid>
     <_PublishSingleFileForRid Condition="'$(RID)' == 'win-x86'">false</_PublishSingleFileForRid>
@@ -26,5 +27,14 @@
       Properties="PublishDir=$(DotnetCoreUninstallOutputDirectory);PublishSingleFile=$(_PublishSingleFileForRid);RuntimeIdentifier=$(RID);PublishTrimmed=true;SelfContained=true"
       Targets="Publish">
     </MSBuild>
+  </Target>
+
+  <Target Name="CrateDotnetCoreUninstallTarball"
+          AfterTargets="AfterBuild"
+          Condition="'$(RID)' == 'osx-x64' OR '$(RID)' == 'osx-arm64'">
+
+    <Exec Command="tar -czf '$(DotnetCoreUninstallTarballPath)' ."
+          WorkingDirectory="$(DotnetCoreUninstallOutputDirectory)"/>
+
   </Target>
 </Project>

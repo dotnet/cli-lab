@@ -50,6 +50,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
         public static readonly string RuntimeOptionName = "runtime";
         public static readonly string AspNetRuntimeOptionName = "aspnet-runtime";
         public static readonly string HostingBundleOptionName = "hosting-bundle";
+        public static readonly string WindowsDesktopRuntimeOptionName = "windows-desktop-runtime";
         public static readonly string X64OptionName = "x64";
         public static readonly string X86OptionName = "x86";
         public static readonly string Arm64OptionName = "arm64";
@@ -160,7 +161,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             new Option($"--{SdkOptionName}", LocalizableStrings.ListSdkOptionDescription),
             new Option($"--{RuntimeOptionName}", LocalizableStrings.ListRuntimeOptionDescription),
             new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.ListAspNetRuntimeOptionDescription),
-            new Option($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription)
+            new Option($"--{HostingBundleOptionName}", LocalizableStrings.ListHostingBundleOptionDescription),
+            new Option($"--{WindowsDesktopRuntimeOptionName}", LocalizableStrings.ListWindowsDesktopRuntimeOptionDescription)
         };
 
         public static readonly Option[] UninstallBundleTypeOptions = new Option[]
@@ -168,7 +170,8 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Configs
             new Option($"--{SdkOptionName}", LocalizableStrings.UninstallSdkOptionDescription),
             new Option($"--{RuntimeOptionName}", LocalizableStrings.UninstallRuntimeOptionDescription),
             new Option($"--{AspNetRuntimeOptionName}", LocalizableStrings.UninstallAspNetRuntimeOptionDescription),
-            new Option($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription)
+            new Option($"--{HostingBundleOptionName}", LocalizableStrings.UninstallHostingBundleOptionDescription),
+            new Option($"--{WindowsDesktopRuntimeOptionName}", LocalizableStrings.UninstallWindowsDesktopRuntimeOptionDescription)
         };
 
         public static readonly Option[] ArchUninstallOptions = new Option[]

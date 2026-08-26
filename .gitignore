@@ -147,3 +147,4 @@ _ReSharper.*/
 buildlog.txt
 nCrunchTemp*
 TestResults/
+.nuget/

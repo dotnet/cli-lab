@@ -63,6 +63,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var aspNetRuntimes = Bundle<AspNetRuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var hostingBundles = Bundle<HostingBundleVersion>.FilterWithSameBundleType(filteredBundlesByArch);
+            var windowsDesktopRuntimes = Bundle<WindowsDesktopRuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
             var filteredSdks = typeSelection.HasFlag(BundleType.Sdk) ?
                 Filter(argValue, sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
@@ -80,10 +81,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 Filter(argValue, hostingBundles).OrderBy(hostingBundle => hostingBundle).Select(hostingBundle => hostingBundle as Bundle) :
                 new List<Bundle>();
 
+            var filteredWindowsDesktopRuntimes = typeSelection.HasFlag(BundleType.WindowsDesktopRuntime) ?
+                Filter(argValue, windowsDesktopRuntimes).OrderBy(windowsDesktopRuntime => windowsDesktopRuntime).Select(windowsDesktopRuntime => windowsDesktopRuntime as Bundle) :
+                new List<Bundle>();
+
             return filteredSdks
                 .Concat(filteredRuntimes)
                 .Concat(filteredAspNetRuntimes)
-                .Concat(filteredHostingBundles);
+                .Concat(filteredHostingBundles)
+                .Concat(filteredWindowsDesktopRuntimes);
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(TArg argValue, IEnumerable<Bundle<TBundleVersion>> bundles)
@@ -108,6 +114,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
             var runtimes = Bundle<RuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var aspNetRuntimes = Bundle<AspNetRuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
             var hostingBundles = Bundle<HostingBundleVersion>.FilterWithSameBundleType(filteredBundlesByArch);
+            var windowsDesktopRuntimes = Bundle<WindowsDesktopRuntimeVersion>.FilterWithSameBundleType(filteredBundlesByArch);
 
             var filteredSdks = typeSelection.HasFlag(BundleType.Sdk) ?
                 Filter(sdks).OrderBy(sdk => sdk).Select(sdk => sdk as Bundle) :
@@ -125,10 +132,15 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.Filterers
                 Filter(hostingBundles).OrderBy(hostingBundle => hostingBundle).Select(hostingBundle => hostingBundle as Bundle) :
                 new List<Bundle>();
 
+            var filteredWindowsDesktopRuntimes = typeSelection.HasFlag(BundleType.WindowsDesktopRuntime) ?
+                Filter(windowsDesktopRuntimes).OrderBy(windowsDesktopRuntime => windowsDesktopRuntime).Select(windowsDesktopRuntime => windowsDesktopRuntime as Bundle) :
+                new List<Bundle>();
+
             return filteredSdks
                 .Concat(filteredRuntimes)
                 .Concat(filteredAspNetRuntimes)
-                .Concat(filteredHostingBundles);
+                .Concat(filteredHostingBundles)
+                .Concat(filteredWindowsDesktopRuntimes);
         }
 
         public abstract IEnumerable<Bundle<TBundleVersion>> Filter<TBundleVersion>(IEnumerable<Bundle<TBundleVersion>> bundles)

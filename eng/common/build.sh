@@ -13,6 +13,7 @@ usage()
   echo "  --configuration <value>    Build configuration: 'Debug' or 'Release' (short: -c)"
   echo "  --verbosity <value>        Msbuild verbosity: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic] (short: -v)"
   echo "  --binaryLog                Create MSBuild binary log (short: -bl)"
+  echo "  --binaryLogName <value>    Binary log file name or path; implies --binaryLog (short: -bln)"
   echo "  --help                     Print help and exit (short: -h)"
   echo ""
 
@@ -39,10 +40,15 @@ usage()
   echo "  --projects <value>       Project or solution file(s) to build"
   echo "  --ci                     Set when running on CI server"
   echo "  --excludeCIBinarylog     Don't output binary log (short: -nobl)"
+  echo "  --pipelinesLog           Promote msbuild errors/warnings to Azure Pipelines timeline issues; defaults to on in CI (short: -pl)"
   echo "  --prepareMachine         Prepare machine for CI run, clean up processes after build"
   echo "  --nodeReuse <value>      Sets nodereuse msbuild parameter ('true' or 'false')"
+  echo "  --msbuildMultiThreaded <value> Sets MSBuild's multi-threaded mode, i.e. the -mt switch ('true' or 'false') (short: --mt)"
   echo "  --warnAsError <value>    Sets warnaserror msbuild parameter ('true' or 'false')"
+  echo "  --warnNotAsError <value> Sets a semi-colon delimited list of warning codes that should not be treated as errors"
   echo "  --buildCheck <value>     Sets /check msbuild parameter"
+  echo "  --fromVMR                Set when building from within the VMR"
+  echo "  --disablePipelineSetResult Set to disable masking the actual exit code in the pipeline when the build fails"
   echo ""
   echo "Command line arguments not listed above are passed thru to msbuild."
   echo "Arguments can also be passed in with a single hyphen."
@@ -64,6 +70,8 @@ restore=false
 build=false
 source_build=false
 product_build=false
+from_vmr=false
+disable_pipeline_set_result=false
 rebuild=false
 test=false
 integration_test=false
@@ -76,9 +84,13 @@ ci=false
 clean=false
 
 warn_as_error=true
-node_reuse=true
+warn_not_as_error=''
+# Empty means "not specified"; tools.sh defaults these to on for local builds and off on CI.
+node_reuse=''
+msbuild_multi_threaded=''
 build_check=false
 binary_log=false
+binary_log_name=''
 exclude_ci_binary_log=false
 pipelines_log=false
 
@@ -89,8 +101,8 @@ verbosity='minimal'
 runtime_source_feed=''
 runtime_source_feed_key=''
 
-properties=''
-while [[ $# > 0 ]]; do
+properties=()
+while [[ $# -gt 0 ]]; do
   opt="$(echo "${1/#--/-}" | tr "[:upper:]" "[:lower:]")"
   case "$opt" in
     -help|-h)
@@ -111,6 +123,11 @@ while [[ $# > 0 ]]; do
     -binarylog|-bl)
       binary_log=true
       ;;
+    -binarylogname|-bln)
+      binary_log=true
+      binary_log_name=$2
+      shift
+      ;;
     -excludecibinarylog|-nobl)
       exclude_ci_binary_log=true
       ;;
@@ -129,18 +146,24 @@ while [[ $# > 0 ]]; do
     -pack)
       pack=true
       ;;
-    -sourcebuild|-sb)
+    -sourcebuild|-source-build|-sb)
       build=true
       source_build=true
       product_build=true
       restore=true
       pack=true
       ;;
-    -productBuild|-pb)
+    -productbuild|-product-build|-pb)
       build=true
       product_build=true
       restore=true
       pack=true
+      ;;
+    -fromvmr|-from-vmr)
+      from_vmr=true
+      ;;
+    -disablepipelinesetresult|-disable-pipeline-set-result)
+      disable_pipeline_set_result=true
       ;;
     -test|-t)
       test=true
@@ -171,8 +194,16 @@ while [[ $# > 0 ]]; do
       warn_as_error=$2
       shift
       ;;
+    -warnnotaserror)
+      warn_not_as_error=$2
+      shift
+      ;;
     -nodereuse)
       node_reuse=$2
+      shift
+      ;;
+    -msbuildmultithreaded|-mt)
+      msbuild_multi_threaded=$2
       shift
       ;;
     -buildcheck)
@@ -187,7 +218,7 @@ while [[ $# > 0 ]]; do
       shift
       ;;
     *)
-      properties="$properties $1"
+      properties+=("$1")
       ;;
   esac
 
@@ -200,7 +231,6 @@ fi
 
 if [[ "$ci" == true ]]; then
   pipelines_log=true
-  node_reuse=false
   if [[ "$exclude_ci_binary_log" == false ]]; then
     binary_log=true
   fi
@@ -221,12 +251,22 @@ function Build {
   InitializeCustomToolset
 
   if [[ ! -z "$projects" ]]; then
-    properties="$properties /p:Projects=$projects"
+    properties+=("/p:Projects=$projects")
   fi
 
   local bl=""
   if [[ "$binary_log" == true ]]; then
-    bl="/bl:\"$log_dir/Build.binlog\""
+    local binary_log_path=""
+    if [[ -z "$binary_log_name" ]]; then
+      binary_log_path="$log_dir/Build.binlog"
+    elif [[ "$binary_log_name" = /* ]]; then
+      binary_log_path="$binary_log_name"
+    else
+      binary_log_path="$log_dir/$binary_log_name"
+    fi
+
+    mkdir -p "$(dirname "$binary_log_path")"
+    bl="/bl:\"$binary_log_path\""
   fi
 
   local check=""
@@ -241,8 +281,9 @@ function Build {
     /p:RepoRoot="$repo_root" \
     /p:Restore=$restore \
     /p:Build=$build \
-    /p:DotNetBuildRepo=$product_build \
+    /p:DotNetBuild=$product_build \
     /p:DotNetBuildSourceOnly=$source_build \
+    /p:DotNetBuildFromVMR=$from_vmr \
     /p:Rebuild=$rebuild \
     /p:Test=$test \
     /p:Pack=$pack \
@@ -250,7 +291,8 @@ function Build {
     /p:PerformanceTest=$performance_test \
     /p:Sign=$sign \
     /p:Publish=$publish \
-    $properties
+    /p:RestoreStaticGraphEnableBinaryLogger=$binary_log \
+    ${properties[@]+"${properties[@]}"}
 
   ExitWithExitCode 0
 }
