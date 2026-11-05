@@ -32,6 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "7.0.100", "7.0.101", "8.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "8.0.100", "8.0.101", "9.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "9.0.100", "9.0.101", "10.0.100" }, new bool[] { true, false, false })]
+        [InlineData(new string[] { "10.0.399", "10.0.400" }, new bool[] { false, true })]
         [InlineData(new string[] { "10.0.100", "10.0.101", "11.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "11.0.100", "11.0.101", "12.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "12.0.100", "12.0.101", "13.0.100" }, new bool[] { false, false, false })]
