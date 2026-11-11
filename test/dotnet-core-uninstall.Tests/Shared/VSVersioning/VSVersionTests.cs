@@ -32,7 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
         [InlineData(new string[] { "7.0.100", "7.0.101", "8.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "8.0.100", "8.0.101", "9.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "9.0.100", "9.0.101", "10.0.100" }, new bool[] { true, false, false })]
-        [InlineData(new string[] { "10.0.399", "10.0.400" }, new bool[] { false, true })]
+        [InlineData(new string[] { "10.0.399", "10.0.400" }, new bool[] { false, false })]
         [InlineData(new string[] { "10.0.100", "10.0.101", "11.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "11.0.100", "11.0.101", "12.0.100" }, new bool[] { true, false, false })]
         [InlineData(new string[] { "12.0.100", "12.0.101", "13.0.100" }, new bool[] { false, false, false })]
@@ -47,6 +47,45 @@ namespace Microsoft.DotNet.Tools.Uninstall.Tests.Shared.VSVersioning
             var uninstallable = VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles);
 
             CheckAllowed(bundles, uninstallable, allowed, null);
+        }
+
+        [WindowsOnlyFact]
+        internal void HighestSdkInVisualStudio2026LTSCBandIsProtected()
+        {
+            var sdk = new Bundle<SdkVersion>(new SdkVersion("10.0.403"), BundleArch.X64, string.Empty, "10.0.403");
+
+            VisualStudioSafeVersionsExtractor.GetUninstallableBundles([sdk]).Should().NotContain(sdk);
+            VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings([sdk])[sdk]
+                .Should().Be(string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026"));
+        }
+
+        [WindowsOnlyFact]
+        internal void VisualStudio2026LTSCBandRemainsProtectedWhenNextSdkBandIsInstalled()
+        {
+            var ltscSdk = new Bundle<SdkVersion>(new SdkVersion("10.0.403"), BundleArch.X64, string.Empty, "10.0.403");
+            var nextSdk = new Bundle<SdkVersion>(new SdkVersion("11.0.100"), BundleArch.X64, string.Empty, "11.0.100");
+            var bundles = new[] { ltscSdk, nextSdk };
+
+            VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles).Should().NotContain(ltscSdk);
+            VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles)[ltscSdk]
+                .Should().Be(string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026"));
+        }
+
+        [WindowsOnlyFact]
+        internal void OnlyHighestSdkInVisualStudio2026LTSCBandIsProtected()
+        {
+            var lowerSdk = new Bundle<SdkVersion>(new SdkVersion("10.0.400"), BundleArch.X64, string.Empty, "10.0.400");
+            var middleSdk = new Bundle<SdkVersion>(new SdkVersion("10.0.402"), BundleArch.X64, string.Empty, "10.0.402");
+            var highestSdk = new Bundle<SdkVersion>(new SdkVersion("10.0.403"), BundleArch.X64, string.Empty, "10.0.403");
+            var bundles = new[] { lowerSdk, middleSdk, highestSdk };
+
+            VisualStudioSafeVersionsExtractor.GetUninstallableBundles(bundles)
+                .Should().BeEquivalentTo([lowerSdk, middleSdk]);
+
+            var reasons = VisualStudioSafeVersionsExtractor.GetReasonRequiredStrings(bundles);
+            reasons[lowerSdk].Should().BeEmpty();
+            reasons[middleSdk].Should().BeEmpty();
+            reasons[highestSdk].Should().Be(string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026"));
         }
 
         [MacOsOnlyTheory]

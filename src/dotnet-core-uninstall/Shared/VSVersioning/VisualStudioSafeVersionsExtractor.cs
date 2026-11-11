@@ -32,6 +32,7 @@ namespace Microsoft.DotNet.Tools.Uninstall.Shared.VSVersioning
             { (new SemanticVersion(8, 0, 100), new SemanticVersion(8, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
             { (new SemanticVersion(9, 0, 100), new SemanticVersion(9, 0, 400)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2022") },
             { (new SemanticVersion(10, 0, 100), new SemanticVersion(10, 0, 400)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026") },
+            { (new SemanticVersion(10, 0, 400), new SemanticVersion(10, 0, 500)), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026") },
             { (new SemanticVersion(11, 0, 100), UpperLimit), string.Format(LocalizableStrings.WindowsRequirementExplanationString, " 2026") }
         };
 
